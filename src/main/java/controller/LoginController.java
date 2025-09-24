@@ -35,10 +35,10 @@ public class LoginController extends HttpServlet {
         if (staff != null) {
             request.getSession().setAttribute("isLogin", true);
             request.getSession().setAttribute("userStaff", staff);
+            System.out.println("abc");
             response.sendRedirect(IConstant.homeServlet);
             return; // Dừng thực thi
         }
-        System.out.println(guest);
         if (guest != null) {
             request.getSession().setAttribute("isLogin", true);
             request.getSession().setAttribute("userGuest", guest);
