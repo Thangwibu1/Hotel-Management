@@ -27,40 +27,73 @@
             <a href="#">Luxury Hotel</a>
         </div>
         <%
+            // Lấy thuộc tính từ request, nếu không có sẽ là null
             Boolean isLogin = (Boolean) request.getAttribute("isLogin");
             Staff loginStaff = (Staff) request.getAttribute("userStaff");
             Guest loginGuest = (Guest) request.getAttribute("userGuest");
 
             String username = "";
+            boolean isStaff = false;
+            boolean isAdmin = false;
+            // Kiểm tra isLogin để tránh NullPointerException
             if (isLogin != null && isLogin == true) {
                 if (loginStaff != null) {
-                    username = loginStaff.getUsername(); // hoặc loginStaff.getUsername()
+                    username = loginStaff.getFullName(); // Lấy tên đầy đủ cho thân thiện
+                    isStaff = true;
+                    // Kiểm tra role của staff
+                    if ("admin".equalsIgnoreCase(loginStaff.getRole())) {
+                        isAdmin = true;
+                    }
                 } else if (loginGuest != null) {
-                    username = loginGuest.getFullName(); // hoặc loginGuest.getUsername()
+                    username = loginGuest.getFullName();
                 }
             }
         %>
         <nav class="main-nav">
             <% if (isLogin != null && isLogin == true) { %>
-            <!-- User đã đăng nhập - hiển thị username -->
             <span style="color: white; margin-right: 15px;">Xin chào, <%= username %>!</span>
+
+            <% if (isStaff) { %>
+            <%-- Kiểm tra xem staff có phải là admin không --%>
+            <% if (isAdmin) { %>
+            <%-- Nếu là admin, hiển thị nút Go to Admin Page --%>
             <form style="display: inline;">
-                <button class="btn btn-secondary"><a href="logout" style="color: white">Đăng xuất</a></button>
+                <button class="btn btn-danger"> <%-- Dùng màu khác để phân biệt --%>
+                    <%-- Thay "adminPage.jsp" bằng URL trang admin của bạn --%>
+                    <a href="adminPage.jsp" style="color: black; text-decoration: none;">Go to Admin Page</a>
+                </button>
             </form>
             <% } else { %>
-            <!-- User chưa đăng nhập - hiển thị nút đăng nhập/đăng ký -->
+            <%-- Nếu là staff thường, hiển thị nút Go to staff page --%>
             <form style="display: inline;">
-                <button class="btn btn-secondary"><a href="./loginPage.jsp" style="color: white">Đăng nhập</a></button>
+                <button class="btn btn-info">
+                    <%-- Thay "staffPage.jsp" bằng URL trang staff của bạn --%>
+                    <a href="staffPage.jsp" style="color: black; text-decoration: none;">Go to staff page</a>
+                </button>
+            </form>
+            <% } %>
+            <% } %>
+            <form style="display: inline;">
+                <button class="btn btn-secondary">
+                    <a href="logout" style="color: white; text-decoration: none;">Đăng xuất</a>
+                </button>
+            </form>
+
+            <% } else { %>
+            <form style="display: inline;">
+                <button class="btn btn-secondary">
+                    <a href="./loginPage.jsp" style="color: white; text-decoration: none;">Đăng nhập</a>
+                </button>
             </form>
             <form style="display: inline;">
-                <button class="btn btn-primary"><a href="./registerPage.jsp" style="color: white">Đăng ký</a></button>
+                <button class="btn btn-primary">
+                    <a href="./registerPage.jsp" style="color: white; text-decoration: none;">Đăng ký</a>
+                </button>
             </form>
             <% } %>
         </nav>
     </div>
 </header>
-
-
 <section class="hero">
     <div class="hero-content">
         <h1>Chào mừng đến với Luxury Hotel</h1>
