@@ -111,22 +111,24 @@
                 <%
                     if (rooms != null && !rooms.isEmpty()) {
                         for (Room room : rooms) {
-                            // Tìm RoomType tương ứng với roomTypeId của room này
-                            RoomType currentRoomType = null;
-                            if (roomTypes != null) {
-                                for (RoomType rt : roomTypes) {
-                                    if (rt.getRoomTypeId() == room.getRoomTypeId()) {
-                                        currentRoomType = rt;
-                                        break; // Tìm thấy rồi thì thoát loop
+                            if (room.getStatus().equalsIgnoreCase("available")) {
+
+                                // Tìm RoomType tương ứng với roomTypeId của room này
+                                RoomType currentRoomType = null;
+                                if (roomTypes != null) {
+                                    for (RoomType rt : roomTypes) {
+                                        if (rt.getRoomTypeId() == room.getRoomTypeId()) {
+                                            currentRoomType = rt;
+                                            break; // Tìm thấy rồi thì thoát loop
+                                        }
                                     }
                                 }
-                            }
 
-                            // Lấy thông tin từ RoomType hoặc dùng default
-                            int currentRoomTypeId = currentRoomType != null ? currentRoomType.getRoomTypeId() : 0;
-                            String typeName = currentRoomType != null ? currentRoomType.getTypeName() : "Standard";
-                            String price = currentRoomType != null ? String.format("%.0f", currentRoomType.getPricePerNight()) : "1,500,000";
-                            int capacity = currentRoomType != null ? currentRoomType.getCapacity() : 2;
+                                // Lấy thông tin từ RoomType hoặc dùng default
+
+                                String typeName = currentRoomType != null ? currentRoomType.getTypeName() : "Standard";
+                                String price = currentRoomType != null ? String.format("%.0f", currentRoomType.getPricePerNight()) : "1,500,000";
+                                int capacity = currentRoomType != null ? currentRoomType.getCapacity() : 2;
                 %>
                 <div class="room-card">
                     <div class="room-image">
@@ -161,6 +163,7 @@
                     </div>
                 </div>
                 <%
+                        }
                     }
                 } else {
                 %>
