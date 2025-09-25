@@ -4,6 +4,7 @@
 <%@ page import="model.RoomType" %>
 <%@ page import="model.Staff" %>
 <%@ page import="model.Guest" %>
+<%@ page import="utils.IConstant" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -160,7 +161,7 @@
                                 // Lấy thông tin từ RoomType hoặc dùng default
 
                                 String typeName = currentRoomType != null ? currentRoomType.getTypeName() : "Standard";
-                                String price = currentRoomType != null ? String.format("%.0f", currentRoomType.getPricePerNight()) : "1,500,000";
+                                String price = currentRoomType != null ? String.format("%,.0f", currentRoomType.getPricePerNight()) : "1,500,000";
                                 int capacity = currentRoomType != null ? currentRoomType.getCapacity() : 2;
                 %>
                 <div class="room-card">
@@ -188,11 +189,18 @@
                             %>
                         </div>
                         <div class="room-price"><%= price %> VNĐ <span>/đêm</span></div>
-                        <form action=".//rentalRoom" method="get">
+
+                        <%-- ================== THAY ĐỔI Ở ĐÂY ================== --%>
+                        <%-- Chỉ hiển thị nút "Đặt phòng" nếu người dùng không phải là nhân viên --%>
+                        <% if (true) { %>
+                        <form action=<%=IConstant.rentalServlet%> method="get">
                             <input type="hidden" value="<%= room.getRoomId() %>" name="roomId">
                             <input type="hidden" value="<%= room.getRoomTypeId()%>" name="roomTypeId">
                             <input type="submit" class="btn btn-book" value="Đặt phòng ngay">
                         </form>
+                        <% } %>
+                        <%-- ====================================================== --%>
+
                     </div>
                 </div>
                 <%

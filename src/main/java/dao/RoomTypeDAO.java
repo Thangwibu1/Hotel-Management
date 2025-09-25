@@ -56,7 +56,7 @@ public class RoomTypeDAO {
 
     public RoomType getRoomTypeById(int roomTypeId) {
         RoomType roomType = null;
-        String sql = "SELECT [TypeID], [TypeName], [Capacity], [PricePerNight] FROM ROOM_TYPE WHERE [TypeID] = ?";
+        String sql = "SELECT [RoomTypeID], [TypeName], [Capacity], [PricePerNight] FROM ROOM_TYPE WHERE [RoomTypeID] = ?";
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -68,7 +68,7 @@ public class RoomTypeDAO {
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                int id = rs.getInt("TypeID");
+                int id = rs.getInt("RoomTypeID");
                 String typeName = rs.getString("TypeName");
                 int capacity = rs.getInt("Capacity");
                 BigDecimal pricePerNight = rs.getBigDecimal("PricePerNight");
