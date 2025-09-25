@@ -8,7 +8,6 @@
 
 <%
     // 1. KIỂM TRA ĐĂNG NHẬP
-    // Lấy trạng thái đăng nhập từ session.
     Boolean isLoginSession = (Boolean) session.getAttribute("isLogin");
 
     // Nếu chưa đăng nhập (isLogin là null hoặc false), chuyển hướng đến trang đăng nhập
@@ -19,14 +18,21 @@
         return; // Dừng việc xử lý trang JSP này lại
     }
 
-    // Nếu đã đăng nhập, lấy thông tin phòng và người dùng
+    // 2. KIỂM TRA VAI TRÒ: NẾU LÀ STAFF THÌ VỀ TRANG CHỦ
+    // Nhân viên không có quyền truy cập trang đặt phòng của khách.
+    if (session.getAttribute("userStaff") != null) {
+        response.sendRedirect("home");
+        return;
+    }
+
+    // Nếu đã đăng nhập và không phải staff, thì chắc chắn là Guest
     Room room = (Room) request.getAttribute("room");
     RoomType roomType = (RoomType) request.getAttribute("roomType");
     Guest guest = (Guest) session.getAttribute("userGuest"); // Thông tin guest được lưu trong session
 
-    // Xử lý trường hợp không tìm thấy phòng
-    if (room == null || roomType == null) {
-        response.sendRedirect("home"); // Chuyển về trang chủ nếu không có dữ liệu phòng
+    // Xử lý trường hợp không tìm thấy phòng hoặc guest
+    if (room == null || roomType == null || guest == null) {
+        response.sendRedirect("home"); // Chuyển về trang chủ nếu không có đủ dữ liệu
         return;
     }
 
@@ -44,150 +50,58 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
     <style>
-        /* Thêm một chút CSS cho trang đặt phòng */
-        .rental-page-container {
-            display: flex;
-            gap: 30px;
-            margin-top: 40px;
-            margin-bottom: 40px;
-            flex-wrap: wrap; /* Cho phép xuống dòng trên màn hình nhỏ */
-        }
-
-        .room-info-details, .booking-form-section {
-            flex: 1;
-            min-width: 320px; /* Đảm bảo có chiều rộng tối thiểu */
-        }
-
-        .room-info-details img {
-            width: 100%;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .booking-form-section {
-            padding: 30px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        .booking-form-section h2 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 15px;
-        }
-
-        .form-group-rental {
-            margin-bottom: 20px;
-        }
-
-        .form-group-rental label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #555;
-        }
-
-        .form-group-rental input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        .form-group-rental input:read-only {
-            background-color: #e9ecef;
-            cursor: not-allowed;
-        }
-
-        .total-price {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 2px solid #eee;
-            font-size: 1.5em;
-            font-weight: bold;
-            text-align: right;
-        }
+        /* (CSS giữ nguyên như cũ) */
+        .rental-page-container { display: flex; gap: 30px; margin-top: 40px; margin-bottom: 40px; flex-wrap: wrap; }
+        .room-info-details, .booking-form-section { flex: 1; min-width: 320px; }
+        .room-info-details img { width: 100%; border-radius: 8px; margin-bottom: 20px; }
+        .booking-form-section { padding: 30px; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); }
+        .booking-form-section h2 { margin-top: 0; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
+        .form-group-rental { margin-bottom: 20px; }
+        .form-group-rental label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
+        .form-group-rental input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        .form-group-rental input:read-only { background-color: #e9ecef; cursor: not-allowed; }
+        .total-price { margin-top: 25px; padding-top: 20px; border-top: 2px solid #eee; font-size: 1.5em; font-weight: bold; text-align: right; }
     </style>
 </head>
 <body>
 
-<%-- ================= HEADER SAO CHÉP TỪ HOME.JSP ================= --%>
+<%-- Header giữ nguyên --%>
 <header class="header">
     <div class="container">
         <div class="logo">
             <a href="#">Luxury Hotel</a>
         </div>
         <%
-            // Lấy thuộc tính từ request, nếu không có sẽ là null
-            Boolean isLogin = (Boolean) request.getAttribute("isLogin");
-            Staff loginStaff = (Staff) request.getAttribute("userStaff");
-            Guest loginGuest = (Guest) request.getAttribute("userGuest");
-
             String username = "";
             boolean isStaff = false;
             boolean isAdmin = false;
-            // Kiểm tra isLogin để tránh NullPointerException
-            if (isLogin != null && isLogin == true) {
-                if (loginStaff != null) {
-                    username = loginStaff.getFullName(); // Lấy tên đầy đủ cho thân thiện
-                    isStaff = true;
-                    // Kiểm tra role của staff
-                    if ("admin".equalsIgnoreCase(loginStaff.getRole())) {
-                        isAdmin = true;
-                    }
-                } else if (loginGuest != null) {
-                    username = loginGuest.getFullName();
+
+            if (session.getAttribute("userStaff") != null) {
+                Staff loginStaff = (Staff) session.getAttribute("userStaff");
+                username = loginStaff.getFullName();
+                isStaff = true;
+                if ("admin".equalsIgnoreCase(loginStaff.getRole())) {
+                    isAdmin = true;
                 }
+            } else if (session.getAttribute("userGuest") != null) {
+                Guest loginGuest = (Guest) session.getAttribute("userGuest");
+                username = loginGuest.getFullName();
             }
         %>
         <nav class="main-nav">
-            <% if (isLogin != null && isLogin == true) { %>
             <span style="color: white; margin-right: 15px;">Xin chào, <%= username %>!</span>
 
             <% if (isStaff) { %>
-            <%-- Kiểm tra xem staff có phải là admin không --%>
             <% if (isAdmin) { %>
-            <%-- Nếu là admin, hiển thị nút Go to Admin Page --%>
-            <form style="display: inline;">
-                <button class="btn btn-danger"> <%-- Dùng màu khác để phân biệt --%>
-                    <%-- Thay "adminPage.jsp" bằng URL trang admin của bạn --%>
-                    <a href="adminPage.jsp" style="color: black; text-decoration: none;">Go to Admin Page</a>
-                </button>
-            </form>
+            <form style="display: inline;"><button class="btn btn-danger"><a href="adminPage.jsp" style="color: black; text-decoration: none;">Go to Admin Page</a></button></form>
             <% } else { %>
-            <%-- Nếu là staff thường, hiển thị nút Go to staff page --%>
-            <form style="display: inline;">
-                <button class="btn btn-info">
-                    <%-- Thay "staffPage.jsp" bằng URL trang staff của bạn --%>
-                    <a href="staffPage.jsp" style="color: black; text-decoration: none;">Go to staff page</a>
-                </button>
-            </form>
+            <form style="display: inline;"><button class="btn btn-info"><a href="staffPage.jsp" style="color: black; text-decoration: none;">Go to staff page</a></button></form>
             <% } %>
             <% } %>
-            <form style="display: inline;">
-                <button class="btn btn-secondary">
-                    <a href="logout" style="color: white; text-decoration: none;">Đăng xuất</a>
-                </button>
-            </form>
-
-            <% } else { %>
-            <form style="display: inline;">
-                <button class="btn btn-secondary">
-                    <a href="./loginPage.jsp" style="color: white; text-decoration: none;">Đăng nhập</a>
-                </button>
-            </form>
-            <form style="display: inline;">
-                <button class="btn btn-primary">
-                    <a href="./registerPage.jsp" style="color: white; text-decoration: none;">Đăng ký</a>
-                </button>
-            </form>
-            <% } %>
+            <form style="display: inline;"><button class="btn btn-secondary"><a href="logout" style="color: white; text-decoration: none;">Đăng xuất</a></button></form>
         </nav>
     </div>
 </header>
-<%-- ================= KẾT THÚC HEADER ================= --%>
 
 
 <main class="main-content">
@@ -220,12 +134,12 @@
 
                     <div class="form-group-rental">
                         <label for="fullName">Họ và tên</label>
-                        <input type="text" id="fullName" name="fullName" value="<%= guest != null ? guest.getFullName() : "" %>" readonly>
+                        <input type="text" id="fullName" name="fullName" value="<%= guest.getFullName() %>" readonly>
                     </div>
 
                     <div class="form-group-rental">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" value="<%= guest != null ? guest.getEmail() : "" %>" readonly>
+                        <input type="email" id="email" name="email" value="<%= guest.getEmail() %>" readonly>
                     </div>
 
                     <div class="form-group-rental">
@@ -249,7 +163,7 @@
 </main>
 
 
-<%-- ================= FOOTER SAO CHÉP TỪ HOME.JSP ================= --%>
+<%-- Footer giữ nguyên --%>
 <footer class="footer">
     <div class="container footer-grid">
         <div class="footer-col">
@@ -276,26 +190,22 @@
         <p>&copy; 2024 Luxury Hotel. Bảo lưu mọi quyền.</p>
     </div>
 </footer>
-<%-- ================= KẾT THÚC FOOTER ================= --%>
 
 
+<%-- Script giữ nguyên --%>
 <script>
     const checkInInput = document.getElementById('check-in');
     const checkOutInput = document.getElementById('check-out');
     const totalPriceElement = document.getElementById('total-price-value');
     const pricePerNight = parseFloat(document.getElementById('price-per-night').value);
-
     const today = new Date().toISOString().split('T')[0];
     checkInInput.setAttribute('min', today);
-
     function calculateTotal() {
         const checkInDate = new Date(checkInInput.value);
         const checkOutDate = new Date(checkOutInput.value);
-
         if (checkInInput.value && checkOutInput.value && checkOutDate > checkInDate) {
             const timeDiff = checkOutDate.getTime() - checkInDate.getTime();
             const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
             if (nights > 0) {
                 const total = nights * pricePerNight;
                 totalPriceElement.textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total);
@@ -306,24 +216,19 @@
             totalPriceElement.textContent = '0 VNĐ';
         }
     }
-
     checkInInput.addEventListener('change', () => {
         if (checkInInput.value) {
             let nextDay = new Date(checkInInput.value);
             nextDay.setDate(nextDay.getDate() + 1);
             const nextDayString = nextDay.toISOString().split('T')[0];
             checkOutInput.setAttribute('min', nextDayString);
-
-            // Nếu ngày trả phòng cũ nhỏ hơn ngày nhận phòng mới, reset nó
             if(checkOutInput.value < checkInInput.value){
                 checkOutInput.value = nextDayString;
             }
         }
         calculateTotal();
     });
-
     checkOutInput.addEventListener('change', calculateTotal);
-
 </script>
 </body>
 </html>
