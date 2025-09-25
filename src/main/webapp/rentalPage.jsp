@@ -154,11 +154,12 @@
                     selectedService(array)
 Example: roomId=2&fullName=Nguy%3Fn+Van+An&email=nguyenvanan%40email.com&checkInDate=2025-09-25&checkOutDate=2025-09-28&selectedServices=1&selectedServices=2
                     --%>
-                <form action="createBooking" method="get">
+                <form action=<%= IConstant.bookingServlet %> method="get">
                     <input type="hidden" name="roomId" value="<%= room.getRoomId() %>">
                     <input type="hidden" id="price-per-night" value="<%= roomType.getPricePerNight() %>">
                     <div class="form-group-rental">
                         <label for="fullName">Họ và tên</label>
+                        <input type="hidden" id="guessId" name="guestId" value="<%= guest.getGuestId() %>">
                         <input type="text" id="fullName" name="fullName" value="<%= guest.getFullName() %>" readonly>
                     </div>
                     <div class="form-group-rental">

@@ -2,38 +2,49 @@ package model;
 
 /**
  * Model cho bảng BOOKING
+ * (Đã được cập nhật để sử dụng guestId và roomId kiểu int)
  */
 public class Booking {
+    // --- THAY ĐỔI: Thuộc tính
     private int bookingId;
-    private Guest guest; // Quan hệ khóa ngoại đến GUEST
-    private Room room;   // Quan hệ khóa ngoại đến ROOM
+    private int guestId; // Đổi từ 'Guest guest' thành 'int guestId'
+    private int roomId;  // Đổi từ 'Room room' thành 'int roomId'
     private String checkInDate;
     private String checkOutDate;
     private String bookingDate;
     private String status;
 
-    // Constructors
+    // --- Constructors được cập nhật
     public Booking() {}
 
-    public Booking(int bookingId, Guest guest, Room room, String checkInDate, String checkOutDate, String bookingDate, String status) {
-        this.bookingId = bookingId;
-        this.guest = guest;
-        this.room = room;
+    public Booking(int guestId, int roomId, String checkInDate, String checkOutDate, String bookingDate, String status) {
+        this.guestId = guestId;
+        this.roomId = roomId;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.bookingDate = bookingDate;
         this.status = status;
     }
 
-    // Getters and Setters
+    public Booking(int bookingId, int guestId, int roomId, String checkInDate, String checkOutDate, String bookingDate, String status) {
+        this.bookingId = bookingId;
+        this.guestId = guestId;
+        this.roomId = roomId;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+        this.bookingDate = bookingDate;
+        this.status = status;
+    }
+
+    // --- Getters and Setters được cập nhật
     public int getBookingId() { return bookingId; }
     public void setBookingId(int bookingId) { this.bookingId = bookingId; }
 
-    public Guest getGuest() { return guest; }
-    public void setGuest(Guest guest) { this.guest = guest; }
+    public int getGuestId() { return guestId; }
+    public void setGuestId(int guestId) { this.guestId = guestId; }
 
-    public Room getRoom() { return room; }
-    public void setRoom(Room room) { this.room = room; }
+    public int getRoomId() { return roomId; }
+    public void setRoomId(int roomId) { this.roomId = roomId; }
 
     public String getCheckInDate() { return checkInDate; }
     public void setCheckInDate(String checkInDate) { this.checkInDate = checkInDate; }
@@ -47,8 +58,17 @@ public class Booking {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
+    // --- THAY ĐỔI: toString() được cập nhật để hiển thị ID
     @Override
     public String toString() {
-        return "Booking{" + "bookingId=" + bookingId + ", guest=" + guest.getFullName() + ", room=" + room.getRoomNumber() + ", status='" + status + '\'' + '}';
+        return "Booking{" +
+                "bookingId=" + bookingId +
+                ", guestId=" + guestId +      // Hiển thị guestId
+                ", roomId=" + roomId +        // Hiển thị roomId
+                ", checkInDate='" + checkInDate + '\'' +
+                ", checkOutDate='" + checkOutDate + '\'' +
+                ", bookingDate='" + bookingDate + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
 }
