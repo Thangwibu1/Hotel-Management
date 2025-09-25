@@ -4,6 +4,7 @@
 <%@ page import="model.RoomType" %>
 <%@ page import="model.Staff" %>
 <%@ page import="model.Guest" %>
+<%@ page import="utils.IConstant" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -192,7 +193,7 @@
                         <%-- ================== THAY ĐỔI Ở ĐÂY ================== --%>
                         <%-- Chỉ hiển thị nút "Đặt phòng" nếu người dùng không phải là nhân viên --%>
                         <% if (!isAdmin) { %>
-                        <form action=".//rentalRoom" method="get">
+                        <form action=<%=IConstant.rentalServlet%> method="get">
                             <input type="hidden" value="<%= room.getRoomId() %>" name="roomId">
                             <input type="hidden" value="<%= room.getRoomTypeId()%>" name="roomTypeId">
                             <input type="submit" class="btn btn-book" value="Đặt phòng ngay">

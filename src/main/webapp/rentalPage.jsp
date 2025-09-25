@@ -3,40 +3,32 @@
 <%@ page import="model.RoomType" %>
 <%@ page import="model.Staff" %>
 <%@ page import="model.Guest" %>
+<%@ page import="model.Service" %>
+<%@ page import="java.util.List" %>
 <%@ page import="java.text.NumberFormat" %>
 <%@ page import="java.util.Locale" %>
+<%@ page import="utils.IConstant" %>
 
 <%
-    // 1. KIỂM TRA ĐĂNG NHẬP
+    // (Phần logic Java của bạn ở đây được giữ nguyên)
     Boolean isLoginSession = (Boolean) session.getAttribute("isLogin");
-
-    // Nếu chưa đăng nhập (isLogin là null hoặc false), chuyển hướng đến trang đăng nhập
     if (isLoginSession == null || !isLoginSession) {
-        // Lưu lại URL hiện tại để sau khi đăng nhập thành công có thể quay lại đúng trang này
         String returnUrl = "rentalRoom?roomId=" + request.getParameter("roomId") + "&roomTypeId=" + request.getParameter("roomTypeId");
         response.sendRedirect(request.getContextPath() + "/loginPage.jsp?returnUrl=" + java.net.URLEncoder.encode(returnUrl, "UTF-8"));
-        return; // Dừng việc xử lý trang JSP này lại
+        return;
     }
-
-    // 2. KIỂM TRA VAI TRÒ: NẾU LÀ STAFF THÌ VỀ TRANG CHỦ
-    // Nhân viên không có quyền truy cập trang đặt phòng của khách.
     if (session.getAttribute("userStaff") != null) {
         response.sendRedirect("home");
         return;
     }
-
-    // Nếu đã đăng nhập và không phải staff, thì chắc chắn là Guest
     Room room = (Room) request.getAttribute("room");
     RoomType roomType = (RoomType) request.getAttribute("roomType");
-    Guest guest = (Guest) session.getAttribute("userGuest"); // Thông tin guest được lưu trong session
-
-    // Xử lý trường hợp không tìm thấy phòng hoặc guest
+    Guest guest = (Guest) session.getAttribute("userGuest");
+    List<Service> services = (List<Service>) request.getAttribute("services");
     if (room == null || roomType == null || guest == null) {
-        response.sendRedirect("home"); // Chuyển về trang chủ nếu không có đủ dữ liệu
+        response.sendRedirect("home");
         return;
     }
-
-    // Định dạng số tiền tệ
     NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
 %>
 
@@ -46,30 +38,247 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đặt phòng - <%= roomType.getTypeName() %> - Luxury Hotel</title>
-    <%-- Đường dẫn tới CSS cần đi ra 1 cấp vì file này nằm trong thư mục /views/ --%>
-    <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+    <%-- ================= TOÀN BỘ CSS ĐƯỢC ĐẶT TẠI ĐÂY ================= --%>
     <style>
-        /* (CSS giữ nguyên như cũ) */
-        .rental-page-container { display: flex; gap: 30px; margin-top: 40px; margin-bottom: 40px; flex-wrap: wrap; }
-        .room-info-details, .booking-form-section { flex: 1; min-width: 320px; }
-        .room-info-details img { width: 100%; border-radius: 8px; margin-bottom: 20px; }
-        .booking-form-section { padding: 30px; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); }
-        .booking-form-section h2 { margin-top: 0; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
-        .form-group-rental { margin-bottom: 20px; }
-        .form-group-rental label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
-        .form-group-rental input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        .form-group-rental input:read-only { background-color: #e9ecef; cursor: not-allowed; }
-        .total-price { margin-top: 25px; padding-top: 20px; border-top: 2px solid #eee; font-size: 1.5em; font-weight: bold; text-align: right; }
+        /* --- 1. General Styles (Dựa trên home.jsp) --- */
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --dark-bg: #222;
+            --light-text: #fff;
+            --dark-text: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- 2. Header (Dựa trên home.jsp) --- */
+        .header {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            padding: 1rem 0;
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo a {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .main-nav form {
+            margin-left: 10px;
+        }
+
+        /* --- 3. Buttons (Dựa trên home.jsp) --- */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            text-align: center;
+        }
+        .btn-secondary { background-color: var(--secondary-color); color: white; }
+        .btn-danger { background-color: #dc3545; color: white; }
+        .btn-info { background-color: #17a2b8; color: black; }
+        .btn-book {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+        }
+
+        /* --- 4. Main Content for Rental Page --- */
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .rental-page-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .room-info-details, .booking-form-section {
+            flex: 1;
+            min-width: 320px;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .room-info-details img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .booking-form-section {
+            padding: 30px;
+            background-color: #f9f9f9;
+        }
+
+        .booking-form-section h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .room-amenities {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .room-amenities span {
+            display: flex;
+            align-items: center;
+        }
+        .room-amenities .fa-solid {
+            margin-right: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .form-group-rental {
+            margin-bottom: 20px;
+        }
+
+        .form-group-rental label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group-rental input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-group-rental input:read-only {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+
+        .total-price {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .service-options {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .service-item label {
+            margin-left: 10px;
+            font-weight: normal;
+            color: #333;
+        }
+
+        .service-item input[type="checkbox"] {
+            width: auto;
+        }
+
+        /* --- 5. Footer (Dựa trên home.jsp) --- */
+        .footer {
+            background: #333;
+            color: #fff;
+            padding: 2rem 0 0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding-bottom: 2rem;
+        }
+
+        .footer-col h3 {
+            margin-bottom: 1rem;
+        }
+
+        .footer-col p, .footer-col li {
+            margin-bottom: 0.5rem;
+            color: #ccc;
+        }
+
+        .footer-col ul {
+            list-style-type: none;
+        }
+
+        .footer-col a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding: 1rem 0;
+            border-top: 1px solid #444;
+        }
     </style>
 </head>
 <body>
 
-<%-- Header giữ nguyên --%>
+<%-- Phần thân trang JSP giữ nguyên, không thay đổi --%>
 <header class="header">
     <div class="container">
         <div class="logo">
-            <a href="#">Luxury Hotel</a>
+            <a href=<%= IConstant.homeServlet %>>Luxury Hotel</a>
         </div>
         <%
             String username = "";
@@ -93,26 +302,24 @@
 
             <% if (isStaff) { %>
             <% if (isAdmin) { %>
-            <form style="display: inline;"><button class="btn btn-danger"><a href="adminPage.jsp" style="color: black; text-decoration: none;">Go to Admin Page</a></button></form>
+            <form style="display: inline;"><button class="btn btn-danger"><a href="adminPage.jsp">Go to Admin Page</a></button></form>
             <% } else { %>
-            <form style="display: inline;"><button class="btn btn-info"><a href="staffPage.jsp" style="color: black; text-decoration: none;">Go to staff page</a></button></form>
+            <form style="display: inline;"><button class="btn btn-info"><a href="staffPage.jsp">Go to staff page</a></button></form>
             <% } %>
             <% } %>
-            <form style="display: inline;"><button class="btn btn-secondary"><a href="logout" style="color: white; text-decoration: none;">Đăng xuất</a></button></form>
+            <form style="display: inline;"><button class="btn btn-secondary"><a href="logout">Đăng xuất</a></button></form>
         </nav>
     </div>
 </header>
 
-
 <main class="main-content">
     <div class="container">
         <div class="rental-page-container">
-            <%-- CỘT BÊN TRÁI: THÔNG TIN PHÒNG --%>
             <div class="room-info-details">
-                <img src="../images/room-<%= room.getRoomId() %>.jpg" alt="Phòng <%= room.getRoomNumber() %>">
+                <img src="${pageContext.request.contextPath}/images/room-<%= room.getRoomId() %>.jpg" alt="Phòng <%= room.getRoomNumber() %>">
                 <h2><%= roomType.getTypeName() %> - Phòng <%= room.getRoomNumber() %></h2>
                 <p><%= room.getDescription() %></p>
-                <div class="room-amenities" style="margin-top: 20px; font-size: 1.1em;">
+                <div class="room-amenities">
                     <span><i class="fa-solid fa-user-group"></i> Tối đa <%= roomType.getCapacity() %> người</span>
                     <span><i class="fa-solid fa-bed"></i> Giường <%= roomType.getTypeName() %></span>
                     <% if (roomType.getPricePerNight().doubleValue() > 2000000) { %>
@@ -125,23 +332,19 @@
                 </div>
             </div>
 
-            <%-- CỘT BÊN PHẢI: FORM ĐẶT PHÒNG --%>
             <div class="booking-form-section">
                 <h2>Thông tin đặt phòng</h2>
                 <form action="createBooking" method="post">
                     <input type="hidden" name="roomId" value="<%= room.getRoomId() %>">
                     <input type="hidden" id="price-per-night" value="<%= roomType.getPricePerNight() %>">
-
                     <div class="form-group-rental">
                         <label for="fullName">Họ và tên</label>
                         <input type="text" id="fullName" name="fullName" value="<%= guest.getFullName() %>" readonly>
                     </div>
-
                     <div class="form-group-rental">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" value="<%= guest.getEmail() %>" readonly>
                     </div>
-
                     <div class="form-group-rental">
                         <label for="check-in">Ngày nhận phòng</label>
                         <input type="date" id="check-in" name="checkInDate" required>
@@ -150,11 +353,32 @@
                         <label for="check-out">Ngày trả phòng</label>
                         <input type="date" id="check-out" name="checkOutDate" required>
                     </div>
-
+                    <div class="form-group-rental">
+                        <label>Dịch vụ đi kèm (tùy chọn)</label>
+                        <div class="service-options">
+                            <% if (services != null && !services.isEmpty()) {
+                                for (Service service : services) {
+                            %>
+                            <div class="service-item">
+                                <input type="checkbox"
+                                       name="selectedServices"
+                                       id="service-<%= service.getServiceId() %>"
+                                       value="<%= service.getServiceId() %>"
+                                       data-price="<%= service.getPrice() %>">
+                                <label for="service-<%= service.getServiceId() %>">
+                                    <%= service.getServiceName() %> (+<%= currencyFormatter.format(service.getPrice()) %>)
+                                </label>
+                            </div>
+                            <%
+                                }
+                            } else { %>
+                            <p>Không có dịch vụ nào để hiển thị.</p>
+                            <% } %>
+                        </div>
+                    </div>
                     <div class="total-price">
                         Tổng cộng: <span id="total-price-value">0 VNĐ</span>
                     </div>
-
                     <button type="submit" class="btn btn-book" style="width: 100%; margin-top: 20px;">Xác nhận đặt phòng</button>
                 </form>
             </div>
@@ -162,8 +386,6 @@
     </div>
 </main>
 
-
-<%-- Footer giữ nguyên --%>
 <footer class="footer">
     <div class="container footer-grid">
         <div class="footer-col">
@@ -191,30 +413,34 @@
     </div>
 </footer>
 
-
-<%-- Script giữ nguyên --%>
 <script>
+    // (Phần Javascript giữ nguyên, không thay đổi)
     const checkInInput = document.getElementById('check-in');
     const checkOutInput = document.getElementById('check-out');
     const totalPriceElement = document.getElementById('total-price-value');
     const pricePerNight = parseFloat(document.getElementById('price-per-night').value);
     const today = new Date().toISOString().split('T')[0];
+    const serviceCheckboxes = document.querySelectorAll('input[name="selectedServices"]');
     checkInInput.setAttribute('min', today);
     function calculateTotal() {
+        let roomTotal = 0;
         const checkInDate = new Date(checkInInput.value);
         const checkOutDate = new Date(checkOutInput.value);
         if (checkInInput.value && checkOutInput.value && checkOutDate > checkInDate) {
             const timeDiff = checkOutDate.getTime() - checkInDate.getTime();
             const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
             if (nights > 0) {
-                const total = nights * pricePerNight;
-                totalPriceElement.textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total);
-            } else {
-                totalPriceElement.textContent = '0 VNĐ';
+                roomTotal = nights * pricePerNight;
             }
-        } else {
-            totalPriceElement.textContent = '0 VNĐ';
         }
+        let servicesTotal = 0;
+        serviceCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                servicesTotal += parseFloat(checkbox.dataset.price);
+            }
+        });
+        const finalTotal = roomTotal + servicesTotal;
+        totalPriceElement.textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(finalTotal);
     }
     checkInInput.addEventListener('change', () => {
         if (checkInInput.value) {
@@ -222,13 +448,17 @@
             nextDay.setDate(nextDay.getDate() + 1);
             const nextDayString = nextDay.toISOString().split('T')[0];
             checkOutInput.setAttribute('min', nextDayString);
-            if(checkOutInput.value < checkInInput.value){
+            if (checkOutInput.value < checkInInput.value) {
                 checkOutInput.value = nextDayString;
             }
         }
         calculateTotal();
     });
     checkOutInput.addEventListener('change', calculateTotal);
+    serviceCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', calculateTotal);
+    });
+    calculateTotal();
 </script>
 </body>
 </html>
