@@ -5,6 +5,14 @@ import java.time.format.DateTimeFormatter;
 public interface IConstant {
     public static final DateTimeFormatter localDateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    public static final String receptionistRole = "receptionist";
+    public static final String managerRole = "manager";
+    public static final String adminRole = "admin";
+    public static final String housekeeping = "housekeeping";
+    public static final String serviceStaff = "service-staff";
+
+
     public static final String bookingServlet = "booking";
     public static final String homeServlet = "home";
     public static final String loginServlet = "login";

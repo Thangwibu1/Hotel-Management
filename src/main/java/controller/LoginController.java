@@ -35,8 +35,25 @@ public class LoginController extends HttpServlet {
         if (staff != null) {
             request.getSession().setAttribute("isLogin", true);
             request.getSession().setAttribute("userStaff", staff);
-            response.sendRedirect(IConstant.homeServlet);
-            return; // Dừng thực thi
+            String role = staff.getRole().toLowerCase();
+            switch (role) {
+                case "admin":
+                    response.sendRedirect(IConstant.adminRole);
+                    break;
+                case "receptionist":
+                    response.sendRedirect(IConstant.receptionistRole);
+                    break;
+                case "manager":
+                    response.sendRedirect(IConstant.managerRole);
+                    break;
+                case "housekeeping":
+                    response.sendRedirect(IConstant.housekeeping);
+                    break;
+                case "servicestaff":
+                    response.sendRedirect(IConstant.serviceStaff);
+                    break;
+            }
+
         }
         if (guest != null) {
             request.getSession().setAttribute("isLogin", true);

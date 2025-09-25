@@ -192,7 +192,7 @@
 
                         <%-- ================== THAY ĐỔI Ở ĐÂY ================== --%>
                         <%-- Chỉ hiển thị nút "Đặt phòng" nếu người dùng không phải là nhân viên --%>
-                        <% if (!isAdmin) { %>
+                        <% if (true) { %>
                         <form action=<%=IConstant.rentalServlet%> method="get">
                             <input type="hidden" value="<%= room.getRoomId() %>" name="roomId">
                             <input type="hidden" value="<%= room.getRoomTypeId()%>" name="roomTypeId">

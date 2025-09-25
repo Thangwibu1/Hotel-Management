@@ -42,9 +42,5 @@ public class BookingController extends HttpServlet {
         String checkOutDate = req.getParameter("checkOutDate");
         String[] selectedServices = req.getParameterValues("selectedService");
 
-        ArrayList<Booking> b = bookingDAO.getAllBookings();
-        for (Booking booking : b) {
-            System.out.println(booking);
-        }
     }
 }
