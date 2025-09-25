@@ -39,242 +39,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đặt phòng - <%= roomType.getTypeName() %> - Luxury Hotel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-
-    <%-- ================= TOÀN BỘ CSS ĐƯỢC ĐẶT TẠI ĐÂY ================= --%>
     <style>
-        /* --- 1. General Styles (Dựa trên home.jsp) --- */
-        :root {
-            --primary-color: #007bff;
-            --secondary-color: #6c757d;
-            --dark-bg: #222;
-            --light-text: #fff;
-            --dark-text: #333;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--dark-text);
-            background-color: #f4f4f4;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 0 20px;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        /* --- 2. Header (Dựa trên home.jsp) --- */
-        .header {
-            background-color: var(--dark-bg);
-            color: var(--light-text);
-            padding: 1rem 0;
-        }
-
-        .header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo a {
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-
-        .main-nav {
-            display: flex;
-            align-items: center;
-        }
-
-        .main-nav form {
-            margin-left: 10px;
-        }
-
-        /* --- 3. Buttons (Dựa trên home.jsp) --- */
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            text-align: center;
-        }
+        /* (CSS giữ nguyên, không thay đổi) */
+        :root { --primary-color: #007bff; --secondary-color: #6c757d; --dark-bg: #222; --light-text: #fff; --dark-text: #333; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: var(--dark-text); background-color: #f4f4f4; }
+        .container { max-width: 1200px; margin: auto; padding: 0 20px; }
+        a { text-decoration: none; color: inherit; }
+        .header { background-color: var(--dark-bg); color: var(--light-text); padding: 1rem 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo a { font-size: 1.5em; font-weight: bold; }
+        .main-nav { display: flex; align-items: center; }
+        .main-nav form { margin-left: 10px; }
+        .btn { display: inline-block; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; font-size: 1rem; text-align: center; }
         .btn-secondary { background-color: var(--secondary-color); color: white; }
         .btn-danger { background-color: #dc3545; color: white; }
         .btn-info { background-color: #17a2b8; color: black; }
-        .btn-book {
-            background-color: var(--primary-color);
-            color: var(--light-text);
-        }
-
-        /* --- 4. Main Content for Rental Page --- */
-        .main-content {
-            padding: 2rem 0;
-        }
-
-        .rental-page-container {
-            display: flex;
-            gap: 30px;
-            margin-top: 40px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-
-        .room-info-details, .booking-form-section {
-            flex: 1;
-            min-width: 320px;
-            background: #fff;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-
-        .room-info-details img {
-            width: 100%;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .booking-form-section {
-            padding: 30px;
-            background-color: #f9f9f9;
-        }
-
-        .booking-form-section h2 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 15px;
-        }
-
-        .room-amenities {
-            border-bottom: 1px solid #eee;
-            padding-bottom: 1rem;
-            margin-bottom: 1rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        .room-amenities span {
-            display: flex;
-            align-items: center;
-        }
-        .room-amenities .fa-solid {
-            margin-right: 0.5rem;
-            color: var(--primary-color);
-        }
-
-        .form-group-rental {
-            margin-bottom: 20px;
-        }
-
-        .form-group-rental label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #555;
-        }
-
-        .form-group-rental input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        .form-group-rental input:read-only {
-            background-color: #e9ecef;
-            cursor: not-allowed;
-        }
-
-        .total-price {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 2px solid #eee;
-            font-size: 1.5em;
-            font-weight: bold;
-            text-align: right;
-        }
-
-        .service-options {
-            margin-top: 15px;
-            padding: 15px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .service-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .service-item label {
-            margin-left: 10px;
-            font-weight: normal;
-            color: #333;
-        }
-
-        .service-item input[type="checkbox"] {
-            width: auto;
-        }
-
-        /* --- 5. Footer (Dựa trên home.jsp) --- */
-        .footer {
-            background: #333;
-            color: #fff;
-            padding: 2rem 0 0;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding-bottom: 2rem;
-        }
-
-        .footer-col h3 {
-            margin-bottom: 1rem;
-        }
-
-        .footer-col p, .footer-col li {
-            margin-bottom: 0.5rem;
-            color: #ccc;
-        }
-
-        .footer-col ul {
-            list-style-type: none;
-        }
-
-        .footer-col a:hover {
-            color: var(--primary-color);
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding: 1rem 0;
-            border-top: 1px solid #444;
-        }
+        .btn-book { background-color: var(--primary-color); color: var(--light-text); }
+        .main-content { padding: 2rem 0; }
+        .rental-page-container { display: flex; gap: 30px; margin-top: 40px; margin-bottom: 40px; flex-wrap: wrap; }
+        .room-info-details, .booking-form-section { flex: 1; min-width: 320px; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        .room-info-details img { width: 100%; border-radius: 8px; margin-bottom: 20px; }
+        .booking-form-section { padding: 30px; background-color: #f9f9f9; }
+        .booking-form-section h2 { margin-top: 0; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
+        .room-amenities { border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1rem; display: flex; flex-wrap: wrap; gap: 1rem; }
+        .room-amenities span { display: flex; align-items: center; }
+        .room-amenities .fa-solid { margin-right: 0.5rem; color: var(--primary-color); }
+        .form-group-rental { margin-bottom: 20px; }
+        .form-group-rental label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
+        .form-group-rental input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        .form-group-rental input:read-only { background-color: #e9ecef; cursor: not-allowed; }
+        .total-price { margin-top: 25px; padding-top: 20px; border-top: 2px solid #eee; font-size: 1.5em; font-weight: bold; text-align: right; }
+        .service-options { margin-top: 15px; padding: 15px; background-color: #fff; border: 1px solid #ddd; border-radius: 4px; }
+        .service-item { display: flex; align-items: center; margin-bottom: 10px; }
+        .service-item label { margin-left: 10px; font-weight: normal; color: #333; }
+        .service-item input[type="checkbox"] { width: auto; }
+        .footer { background: #333; color: #fff; padding: 2rem 0 0; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding-bottom: 2rem; }
+        .footer-col h3 { margin-bottom: 1rem; }
+        .footer-col p, .footer-col li { margin-bottom: 0.5rem; color: #ccc; }
+        .footer-col ul { list-style-type: none; }
+        .footer-col a:hover { color: var(--primary-color); }
+        .footer-bottom { text-align: center; padding: 1rem 0; border-top: 1px solid #444; }
     </style>
 </head>
 <body>
 
-<%-- Phần thân trang JSP giữ nguyên, không thay đổi --%>
+<%-- (Header giữ nguyên) --%>
 <header class="header">
     <div class="container">
         <div class="logo">
@@ -299,7 +110,6 @@
         %>
         <nav class="main-nav">
             <span style="color: white; margin-right: 15px;">Xin chào, <%= username %>!</span>
-
             <% if (isStaff) { %>
             <% if (isAdmin) { %>
             <form style="display: inline;"><button class="btn btn-danger"><a href="adminPage.jsp">Go to Admin Page</a></button></form>
@@ -334,7 +144,17 @@
 
             <div class="booking-form-section">
                 <h2>Thông tin đặt phòng</h2>
-                <form action="createBooking" method="post">
+
+                <%-- các attribute được gửi kèm
+                    roomId
+                    fullName
+                    email
+                    checkInDate
+                    checkOutDate
+                    selectedService(array)
+Example: roomId=2&fullName=Nguy%3Fn+Van+An&email=nguyenvanan%40email.com&checkInDate=2025-09-25&checkOutDate=2025-09-28&selectedServices=1&selectedServices=2
+                    --%>
+                <form action="createBooking" method="get">
                     <input type="hidden" name="roomId" value="<%= room.getRoomId() %>">
                     <input type="hidden" id="price-per-night" value="<%= roomType.getPricePerNight() %>">
                     <div class="form-group-rental">
@@ -386,6 +206,7 @@
     </div>
 </main>
 
+<%-- (Footer giữ nguyên) --%>
 <footer class="footer">
     <div class="container footer-grid">
         <div class="footer-col">
@@ -414,7 +235,7 @@
 </footer>
 
 <script>
-    // (Phần Javascript giữ nguyên, không thay đổi)
+    // Phần Javascript tính tiền không đổi
     const checkInInput = document.getElementById('check-in');
     const checkOutInput = document.getElementById('check-out');
     const totalPriceElement = document.getElementById('total-price-value');
