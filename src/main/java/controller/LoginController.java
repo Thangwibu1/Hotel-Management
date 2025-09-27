@@ -31,27 +31,26 @@ public class LoginController extends HttpServlet {
         Staff staff = staffDAO.getStaffByUsernameAndPassword(username, password);
         Guest guest = guestDAO.getGuestByUsernameAndPassword(username, password);
         request.getSession().setAttribute("isLogin", false);
-
         if (staff != null) {
             request.getSession().setAttribute("isLogin", true);
             request.getSession().setAttribute("userStaff", staff);
             String role = staff.getRole().toLowerCase();
             switch (role) {
                 case "admin":
-                    response.sendRedirect(IConstant.adminRole);
-                    break;
+                    response.sendRedirect(IConstant.adminRole); //la mot controller
+                    return;
                 case "receptionist":
                     response.sendRedirect(IConstant.receptionistRole);
-                    break;
+                    return;
                 case "manager":
                     response.sendRedirect(IConstant.managerRole);
-                    break;
+                    return;
                 case "housekeeping":
                     response.sendRedirect(IConstant.housekeeping);
-                    break;
+                    return;
                 case "servicestaff":
                     response.sendRedirect(IConstant.serviceStaff);
-                    break;
+                    return;
             }
 
         }

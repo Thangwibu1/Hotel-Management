@@ -2,34 +2,43 @@ package model;
 
 /**
  * Model cho bảng BOOKING_SERVICE
+ * (Đã được cập nhật để sử dụng bookingId và serviceId kiểu int)
  */
 public class BookingService {
+    // --- THAY ĐỔI: Thuộc tính ---
     private int bookingServiceId;
-    private Booking booking; // Quan hệ khóa ngoại đến BOOKING
-    private Service service; // Quan hệ khóa ngoại đến SERVICE
+    private int bookingId; // Đổi từ 'Booking booking' thành 'int bookingId'
+    private int serviceId; // Đổi từ 'Service service' thành 'int serviceId'
     private int quantity;
     private String serviceDate;
 
-    // Constructors
+    // --- Constructors được cập nhật ---
     public BookingService() {}
 
-    public BookingService(int bookingServiceId, Booking booking, Service service, int quantity, String serviceDate) {
-        this.bookingServiceId = bookingServiceId;
-        this.booking = booking;
-        this.service = service;
+    public BookingService(int bookingId, int serviceId, int quantity, String serviceDate) {
+        this.bookingId = bookingId;
+        this.serviceId = serviceId;
         this.quantity = quantity;
         this.serviceDate = serviceDate;
     }
 
-    // Getters and Setters
+    public BookingService(int bookingServiceId, int bookingId, int serviceId, int quantity, String serviceDate) {
+        this.bookingServiceId = bookingServiceId;
+        this.bookingId = bookingId;
+        this.serviceId = serviceId;
+        this.quantity = quantity;
+        this.serviceDate = serviceDate;
+    }
+
+    // --- Getters and Setters được cập nhật ---
     public int getBookingServiceId() { return bookingServiceId; }
     public void setBookingServiceId(int bookingServiceId) { this.bookingServiceId = bookingServiceId; }
 
-    public Booking getBooking() { return booking; }
-    public void setBooking(Booking booking) { this.booking = booking; }
+    public int getBookingId() { return bookingId; }
+    public void setBookingId(int bookingId) { this.bookingId = bookingId; }
 
-    public Service getService() { return service; }
-    public void setService(Service service) { this.service = service; }
+    public int getServiceId() { return serviceId; }
+    public void setServiceId(int serviceId) { this.serviceId = serviceId; }
 
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
@@ -37,8 +46,15 @@ public class BookingService {
     public String getServiceDate() { return serviceDate; }
     public void setServiceDate(String serviceDate) { this.serviceDate = serviceDate; }
 
+    // --- THAY ĐỔI: toString() được cập nhật để hiển thị ID ---
     @Override
     public String toString() {
-        return "BookingService{" + "bookingServiceId=" + bookingServiceId + ", service=" + service.getServiceName() + ", quantity=" + quantity + '}';
+        return "BookingService{" +
+                "bookingServiceId=" + bookingServiceId +
+                ", bookingId=" + bookingId +         // Hiển thị bookingId
+                ", serviceId=" + serviceId +         // Hiển thị serviceId
+                ", quantity=" + quantity +
+                ", serviceDate='" + serviceDate + '\'' +
+                '}';
     }
 }

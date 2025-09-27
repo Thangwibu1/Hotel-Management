@@ -54,26 +54,14 @@
             <% if (isLogin != null && isLogin == true) { %>
             <span style="color: white; margin-right: 15px;">Xin chào, <%= username %>!</span>
 
-            <% if (isStaff) { %>
-            <%-- Kiểm tra xem staff có phải là admin không --%>
-            <% if (isAdmin) { %>
-            <%-- Nếu là admin, hiển thị nút Go to Admin Page --%>
+            <%-- ================== NÚT MỚI ĐƯỢC THÊM TẠI ĐÂY ================== --%>
             <form style="display: inline;">
-                <button class="btn btn-danger"> <%-- Dùng màu khác để phân biệt --%>
-                    <%-- Thay "adminPage.jsp" bằng URL trang admin của bạn --%>
-                    <a href="adminPage.jsp" style="color: black; text-decoration: none;">Go to Admin Page</a>
+                <button class="btn btn-secondary"> <%-- Dùng màu khác cho dễ phân biệt --%>
+                    <a href="viewBookings" style="color: white; text-decoration: none;">Xem Phòng Đã Đặt</a>
                 </button>
             </form>
-            <% } else { %>
-            <%-- Nếu là staff thường, hiển thị nút Go to staff page --%>
-            <form style="display: inline;">
-                <button class="btn btn-info">
-                    <%-- Thay "staffPage.jsp" bằng URL trang staff của bạn --%>
-                    <a href="staffPage.jsp" style="color: black; text-decoration: none;">Go to staff page</a>
-                </button>
-            </form>
-            <% } %>
-            <% } %>
+            <%-- ================================================================= --%>
+
             <form style="display: inline;">
                 <button class="btn btn-secondary">
                     <a href="logout" style="color: white; text-decoration: none;">Đăng xuất</a>
@@ -190,7 +178,6 @@
                         </div>
                         <div class="room-price"><%= price %> VNĐ <span>/đêm</span></div>
 
-                        <%-- ================== THAY ĐỔI Ở ĐÂY ================== --%>
                         <%-- Chỉ hiển thị nút "Đặt phòng" nếu người dùng không phải là nhân viên --%>
                         <% if (true) { %>
                         <form action=<%=IConstant.rentalServlet%> method="get">
@@ -199,7 +186,6 @@
                             <input type="submit" class="btn btn-book" value="Đặt phòng ngay">
                         </form>
                         <% } %>
-                        <%-- ====================================================== --%>
 
                     </div>
                 </div>

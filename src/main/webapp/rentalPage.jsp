@@ -10,17 +10,21 @@
 <%@ page import="utils.IConstant" %>
 
 <%
-    // (Phần logic Java của bạn ở đây được giữ nguyên)
+    // 1. KIỂM TRA ĐĂNG NHẬP
     Boolean isLoginSession = (Boolean) session.getAttribute("isLogin");
     if (isLoginSession == null || !isLoginSession) {
         String returnUrl = "rentalRoom?roomId=" + request.getParameter("roomId") + "&roomTypeId=" + request.getParameter("roomTypeId");
         response.sendRedirect(request.getContextPath() + "/loginPage.jsp?returnUrl=" + java.net.URLEncoder.encode(returnUrl, "UTF-8"));
         return;
     }
+
+    // 2. KIỂM TRA VAI TRÒ: NẾU LÀ STAFF THÌ VỀ TRANG CHỦ
     if (session.getAttribute("userStaff") != null) {
         response.sendRedirect("home");
         return;
     }
+
+    // Nếu đã đăng nhập và không phải staff, thì chắc chắn là Guest
     Room room = (Room) request.getAttribute("room");
     RoomType roomType = (RoomType) request.getAttribute("roomType");
     Guest guest = (Guest) session.getAttribute("userGuest");
@@ -39,23 +43,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đặt phòng - <%= roomType.getTypeName() %> - Luxury Hotel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
     <style>
-        /* (CSS giữ nguyên, không thay đổi) */
-        :root { --primary-color: #007bff; --secondary-color: #6c757d; --dark-bg: #222; --light-text: #fff; --dark-text: #333; }
+        /* --- 1. General Styles --- */
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --dark-bg: #222;
+            --light-text: #fff;
+            --dark-text: #333;
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: Arial, sans-serif; line-height: 1.6; color: var(--dark-text); background-color: #f4f4f4; }
         .container { max-width: 1200px; margin: auto; padding: 0 20px; }
         a { text-decoration: none; color: inherit; }
+
+        /* --- 2. Header --- */
         .header { background-color: var(--dark-bg); color: var(--light-text); padding: 1rem 0; }
         .header .container { display: flex; justify-content: space-between; align-items: center; }
         .logo a { font-size: 1.5em; font-weight: bold; }
         .main-nav { display: flex; align-items: center; }
         .main-nav form { margin-left: 10px; }
+
+        /* --- 3. Buttons --- */
         .btn { display: inline-block; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; font-size: 1rem; text-align: center; }
         .btn-secondary { background-color: var(--secondary-color); color: white; }
         .btn-danger { background-color: #dc3545; color: white; }
         .btn-info { background-color: #17a2b8; color: black; }
         .btn-book { background-color: var(--primary-color); color: var(--light-text); }
+
+        /* --- 4. Main Content for Rental Page --- */
         .main-content { padding: 2rem 0; }
         .rental-page-container { display: flex; gap: 30px; margin-top: 40px; margin-bottom: 40px; flex-wrap: wrap; }
         .room-info-details, .booking-form-section { flex: 1; min-width: 320px; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
@@ -70,10 +87,16 @@
         .form-group-rental input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
         .form-group-rental input:read-only { background-color: #e9ecef; cursor: not-allowed; }
         .total-price { margin-top: 25px; padding-top: 20px; border-top: 2px solid #eee; font-size: 1.5em; font-weight: bold; text-align: right; }
+
+        /* === CSS CẬP NHẬT CHO DỊCH VỤ === */
         .service-options { margin-top: 15px; padding: 15px; background-color: #fff; border: 1px solid #ddd; border-radius: 4px; }
-        .service-item { display: flex; align-items: center; margin-bottom: 10px; }
-        .service-item label { margin-left: 10px; font-weight: normal; color: #333; }
-        .service-item input[type="checkbox"] { width: auto; }
+        .service-item { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
+        .service-item label { flex-grow: 1; margin-left: 10px; font-weight: normal; color: #333; }
+        .service-item input[type="checkbox"] { width: auto; flex-shrink: 0; }
+        .service-quantity, .service-date { padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 80px; }
+        .service-date { width: 155px; }
+
+        /* --- 5. Footer --- */
         .footer { background: #333; color: #fff; padding: 2rem 0 0; }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding-bottom: 2rem; }
         .footer-col h3 { margin-bottom: 1rem; }
@@ -85,11 +108,10 @@
 </head>
 <body>
 
-<%-- (Header giữ nguyên) --%>
 <header class="header">
     <div class="container">
         <div class="logo">
-            <a href=<%= IConstant.homeServlet %>>Luxury Hotel</a>
+            <a href="<%= IConstant.homeServlet %>">Luxury Hotel</a>
         </div>
         <%
             String username = "";
@@ -144,22 +166,14 @@
 
             <div class="booking-form-section">
                 <h2>Thông tin đặt phòng</h2>
-
-                <%-- các attribute được gửi kèm
-                    roomId
-                    fullName
-                    email
-                    checkInDate
-                    checkOutDate
-                    selectedService(array)
-Example: roomId=2&fullName=Nguy%3Fn+Van+An&email=nguyenvanan%40email.com&checkInDate=2025-09-25&checkOutDate=2025-09-28&selectedServices=1&selectedServices=2
-                    --%>
-                <form action=<%= IConstant.bookingServlet %> method="get">
+                <form action="<%= IConstant.bookingServlet %>" method="get">
                     <input type="hidden" name="roomId" value="<%= room.getRoomId() %>">
                     <input type="hidden" id="price-per-night" value="<%= roomType.getPricePerNight() %>">
+                    <input type="hidden" id="bookingDate" name="bookingDate">
+
                     <div class="form-group-rental">
                         <label for="fullName">Họ và tên</label>
-                        <input type="hidden" id="guessId" name="guestId" value="<%= guest.getGuestId() %>">
+                        <input type="hidden" id="guestId" name="guestId" value="<%= guest.getGuestId() %>">
                         <input type="text" id="fullName" name="fullName" value="<%= guest.getFullName() %>" readonly>
                     </div>
                     <div class="form-group-rental">
@@ -180,6 +194,7 @@ Example: roomId=2&fullName=Nguy%3Fn+Van+An&email=nguyenvanan%40email.com&checkIn
                             <% if (services != null && !services.isEmpty()) {
                                 for (Service service : services) {
                             %>
+                            <%-- === HTML CẬP NHẬT CHO MỤC DỊCH VỤ === --%>
                             <div class="service-item">
                                 <input type="checkbox"
                                        name="selectedServices"
@@ -189,6 +204,17 @@ Example: roomId=2&fullName=Nguy%3Fn+Van+An&email=nguyenvanan%40email.com&checkIn
                                 <label for="service-<%= service.getServiceId() %>">
                                     <%= service.getServiceName() %> (+<%= currencyFormatter.format(service.getPrice()) %>)
                                 </label>
+                                <input type="number"
+                                       name="quantity_<%= service.getServiceId() %>"
+                                       value="1"
+                                       min="1"
+                                       class="service-quantity"
+                                       disabled>
+                                <input type="date"
+                                       name="serviceDate_<%= service.getServiceId() %>"
+                                       class="service-date"
+                                       disabled
+                                       required>
                             </div>
                             <%
                                 }
@@ -207,7 +233,6 @@ Example: roomId=2&fullName=Nguy%3Fn+Van+An&email=nguyenvanan%40email.com&checkIn
     </div>
 </main>
 
-<%-- (Footer giữ nguyên) --%>
 <footer class="footer">
     <div class="container footer-grid">
         <div class="footer-col">
@@ -236,50 +261,128 @@ Example: roomId=2&fullName=Nguy%3Fn+Van+An&email=nguyenvanan%40email.com&checkIn
 </footer>
 
 <script>
-    // Phần Javascript tính tiền không đổi
+    // --- Lấy các phần tử DOM ---
     const checkInInput = document.getElementById('check-in');
     const checkOutInput = document.getElementById('check-out');
     const totalPriceElement = document.getElementById('total-price-value');
     const pricePerNight = parseFloat(document.getElementById('price-per-night').value);
     const today = new Date().toISOString().split('T')[0];
-    const serviceCheckboxes = document.querySelectorAll('input[name="selectedServices"]');
+    const allServiceItems = document.querySelectorAll('.service-item');
+    const bookingForm = document.querySelector('form[action="<%= IConstant.bookingServlet %>"]');
+    const bookingDateInput = document.getElementById('bookingDate');
+
     checkInInput.setAttribute('min', today);
-    function calculateTotal() {
-        let roomTotal = 0;
-        const checkInDate = new Date(checkInInput.value);
-        const checkOutDate = new Date(checkOutInput.value);
-        if (checkInInput.value && checkOutInput.value && checkOutDate > checkInDate) {
-            const timeDiff = checkOutDate.getTime() - checkInDate.getTime();
-            const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
-            if (nights > 0) {
-                roomTotal = nights * pricePerNight;
+
+    // --- CÁC HÀM XỬ LÝ ---
+
+    /**
+     * Cập nhật ràng buộc (min/max) cho tất cả các ô chọn ngày dịch vụ
+     * dựa trên ngày check-in và check-out chính.
+     */
+    function updateServiceDateConstraints() {
+        const checkInDate = checkInInput.value;
+        const checkOutDate = checkOutInput.value;
+
+        document.querySelectorAll('.service-date').forEach(dateInput => {
+            if (checkInDate) {
+                dateInput.min = checkInDate;
             }
-        }
-        let servicesTotal = 0;
-        serviceCheckboxes.forEach(checkbox => {
-            if (checkbox.checked) {
-                servicesTotal += parseFloat(checkbox.dataset.price);
+            if (checkOutDate) {
+                let maxDate = new Date(checkOutDate);
+                dateInput.max = maxDate.toISOString().split('T')[0];
+            }
+
+            if (dateInput.value && (dateInput.value < dateInput.min || dateInput.value > dateInput.max)) {
+                dateInput.value = '';
             }
         });
+    }
+
+    /**
+     * Tính toán và cập nhật lại tổng tiền.
+     */
+    function calculateTotal() {
+        // 1. Tính tiền phòng
+        let roomTotal = 0;
+        if (checkInInput.value && checkOutInput.value && new Date(checkOutInput.value) > new Date(checkInInput.value)) {
+            const timeDiff = new Date(checkOutInput.value).getTime() - new Date(checkInInput.value).getTime();
+            const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            roomTotal = nights > 0 ? nights * pricePerNight : 0;
+        }
+
+        // 2. Tính tiền dịch vụ (dựa trên số lượng)
+        let servicesTotal = 0;
+        allServiceItems.forEach(item => {
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            if (checkbox.checked) {
+                const price = parseFloat(checkbox.dataset.price);
+                const quantityInput = item.querySelector('.service-quantity');
+                const quantity = parseInt(quantityInput.value, 10) || 1;
+                servicesTotal += price * quantity;
+            }
+        });
+
         const finalTotal = roomTotal + servicesTotal;
         totalPriceElement.textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(finalTotal);
     }
+
+    // --- GẮN CÁC SỰ KIỆN ---
+
+    // Sự kiện cho ngày check-in và check-out chính
     checkInInput.addEventListener('change', () => {
         if (checkInInput.value) {
             let nextDay = new Date(checkInInput.value);
             nextDay.setDate(nextDay.getDate() + 1);
             const nextDayString = nextDay.toISOString().split('T')[0];
             checkOutInput.setAttribute('min', nextDayString);
-            if (checkOutInput.value < checkInInput.value) {
+            if (checkOutInput.value && checkOutInput.value < nextDayString) {
                 checkOutInput.value = nextDayString;
             }
         }
+        updateServiceDateConstraints();
         calculateTotal();
     });
-    checkOutInput.addEventListener('change', calculateTotal);
-    serviceCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', calculateTotal);
+
+    checkOutInput.addEventListener('change', () => {
+        updateServiceDateConstraints();
+        calculateTotal();
     });
+
+    // Sự kiện cho từng mục dịch vụ
+    allServiceItems.forEach(item => {
+        const checkbox = item.querySelector('input[type="checkbox"]');
+        const quantityInput = item.querySelector('.service-quantity');
+        const dateInput = item.querySelector('.service-date');
+
+        checkbox.addEventListener('change', () => {
+            const isChecked = checkbox.checked;
+            quantityInput.disabled = !isChecked;
+            dateInput.disabled = !isChecked;
+
+            if (isChecked) {
+                if (checkInInput.value) {
+                    dateInput.value = checkInInput.value;
+                }
+            } else {
+                quantityInput.value = '1';
+                dateInput.value = '';
+            }
+            calculateTotal();
+        });
+
+        quantityInput.addEventListener('input', calculateTotal);
+    });
+
+    // Sự kiện khi gửi form (để thêm bookingDate)
+    bookingForm.addEventListener('submit', function(event) {
+        const todaySubmit = new Date();
+        const year = todaySubmit.getFullYear();
+        const month = String(todaySubmit.getMonth() + 1).padStart(2, '0');
+        const day = String(todaySubmit.getDate()).padStart(2, '0');
+        bookingDateInput.value = `${year}-${month}-${day}`;
+    });
+
+    // Tính tổng tiền lần đầu khi tải trang
     calculateTotal();
 </script>
 </body>
