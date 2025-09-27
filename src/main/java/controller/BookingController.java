@@ -60,7 +60,18 @@ public class BookingController extends HttpServlet {
         LocalDateTime inDateTime = inDate.atStartOfDay();
         LocalDateTime outDateTime = outDate.atTime(23, 59, 59);
 
+        int quantity = 0;
+        LocalDate serviceDate;
         String[] selectedServices = req.getParameterValues("selectedServices");
+        if (selectedServices != null) {
+            for (String serviceId : selectedServices) {
+                int id = Integer.parseInt(serviceId);
+                String quantityParam = req.getParameter("quantity_" + id);
+                String serviceDateParam = req.getParameter("serviceDate_" + id);
+                quantity = Integer.parseInt(quantityParam);
+                serviceDate = LocalDate.parse(serviceDateParam);
+            }
+        }
 
     }
 }

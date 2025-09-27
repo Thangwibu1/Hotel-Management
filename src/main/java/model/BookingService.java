@@ -1,28 +1,29 @@
 package model;
 
+import java.time.LocalDate; // THAY ĐỔI: Thêm import cho LocalDate
+
 /**
  * Model cho bảng BOOKING_SERVICE
- * (Đã được cập nhật để sử dụng bookingId và serviceId kiểu int)
+ * (Đã được cập nhật để sử dụng LocalDate cho serviceDate)
  */
 public class BookingService {
-    // --- THAY ĐỔI: Thuộc tính ---
     private int bookingServiceId;
-    private int bookingId; // Đổi từ 'Booking booking' thành 'int bookingId'
-    private int serviceId; // Đổi từ 'Service service' thành 'int serviceId'
+    private int bookingId;
+    private int serviceId;
     private int quantity;
-    private String serviceDate;
+    private LocalDate serviceDate; // THAY ĐỔI: Kiểu dữ liệu thành LocalDate
 
     // --- Constructors được cập nhật ---
     public BookingService() {}
 
-    public BookingService(int bookingId, int serviceId, int quantity, String serviceDate) {
+    public BookingService(int bookingId, int serviceId, int quantity, LocalDate serviceDate) { // THAY ĐỔI
         this.bookingId = bookingId;
         this.serviceId = serviceId;
         this.quantity = quantity;
         this.serviceDate = serviceDate;
     }
 
-    public BookingService(int bookingServiceId, int bookingId, int serviceId, int quantity, String serviceDate) {
+    public BookingService(int bookingServiceId, int bookingId, int serviceId, int quantity, LocalDate serviceDate) { // THAY ĐỔI
         this.bookingServiceId = bookingServiceId;
         this.bookingId = bookingId;
         this.serviceId = serviceId;
@@ -43,18 +44,18 @@ public class BookingService {
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
 
-    public String getServiceDate() { return serviceDate; }
-    public void setServiceDate(String serviceDate) { this.serviceDate = serviceDate; }
+    public LocalDate getServiceDate() { return serviceDate; } // THAY ĐỔI
+    public void setServiceDate(LocalDate serviceDate) { this.serviceDate = serviceDate; } // THAY ĐỔI
 
-    // --- THAY ĐỔI: toString() được cập nhật để hiển thị ID ---
+    // --- THAY ĐỔI: toString() được cập nhật ---
     @Override
     public String toString() {
         return "BookingService{" +
                 "bookingServiceId=" + bookingServiceId +
-                ", bookingId=" + bookingId +         // Hiển thị bookingId
-                ", serviceId=" + serviceId +         // Hiển thị serviceId
+                ", bookingId=" + bookingId +
+                ", serviceId=" + serviceId +
                 ", quantity=" + quantity +
-                ", serviceDate='" + serviceDate + '\'' +
+                ", serviceDate=" + serviceDate + // Bỏ dấu nháy đơn, sẽ tự gọi .toString() của LocalDate
                 '}';
     }
 }
