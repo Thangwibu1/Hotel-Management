@@ -2,6 +2,7 @@ package controller;
 
 import dao.*;
 import model.Booking;
+import model.BookingService;
 import model.ChoosenService;
 import org.omg.CORBA.ARG_OUT;
 
@@ -14,23 +15,45 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/booking")
 public class BookingController extends HttpServlet {
     private BookingDAO bookingDAO;
     private RoomDAO roomDAO;
     private GuestDAO guestDAO;
+    private BookingServiceDAO bookingServiceDAO;
 
     @Override
     public void init() throws ServletException {
         bookingDAO = new BookingDAO();
         roomDAO = new RoomDAO();
         guestDAO = new GuestDAO();
+        bookingServiceDAO = new BookingServiceDAO();
     }
 
-    protected boolean bookingHandle(int roomId, int guessId, LocalDateTime checkInDate, LocalDateTime checkOutDate, LocalDate bookingDate) {
+    protected int bookingHandle(int roomId, int guessId, LocalDateTime checkInDate, LocalDateTime checkOutDate, LocalDate bookingDate) {
         Booking newBooking = new Booking(guessId, roomId, checkInDate, checkOutDate, bookingDate, "Pending");
-        return bookingDAO.addBooking(newBooking);
+        return bookingDAO.addBookingV2(newBooking);
+    }
+
+    protected boolean bookingServiceHandle(List<ChoosenService> services, int bookingId) {
+        boolean resutlt = false;
+
+        for (ChoosenService service : services) {
+            try {
+                BookingService newBookingService = new BookingService(bookingId, service.getServiceId(), service.getQuantity(), service.getServiceDate());
+                resutlt = bookingServiceDAO.addBookingService(newBookingService);
+                resutlt = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                resutlt = false;
+                break;
+            }
+
+        }
+
+        return resutlt;
     }
 
     @Override
