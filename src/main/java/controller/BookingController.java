@@ -1,10 +1,8 @@
 package controller;
 
-import dao.BookingDAO;
-import dao.GuestDAO;
-import dao.RoomDAO;
-import dao.RoomTypeDAO;
+import dao.*;
 import model.Booking;
+import model.ChoosenService;
 import org.omg.CORBA.ARG_OUT;
 
 import javax.servlet.ServletException;
@@ -37,15 +35,12 @@ public class BookingController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //        roomId
-        //        guestId
-//                    fullName
-//                    email
-//                    checkInDate
-//                    checkOutDate
-//                    selectedService(array)
-// booking?roomId=1&bookingDate=2025-09-27&guestId=1&fullName=Nguy%3Fn+Van+An&email=nguyenvanan%40email.com&checkInDate=2025-09-27&checkOutDate=2025-09-30&
-// selectedServices=1&quantity_1=1&serviceDate_1=2025-09-29&selectedServices=2&quantity_2=2&serviceDate_2=2025-09-27
+/*
+* http://localhost:8080/PRJ_Assignment/booking?roomId=1&bookingDate=2025-09-28&guestId=1&fullName=Nguy%3Fn+Van+An&email=nguyenvanan%40email.com&checkInDate=2025-09-27&checkOutDate=2025-09-30&
+* serviceId=1&serviceQuantity=1&serviceDate=2025-09-27&
+* serviceId=1&serviceQuantity=1&serviceDate=2025-09-28&
+* serviceId=3&serviceQuantity=1&serviceDate=2025-09-27
+* */
         String roomId = req.getParameter("roomId");
         String guestId = req.getParameter("guestId");
 
@@ -60,16 +55,14 @@ public class BookingController extends HttpServlet {
         LocalDateTime inDateTime = inDate.atStartOfDay();
         LocalDateTime outDateTime = outDate.atTime(23, 59, 59);
 
-        int quantity = 0;
-        LocalDate serviceDate;
-        String[] selectedServices = req.getParameterValues("selectedServices");
-        if (selectedServices != null) {
-            for (String serviceId : selectedServices) {
-                int id = Integer.parseInt(serviceId);
-                String quantityParam = req.getParameter("quantity_" + id);
-                String serviceDateParam = req.getParameter("serviceDate_" + id);
-                quantity = Integer.parseInt(quantityParam);
-                serviceDate = LocalDate.parse(serviceDateParam);
+        ArrayList<ChoosenService> services = new ArrayList<>();
+        String[] serviceId = (String[]) req.getParameterValues("serviceId");
+        String[] serviceQuantity = (String[]) req.getParameterValues("serviceQuantity");
+        String[] serviceDate = (String[]) req.getParameterValues("serviceDate");
+        if (serviceId != null && serviceQuantity != null && serviceDate != null) {
+            for (int i = 0; i < serviceId.length; i++) {
+                ChoosenService tmpService = new ChoosenService(Integer.parseInt(serviceId[i]), Integer.parseInt(serviceQuantity[i]), LocalDate.parse(serviceDate[i]));
+                services.add(tmpService);
             }
         }
 
