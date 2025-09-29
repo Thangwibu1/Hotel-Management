@@ -33,7 +33,7 @@ public class BookingController extends HttpServlet {
     }
 
     protected int bookingHandle(int roomId, int guessId, LocalDateTime checkInDate, LocalDateTime checkOutDate, LocalDate bookingDate) {
-        Booking newBooking = new Booking(guessId, roomId, checkInDate, checkOutDate, bookingDate, "Pending");
+        Booking newBooking = new Booking(guessId, roomId, checkInDate, checkOutDate, bookingDate, "Reserved");
         return bookingDAO.addBookingV2(newBooking);
     }
 
@@ -88,6 +88,13 @@ public class BookingController extends HttpServlet {
                 services.add(tmpService);
             }
         }
+        try {
+            int newBookingId = bookingHandle(Integer.parseInt(roomId), Integer.parseInt(guestId), inDateTime, outDateTime, bookDate);
+            boolean bookingServiceResult = bookingServiceHandle(services, newBookingId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 }
