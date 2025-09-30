@@ -115,4 +115,24 @@ public class RoomDAO {
         return result;
     }
 
+    public int getRoomTypeIdByRoomId(int roomId) {
+        int result = 0;
+        String sql = "SELECT RoomTypeID FROM ROOM WHERE RoomID = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, roomId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                result = rs.getInt("RoomTypeID");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
 }

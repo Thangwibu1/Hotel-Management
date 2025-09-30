@@ -108,4 +108,37 @@ public class BookingDAO {
         // BƯỚC 3: Trả về ID đã lấy được
         return generatedBookingId;
     }
+
+    public Booking getBookingById(int bookingId) {
+        Booking result = null;
+        String sql = "SELECT [BookingID], [GuestID], [RoomID], [CheckInDate], [CheckOutDate], [BookingDate], [Status] FROM [HotelManagement].[dbo].[BOOKING] where BookingID = ?";
+
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, bookingId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                while (rs.next()) {
+                    // Bước 1: Lấy tất cả dữ liệu từ ResultSet
+
+                    int guestId = rs.getInt("GuestID");
+                    int roomId = rs.getInt("RoomID");
+                    String status = rs.getString("Status");
+
+                    // Lấy thẳng đối tượng ngày giờ
+                    LocalDateTime checkInDate = rs.getObject("CheckInDate", LocalDateTime.class);
+                    LocalDateTime checkOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
+                    LocalDate bookingDate = rs.getObject("BookingDate", LocalDate.class);
+
+                    result = new Booking(bookingId, guestId, roomId, checkInDate, checkOutDate, bookingDate, status);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 }

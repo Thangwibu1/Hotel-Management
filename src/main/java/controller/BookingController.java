@@ -22,6 +22,7 @@ public class BookingController extends HttpServlet {
     private GuestDAO guestDAO;
     private BookingServiceDAO bookingServiceDAO;
     private ServiceDAO serviceDAO;
+    private RoomTypeDAO roomTypeDAO;
 
     @Override
     public void init() throws ServletException {
@@ -30,6 +31,7 @@ public class BookingController extends HttpServlet {
         guestDAO = new GuestDAO();
         bookingServiceDAO = new BookingServiceDAO();
         serviceDAO = new ServiceDAO();
+        roomTypeDAO = new RoomTypeDAO();
     }
 
     protected int bookingHandle(int roomId, int guessId, LocalDateTime checkInDate, LocalDateTime checkOutDate, LocalDate bookingDate) {
@@ -95,8 +97,9 @@ public class BookingController extends HttpServlet {
                 services.add(tmpService);
             }
         }
+        int newBookingId = 0;
         try {
-            int newBookingId = bookingHandle(Integer.parseInt(roomId), Integer.parseInt(guestId), inDateTime, outDateTime, bookDate);
+            newBookingId = bookingHandle(Integer.parseInt(roomId), Integer.parseInt(guestId), inDateTime, outDateTime, bookDate);
             if (newBookingId > 0) {
                 roomDAO.updateRoomStatus(Integer.parseInt(roomId), "Occupied");
                 boolean bookingServiceResult = bookingServiceHandle(services, newBookingId);
@@ -111,6 +114,10 @@ public class BookingController extends HttpServlet {
         }
         Guest viewGuest = guestDAO.getGuestById(Integer.parseInt(guestId));
 
+        req.setAttribute("booking", bookingDAO.getBookingById(newBookingId));
+
+        req.setAttribute("chosenServices", services);
+        req.setAttribute("roomType", roomTypeDAO.getRoomTypeById(viewRoom.getRoomTypeId()));
         req.setAttribute("room", viewRoom);
         req.setAttribute("guest", viewGuest);
         req.setAttribute("services", servicesList);
