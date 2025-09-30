@@ -1,9 +1,8 @@
 package controller;
 
 import dao.*;
-import model.Booking;
-import model.BookingService;
-import model.ChoosenService;
+import model.*;
+import utils.IConstant;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +21,7 @@ public class BookingController extends HttpServlet {
     private RoomDAO roomDAO;
     private GuestDAO guestDAO;
     private BookingServiceDAO bookingServiceDAO;
+    private ServiceDAO serviceDAO;
 
     @Override
     public void init() throws ServletException {
@@ -29,6 +29,7 @@ public class BookingController extends HttpServlet {
         roomDAO = new RoomDAO();
         guestDAO = new GuestDAO();
         bookingServiceDAO = new BookingServiceDAO();
+        serviceDAO = new ServiceDAO();
     }
 
     protected int bookingHandle(int roomId, int guessId, LocalDateTime checkInDate, LocalDateTime checkOutDate, LocalDate bookingDate) {
@@ -63,7 +64,7 @@ public class BookingController extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*
          * http://localhost:8080/PRJ_Assignment/booking?roomId=1&bookingDate=2025-09-28&guestId=1&fullName=Nguy%3Fn+Van+An&email=nguyenvanan%40email.com&checkInDate=2025-09-27&checkOutDate=2025-09-30&
          * serviceId=1&serviceQuantity=1&serviceDate=2025-09-27&
@@ -103,7 +104,17 @@ public class BookingController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Room viewRoom = roomDAO.getRoomById(Integer.parseInt(roomId));
+        ArrayList<Service> servicesList = new ArrayList<>();
+        for (ChoosenService service : services) {
+            servicesList.add(serviceDAO.getServiceById(service.getServiceId()));
+        }
+        Guest viewGuest = guestDAO.getGuestById(Integer.parseInt(guestId));
 
+        req.setAttribute("room", viewRoom);
+        req.setAttribute("guest", viewGuest);
+        req.setAttribute("services", servicesList);
 
+        req.getRequestDispatcher(IConstant.bookingDashboard).forward(req, resp);
     }
 }

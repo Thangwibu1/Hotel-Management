@@ -126,7 +126,7 @@
         <%-- Bỏ cột thông tin phòng bên trái theo yêu cầu --%>
         <div class="booking-form-section">
             <h2>Thông tin đặt phòng</h2>
-            <form id="bookingForm" action="<%= IConstant.bookingServlet %>" method="get">
+            <form id="bookingForm" action="<%= IConstant.bookingServlet %>" method="post">
                 <%-- Các input ẩn và thông tin khách hàng --%>
                 <input type="hidden" name="roomId" value="<%= room.getRoomId() %>">
                 <input type="hidden" id="price-per-night" value="<%= roomType.getPricePerNight() %>">

@@ -6,6 +6,7 @@ import utils.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class GuestDAO {
@@ -69,6 +70,36 @@ public class GuestDAO {
         } catch (Exception e) {
 
         }
+        return guest;
+    }
+
+    public Guest getGuestById(int guestId){
+        Guest guest = null;
+
+        String sql = "SELECT * FROM [HotelManagement].[dbo].[GUEST] where GuestID = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, guestId);
+            ResultSet rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+                    String fullName = rs.getString("FullName");
+                    String phone = rs.getString("Phone");
+                    String email = rs.getString("Email");
+                    String address = rs.getString("Address");
+                    String idNumber = rs.getString("IDNumber");
+                    String dateOfBirth = rs.getString("DateOfBirth");
+                    guest = new Guest();
+                    guest = new Guest(guestId, fullName, phone, email, address, idNumber, dateOfBirth, "null");
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         return guest;
     }
 }
