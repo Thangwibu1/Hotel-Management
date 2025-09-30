@@ -180,7 +180,7 @@
 
                         <%-- Chỉ hiển thị nút "Đặt phòng" nếu người dùng không phải là nhân viên --%>
                         <% if (true) { %>
-                        <form action=<%=IConstant.rentalServlet%> method="get">
+                        <form action=<%=IConstant.rentalServlet%> method="post">
                             <input type="hidden" value="<%= room.getRoomId() %>" name="roomId">
                             <input type="hidden" value="<%= room.getRoomTypeId()%>" name="roomTypeId">
                             <input type="submit" class="btn btn-book" value="Đặt phòng ngay">

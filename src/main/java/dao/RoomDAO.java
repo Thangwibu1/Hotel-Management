@@ -94,4 +94,25 @@ public class RoomDAO {
         return room;
     }
 
+    public boolean updateRoomStatus(int roomId, String status) {
+        boolean result = false;
+
+        String sql = "UPDATE ROOM SET Status = ? WHERE RoomID = ? ";
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, status);
+            ps.setInt(2, roomId);
+            boolean rowsAffected = ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
+    }
+
 }

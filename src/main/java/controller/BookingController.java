@@ -4,7 +4,6 @@ import dao.*;
 import model.Booking;
 import model.BookingService;
 import model.ChoosenService;
-import org.omg.CORBA.ARG_OUT;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,8 +32,15 @@ public class BookingController extends HttpServlet {
     }
 
     protected int bookingHandle(int roomId, int guessId, LocalDateTime checkInDate, LocalDateTime checkOutDate, LocalDate bookingDate) {
+        int returnValue = 0;
         Booking newBooking = new Booking(guessId, roomId, checkInDate, checkOutDate, bookingDate, "Reserved");
-        return bookingDAO.addBookingV2(newBooking);
+        try {
+            returnValue = bookingDAO.addBookingV2(newBooking);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(returnValue);
+        return returnValue;
     }
 
     protected boolean bookingServiceHandle(List<ChoosenService> services, int bookingId) {
@@ -58,12 +64,12 @@ public class BookingController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-/*
-* http://localhost:8080/PRJ_Assignment/booking?roomId=1&bookingDate=2025-09-28&guestId=1&fullName=Nguy%3Fn+Van+An&email=nguyenvanan%40email.com&checkInDate=2025-09-27&checkOutDate=2025-09-30&
-* serviceId=1&serviceQuantity=1&serviceDate=2025-09-27&
-* serviceId=1&serviceQuantity=1&serviceDate=2025-09-28&
-* serviceId=3&serviceQuantity=1&serviceDate=2025-09-27
-* */
+        /*
+         * http://localhost:8080/PRJ_Assignment/booking?roomId=1&bookingDate=2025-09-28&guestId=1&fullName=Nguy%3Fn+Van+An&email=nguyenvanan%40email.com&checkInDate=2025-09-27&checkOutDate=2025-09-30&
+         * serviceId=1&serviceQuantity=1&serviceDate=2025-09-27&
+         * serviceId=1&serviceQuantity=1&serviceDate=2025-09-28&
+         * serviceId=3&serviceQuantity=1&serviceDate=2025-09-27
+         * */
         String roomId = req.getParameter("roomId");
         String guestId = req.getParameter("guestId");
 
@@ -90,7 +96,10 @@ public class BookingController extends HttpServlet {
         }
         try {
             int newBookingId = bookingHandle(Integer.parseInt(roomId), Integer.parseInt(guestId), inDateTime, outDateTime, bookDate);
-            boolean bookingServiceResult = bookingServiceHandle(services, newBookingId);
+            if (newBookingId > 0) {
+                roomDAO.updateRoomStatus(Integer.parseInt(roomId), "Occupied");
+                boolean bookingServiceResult = bookingServiceHandle(services, newBookingId);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
