@@ -4,10 +4,7 @@ import model.Booking;
 import utils.DBConnection;
 // Không cần import IConstant chứa formatter nữa (trừ khi dùng ở nơi khác)
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -56,6 +53,7 @@ public class BookingDAO {
     }
 
     public boolean addBooking(Booking booking) {
+        boolean result = false;
         String sql = "INSERT INTO [dbo].[BOOKING] (GuestID, RoomID, CheckInDate, CheckOutDate, BookingDate, Status) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -67,11 +65,80 @@ public class BookingDAO {
             ps.setObject(5, booking.getBookingDate());   // Gán trực tiếp đối tượng
             ps.setString(6, booking.getStatus());
 
-            int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0;
+            result = true;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return result;
+    }
+
+    public int addBookingV2(Booking booking) {
+        int generatedBookingId = -1; // Sẽ chứa ID trả về, mặc định là -1 (thất bại)
+        String sql = "INSERT INTO [dbo].[BOOKING] (GuestID, RoomID, CheckInDate, CheckOutDate, BookingDate, Status) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = DBConnection.getConnection();
+             // BƯỚC 1: Yêu cầu JDBC trả về các key (ID) được tự động sinh ra
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setInt(1, booking.getGuestId());
+            ps.setInt(2, booking.getRoomId());
+            ps.setObject(3, booking.getCheckInDate());
+            ps.setObject(4, booking.getCheckOutDate());
+            ps.setObject(5, booking.getBookingDate());
+            ps.setString(6, booking.getStatus());
+
+            int rowsAffected = ps.executeUpdate();
+
+            // BƯỚC 2: Nếu insert thành công, tiến hành lấy ID
+            if (rowsAffected > 0) {
+                // Lấy về một ResultSet chứa các ID vừa được sinh ra
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    // Di chuyển đến dòng đầu tiên và lấy ID
+                    if (rs.next()) {
+                        // Lấy giá trị int từ cột đầu tiên, đó chính là BookingID
+                        generatedBookingId = rs.getInt(1);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Nếu có lỗi, hàm sẽ trả về giá trị mặc định là -1
+        }
+
+        // BƯỚC 3: Trả về ID đã lấy được
+        return generatedBookingId;
+    }
+
+    public Booking getBookingById(int bookingId) {
+        Booking result = null;
+        String sql = "SELECT [BookingID], [GuestID], [RoomID], [CheckInDate], [CheckOutDate], [BookingDate], [Status] FROM [HotelManagement].[dbo].[BOOKING] where BookingID = ?";
+
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, bookingId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                while (rs.next()) {
+                    // Bước 1: Lấy tất cả dữ liệu từ ResultSet
+
+                    int guestId = rs.getInt("GuestID");
+                    int roomId = rs.getInt("RoomID");
+                    String status = rs.getString("Status");
+
+                    // Lấy thẳng đối tượng ngày giờ
+                    LocalDateTime checkInDate = rs.getObject("CheckInDate", LocalDateTime.class);
+                    LocalDateTime checkOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
+                    LocalDate bookingDate = rs.getObject("BookingDate", LocalDate.class);
+
+                    result = new Booking(bookingId, guestId, roomId, checkInDate, checkOutDate, bookingDate, status);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }
