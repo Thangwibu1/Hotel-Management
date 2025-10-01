@@ -19,8 +19,10 @@ public interface IConstant {
     public static final String registerServlet = "register";
     public static final String logoutServlet = "logout";
     public static final String rentalServlet = "rentalRoom";
+    public static final String viewBookingServlet = "viewBooking";
 
     public static final String bookingDashboard = "bookingDashboard.jsp";
+    public static final String viewHisttoryRental = "viewHistoryRental.jsp";
     public static final String staffDashboard = "staffDashboard.jsp";
     public static final String homePage = "home.jsp";
     public static final String loginPage = "loginPage.jsp";
