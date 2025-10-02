@@ -141,4 +141,43 @@ public class BookingDAO {
 
         return result;
     }
+
+    public ArrayList<Booking> getBookingByGuestId(int guestId) {
+        ArrayList<Booking> result = new ArrayList<>();
+        String sql = "SELECT [BookingID], [GuestID], [RoomID], [CheckInDate], [CheckOutDate], [BookingDate], [Status] FROM [HotelManagement].[dbo].[BOOKING] where GuestID = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, guestId);
+            rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+                    int bookingId = rs.getInt("BookingID");
+                    int roomId = rs.getInt("RoomID");
+                    String status = rs.getString("Status");
+                    LocalDateTime checkInDate = rs.getObject("CheckInDate", LocalDateTime.class);
+                    LocalDateTime checkOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
+                    LocalDate bookingDate = rs.getObject("BookingDate", LocalDate.class);
+                    Booking booking = new Booking();
+                    booking.setBookingId(bookingId);
+                    booking.setGuestId(guestId);
+                    booking.setRoomId(roomId);
+                    booking.setStatus(status);
+                    booking.setCheckInDate(checkInDate);
+                    booking.setCheckOutDate(checkOutDate);
+                    booking.setBookingDate(bookingDate);
+
+                    result.add(booking);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
+    }
 }

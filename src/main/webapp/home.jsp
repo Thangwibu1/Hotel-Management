@@ -34,6 +34,7 @@
             Guest loginGuest = (Guest) request.getAttribute("userGuest");
 
             String username = "";
+            int guestId = 0;
             boolean isStaff = false;
             boolean isAdmin = false;
             // Kiểm tra isLogin để tránh NullPointerException
@@ -46,6 +47,7 @@
                         isAdmin = true;
                     }
                 } else if (loginGuest != null) {
+                    guestId = loginGuest.getGuestId();
                     username = loginGuest.getFullName();
                 }
             }
@@ -55,10 +57,11 @@
             <span style="color: white; margin-right: 15px;">Xin chào, <%= username %>!</span>
 
             <%-- ================== NÚT MỚI ĐƯỢC THÊM TẠI ĐÂY ================== --%>
-            <form style="display: inline;">
-                <button class="btn btn-secondary"> <%-- Dùng màu khác cho dễ phân biệt --%>
-                    <a href="viewBookings" style="color: white; text-decoration: none;">Xem Phòng Đã Đặt</a>
-                </button>
+            <form action="<%= IConstant.viewBookingServlet %>" method="post" style="display: inline;">
+                <input type="hidden" name="guestId" value="<%= guestId %>">
+                <input type="submit" class="btn btn-secondary" name="viewBooking" value="Xem Phòng Đã Đặt">
+
+
             </form>
             <%-- ================================================================= --%>
 
