@@ -17,6 +17,21 @@ public class Payment {
     // Constructors
     public Payment() {}
 
+    public Payment(Booking booking, LocalDate paymentDate, BigDecimal amount, String paymentMethod, String status) {
+        this.booking = booking;
+        this.paymentDate = paymentDate;
+        this.amount = amount;
+        this.paymentMethod = paymentMethod;
+        this.status = status;
+    }
+
+    public Payment(Booking booking, BigDecimal amount, String paymentMethod, String status) {
+        this.booking = booking;
+        this.amount = amount;
+        this.paymentMethod = paymentMethod;
+        this.status = status;
+    }
+
     public Payment(int paymentId, Booking booking, LocalDate paymentDate, BigDecimal amount, String paymentMethod, String status) {
         this.paymentId = paymentId;
         this.booking = booking;

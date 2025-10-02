@@ -1,5 +1,4 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%-- Import đầy đủ các lớp cần thiết --%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.Booking" %>
@@ -8,38 +7,25 @@
 <%@ page import="model.Guest" %>
 <%@ page import="model.Staff" %>
 <%@ page import="utils.IConstant" %>
-
-<%-- ================== THÊM MỚI: KIỂM TRA ĐĂNG NHẬP ================== --%>
-<%
-    Boolean isLogin = (Boolean) session.getAttribute("isLogin");
-    // Nếu chưa đăng nhập (isLogin là null hoặc false)
-    if (isLogin == null || !isLogin) {
-        // Chuyển hướng về trang đăng nhập.
-        // Thêm returnUrl để sau khi đăng nhập thành công có thể quay lại trang này.
-        response.sendRedirect(request.getContextPath() + "/loginPage.jsp?returnUrl=viewbooking");
-        return; // Rất quan trọng: Dừng việc render phần còn lại của trang.
-    }
-%>
-<%-- ==================================================================== --%>
-
+<%@ page import="com.sun.org.apache.bcel.internal.generic.ICONST" %>
 
 <%!
-    // Helper function: Tạo một hàm nhỏ để tìm tên loại phòng từ ID.
+    // Helper function
     public String getRoomTypeNameById(int roomTypeId, List<RoomType> roomTypes) {
-        if (roomTypes == null) {
-            return "N/A";
-        }
+        if (roomTypes == null) return "N/A";
         for (RoomType rt : roomTypes) {
-            if (rt.getRoomTypeId() == roomTypeId) {
-                return rt.getTypeName();
-            }
+            if (rt.getRoomTypeId() == roomTypeId) return rt.getTypeName();
         }
         return "Unknown";
     }
 %>
 
 <%
-    // Lấy tất cả các attributes từ request và ép kiểu
+    Boolean isLogin = (Boolean) session.getAttribute("isLogin");
+    if (isLogin == null || !isLogin) {
+        response.sendRedirect(request.getContextPath() + "/loginPage.jsp?returnUrl=viewbooking");
+        return;
+    }
     List<Booking> bookings = (List<Booking>) request.getAttribute("bookings");
     List<Room> rooms = (List<Room>) request.getAttribute("rooms");
     List<RoomType> roomTypes = (List<RoomType>) request.getAttribute("roomTypes");
@@ -54,7 +40,7 @@
     <title>Lịch Sử Đặt Phòng - Luxury Hotel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
     <style>
-        /* (CSS giữ nguyên như phiên bản trước) */
+        /* (CSS giữ nguyên) */
         :root { --primary-color: #007bff; --secondary-color: #6c757d; --dark-bg: #222; --light-text: #fff; --dark-text: #333; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: Arial, sans-serif; line-height: 1.6; color: var(--dark-text); background-color: #f4f4f4; }
@@ -65,8 +51,9 @@
         .logo a { font-size: 1.5em; font-weight: bold; }
         .main-nav { display: flex; align-items: center; }
         .main-nav form { margin-left: 10px; }
-        .btn { display: inline-block; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; font-size: 1rem; text-align: center; }
+        .btn { display: inline-block; padding: 8px 15px; border-radius: 5px; border: none; cursor: pointer; font-size: 0.9rem; text-align: center; }
         .btn-secondary { background-color: var(--secondary-color); color: white; }
+        .btn-primary { background-color: var(--primary-color); color: white; }
         .footer { background: #333; color: #fff; padding: 2rem 0 0; }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding-bottom: 2rem; }
         .footer-col h3 { margin-bottom: 1rem; }
@@ -120,8 +107,8 @@
                     <th>Loại Phòng</th>
                     <th>Ngày Nhận Phòng</th>
                     <th>Ngày Trả Phòng</th>
-                    <th>Ngày Đặt</th>
                     <th>Trạng Thái</th>
+                    <th>Hành động</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -136,11 +123,17 @@
                     <td><%= roomTypeName %></td>
                     <td><%= IConstant.localDateFormat.format(booking.getCheckInDate()) %></td>
                     <td><%= IConstant.localDateFormat.format(booking.getCheckOutDate()) %></td>
-                    <td><%= IConstant.dateFormat.format(booking.getBookingDate()) %></td>
                     <td>
                         <span class="status <%= booking.getStatus().toLowerCase().replace("-", "") %>">
                             <%= booking.getStatus() %>
                         </span>
+                    </td>
+                    <td>
+                        <form action=<%=IConstant.detailBooking%> method="post" style="display: inline;">
+                            <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>">
+                            <input type="hidden" name="guestId" value="<%= guest.getGuestId() %>">
+                            <button type="submit" class="btn btn-primary">Chi tiết</button>
+                        </form>
                     </td>
                 </tr>
                 <% } %>
