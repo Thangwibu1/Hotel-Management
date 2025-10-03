@@ -73,7 +73,7 @@ public class GuestDAO {
         return guest;
     }
 
-    public Guest getGuestById(int guestId){
+    public Guest getGuestById(int guestId) {
         Guest guest = null;
 
         String sql = "SELECT * FROM [HotelManagement].[dbo].[GUEST] where GuestID = ?";
@@ -101,5 +101,69 @@ public class GuestDAO {
         }
 
         return guest;
+    }
+
+    public boolean checkDuplicateIdNumber(String idNumber) {
+        boolean isDuplicate = false;
+        String sql = "SELECT COUNT(*) AS count FROM [HotelManagement].[dbo].[GUEST] WHERE [IDNumber] = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, idNumber);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt("count");
+                isDuplicate = count > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isDuplicate;
+    }
+
+    public boolean checkDuplicateEmail(String email) {
+        boolean isDuplicate = false;
+        String sql = "SELECT COUNT(*) AS count FROM [HotelManagement].[dbo].[GUEST] WHERE [Email] = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt("count");
+                isDuplicate = count > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isDuplicate;
+    }
+
+    public boolean addGuest(Guest guest) {
+        boolean result = false;
+        String sql = "INSERT INTO [HotelManagement].[dbo].[GUEST] ([FullName] ,[Phone] ,[Email] ,[PasswordHash] ,[Address] ,[IDNumber] ,[DateOfBirth]) VALUES (?,?,?,?,?,?,?)";
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, guest.getFullName());
+            ps.setString(2, guest.getPhone());
+            ps.setString(3, guest.getEmail());
+            ps.setString(4, guest.getPasswordHash());
+            ps.setString(5, guest.getAddress());
+            ps.setString(6, guest.getIdNumber());
+            ps.setString(7, guest.getDateOfBirth());
+            int rowsAffected = ps.executeUpdate();
+            result = rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 }
