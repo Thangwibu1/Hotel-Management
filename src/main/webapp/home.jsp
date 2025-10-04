@@ -79,7 +79,7 @@
             </form>
             <form style="display: inline;">
                 <button class="btn btn-primary">
-                    <a href="./registerPage.jsp" style="color: white; text-decoration: none;">Đăng ký</a>
+                    <a href=<%=IConstant.registerPage%> style="color: white; text-decoration: none;">Đăng ký</a>
                 </button>
             </form>
             <% } %>
