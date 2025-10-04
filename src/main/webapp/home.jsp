@@ -86,7 +86,8 @@
         </nav>
     </div>
 </header>
-<section class="hero">
+<section class="hero" style="
+background-image: url('image/background.jpg');">
     <div class="hero-content">
         <h1>Chào mừng đến với Luxury Hotel</h1>
         <p>Trải nghiệm đẳng cấp - Dịch vụ hoàn hảo</p>
@@ -157,7 +158,7 @@
                 %>
                 <div class="room-card">
                     <div class="room-image">
-                        <img src="images/room-<%= room.getRoomId() %>.jpg" alt="Phòng <%= room.getRoomNumber() %>">
+                        <img src="image/<%= room.getRoomNumber() %>.jpg" alt="Phòng <%= room.getRoomNumber() %>">
                         <span class="room-badge <%= typeName.toLowerCase() %>"><%= typeName %></span>
                     </div>
                     <div class="room-details">
