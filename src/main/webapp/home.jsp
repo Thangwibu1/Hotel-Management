@@ -331,7 +331,7 @@
         <div class="footer-col">
             <h3>Liên hệ</h3>
             <p><i class="fa-solid fa-location-dot"></i> 123 Đường ABC, Quận 1, TP.HCM</p>
-            <p><i class="fa-solid fa-phone"></i> (028) 1234-5678</p>
+            <p><i class="fa-solid fa-phone"></i> (028) 1234-567</p>
             <p><i class="fa-solid fa-envelope"></i> info@luxuryhotel.com</p>
         </div>
         <div class="footer-col">
