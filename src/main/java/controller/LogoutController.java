@@ -12,6 +12,13 @@ public class LogoutController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, IOException {
         req.getSession().invalidate(); // X√≥a session
-        resp.sendRedirect("home"); // Redirect v·ªÅ home
+        resp.sendRedirect("home"); // Redirect v·ª? home
+    }
+    
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, IOException {
+        req.getSession().invalidate(); // X√≥a session
+        System.out.println("toi day r");
+        resp.sendRedirect("home"); // Redirect v·ª? home
     }
 }

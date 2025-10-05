@@ -29,12 +29,12 @@ public class HomeController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Lấy attributes từ session (đã được set trong LoginController)
+        
         Boolean isLogin = (Boolean) req.getSession().getAttribute("isLogin");
         Staff userStaff = (Staff) req.getSession().getAttribute("userStaff");
         Guest userGuest = (Guest) req.getSession().getAttribute("userGuest");
 
-        // Set lại vào request để JSP có thể sử dụng
+       
         req.setAttribute("isLogin", isLogin != null ? isLogin : false);
         req.setAttribute("userStaff", userStaff);
         req.setAttribute("userGuest", userGuest);
