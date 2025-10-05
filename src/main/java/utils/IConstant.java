@@ -32,4 +32,5 @@ public interface IConstant {
     public static final String loginPage = "loginPage.jsp";
     public static final String registerPage = "registerPage.jsp";
     public static final String rentalPage = "rentalPage.jsp";
+    public static final String registerSuccess = "registerSuccess.jsp";
 }
