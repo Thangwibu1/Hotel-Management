@@ -191,34 +191,34 @@ public class BookingDAO {
         ResultSet rs = null;
         try {
 
-                con = DBConnection.getConnection();
-                ps = con.prepareStatement(sql);
-                rs = ps.executeQuery();
-                if (rs != null) {
-                    while (rs.next()) {
-                        int bookingId = rs.getInt("BookingID");
-                        int guestId = rs.getInt("GuestID");
-                        int roomId = rs.getInt("RoomID");
-                        String status = rs.getString("Status");
-                        LocalDateTime dbCheckInDate = rs.getObject("CheckInDate", LocalDateTime.class);
-                        LocalDateTime dbCheckOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
-                        LocalDate bookingDate = rs.getObject("BookingDate", LocalDate.class);
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+                    int bookingId = rs.getInt("BookingID");
+                    int guestId = rs.getInt("GuestID");
+                    int roomId = rs.getInt("RoomID");
+                    String status = rs.getString("Status");
+                    LocalDateTime dbCheckInDate = rs.getObject("CheckInDate", LocalDateTime.class);
+                    LocalDateTime dbCheckOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
+                    LocalDate bookingDate = rs.getObject("BookingDate", LocalDate.class);
 
-                        // Kiểm tra điều kiện ngày
-                        if (dbCheckInDate.isBefore(checkOutDate) && dbCheckOutDate.isAfter(checkInDate)) {
-                            Booking booking = new Booking();
-                            booking.setBookingId(bookingId);
-                            booking.setGuestId(guestId);
-                            booking.setRoomId(roomId);
-                            booking.setStatus(status);
-                            booking.setCheckInDate(dbCheckInDate);
-                            booking.setCheckOutDate(dbCheckOutDate);
-                            booking.setBookingDate(bookingDate);
+                    // Kiểm tra điều kiện ngày
+                    if (dbCheckInDate.isBefore(checkOutDate) && dbCheckOutDate.isAfter(checkInDate)) {
+                        Booking booking = new Booking();
+                        booking.setBookingId(bookingId);
+                        booking.setGuestId(guestId);
+                        booking.setRoomId(roomId);
+                        booking.setStatus(status);
+                        booking.setCheckInDate(dbCheckInDate);
+                        booking.setCheckOutDate(dbCheckOutDate);
+                        booking.setBookingDate(bookingDate);
 
-                            result.add(booking);
-                        }
+                        result.add(booking);
                     }
                 }
+            }
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -245,16 +245,27 @@ public class BookingDAO {
 
             for (LocalDate date : datesInRange) {
                 if ((date.isEqual(bookingCheckInDate) || date.isAfter(bookingCheckInDate)) &&
-                    (date.isEqual(bookingCheckOutDate) || date.isBefore(bookingCheckOutDate))) {
-
+                        (date.isEqual(bookingCheckOutDate) || date.isBefore(bookingCheckOutDate))) {
+                    result2.add(booking);
                     break; // Không cần kiểm tra các ngày còn lại, đã tìm thấy ngày phù hợp
                 }
             }
-            result2.add(booking);
+
         }
 
-
-
-        return result2;
+        ArrayList<Booking> result3 = new ArrayList<>();
+        for (Booking booking : result) {
+            boolean exists = false;
+            for (Booking booking2 : result2) {
+                if (booking.getBookingId() == booking2.getBookingId()) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists) {
+                result3.add(booking);
+            }
+        }
+        return result3;
     }
 }

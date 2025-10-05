@@ -206,7 +206,7 @@
         <p>Trải nghiệm đẳng cấp - Dịch vụ hoàn hảo</p>
     </div>
     <div class="booking-form-container" style="color: gray;">
-        <form class="booking-form">
+        <form class="booking-form" action=<%=IConstant.searchController%>>
             <div class="form-group">
                 <label for="check-in">Ngày nhận phòng</label>
                 <input type="date" id="check-in" name="check-in">

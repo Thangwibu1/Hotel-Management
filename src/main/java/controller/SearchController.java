@@ -1,5 +1,8 @@
 package controller;
 
+import dao.BookingDAO;
+import model.Booking;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,9 +11,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @WebServlet("/search")
 public class SearchController extends HttpServlet {
+
+    private BookingDAO bookingDAO;
+
+    @Override
+    public void init() throws ServletException {
+        bookingDAO = new BookingDAO();
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*/PRJ_Assignment/home?
@@ -31,5 +43,10 @@ public class SearchController extends HttpServlet {
         LocalDateTime checkOutDateTime = checkOutDate.atTime(23, 59, 59);
 
         int numberOfGuests = Integer.parseInt(guests);
+
+        ArrayList<Booking> bookings = bookingDAO.getBookingByCheckInCheckOutDate(checkInDateTime, checkOutDateTime );
+        for (Booking booking : bookings) {
+            System.out.println(booking);
+        }
     }
 }
