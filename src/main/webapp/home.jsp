@@ -13,6 +13,116 @@
     <title>Luxury Hotel</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <style>
+        /* CSS cho slideshow */
+        .hero {
+            position: relative; /* Quan trọng cho việc định vị các ảnh nền */
+            height: 600px; /* Chiều cao cố định cho hero section */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            overflow: hidden; /* Đảm bảo ảnh không tràn ra ngoài */
+        }
+
+        .hero-slideshow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 1.5s ease-in-out; /* Hiệu ứng fade */
+            opacity: 0; /* Mặc định ẩn tất cả ảnh */
+            z-index: 1; /* Đảm bảo các slide nằm dưới nội dung */
+        }
+
+        /* Đặt ảnh đầu tiên visible mặc định */
+        .hero-slideshow:first-child {
+            opacity: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2; /* Đảm bảo nội dung nằm trên ảnh nền */
+            background: rgba(0, 0, 0, 0.4); /* Nền tối nhẹ để chữ dễ đọc */
+            padding: 20px 40px;
+            border-radius: 10px;
+        }
+
+        .hero-content h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero-content p {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+        }
+
+        .booking-form-container {
+            position: absolute;
+            bottom: 50px; /* Đặt form ở dưới hero section */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3; /* Đảm bảo form nằm trên mọi thứ */
+            background: rgba(255, 255, 255, 0.9); /* Nền trắng trong suốt */
+            padding: 25px 35px;
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            display: flex; /* Dùng flexbox để căn chỉnh form */
+            align-items: center;
+            gap: 20px; /* Khoảng cách giữa các form-group */
+        }
+
+        .booking-form .form-group {
+            margin-bottom: 0; /* Bỏ margin-bottom cũ */
+            text-align: left;
+        }
+
+        .booking-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--dark-text);
+        }
+
+        .booking-form input,
+        .booking-form select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            color: var(--dark-text);
+            background-color: #f9f9f9;
+        }
+
+        .btn-search {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            white-space: nowrap; /* Ngăn nút xuống dòng */
+        }
+        .btn-search:hover {
+            background-color: #0056b3;
+        }
+
+        /* Đảm bảo hero-content không bị form che mất khi cuộn */
+        .hero-content {
+            margin-bottom: 200px; /* Khoảng cách đủ để form không chồng lên */
+        }
+
+    </style>
 </head>
 <body>
 
@@ -79,7 +189,7 @@
             </form>
             <form style="display: inline;">
                 <button class="btn btn-primary">
-                    <a href="./registerPage.jsp" style="color: white; text-decoration: none;">Đăng ký</a>
+                    <a href=<%=IConstant.registerPage%> style="color: white; text-decoration: none;">Đăng ký</a>
                 </button>
             </form>
             <% } %>
@@ -87,11 +197,15 @@
     </div>
 </header>
 <section class="hero">
+    <div class="hero-slideshow" style="background-image: url('image/background1.jpg');"></div>
+    <div class="hero-slideshow" style="background-image: url('image/background2.jpg');"></div>
+    <div class="hero-slideshow" style="background-image: url('image/background3.jpg');"></div>
+    <div class="hero-slideshow" style="background-image: url('image/background4.jpg');"></div>
     <div class="hero-content">
         <h1>Chào mừng đến với Luxury Hotel</h1>
         <p>Trải nghiệm đẳng cấp - Dịch vụ hoàn hảo</p>
     </div>
-    <div class="booking-form-container">
+    <div class="booking-form-container" style="color: gray;">
         <form class="booking-form">
             <div class="form-group">
                 <label for="check-in">Ngày nhận phòng</label>
@@ -126,6 +240,8 @@
     </div>
 </section>
 
+
+
 <main class="main-content">
     <div class="container">
         <section class="room-listings">
@@ -157,7 +273,7 @@
                 %>
                 <div class="room-card">
                     <div class="room-image">
-                        <img src="images/room-<%= room.getRoomId() %>.jpg" alt="Phòng <%= room.getRoomNumber() %>">
+                        <img src="image/<%= room.getRoomNumber() %>.jpg" alt="Phòng <%= room.getRoomNumber() %>">
                         <span class="room-badge <%= typeName.toLowerCase() %>"><%= typeName %></span>
                     </div>
                     <div class="room-details">
@@ -215,7 +331,7 @@
         <div class="footer-col">
             <h3>Liên hệ</h3>
             <p><i class="fa-solid fa-location-dot"></i> 123 Đường ABC, Quận 1, TP.HCM</p>
-            <p><i class="fa-solid fa-phone"></i> (028) 1234-5678</p>
+            <p><i class="fa-solid fa-phone"></i> (028) 1234-567</p>
             <p><i class="fa-solid fa-envelope"></i> info@luxuryhotel.com</p>
         </div>
         <div class="footer-col">
@@ -232,6 +348,29 @@
         <p>&copy; 2024 Luxury Hotel. Bảo lưu mọi quyền.</p>
     </div>
 </footer>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const slides = document.querySelectorAll('.hero-slideshow');
+        let currentSlide = 0;
 
+        function showSlide(n) {
+            // Ẩn tất cả slide
+            slides.forEach(slide => slide.style.opacity = '0');
+            // Hiện slide hiện tại
+            slides[n].style.opacity = '1';
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // Khởi tạo hiển thị slide đầu tiên
+        showSlide(currentSlide);
+
+        // Tự động chuyển slide sau mỗi 5 giây (5000ms)
+        setInterval(nextSlide, 5000);
+    });
+</script>
 </body>
 </html>
