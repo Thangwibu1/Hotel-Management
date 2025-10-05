@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/detailBooking")
-public class DetailBooking extends HttpServlet {
+public class detailBooking extends HttpServlet {
 
     private BookingDAO bookingDAO;
     private RoomDAO roomDAO;
