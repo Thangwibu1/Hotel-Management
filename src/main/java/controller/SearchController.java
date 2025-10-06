@@ -1,7 +1,12 @@
 package controller;
 
 import dao.BookingDAO;
+import dao.GuestDAO;
+import dao.RoomDAO;
+import dao.RoomTypeDAO;
 import model.Booking;
+import model.Room;
+import model.RoomType;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,10 +22,14 @@ import java.util.ArrayList;
 public class SearchController extends HttpServlet {
 
     private BookingDAO bookingDAO;
+    private RoomDAO roomDAO;
+    private RoomTypeDAO roomTypeDAO;
 
     @Override
     public void init() throws ServletException {
         bookingDAO = new BookingDAO();
+        roomDAO = new RoomDAO();
+        roomTypeDAO = new RoomTypeDAO();
     }
 
     @Override
@@ -44,9 +53,39 @@ public class SearchController extends HttpServlet {
 
         int numberOfGuests = Integer.parseInt(guests);
 
-        ArrayList<Booking> bookings = bookingDAO.getBookingByCheckInCheckOutDate(checkInDateTime, checkOutDateTime );
-        for (Booking booking : bookings) {
-            System.out.println(booking);
+        ArrayList<Booking> bookings = bookingDAO.getBookingByCheckInCheckOutDate(checkInDateTime, checkOutDateTime);
+
+        ArrayList<Room> allRooms = roomDAO.getAllRoom();
+
+        ArrayList<Room> availableRooms = new ArrayList<>();
+
+        for (Room room : allRooms) {
+            boolean isBooked = false;
+            for (Booking booking : bookings) {
+                if (room.getRoomId() == booking.getRoomId()) {
+                    isBooked = true;
+                    break;
+                }
+            }
+            if (isBooked == false) {
+                availableRooms.add(room);
+            }
         }
+
+        for (Room room : availableRooms) {
+            System.out.println(room);
+        }
+
+        ArrayList<RoomType> roomTypes = roomTypeDAO.getAllRoomType();
+
+        req.setAttribute("availableRooms", availableRooms);
+        req.setAttribute("roomTypes", roomTypes);
+        req.setAttribute("checkIn", checkIn);
+        req.setAttribute("checkOut", checkOut);
+        req.setAttribute("guests", numberOfGuests);
+        req.setAttribute("roomType", roomType);
+
+        // Forward đến trang searchResult.jsp
+        req.getRequestDispatcher("searchResult.jsp").forward(req, resp);
     }
 }

@@ -16,14 +16,14 @@
     <style>
         /* CSS cho slideshow */
         .hero {
-            position: relative; /* Quan trọng cho việc định vị các ảnh nền */
-            height: 600px; /* Chiều cao cố định cho hero section */
+            position: relative;
+            height: 700px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             color: white;
-            overflow: hidden; /* Đảm bảo ảnh không tràn ra ngoài */
+            overflow: hidden;
         }
 
         .hero-slideshow {
@@ -46,80 +46,739 @@
 
         .hero-content {
             position: relative;
-            z-index: 2; /* Đảm bảo nội dung nằm trên ảnh nền */
-            background: rgba(0, 0, 0, 0.4); /* Nền tối nhẹ để chữ dễ đọc */
-            padding: 20px 40px;
-            border-radius: 10px;
+            z-index: 2;
+            animation: fadeInUp 1.2s ease-out;
+            max-width: 800px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .hero-content h1 {
-            font-size: 3em;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            font-size: 4.5em;
+            margin-bottom: 25px;
+            text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.8);
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
         }
 
         .hero-content p {
-            font-size: 1.5em;
-            margin-bottom: 30px;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            font-size: 1.8em;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+            font-weight: 300;
+            letter-spacing: 1px;
         }
 
         .booking-form-container {
             position: absolute;
-            bottom: 50px; /* Đặt form ở dưới hero section */
+            bottom: -80px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 3; /* Đảm bảo form nằm trên mọi thứ */
-            background: rgba(255, 255, 255, 0.9); /* Nền trắng trong suốt */
-            padding: 25px 35px;
-            border-radius: 8px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-            display: flex; /* Dùng flexbox để căn chỉnh form */
-            align-items: center;
-            gap: 20px; /* Khoảng cách giữa các form-group */
+            z-index: 150;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 35px 45px;
+            border-radius: 15px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: flex-end;
+            gap: 25px;
+            border: 1px solid #404040;
+            width: 90%;
+            max-width: 1150px;
         }
 
         .booking-form .form-group {
-            margin-bottom: 0; /* Bỏ margin-bottom cũ */
+            margin-bottom: 0;
             text-align: left;
+            flex: 1;
         }
 
         .booking-form label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: var(--dark-text);
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #ffffff;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .booking-form input,
         .booking-form select {
             width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 14px 18px;
+            border: 2px solid #404040;
+            border-radius: 8px;
             font-size: 1rem;
-            color: var(--dark-text);
-            background-color: #f9f9f9;
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .booking-form input:focus,
+        .booking-form select:focus {
+            outline: none;
+            border-color: #666;
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+
+        .booking-form input::placeholder {
+            color: #999;
         }
 
         .btn-search {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
             color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
+            padding: 14px 35px;
+            border: 2px solid #fff;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 1rem;
-            font-weight: bold;
-            white-space: nowrap; /* Ngăn nút xuống dòng */
+            font-weight: 700;
+            white-space: nowrap;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
         }
+        
         .btn-search:hover {
-            background-color: #0056b3;
+            background: #fff;
+            color: #1a1a1a;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
         }
 
-        /* Đảm bảo hero-content không bị form che mất khi cuộn */
-        .hero-content {
-            margin-bottom: 200px; /* Khoảng cách đủ để form không chồng lên */
+        .btn-search i {
+            margin-right: 8px;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.65) 0%, rgba(26, 26, 26, 0.55) 100%);
+            z-index: 1;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0 80px 0;
+            background: linear-gradient(to bottom, #ffffff 0%, #f5f5f5 100%);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 40px 30px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            border: 1px solid #e0e0e0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #1a1a1a 0%, #666 100%);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            border-color: #1a1a1a;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            font-size: 4em;
+            color: #1a1a1a;
+            margin-bottom: 25px;
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotateY(360deg);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #1a1a1a 0%, #666 100%);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 50px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        /* Room Listings */
+        .main-content {
+            background: #fff;
+            padding: 80px 0;
+        }
+
+        .room-listings h2 {
+            font-size: 3em;
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .room-listings h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #1a1a1a 0%, #666 100%);
+        }
+
+        .room-listings > p {
+            text-align: center;
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 60px;
+            font-weight: 300;
+        }
+
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .room-card {
+            background: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            border: 1px solid #e0e0e0;
+            position: relative;
+        }
+
+        .room-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .room-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            border-color: #1a1a1a;
+        }
+
+        .room-card:hover::before {
+            opacity: 1;
+        }
+
+        .room-image {
+            position: relative;
+            height: 280px;
+            overflow: hidden;
+        }
+
+        .room-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .room-card:hover .room-image img {
+            transform: scale(1.15);
+        }
+
+        .room-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.85em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 2;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .room-details {
+            padding: 30px;
+        }
+
+        .room-details h3 {
+            font-size: 1.8em;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .room-description {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.8;
+            font-size: 1em;
+        }
+
+        .room-amenities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .room-amenities span {
+            color: #555;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+        }
+
+        .room-amenities i {
+            color: #1a1a1a;
+            margin-right: 6px;
+            font-size: 1.1em;
+        }
+
+        .room-price {
+            font-size: 2em;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .room-price span {
+            font-size: 0.5em;
+            color: #999;
+            font-weight: 400;
+            margin-left: 8px;
+        }
+
+        .btn-book {
+            width: 100%;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            padding: 15px 20px;
+            border: 2px solid #1a1a1a;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.4s ease;
+        }
+
+        .btn-book:hover {
+            background: #fff;
+            color: #1a1a1a;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #fff;
+            padding: 60px 0 20px 0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #fff;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-col p {
+            color: #ccc;
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col ul li a {
+            color: #ccc;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col ul li a:hover {
+            color: #fff;
+            padding-left: 5px;
+        }
+
+        .footer-col i {
+            margin-right: 10px;
+            color: #fff;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #404040;
+            color: #999;
+        }
+
+        /* Scroll animations */
+        @keyframes fadeInOnScroll {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-scroll {
+            animation: fadeInOnScroll 0.8s ease-out;
+        }
+
+        /* Search Modal */
+        .search-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .search-modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+            border: 1px solid #404040;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .search-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 40px;
+            border-bottom: 1px solid #404040;
+        }
+
+        .search-modal-header h2 {
+            color: #fff;
+            font-size: 1.8em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .search-modal-header h2 i {
+            margin-right: 12px;
+            color: #fff;
+        }
+
+        .close-modal {
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            font-size: 2em;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            background: #fff;
+            color: #1a1a1a;
+            transform: rotate(90deg);
+        }
+
+        .booking-form-modal {
+            padding: 40px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .booking-form-modal .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .booking-form-modal label {
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .booking-form-modal input,
+        .booking-form-modal select {
+            padding: 14px 18px;
+            border: 2px solid #404040;
+            border-radius: 10px;
+            font-size: 1rem;
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .booking-form-modal input:focus,
+        .booking-form-modal select:focus {
+            outline: none;
+            border-color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-modal-search {
+            width: 100%;
+            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            color: #1a1a1a;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.4s ease;
+            margin-top: 15px;
+        }
+
+        .btn-modal-search:hover {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-modal-search i {
+            margin-right: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .booking-form-container {
+                width: 95%;
+                padding: 25px 30px;
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            .booking-form .form-group {
+                flex: 1 1 calc(50% - 10px);
+                min-width: 200px;
+            }
+
+            .btn-search {
+                flex: 1 1 100%;
+            }
+
+            .hero-content h1 {
+                font-size: 3em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .booking-form-container {
+                padding: 20px;
+                gap: 15px;
+                bottom: -100px;
+            }
+
+            .booking-form {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .booking-form .form-group {
+                width: 100%;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5em;
+            }
+
+            .hero-content p {
+                font-size: 1.3em;
+            }
+
+            .features {
+                padding: 60px 0 60px 0;
+            }
+
+            .section-title {
+                font-size: 2.2em;
+            }
+
+            .room-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Modal responsive */
+            .search-modal-content {
+                width: 95%;
+                max-width: 500px;
+            }
+
+            .search-modal-header {
+                padding: 20px 25px;
+            }
+
+            .search-modal-header h2 {
+                font-size: 1.3em;
+            }
+
+            .booking-form-modal {
+                padding: 25px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                margin-bottom: 20px;
+            }
+
+            .close-modal {
+                width: 38px;
+                height: 38px;
+                font-size: 1.5em;
+            }
         }
 
     </style>
@@ -193,54 +852,55 @@
                 </button>
             </form>
             <% } %>
+            
+            <!-- Icon tìm kiếm (luôn hiển thị) -->
+            <button class="btn btn-secondary" id="searchIcon" style="margin-left: 10px;">
+                <i class="fa-solid fa-magnifying-glass"></i> Tìm phòng
+            </button>
         </nav>
     </div>
 </header>
 <section class="hero">
-    <div class="hero-slideshow" style="background-image: url('image/background1.jpg');"></div>
-    <div class="hero-slideshow" style="background-image: url('image/background2.jpg');"></div>
-    <div class="hero-slideshow" style="background-image: url('image/background3.jpg');"></div>
-    <div class="hero-slideshow" style="background-image: url('image/background4.jpg');"></div>
+    <div class="hero-slideshow" style="background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920');"></div>
+    <div class="hero-slideshow" style="background-image: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1920');"></div>
+    <div class="hero-slideshow" style="background-image: url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1920');"></div>
+    <div class="hero-slideshow" style="background-image: url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1920');"></div>
+    <div class="hero-overlay"></div>
     <div class="hero-content">
         <h1>Chào mừng đến với Luxury Hotel</h1>
         <p>Trải nghiệm đẳng cấp - Dịch vụ hoàn hảo</p>
     </div>
-    <div class="booking-form-container" style="color: gray;">
-        <form class="booking-form" action=<%=IConstant.searchController%>>
-            <div class="form-group">
-                <label for="check-in">Ngày nhận phòng</label>
-                <input type="date" id="check-in" name="check-in">
-            </div>
-            <div class="form-group">
-                <label for="check-out">Ngày trả phòng</label>
-                <input type="date" id="check-out" name="check-out">
-            </div>
-            <div class="form-group">
-                <label for="guests">Số người</label>
-                <input type="number" id="guests" name="guests" value="2" min="1">
-            </div>
-            <div class="form-group">
-                <label for="room-type">Loại phòng</label>
-                <select id="room-type" name="room-type">
-                    <option value="">Chọn loại phòng</option>
-                    <%
-                        if (roomTypes != null) {
-                            for (RoomType rt : roomTypes) {
-                    %>
-                    <option value="<%= rt.getRoomTypeId() %>"><%= rt.getTypeName() %>
-                    </option>
-                    <%
-                            }
-                        }
-                    %>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-search">Tìm kiếm phòng</button>
-        </form>
-    </div>
 </section>
 
-
+<!-- Features Section -->
+<section class="features">
+    <div class="container">
+        <h2 class="section-title">Tại sao chọn chúng tôi?</h2>
+        <p class="section-subtitle">Trải nghiệm dịch vụ 5 sao với đầy đủ tiện nghi hiện đại</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-wifi"></i></div>
+                <h3>WiFi Tốc Độ Cao</h3>
+                <p>Kết nối internet miễn phí với tốc độ cao trong toàn bộ khách sạn</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-utensils"></i></div>
+                <h3>Nhà Hàng 5 Sao</h3>
+                <p>Thưởng thức ẩm thực đa dạng từ đầu bếp nổi tiếng thế giới</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-spa"></i></div>
+                <h3>Spa & Massage</h3>
+                <p>Thư giãn với dịch vụ spa cao cấp và massage chuyên nghiệp</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-swimming-pool"></i></div>
+                <h3>Bể Bơi Vô Cực</h3>
+                <p>Bể bơi rooftop với view toàn cảnh thành phố tuyệt đẹp</p>
+            </div>
+        </div>
+    </div>
+</section>
 
 <main class="main-content">
     <div class="container">
@@ -252,9 +912,7 @@
                 <%
                     if (rooms != null && !rooms.isEmpty()) {
                         for (Room room : rooms) {
-                            if (room.getStatus().equalsIgnoreCase("available")) {
-
-                                // Tìm RoomType tương ứng với roomTypeId của room này
+                            // Tìm RoomType tương ứng với roomTypeId của room này
                                 RoomType currentRoomType = null;
                                 if (roomTypes != null) {
                                     for (RoomType rt : roomTypes) {
@@ -310,7 +968,6 @@
                 </div>
                 <%
                         }
-                    }
                 } else {
                 %>
                 <p>Hiện không có phòng nào để hiển thị.</p>
@@ -348,6 +1005,53 @@
         <p>&copy; 2024 Luxury Hotel. Bảo lưu mọi quyền.</p>
     </div>
 </footer>
+
+<!-- Search Modal -->
+<div id="searchModal" class="search-modal">
+    <div class="search-modal-content">
+        <div class="search-modal-header">
+            <h2><i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm phòng</h2>
+            <button class="close-modal" id="closeModal">&times;</button>
+        </div>
+        <form class="booking-form-modal" action="<%=IConstant.searchController%>">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="modal-check-in">Ngày nhận phòng</label>
+                    <input type="date" id="modal-check-in" name="check-in" required>
+                </div>
+                <div class="form-group">
+                    <label for="modal-check-out">Ngày trả phòng</label>
+                    <input type="date" id="modal-check-out" name="check-out" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="modal-guests">Số người</label>
+                    <input type="number" id="modal-guests" name="guests" value="2" min="1" max="10">
+                </div>
+                <div class="form-group">
+                    <label for="modal-room-type">Loại phòng</label>
+                    <select id="modal-room-type" name="room-type">
+                        <option value="">Tất cả loại phòng</option>
+                        <%
+                            if (roomTypes != null) {
+                                for (RoomType rt : roomTypes) {
+                        %>
+                        <option value="<%= rt.getRoomTypeId() %>"><%= rt.getTypeName() %></option>
+                        <%
+                                }
+                            }
+                        %>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn-modal-search">
+                <i class="fa-solid fa-magnifying-glass"></i> TÌM KIẾM PHÒNG
+            </button>
+        </form>
+    </div>
+</div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const slides = document.querySelectorAll('.hero-slideshow');
@@ -370,6 +1074,39 @@
 
         // Tự động chuyển slide sau mỗi 5 giây (5000ms)
         setInterval(nextSlide, 5000);
+
+        // Modal control
+        const modal = document.getElementById('searchModal');
+        const searchIcon = document.getElementById('searchIcon');
+        const closeModal = document.getElementById('closeModal');
+
+        // Mở modal khi click vào icon search
+        searchIcon.addEventListener('click', function() {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Prevent scroll
+        });
+
+        // Đóng modal khi click vào nút close
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        // Đóng modal khi click bên ngoài
+        window.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Đóng modal khi nhấn ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.style.display === 'flex') {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
     });
 </script>
 </body>

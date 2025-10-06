@@ -36,6 +36,7 @@ public class BookingController extends HttpServlet {
 
     protected int bookingHandle(int roomId, int guessId, LocalDateTime checkInDate, LocalDateTime checkOutDate, LocalDate bookingDate) {
         int returnValue = 0;
+
         Booking newBooking = new Booking(guessId, roomId, checkInDate, checkOutDate, bookingDate, "Reserved");
         try {
             returnValue = bookingDAO.addBookingV2(newBooking);

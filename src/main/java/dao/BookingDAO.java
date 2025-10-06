@@ -252,20 +252,6 @@ public class BookingDAO {
             }
 
         }
-
-        ArrayList<Booking> result3 = new ArrayList<>();
-        for (Booking booking : result) {
-            boolean exists = false;
-            for (Booking booking2 : result2) {
-                if (booking.getBookingId() == booking2.getBookingId()) {
-                    exists = true;
-                    break;
-                }
-            }
-            if (!exists) {
-                result3.add(booking);
-            }
-        }
-        return result3;
+        return result2;
     }
 }
