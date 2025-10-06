@@ -22,6 +22,7 @@ public interface IConstant {
     public static final String rentalServlet = "rentalRoom";
     public static final String viewBookingServlet = "viewBooking";
     public static final String detailBooking = "detailBooking";
+    public static final String searchController = "search";
 
 
     public static final String detailBookingPage = "detailBooking.jsp";
@@ -32,4 +33,5 @@ public interface IConstant {
     public static final String loginPage = "loginPage.jsp";
     public static final String registerPage = "registerPage.jsp";
     public static final String rentalPage = "rentalPage.jsp";
+    public static final String registerSuccess = "registerSuccess.jsp";
 }
