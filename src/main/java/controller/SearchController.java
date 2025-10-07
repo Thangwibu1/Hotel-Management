@@ -1,7 +1,6 @@
 package controller;
 
 import dao.BookingDAO;
-import dao.GuestDAO;
 import dao.RoomDAO;
 import dao.RoomTypeDAO;
 import model.Booking;
@@ -67,7 +66,7 @@ public class SearchController extends HttpServlet {
                     break;
                 }
             }
-            if (isBooked == false) {
+            if (isBooked == false && room.getRoomTypeId() == Integer.parseInt(roomType)) {
                 availableRooms.add(room);
             }
         }

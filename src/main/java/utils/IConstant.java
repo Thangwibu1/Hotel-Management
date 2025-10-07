@@ -14,6 +14,7 @@ public interface IConstant {
 
 
 
+    public static final String bookingChangeServlet = "bookingChange";
     public static final String bookingServlet = "booking";
     public static final String homeServlet = "home";
     public static final String loginServlet = "login";

@@ -84,6 +84,89 @@
         .booking-form-modal input, .booking-form-modal select { width: 100%; padding: 12px; border: 1px solid #555; border-radius: 5px; background: #333; color: white; }
         .reveal { opacity: 0; transform: translateY(50px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
+        /* --- ROOM FEATURE (ZIGZAG) --- */
+        .room-feature {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-bottom: 100px;
+            overflow: hidden; /* To contain animations */
+        }
+
+        .room-feature-image, .room-feature-content {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .room-feature.active .room-feature-image,
+        .room-feature.active .room-feature-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Stagger the animation */
+        .room-feature.active .room-feature-content {
+            transition-delay: 0.2s;
+        }
+
+
+        .room-feature-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        /* Zigzag layout */
+        .room-feature:nth-child(even) .room-feature-image {
+            grid-column: 2;
+        }
+        .room-feature:nth-child(even) .room-feature-content {
+            grid-column: 1;
+            grid-row: 1;
+            text-align: right;
+        }
+
+        .room-feature-content h3 {
+            font-family: var(--font-heading);
+            font-size: 2.8em;
+            margin-bottom: 20px;
+            color: var(--color-charcoal);
+        }
+
+        .room-feature-content .room-type-subtitle {
+            color: var(--color-grey);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .room-feature-content p {
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            line-height: 1.7;
+        }
+
+        .btn-feature {
+            padding: 12px 35px;
+            font-size: 1rem;
+            font-weight: 700;
+            background-color: var(--color-gold);
+            color: #fff;
+            border-radius: 5px;
+            border: 1px solid var(--color-gold);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .btn-feature:hover {
+            background-color: transparent;
+            color: var(--color-gold);
+        }
         /* --- FOOTER --- */
         .footer {
             background: var(--color-charcoal);
@@ -227,34 +310,51 @@
     </div>
 </section>
 
-<section class="section">
+<section class="section" id="room-types-section">
     <div class="container">
-        <h2 class="section-title">Không Gian Nghỉ Dưỡng Nổi Bật</h2>
-        <p class="section-subtitle">Mỗi căn phòng là một tuyệt tác, được thiết kế để mang lại sự thoải mái và riêng tư tuyệt đối.</p>
-        <% if (rooms != null && rooms.size() >= 2) {
-            for (int i = 0; i < 2; i++) {
-                Room room = rooms.get(i);
-                RoomType rt = null;
-                // === THÊM KIỂM TRA NULL TẠI ĐÂY ===
-                if (roomTypes != null) {
-                    for(RoomType tempRt : roomTypes) {
-                        if(tempRt.getRoomTypeId() == room.getRoomTypeId()) {
-                            rt = tempRt;
-                            break;
-                        }
-                    }
-                }
-                String typeName = (rt != null) ? rt.getTypeName() : "Phòng nghỉ dưỡng";
+        <h2 class="section-title">Không Gian Nghỉ Dưỡng Đa Dạng</h2>
+        <p class="section-subtitle">Từ những căn phòng ấm cúng đến các suite tổng thống sang trọng, mỗi không gian đều là một tuyên ngôn về sự tinh tế.</p>
+        
+        <% 
+            if (roomTypes != null) {
+                String[] images = {
+                    "image/background1.jpg",
+                    "image/background2.jpg",
+                    "image/background3.jpg",
+                    "image/background4.jpg",
+                    "image/background1.jpg"
+                };
+                String[] descriptions = {
+                    "Lý tưởng cho du khách một mình hoặc các cặp đôi, phòng Standard mang đến một không gian nghỉ ngơi ấm cúng và đầy đủ tiện nghi, đảm bảo một kỳ nghỉ thoải mái và thư giãn.",
+                    "Với không gian rộng rãi hơn và tầm nhìn hướng thành phố, phòng Deluxe là sự lựa chọn hoàn hảo để bạn tận hưởng sự sang trọng và tiện nghi đẳng cấp.",
+                    "Được thiết kế cho các gia đình, Family Suite có nhiều không gian sinh hoạt chung và các phòng ngủ riêng biệt, mang lại sự thoải mái và kết nối cho mọi thành viên.",
+                    "Trải nghiệm đỉnh cao của sự xa hoa với phòng Presidential Suite. Không gian sống tráng lệ, phòng ngủ master sang trọng và dịch vụ quản gia riêng biệt sẽ định nghĩa lại kỳ nghỉ của bạn.",
+                    "Một không gian sang trọng với các tiện nghi được lựa chọn cẩn thận, mang đến cho bạn một nơi ẩn náu yên tĩnh và thư thái sau một ngày dài khám phá."
+                };
+                int itemIndex = 0;
+                for (RoomType rt : roomTypes) {
+                    String imageUrl = (itemIndex < images.length) ? images[itemIndex] : images[0];
+                    String description = (itemIndex < descriptions.length) ? descriptions[itemIndex] : "Tận hưởng không gian nghỉ dưỡng sang trọng và tiện nghi với thiết kế tinh tế và dịch vụ chuyên nghiệp.";
         %>
-        <div class="featured-room reveal">
-            <div class="room-image"><img src="image/<%= room.getRoomNumber() %>.jpg" alt="<%= typeName %>"></div>
-            <div class="room-info">
-                <p class="room-type"><%= typeName %></p>
-                <h3><%= room.getDescription() %></h3>
-                <button class="btn btn-primary" onclick="window.scrollTo(0, 0);">Khám Phá Thêm</button>
+        <div class="room-feature reveal">
+            <div class="room-feature-image">
+                <img src="<%= imageUrl %>" alt="<%= rt.getTypeName() %>">
+            </div>
+            <div class="room-feature-content">
+                <span class="room-type-subtitle"><%= String.format("%,.0f", rt.getPricePerNight()) %> VNĐ / đêm</span>
+                <h3><%= rt.getTypeName() %></h3>
+                <p><%= description %></p>
+                <div class="room-feature-details" style="margin-bottom: 30px; text-align: inherit; font-size: 1.1em; color: var(--color-grey);">
+                    <span><i class="fa-solid fa-user-group" style="color: var(--color-gold);"></i> Sức chứa: <%= rt.getCapacity() %> người</span>
+                </div>
+                <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="btn btn-feature">Tìm hiểu thêm</a>
             </div>
         </div>
-        <% }} %>
+        <% 
+                    itemIndex++;
+                }
+            }
+        %> 
     </div>
 </section>
 
