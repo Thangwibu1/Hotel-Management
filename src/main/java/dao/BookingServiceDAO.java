@@ -12,7 +12,7 @@ public class BookingServiceDAO {
     public ArrayList<BookingService> getAllBookingService() {
         ArrayList<BookingService> result = new ArrayList<>();
 
-        String sql = "SELECT  [Booking_Service_ID],[BookingID],[ServiceID],[Quantity] ,[ServiceDate] FROM [HotelManagement].[dbo].[BOOKING_SERVICE]";
+        String sql = "SELECT  [Booking_Service_ID],[BookingID],[ServiceID],[Quantity] ,[ServiceDate], [Status] FROM [HotelManagement].[dbo].[BOOKING_SERVICE]";
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -25,8 +25,9 @@ public class BookingServiceDAO {
                     int serviceId = rs.getInt("ServiceID");
                     int quantity = rs.getInt("Quantity");
                     java.time.LocalDate serviceDate = rs.getObject("ServiceDate", java.time.LocalDate.class); // THAY ĐỔI
+                    int status = rs.getInt("Status");
 
-                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate); // THAY ĐỔI
+                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, status); // THAY ĐỔI
                     result.add(bookingService);
                 }
             }
@@ -40,7 +41,7 @@ public class BookingServiceDAO {
     public ArrayList<BookingService> getBookingServiceByBookingId(int bookingId) {
 
         ArrayList<BookingService> result = new ArrayList<>();
-        String sql = "SELECT  [Booking_Service_ID],[BookingID],[ServiceID],[Quantity] ,[ServiceDate] FROM [HotelManagement].[dbo].[BOOKING_SERVICE] where BookingID = ?";
+        String sql = "SELECT  [Booking_Service_ID],[BookingID],[ServiceID],[Quantity] ,[ServiceDate], [Status] FROM [HotelManagement].[dbo].[BOOKING_SERVICE] where BookingID = ?";
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -52,8 +53,9 @@ public class BookingServiceDAO {
                     int serviceId = rs.getInt("ServiceID");
                     int quantity = rs.getInt("Quantity");
                     java.time.LocalDate serviceDate = rs.getObject("ServiceDate", java.time.LocalDate.class); // THAY ĐỔI
+                    int status = rs.getInt("Status");
 
-                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate); // THAY ĐỔI
+                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, status); // THAY ĐỔI
                     result.add(bookingService);
                 }
             }
@@ -64,7 +66,7 @@ public class BookingServiceDAO {
     }
 
     public boolean addBookingService(BookingService bookingService) {
-        String sql = "INSERT INTO [dbo].[BOOKING_SERVICE] (BookingID, ServiceID, Quantity, ServiceDate) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO [dbo].[BOOKING_SERVICE] (BookingID, ServiceID, Quantity, ServiceDate, Status) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -72,6 +74,7 @@ public class BookingServiceDAO {
             ps.setInt(2, bookingService.getServiceId());
             ps.setInt(3, bookingService.getQuantity());
             ps.setObject(4, bookingService.getServiceDate()); // THAY ĐỔI
+            ps.setInt(5, bookingService.getStatus());
 
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;

@@ -12,23 +12,26 @@ public class BookingService {
     private int serviceId;
     private int quantity;
     private LocalDate serviceDate; // THAY ĐỔI: Kiểu dữ liệu thành LocalDate
+    private int status;
 
     // --- Constructors được cập nhật ---
     public BookingService() {}
 
-    public BookingService(int bookingId, int serviceId, int quantity, LocalDate serviceDate) { // THAY ĐỔI
+    public BookingService(int bookingId, int serviceId, int quantity, LocalDate serviceDate, int status) { // THAY ĐỔI
         this.bookingId = bookingId;
         this.serviceId = serviceId;
         this.quantity = quantity;
         this.serviceDate = serviceDate;
+        this.status = status;
     }
 
-    public BookingService(int bookingServiceId, int bookingId, int serviceId, int quantity, LocalDate serviceDate) { // THAY ĐỔI
+    public BookingService(int bookingServiceId, int bookingId, int serviceId, int quantity, LocalDate serviceDate, int status) { // THAY ĐỔI
         this.bookingServiceId = bookingServiceId;
         this.bookingId = bookingId;
         this.serviceId = serviceId;
         this.quantity = quantity;
         this.serviceDate = serviceDate;
+        this.status = status;
     }
 
     // --- Getters and Setters được cập nhật ---
@@ -46,6 +49,9 @@ public class BookingService {
 
     public LocalDate getServiceDate() { return serviceDate; } // THAY ĐỔI
     public void setServiceDate(LocalDate serviceDate) { this.serviceDate = serviceDate; } // THAY ĐỔI
+    
+    public int getStatus() { return status; }
+    public void setStatus(int status) { this.status = status; }
 
     // --- THAY ĐỔI: toString() được cập nhật ---
     @Override
@@ -56,6 +62,7 @@ public class BookingService {
                 ", serviceId=" + serviceId +
                 ", quantity=" + quantity +
                 ", serviceDate=" + serviceDate + // Bỏ dấu nháy đơn, sẽ tự gọi .toString() của LocalDate
+                ", status=" + status +
                 '}';
     }
 }
