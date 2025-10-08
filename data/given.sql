@@ -50,75 +50,128 @@ CREATE TABLE ROOM (
 );
 GO
 
+-- Bảng Thiết bị (DEVICE)
+CREATE TABLE DEVICE (
+                        DeviceID INT IDENTITY(1,1) PRIMARY KEY,
+                        DeviceName NVARCHAR(100) NOT NULL,
+                        Description NVARCHAR(500) NULL
+);
+GO
+
+-- Bảng Thiết bị trong phòng (ROOM_DEVICE)
+-- Bảng này tạo quan hệ N-N giữa ROOM và DEVICE
+CREATE TABLE ROOM_DEVICE (
+                             RoomDeviceID INT IDENTITY(1,1) PRIMARY KEY,
+                             RoomID INT NOT NULL,
+                             DeviceID INT NOT NULL,
+                             Quantity INT DEFAULT 1 CHECK (Quantity > 0),
+                             FOREIGN KEY (RoomID) REFERENCES ROOM(RoomID),
+                             FOREIGN KEY (DeviceID) REFERENCES DEVICE(DeviceID)
+);
+GO
+
+-- Bảng Sửa chữa (REPAIR)
+-- Quan hệ 1-M với ROOM_DEVICE (một thiết bị trong phòng có thể được sửa nhiều lần)
+CREATE TABLE REPAIR (
+                        RepairID INT IDENTITY(1,1) PRIMARY KEY,
+                        RoomDeviceID INT NOT NULL,
+                        StaffID INT NULL, -- Nhân viên chịu trách nhiệm, có thể null ban đầu
+                        ReportDate DATETIME NOT NULL DEFAULT GETDATE(),
+                        CompletionDate DATETIME NULL,
+                        NextdateMaintaince Date NULL,
+                        Description NVARCHAR(500) NOT NULL,
+                        Cost DECIMAL(10, 2) DEFAULT 0,
+                        Status NVARCHAR(50) CHECK (Status IN ('Pending', 'In Progress', 'Completed', 'Canceled')),
+                        FOREIGN KEY (RoomDeviceID) REFERENCES ROOM_DEVICE(RoomDeviceID),
+);
+GO
+
+
+-- Bảng Lịch sử dọn dẹp (ROOM_KEEPING)
+-- Quan hệ 1-M với ROOM (một phòng có thể được dọn dẹp nhiều lần)
+CREATE TABLE ROOM_TASK (
+    RoomKeepingID INT IDENTITY(1,1) PRIMARY KEY,
+    RoomID INT NOT NULL,
+    StaffID INT NULL, 
+    StartTime DATETIME NOT NULL,
+    EndTime DATETIME NULL,
+    Status NVARCHAR(50) CHECK (Status IN ('Dirty', 'In Progress', 'Completed', 'Maintance')),
+    Notes NVARCHAR(500) NULL,
+    FOREIGN KEY (RoomID) REFERENCES ROOM(RoomID)
+);
+GO
+-- 1 101 5 8/10/2025 15:00 16:00 Dirty Khách đái bậy trên giường 
+
 -- 4. Bảng Đặt phòng (BOOKING)
 CREATE TABLE BOOKING (
-                         BookingID INT IDENTITY(1,1) PRIMARY KEY,
-                         GuestID INT NOT NULL,
-                         RoomID INT NOT NULL,
-                         CheckInDate DATETIME NOT NULL,
-                         CheckOutDate DATETIME NOT NULL,
-                         BookingDate DATE DEFAULT GETDATE(),
-                         Status NVARCHAR(20) CHECK (Status IN ('Reserved', 'Checked-in', 'Checked-out', 'Canceled')),
-                         FOREIGN KEY (GuestID) REFERENCES GUEST(GuestID),
-                         FOREIGN KEY (RoomID) REFERENCES ROOM(RoomID),
-                         CHECK (CheckOutDate > CheckInDate)
+                        BookingID INT IDENTITY(1,1) PRIMARY KEY,
+                        GuestID INT NOT NULL,
+                        RoomID INT NOT NULL,
+                        CheckInDate DATETIME NOT NULL,
+                        CheckOutDate DATETIME NOT NULL,
+                        BookingDate DATE DEFAULT GETDATE(),
+                        Status NVARCHAR(20) CHECK (Status IN ('Reserved', 'Checked-in', 'Checked-out', 'Canceled')),
+                        FOREIGN KEY (GuestID) REFERENCES GUEST(GuestID),
+                        FOREIGN KEY (RoomID) REFERENCES ROOM(RoomID),
+                        CHECK (CheckOutDate > CheckInDate)
 );
 GO
 
 -- 5. Bảng Dịch vụ (SERVICE)
 CREATE TABLE SERVICE (
-                         ServiceID INT IDENTITY(1,1) PRIMARY KEY,
-                         ServiceName NVARCHAR(100) NOT NULL,
-                         ServiceType NVARCHAR(50),
-                         Price DECIMAL(10,2) NOT NULL CHECK (Price >= 0)
+                        ServiceID INT IDENTITY(1,1) PRIMARY KEY,
+                        ServiceName NVARCHAR(100) NOT NULL,
+                        ServiceType NVARCHAR(50),
+                        Price DECIMAL(10,2) NOT NULL CHECK (Price >= 0)
 );
 GO
 
 -- 6. Bảng Chi tiết Dịch vụ của Đặt phòng (BOOKING_SERVICE)
 CREATE TABLE BOOKING_SERVICE (
-                                 Booking_Service_ID INT IDENTITY(1,1) PRIMARY KEY,
-                                 BookingID INT NOT NULL,
-                                 ServiceID INT NOT NULL,
-                                 Quantity INT DEFAULT 1 CHECK (Quantity > 0),
-                                 ServiceDate DATE DEFAULT GETDATE(),
-                                 Status INT DEFAULT 0, -- 1: Active, 0: Canceled
-                                 FOREIGN KEY (BookingID) REFERENCES BOOKING(BookingID),
-                                 FOREIGN KEY (ServiceID) REFERENCES SERVICE(ServiceID)
+                                Booking_Service_ID INT IDENTITY(1,1) PRIMARY KEY,
+                                BookingID INT NOT NULL,
+                                ServiceID INT NOT NULL,
+                                Quantity INT DEFAULT 1 CHECK (Quantity > 0),
+                                ServiceDate DATE DEFAULT GETDATE(),
+                                Status INT DEFAULT 0, -- 0 Chưa làm, 1. Inprogress, 2. Làm rùi, -1. Huỷ
+                                FOREIGN KEY (BookingID) REFERENCES BOOKING(BookingID),
+                                FOREIGN KEY (ServiceID) REFERENCES SERVICE(ServiceID)
 );
 GO
 
 -- 7. Bảng Hóa đơn (INVOICE)
 CREATE TABLE INVOICE (
-                         InvoiceID INT IDENTITY(1,1) PRIMARY KEY,
-                         BookingID INT NOT NULL UNIQUE,
-                         IssueDate DATE DEFAULT GETDATE(),
-                         TotalAmount DECIMAL(12,2) NOT NULL CHECK (TotalAmount >= 0),
-                         Status NVARCHAR(20) CHECK (Status IN ('Unpaid', 'Paid', 'Canceled')),
-                         FOREIGN KEY (BookingID) REFERENCES BOOKING(BookingID)
+                        InvoiceID INT IDENTITY(1,1) PRIMARY KEY,
+                        BookingID INT NOT NULL UNIQUE,
+                        IssueDate DATE DEFAULT GETDATE(),
+                        TotalAmount DECIMAL(12,2) NOT NULL CHECK (TotalAmount >= 0),
+                        Status NVARCHAR(20) CHECK (Status IN ('Unpaid', 'Paid', 'Canceled')),
+                        FOREIGN KEY (BookingID) REFERENCES BOOKING(BookingID)
 );
 GO
 
 -- 8. Bảng Thanh toán (PAYMENT)
 CREATE TABLE PAYMENT (
-                         PaymentID INT IDENTITY(1,1) PRIMARY KEY,
-                         BookingID INT NOT NULL,
-                         PaymentDate DATE DEFAULT GETDATE(),
-                         Amount DECIMAL(12,2) NOT NULL CHECK (Amount >= 0),
-                         PaymentMethod NVARCHAR(50) CHECK (PaymentMethod IN ('Cash', 'Credit Card', 'Debit Card', 'Online')),
-                         Status NVARCHAR(20) CHECK (Status IN ('Pending', 'Completed', 'Failed')),
-                         FOREIGN KEY (BookingID) REFERENCES BOOKING(BookingID)
+                        PaymentID INT IDENTITY(1,1) PRIMARY KEY,
+                        BookingID INT NOT NULL,
+                        PaymentDate DATE DEFAULT GETDATE(),
+                        Amount DECIMAL(12,2) NOT NULL CHECK (Amount >= 0),
+                        PaymentMethod NVARCHAR(50) CHECK (PaymentMethod IN ('Cash', 'Credit Card', 'Debit Card', 'Online')),
+                        Status NVARCHAR(20) CHECK (Status IN ('Pending', 'Completed', 'Failed')),
+                        FOREIGN KEY (BookingID) REFERENCES BOOKING(BookingID)
 );
 GO
 
 -- 9. Bảng Nhân viên (STAFF)
 CREATE TABLE STAFF (
-                       StaffID INT IDENTITY(1,1) PRIMARY KEY,
-                       FullName NVARCHAR(100) NOT NULL,
-                       Role NVARCHAR(50) CHECK (Role IN ('Receptionist', 'Manager', 'Housekeeping', 'ServiceStaff', 'Admin')),
-                       Username NVARCHAR(50) UNIQUE NOT NULL,
-                       PasswordHash NVARCHAR(255) NOT NULL,
-                       Phone NVARCHAR(20),
-                       Email NVARCHAR(100)
+                        StaffID INT IDENTITY(1,1) PRIMARY KEY,
+                        FullName NVARCHAR(100) NOT NULL,
+                        Role NVARCHAR(50) CHECK (Role IN ('Receptionist', 'Manager', 'Housekeeping', 'ServiceStaff', 'Admin')),
+                        Role NVARCHAR(50) CHECK (Role IN ('Receptionist', 'Manager', 'Housekeeping', 'ServiceStaff', 'Admin', 'Repair')),
+                        Username NVARCHAR(50) UNIQUE NOT NULL,
+                        PasswordHash NVARCHAR(255) NOT NULL,
+                        Phone NVARCHAR(20),
+                        Email NVARCHAR(100)
 );
 GO
 
@@ -181,6 +234,9 @@ INSERT INTO STAFF (FullName, Role, Username, PasswordHash, Phone, Email) VALUES
 ('Phạm Minh Quân', 'Manager', 'manager01', 'hash_placeholder_staff_1', '0331112222', 'quan.pm@hotel.com'),
 ('Hoàng Thị Lan', 'Receptionist', 'receptionist01', 'hash_placeholder_staff_2', '0333334444', 'lan.ht@hotel.com'),
 ('Trần Văn Bình', 'Receptionist', 'receptionist02', 'hash_placeholder_staff_3', '0333334445', 'binh.tv@hotel.com');
+('Trần Văn Bình', 'Receptionist', 'receptionist02', 'hash_placeholder_staff_3', '0333334445', 'binh.tv@hotel.com'),
+('Nguyễn Thị Mai', 'Housekeeping', 'housekeeping01', 'hash_placeholder_staff_4', '0335556666', 'mai.nt@hotel.com'),
+('Lê Văn Nam', 'Repair', 'repair01', 'hash_placeholder_staff_5', '0337778888', 'nam.lv@hotel.com');
 GO
 
 select [TypeName], [Capacity], [PricePerNight] from ROOM_TYPE;
