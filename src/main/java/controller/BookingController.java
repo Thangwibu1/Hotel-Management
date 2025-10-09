@@ -52,7 +52,7 @@ public class BookingController extends HttpServlet {
 
         for (ChoosenService service : services) {
             try {
-                BookingService newBookingService = new BookingService(bookingId, service.getServiceId(), service.getQuantity(), service.getServiceDate());
+                BookingService newBookingService = new BookingService(bookingId, service.getServiceId(), service.getQuantity(), service.getServiceDate(), 0);
                 resutlt = bookingServiceDAO.addBookingService(newBookingService);
                 resutlt = true;
             } catch (Exception e) {
