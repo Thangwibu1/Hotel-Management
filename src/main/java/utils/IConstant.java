@@ -14,6 +14,7 @@ public interface IConstant {
 
 
 
+    public static final String getBookingInfoServlet = "getBookingInfo";
     public static final String bookingChangeServlet = "bookingChange";
     public static final String bookingServlet = "booking";
     public static final String homeServlet = "home";
@@ -25,7 +26,7 @@ public interface IConstant {
     public static final String detailBooking = "detailBooking";
     public static final String searchController = "search";
 
-
+    public static final String editServicePage = "editService.jsp";
     public static final String detailBookingPage = "detailBooking.jsp";
     public static final String bookingDashboard = "bookingDashboard.jsp";
     public static final String viewHisttoryRental = "viewHistoryRental.jsp";

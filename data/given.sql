@@ -166,7 +166,6 @@ GO
 CREATE TABLE STAFF (
                         StaffID INT IDENTITY(1,1) PRIMARY KEY,
                         FullName NVARCHAR(100) NOT NULL,
-                        Role NVARCHAR(50) CHECK (Role IN ('Receptionist', 'Manager', 'Housekeeping', 'ServiceStaff', 'Admin')),
                         Role NVARCHAR(50) CHECK (Role IN ('Receptionist', 'Manager', 'Housekeeping', 'ServiceStaff', 'Admin', 'Repair')),
                         Username NVARCHAR(50) UNIQUE NOT NULL,
                         PasswordHash NVARCHAR(255) NOT NULL,
@@ -234,9 +233,6 @@ INSERT INTO STAFF (FullName, Role, Username, PasswordHash, Phone, Email) VALUES
 ('Phạm Minh Quân', 'Manager', 'manager01', 'hash_placeholder_staff_1', '0331112222', 'quan.pm@hotel.com'),
 ('Hoàng Thị Lan', 'Receptionist', 'receptionist01', 'hash_placeholder_staff_2', '0333334444', 'lan.ht@hotel.com'),
 ('Trần Văn Bình', 'Receptionist', 'receptionist02', 'hash_placeholder_staff_3', '0333334445', 'binh.tv@hotel.com');
-('Trần Văn Bình', 'Receptionist', 'receptionist02', 'hash_placeholder_staff_3', '0333334445', 'binh.tv@hotel.com'),
-('Nguyễn Thị Mai', 'Housekeeping', 'housekeeping01', 'hash_placeholder_staff_4', '0335556666', 'mai.nt@hotel.com'),
-('Lê Văn Nam', 'Repair', 'repair01', 'hash_placeholder_staff_5', '0337778888', 'nam.lv@hotel.com');
 GO
 
 select [TypeName], [Capacity], [PricePerNight] from ROOM_TYPE;

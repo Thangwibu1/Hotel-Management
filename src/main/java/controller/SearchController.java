@@ -43,6 +43,10 @@ public class SearchController extends HttpServlet {
         String guests = req.getParameter("guests");
         String roomType = req.getParameter("room-type");
 
+        if (roomType.equals("")) {
+            roomType = "0";
+        }
+
         LocalDate checkInDate = LocalDate.parse(checkIn);
         LocalDate checkOutDate = LocalDate.parse(checkOut);
 
@@ -66,8 +70,17 @@ public class SearchController extends HttpServlet {
                     break;
                 }
             }
-            if (isBooked == false && room.getRoomTypeId() == Integer.parseInt(roomType)) {
-                availableRooms.add(room);
+
+            boolean checkRoomType = Integer.parseInt(roomType) == 0;
+
+            if (checkRoomType) {
+                if (isBooked == false) {
+                    availableRooms.add(room);
+                }
+            } else {
+                if (isBooked == false && room.getRoomTypeId() == Integer.parseInt(roomType)) {
+                    availableRooms.add(room);
+                }
             }
         }
 

@@ -497,6 +497,29 @@
         }, { threshold: 0.15 });
 
         document.querySelectorAll('.reveal').forEach(el => { observer.observe(el); });
+
+        // --- LOGIC CHO VALIDATE NGÀY TRONG MODAL TÌM KIẾM ---
+        const checkInInput = document.getElementById('modal-check-in');
+        const checkOutInput = document.getElementById('modal-check-out');
+
+        if (checkInInput && checkOutInput) {
+            // 1. Set ngày nhận phòng tối thiểu là ngày mai
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomorrowString = tomorrow.toISOString().split('T')[0];
+            checkInInput.min = tomorrowString;
+
+            // 2. Khi ngày nhận phòng thay đổi, cập nhật ngày trả phòng
+            checkInInput.addEventListener('change', function() {
+                // Ngày trả phòng không được nhỏ hơn ngày nhận phòng
+                checkOutInput.min = this.value;
+                // Nếu ngày trả phòng hiện tại nhỏ hơn ngày nhận phòng mới, hãy đặt lại nó
+                if (checkOutInput.value < this.value) {
+                    checkOutInput.value = this.value;
+                }
+            });
+        }
     });
 </script>
 

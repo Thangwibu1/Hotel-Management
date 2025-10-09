@@ -11,7 +11,7 @@ public class BookingService {
     private int bookingId;
     private int serviceId;
     private int quantity;
-    private LocalDate serviceDate; // THAY ĐỔI: Kiểu dữ liệu thành LocalDate
+    private LocalDate serviceDate; 
     private int status;
 
     // --- Constructors được cập nhật ---
