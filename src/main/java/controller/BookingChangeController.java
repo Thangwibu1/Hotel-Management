@@ -41,12 +41,17 @@ public class BookingChangeController extends HttpServlet {
         return result;
     }
 
+    public boolean updateBookingServiceStatus(int bookingServiceId, int status) {
+        return bookingServiceDAO.updateBookingServiceStatus(bookingServiceId, status);
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String[] serviceId = (String[])req.getParameterValues("newServiceId");
         String[] quantity = (String[])req.getParameterValues("newServiceQuantity");
         String[] date = (String[])req.getParameterValues("newServiceDate");
         String bookingId = req.getParameter("bookingId");
+        String[] cancelService = req.getParameterValues("cancelService");
 
         List<ChoosenService> newServices = new ArrayList<>();
         if (serviceId != null) {
@@ -60,6 +65,11 @@ public class BookingChangeController extends HttpServlet {
         // Store the new services in the database
         for (ChoosenService newService : newServices) {
             addBooking(newService, Integer.parseInt(bookingId));
+        }
+        if (cancelService != null) {
+            for (String id : cancelService) {
+                updateBookingServiceStatus(Integer.parseInt(id), -1);
+            }   
         }
         resp.sendRedirect(IConstant.homeServlet);
     }
