@@ -11,21 +11,23 @@ import java.util.ArrayList;
 public class StaffDAO {
     public ArrayList<Staff> getAllStaff() {
         ArrayList<Staff> result = new ArrayList<>();
-        String sql = "SELECT TOP (1000) [StaffID] ,[FullName] ,[Role] ,[Username] ,[PasswordHash] ,[Phone] ,[Email] FROM [HotelManagement].[dbo].[STAFF]";
+        String sql = "SELECT [StaffID] ,[FullName] ,[Role] ,[Username] ,[PasswordHash] ,[Phone] ,[Email] FROM [HotelManagement].[dbo].[STAFF]";
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             if (rs != null) {
-                    Staff staff = new Staff();
-                    staff.setStaffId(rs.getInt("StaffID"));
-                    staff.setFullName(rs.getString("FullName"));
-                    staff.setRole(rs.getString("Role"));
-                    staff.setUsername(rs.getString("Username"));
-                    staff.setPasswordHash(rs.getString("PasswordHash"));
-                    staff.setPhone(rs.getString("Phone"));
-                    staff.setEmail(rs.getString("Email"));
+                while (rs.next()) {
+                    int id = rs.getInt("StaffID");
+                    String fullName = rs.getString("FullName");
+                    String role = rs.getString("Role");
+                    String username = rs.getString("Username");
+                    String passwordHash = rs.getString("PasswordHash");
+                    String phone = rs.getString("Phone");
+                    String email = rs.getString("Email");
+                    Staff staff = new Staff(id, fullName, role, username, passwordHash, phone, email);
                     result.add(staff);
+                }
 
             }
         } catch (Exception e) {
