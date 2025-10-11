@@ -146,11 +146,11 @@
                 <input type="hidden" id="staffId" name="staffId">
                 <div class="form-group">
                     <label for="fullName">Full Name</label>
-                    <input type="text" id="fullName" name="fullName" required>
+                    <input type="text" id="fullName" name="fullName" required="">
                 </div>
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
+                    <input type="text" id="username" name="username" required="">
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
@@ -158,15 +158,15 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email" required="">
                 </div>
                 <div class="form-group">
                     <label for="phone">Phone</label>
-                    <input type="text" id="phone" name="phone" required>
+                    <input type="text" id="phone" name="phone" required="">
                 </div>
                 <div class="form-group">
                     <label for="role">Role</label>
-                    <input type="text" id="role" name="role" required>
+                    <input type="text" id="role" name="role" required="">
                 </div>
             </div>
             <div class="modal-footer">
