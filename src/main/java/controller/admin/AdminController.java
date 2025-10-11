@@ -34,7 +34,7 @@ public class AdminController extends HttpServlet {
         
         // Redirect to login if not logged in or not an admin
         if (admin == null || !"admin".equalsIgnoreCase(admin.getRole())) {
-            resp.sendRedirect(IConstant.loginPage);
+            resp.sendRedirect("./" + IConstant.loginPage);
             return;
         }
 

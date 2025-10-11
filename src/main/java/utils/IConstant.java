@@ -15,6 +15,8 @@ public interface IConstant {
     public static final String housekeeping = "housekeeping";
     public static final String serviceStaff = "service-staff";
 
+    public static final String addStaffServlet = "/" + adminFilter + "add-staff";
+    public static final String removeStaffServlet = "/" + adminFilter + "remove-staff";
     public static final String bookingChangeServlet = "booking-change";
     public static final String getBookingInfoServlet = "getBookingInfo";
     public static final String bookingServlet = "booking";
