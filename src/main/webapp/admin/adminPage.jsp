@@ -66,6 +66,20 @@
 </div>
 
 <div class="container">
+    <%
+        String error = "";
+        try {
+            error = (String) request.getAttribute("error");
+        } catch (Exception e) {
+            error = "";
+        }
+
+    %>
+    <% if (error != null && !error.isEmpty()) { %>
+        <div style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+            <strong>Error:</strong> <%= error %>
+        </div>
+    <% } %>
     <div class="card">
         <h2>Staff Management</h2>
         <a class="add-button" id="addStaffBtn">Add New Staff</a>

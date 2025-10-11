@@ -162,4 +162,28 @@ public class StaffDAO {
 
         return result;
     }
+
+    public boolean isUsernameExist(String username) {
+        boolean result = false;
+
+        String sql = "SELECT COUNT(*) AS count FROM [HotelManagement].[dbo].[STAFF] WHERE [Username] = ?";
+
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt("count");
+                result = count > 0;
+            }
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+        return result;
+    }
 }
