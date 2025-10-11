@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class GuestDAO {
@@ -151,7 +152,7 @@ public class GuestDAO {
             ps.setString(4, guest.getPasswordHash());
             ps.setString(5, guest.getAddress());
             ps.setString(6, guest.getIdNumber());
-            ps.setString(7, guest.getDateOfBirth());
+            ps.setObject(7, LocalDate.parse(guest.getDateOfBirth()));
             int rowsAffected = ps.executeUpdate();
             result = rowsAffected > 0;
         } catch (Exception e) {

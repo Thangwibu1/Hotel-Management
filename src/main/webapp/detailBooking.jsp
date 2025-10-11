@@ -70,6 +70,11 @@
         .status.checked-in { background-color: #28a745; }
         .status.checked-out { background-color: #6c757d; }
         .status.canceled { background-color: #dc3545; }
+        .service-status { padding: 3px 8px; border-radius: 12px; color: #fff; font-size: 0.8em; display: inline-block; }
+        .status-0 { background-color: #007bff; } /* Chưa làm */
+        .status-1 { background-color: #ffc107; color: #212529; } /* Đang làm */
+        .status-2 { background-color: #28a745; } /* Đã làm */
+        .status--1 { background-color: #6c757d; } /* Đã hủy */
     </style>
 </head>
 <body>
@@ -100,18 +105,27 @@
                 <h2><i class="fa-solid fa-concierge-bell"></i> Dịch vụ đã sử dụng</h2>
                 <% if (bookingServices != null && !bookingServices.isEmpty()) { %>
                 <table class="services-table">
-                    <thead><tr><th>Tên dịch vụ</th><th class="text-right">Số lượng</th><th>Ngày sử dụng</th><th class="text-right">Thành tiền</th></tr></thead>
+                    <thead><tr><th>Tên dịch vụ</th><th class="text-right">Số lượng</th><th>Ngày sử dụng</th><th>Trạng thái</th><th class="text-right">Thành tiền</th></tr></thead>
                     <tbody>
                     <%-- Dùng vòng lặp có chỉ số để truy cập 2 list song song --%>
                     <% for (int i = 0; i < bookingServices.size(); i++) {
                         BookingService bs = bookingServices.get(i);
                         Service service = serviceDetails.get(i); // Lấy service tương ứng
                         BigDecimal subTotal = service.getPrice().multiply(new BigDecimal(bs.getQuantity()));
+                        String statusText;
+                        switch (bs.getStatus()) {
+                            case 0: statusText = "Chưa làm"; break;
+                            case 1: statusText = "Đang làm"; break;
+                            case 2: statusText = "Đã làm"; break;
+                            case -1: statusText = "Đã hủy"; break;
+                            default: statusText = "Không xác định";
+                        }
                     %>
                     <tr>
                         <td><%= service.getServiceName() %></td>
                         <td class="text-right"><%= bs.getQuantity() %></td>
                         <td><%= IConstant.dateFormat.format(bs.getServiceDate()) %></td>
+                        <td><span class="service-status status-<%= bs.getStatus() %>"><%= statusText %></span></td>
                         <td class="text-right"><%= currencyFormatter.format(subTotal) %></td>
                     </tr>
                     <% } %>

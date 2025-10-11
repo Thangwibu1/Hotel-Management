@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet("/detailBooking")
-public class detailBooking extends HttpServlet {
+@WebServlet("/getBookingInfo")
+public class GetBookingInfoController extends HttpServlet {
 
     private BookingDAO bookingDAO;
     private RoomDAO roomDAO;
@@ -38,31 +38,28 @@ public class detailBooking extends HttpServlet {
         int bookingId = Integer.parseInt(req.getParameter("bookingId"));
         int guestId = Integer.parseInt(req.getParameter("guestId"));
         Booking booking = bookingDAO.getBookingById(bookingId);
+        //Lay thong tin booking
         req.setAttribute("booking", booking);
+        //Lay thong tin room
         Room room = roomDAO.getRoomById(booking.getRoomId());
         req.setAttribute("room", room);
+        //Lay thong tin roomType
         RoomType roomType = roomTypeDAO.getRoomTypeById(room.getRoomTypeId());
         req.setAttribute("roomType", roomType);
-        Guest guest = guestDAO.getGuestById(guestId);
-        req.setAttribute("guest", guest);
+
+        //Lay thong tin bookingService
         List<BookingService> bookingServices = bookingServiceDAO.getBookingServiceByBookingId(bookingId);
-        req.setAttribute("bookingServices", bookingServices);
-        List<Service> serviceDetailForBookingService = new ArrayList<>();
-        for (BookingService bookingService : bookingServices) {
-            serviceDetailForBookingService.add(serviceDAO.getServiceById(bookingService.getServiceId()));
-        }
-        req.setAttribute("services", serviceDetailForBookingService);
+        req.setAttribute("chosenServices", bookingServices);
+
+        //Lay tat ca service de doi chieu hien thi
         List<Service> services = serviceDAO.getAllService();
         req.setAttribute("allServices", services);
-        ArrayList<Booking> bookings = bookingDAO.getBookingByGuestId(guestId);
-        req.setAttribute("bookings", bookings);
-        ArrayList<Room> rooms = new ArrayList<>();
-        for (Booking bookig : bookings) {
-            rooms.add(roomDAO.getRoomById(bookig.getRoomId()));
-        }
-        req.setAttribute("rooms", rooms);
-        ArrayList<RoomType> roomTypes = roomTypeDAO.getAllRoomType();
-        req.setAttribute("roomTypes", roomTypes);
-        req.getRequestDispatcher(IConstant.detailBookingPage).forward(req, resp);
+        req.getRequestDispatcher(IConstant.editServicePage).forward(req, resp);
+
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req, resp);
     }
 }

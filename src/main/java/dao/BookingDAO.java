@@ -8,6 +8,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class BookingDAO {
 
@@ -25,12 +26,12 @@ public class BookingDAO {
                     int roomId = rs.getInt("RoomID");
                     String status = rs.getString("Status");
 
-                    // Lấy thẳng đối tượng ngày gi�?
+                    // Lấy thẳng đối tượng ngày gi�?
                     LocalDateTime checkInDate = rs.getObject("CheckInDate", LocalDateTime.class);
                     LocalDateTime checkOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
                     LocalDate bookingDate = rs.getObject("BookingDate", LocalDate.class);
 
-                    // Bước 2: Tạo đối tượng Booking và set trực tiếp các đối tượng ngày gi�?
+                    // Bước 2: Tạo đối tượng Booking và set trực tiếp các đối tượng ngày gi�?
                     Booking booking = new Booking();
                     booking.setBookingId(bookingId);
                     booking.setGuestId(guestId);
@@ -70,10 +71,10 @@ public class BookingDAO {
     }
 
     public int addBookingV2(Booking booking) {
-        int generatedBookingId = -1; // Sẽ chứa ID trả v�?, mặc định là -1 (thất bại)
+        int generatedBookingId = -1; // Sẽ chứa ID trả v�?, mặc định là -1 (thất bại)
         String sql = "INSERT INTO [dbo].[BOOKING] (GuestID, RoomID, CheckInDate, CheckOutDate, BookingDate, Status) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try ( Connection conn = DBConnection.getConnection(); // BƯỚC 1: Yêu cầu JDBC trả v�? các key (ID) được tự động sinh ra
+        try ( Connection conn = DBConnection.getConnection(); // BƯỚC 1: Yêu cầu JDBC trả v�? các key (ID) được tự động sinh ra
                   PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setInt(1, booking.getGuestId());
@@ -87,7 +88,7 @@ public class BookingDAO {
 
             // BƯỚC 2: Nếu insert thành công, tiến hành lấy ID
             if (rowsAffected > 0) {
-                // Lấy v�? một ResultSet chứa các ID vừa được sinh ra
+                // Lấy v�? một ResultSet chứa các ID vừa được sinh ra
                 try ( ResultSet rs = ps.getGeneratedKeys()) {
                     // Di chuyển đến dòng đầu tiên và lấy ID
                     if (rs.next()) {
@@ -98,10 +99,10 @@ public class BookingDAO {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // Nếu có lỗi, hàm sẽ trả v�? giá trị mặc định là -1
+            // Nếu có lỗi, hàm sẽ trả v�? giá trị mặc định là -1
         }
 
-        // BƯỚC 3: Trả v�? ID đã lấy được
+        // BƯỚC 3: Trả v�? ID đã lấy được
         return generatedBookingId;
     }
 
@@ -123,7 +124,7 @@ public class BookingDAO {
                     int roomId = rs.getInt("RoomID");
                     String status = rs.getString("Status");
 
-                    // Lấy thẳng đối tượng ngày gi�?
+                    // Lấy thẳng đối tượng ngày gi�?
                     LocalDateTime checkInDate = rs.getObject("CheckInDate", LocalDateTime.class);
                     LocalDateTime checkOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
                     LocalDate bookingDate = rs.getObject("BookingDate", LocalDate.class);
@@ -194,5 +195,78 @@ public class BookingDAO {
             e.printStackTrace();
         }
         return result;
+    }
+}
+    public ArrayList<Booking> getBookingByCheckInCheckOutDate(LocalDateTime checkInDate, LocalDateTime checkOutDate) {
+        ArrayList<Booking> result = new ArrayList<>();
+
+        String sql = "SELECT [BookingID], [GuestID], [RoomID], [CheckInDate], [CheckOutDate], [BookingDate], [Status] FROM [HotelManagement].[dbo].[BOOKING]";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+                    int bookingId = rs.getInt("BookingID");
+                    int guestId = rs.getInt("GuestID");
+                    int roomId = rs.getInt("RoomID");
+                    String status = rs.getString("Status");
+                    LocalDateTime dbCheckInDate = rs.getObject("CheckInDate", LocalDateTime.class);
+                    LocalDateTime dbCheckOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
+                    LocalDate bookingDate = rs.getObject("BookingDate", LocalDate.class);
+
+                    // Kiểm tra điều kiện ngày
+                    if (dbCheckInDate.isBefore(checkOutDate) && dbCheckOutDate.isAfter(checkInDate)) {
+                        Booking booking = new Booking();
+                        booking.setBookingId(bookingId);
+                        booking.setGuestId(guestId);
+                        booking.setRoomId(roomId);
+                        booking.setStatus(status);
+                        booking.setCheckInDate(dbCheckInDate);
+                        booking.setCheckOutDate(dbCheckOutDate);
+                        booking.setBookingDate(bookingDate);
+
+                        result.add(booking);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        ArrayList<Booking> result2 = new ArrayList<>();
+        List<LocalDate> datesInRange = new ArrayList<>();
+
+        LocalDate currentDate = checkInDate.toLocalDate();
+
+        LocalDate endDate = checkOutDate.toLocalDate();
+
+        while (!currentDate.isAfter(endDate)) {
+            // Thêm ngày hiện tại vào danh sách
+            datesInRange.add(currentDate);
+
+            // Tăng ngày hiện tại lên 1 ngày để chuẩn bị cho vòng lặp tiếp theo
+            currentDate = currentDate.plusDays(1);
+        }
+
+        for (Booking booking : result) {
+            LocalDate bookingCheckInDate = booking.getCheckInDate().toLocalDate();
+            LocalDate bookingCheckOutDate = booking.getCheckOutDate().toLocalDate();
+
+            for (LocalDate date : datesInRange) {
+                if ((date.isEqual(bookingCheckInDate) || date.isAfter(bookingCheckInDate)) &&
+                        (date.isEqual(bookingCheckOutDate) || date.isBefore(bookingCheckOutDate))) {
+                    result2.add(booking);
+                    break; // Không cần kiểm tra các ngày còn lại, đã tìm thấy ngày phù hợp
+                }
+            }
+
+        }
+        return result2;
     }
 }
