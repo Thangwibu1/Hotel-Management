@@ -86,4 +86,80 @@ public class StaffDAO {
 
         return staff;
     }
+
+    public boolean addStaff(Staff staff) {
+        boolean result = false;
+
+        String sql = "INSERT INTO [HotelManagement].[dbo].[STAFF] ([FullName] ,[Role] ,[Username] ,[PasswordHash] ,[Phone] ,[Email]) VALUES (?, ?, ?, ?, ?, ?)";
+        try {
+            
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, staff.getFullName());
+            ps.setString(2, staff.getRole());
+            ps.setString(3, staff.getUsername());
+            ps.setString(4, staff.getPasswordHash());
+            ps.setString(5, staff.getPhone());
+            ps.setString(6, staff.getEmail());
+            int rowsAffected = ps.executeUpdate();
+            result = rowsAffected > 0;
+            
+            ps.close();
+            con.close();
+        } catch (Exception e) {
+            // TODO: handle exception
+        } finally {
+            
+        }
+
+        return result;
+    }
+
+    public boolean updateStaff(Staff staff) {
+        boolean result = false;
+
+        String sql = "UPDATE [HotelManagement].[dbo].[STAFF] SET [FullName] = ?, [Role] = ?, [Username] = ?, [PasswordHash] = ?, [Phone] = ?, [Email] = ? WHERE [StaffID] = ?";
+        
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, staff.getFullName());
+            ps.setString(2, staff.getRole());
+            ps.setString(3, staff.getUsername());
+            ps.setString(4, staff.getPasswordHash());
+            ps.setString(5, staff.getPhone());
+            ps.setString(6, staff.getEmail());
+            ps.setInt(7, staff.getStaffId());
+            int rowsAffected = ps.executeUpdate();
+            result = rowsAffected > 0;
+            ps.close();
+            con.close();
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+        return result;
+    }
+
+    public boolean deleteStaff(int staffId) {
+        boolean result = false;
+
+        String sql = "DELETE FROM [HotelManagement].[dbo].[STAFF] WHERE [StaffID] = ?";
+
+
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, staffId);
+            int rowsAffected = ps.executeUpdate();
+            result = rowsAffected > 0;
+            ps.close();
+            con.close();
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+        return result;
+    }
 }
