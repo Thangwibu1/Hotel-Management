@@ -3,6 +3,7 @@ package controller;
 
 import dao.GuestDAO;
 import model.Guest;
+import utils.IConstant;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,11 +24,11 @@ public class RegisterController extends HttpServlet {
     }
 
     public boolean validate(String email, String idNumber) {
-        return guestDAO.checkDuplicateEmail(email) && guestDAO.checkDuplicateIdNumber(idNumber);
+        return guestDAO.checkDuplicateEmail(email) || guestDAO.checkDuplicateIdNumber(idNumber);
     }
 
-    public boolean addGuest(String fullName, String email, String password, String phone, String dateOfBirth, String address, String idNumber) {
-        return guestDAO.addGuest(new Guest(fullName, email, password, phone, dateOfBirth, address, idNumber));
+    public boolean addGuest(String fullName, String phone, String email, String password, String address, String idNumber, String dateOfBirth) {
+        return guestDAO.addGuest(new Guest(fullName, phone, email, address, idNumber, dateOfBirth, password));
     }
 
     @Override
@@ -46,10 +47,21 @@ public class RegisterController extends HttpServlet {
         String dateOfBirth = req.getParameter("dateOfBirth");
         String address = req.getParameter("address");
         String idNumber = req.getParameter("idNumber");
-
+        System.out.println(dateOfBirth);
         try {
-            if (validate(email, idNumber)) {
-                addGuest(fullName, email, password, phone, dateOfBirth, address, idNumber);
+            if (!validate(email, idNumber)) {
+                addGuest(fullName, phone, email, password, address, idNumber, dateOfBirth);
+                req.setAttribute("fullName", fullName);
+                req.setAttribute("email", email);
+                req.setAttribute("phone", phone);
+                req.setAttribute("dateOfBirth", dateOfBirth);
+                req.setAttribute("address", address);
+                req.setAttribute("idNumber", idNumber);
+                req.getRequestDispatcher(IConstant.registerSuccess).forward(req, resp);
+            } else {
+                System.out.println("Toi day la dung ne");
+                resp.sendRedirect(IConstant.registerPage + "?error=Email or ID number is already used");
+                return;
             }
         } catch (Exception e) {
             e.printStackTrace();

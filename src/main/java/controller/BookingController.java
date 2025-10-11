@@ -36,6 +36,7 @@ public class BookingController extends HttpServlet {
 
     protected int bookingHandle(int roomId, int guessId, LocalDateTime checkInDate, LocalDateTime checkOutDate, LocalDate bookingDate) {
         int returnValue = 0;
+
         Booking newBooking = new Booking(guessId, roomId, checkInDate, checkOutDate, bookingDate, "Reserved");
         try {
             returnValue = bookingDAO.addBookingV2(newBooking);
@@ -51,7 +52,7 @@ public class BookingController extends HttpServlet {
 
         for (ChoosenService service : services) {
             try {
-                BookingService newBookingService = new BookingService(bookingId, service.getServiceId(), service.getQuantity(), service.getServiceDate());
+                BookingService newBookingService = new BookingService(bookingId, service.getServiceId(), service.getQuantity(), service.getServiceDate(), 0);
                 resutlt = bookingServiceDAO.addBookingService(newBookingService);
                 resutlt = true;
             } catch (Exception e) {
