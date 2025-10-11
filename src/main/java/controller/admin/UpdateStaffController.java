@@ -41,13 +41,8 @@ public class UpdateStaffController extends HttpServlet {
 
         Staff staff = new Staff(Integer.parseInt(id), fullName, role, username, password, phone, email);
 
-        if (!isUsernameExist(username)) {
-            updateStaff(staff);
-            req.getRequestDispatcher("admin").forward(req, resp);
-        } else {
-            req.setAttribute("error", "Username already exists!");
-            req.getRequestDispatcher("admin").forward(req, resp);
-        }
+        updateStaff(staff);
+        req.getRequestDispatcher("admin").forward(req, resp);
     }
 
     @Override
