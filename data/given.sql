@@ -93,9 +93,9 @@ CREATE TABLE ROOM_TASK (
     RoomTaskID INT IDENTITY(1,1) PRIMARY KEY,
     RoomID INT NOT NULL,
     StaffID INT NULL, 
-    StartTime DATETIME NOT NULL,
+    StartTime DATETIME NULL,
     EndTime DATETIME NULL,
-    StatusClean NVARCHAR(50) CHECK (Status IN ('Dirty', 'In Progress', 'Completed', 'Maintance')),
+    StatusClean NVARCHAR(50) CHECK (StatusClean IN ('Cleaned', 'In Progress', 'Pending', 'Maintance')),
     Notes NVARCHAR(500) NULL,
     FOREIGN KEY (RoomID) REFERENCES ROOM(RoomID)
 );
