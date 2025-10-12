@@ -41,10 +41,21 @@ public class GetPendingCheckinController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
+            String subTab = request.getParameter("tab");
+            if (subTab == null) {
+                subTab = "in";
+            }
             BookingDAO bookingDao = new BookingDAO();
-            ArrayList<BookingActionRow> bookings = bookingDao.getBookingByStatus("Reserved", "checkin");
-            System.out.println("rows size = " + (bookings==null? "null" : bookings.size()));
-            request.setAttribute("PENDING_CHECKIN", bookings);
+            if ("in".equals(subTab)) {
+                ArrayList<BookingActionRow> bookings = bookingDao.getBookingByStatus("Reserved", "checkin");
+                request.setAttribute("PENDING_CHECKIN", bookings);
+            } else {
+                ArrayList<BookingActionRow> bookings = bookingDao.getBookingByStatus("Checked-in", "checkout");
+                request.setAttribute("PENDING_CHECKOUT", bookings);
+            }
+            
+            request.setAttribute("SUB_TAB", subTab);
+            request.setAttribute("CURRENT_TAB", "checkin"); 
             request.getRequestDispatcher("/receptionist/checkPage.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
