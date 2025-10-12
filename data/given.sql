@@ -60,13 +60,14 @@ GO
 
 -- Bảng Thiết bị trong phòng (ROOM_DEVICE)
 -- Bảng này tạo quan hệ N-N giữa ROOM và DEVICE
+
 CREATE TABLE ROOM_DEVICE (
-                            RoomDeviceID INT IDENTITY(1,1) PRIMARY KEY,
-                            RoomID INT NOT NULL,
-                            DeviceID INT NOT NULL,
-                            Quantity INT DEFAULT 1 CHECK (Quantity > 0),
-                            FOREIGN KEY (RoomID) REFERENCES ROOM(RoomID),
-                            FOREIGN KEY (DeviceID) REFERENCES DEVICE(DeviceID)
+                        RoomDeviceID INT IDENTITY(1,1) PRIMARY KEY,
+                        RoomID INT NOT NULL,
+                        DeviceID INT NOT NULL,
+                        Quantity INT DEFAULT 1 CHECK (Quantity > 0),
+                        FOREIGN KEY (RoomID) REFERENCES ROOM(RoomID),
+                        FOREIGN KEY (DeviceID) REFERENCES DEVICE(DeviceID)
 );
 GO
 
@@ -229,10 +230,11 @@ GO
 
 -- 4. Dữ liệu bảng SERVICE
 INSERT INTO SERVICE (ServiceName, ServiceType, Price) VALUES
-('Breakfast Buffet', 'Food', 15.00),
-('Set Menu Lunch', 'Food', 25.00),
-('Laundry Service (per kg)', 'Laundry', 5.00),
-('Spa Massage (60 mins)', 'Spa', 40.00)
+    ('Breakfast Buffet', 'Food', 15.00),
+    ('Set Menu Lunch', 'Food', 25.00),
+    ('Laundry Service (per kg)', 'Laundry', 5.00),
+    ('Spa Massage (60 mins)', 'Spa', 40.00),
+    ('Room Keeping', 'HouseKeeping', 30.00)
 GO
 
 -- 5. Dữ liệu bảng STAFF

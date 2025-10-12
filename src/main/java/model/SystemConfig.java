@@ -8,6 +8,11 @@ public class SystemConfig {
     public SystemConfig() {
     }
 
+    public SystemConfig(String configName, int configValue) {
+        ConfigName = configName;
+        ConfigValue = configValue;
+    }
+
     public SystemConfig(int configId, String configName, int configValue) {
         ConfigId = configId;
         ConfigName = configName;

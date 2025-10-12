@@ -15,6 +15,8 @@ public interface IConstant {
     public static final String housekeeping = "housekeeping";
     public static final String serviceStaff = "service-staff";
 
+    public static final String systemConfigServlet = "SystemController";
+    public static final String systemConfigController = "./" + adminFilter + "/system";
     public static final String addStaffServlet = "/" + adminFilter + "add-staff";
     public static final String removeStaffServlet = "/" + adminFilter + "remove-staff";
     public static final String bookingChangeServlet = "booking-change";
@@ -29,7 +31,7 @@ public interface IConstant {
     public static final String detailBooking = "detailBooking";
     public static final String searchController = "search";
 
-
+    public static final String systemConfigPage = "/" + adminFilter + "/systemConfig.jsp";
     public static final String adminPage = "/" + adminFilter + "/adminPage.jsp";
     public static final String editServicePage = "editService.jsp";
     public static final String detailBookingPage = "detailBooking.jsp";

@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.Staff" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="utils.IConstant" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,7 +61,7 @@
         <% } %>
     </div>
     <div class="header-actions">
-        <a href="#">Change System Info</a>
+        <a href="./system">Change System Info</a>
         <a href="<%= request.getContextPath() %>/logout">Logout</a>
     </div>
 </div>

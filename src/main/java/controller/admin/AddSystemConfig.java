@@ -1,6 +1,7 @@
 package controller.admin;
 
 import dao.SystemConfigDAO;
+import model.SystemConfig;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,7 +22,10 @@ public class AddSystemConfig extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        String configName = req.getParameter("configName");
+        String configValue = req.getParameter("configValue");
+        systemConfigDAO.addSystemConfig(new SystemConfig(configName, Integer.parseInt(configValue)));
+        req.getRequestDispatcher("./system").forward(req, resp);
     }
 
     @Override
