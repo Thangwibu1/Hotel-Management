@@ -9,6 +9,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import model.BookingActionRow;
+import model.Guest;
+import model.Room;
+import model.RoomType;
 
 public class BookingDAO {
 
@@ -184,8 +188,7 @@ public class BookingDAO {
         String sql = "SELECT COUNT(*) as total \n"
                 + "FROM [HotelManagement].[dbo].[BOOKING]\n"
                 + "WHERE [Status] = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( Connection conn = DBConnection.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, str);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -219,7 +222,7 @@ public class BookingDAO {
                     LocalDateTime dbCheckOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
                     LocalDate bookingDate = rs.getObject("BookingDate", LocalDate.class);
 
-                    // Kiểm tra điều kiện ngày
+                    // Kiểm tra đi�?u kiện ngày
                     if (dbCheckInDate.isBefore(checkOutDate) && dbCheckOutDate.isAfter(checkInDate)) {
                         Booking booking = new Booking();
                         booking.setBookingId(bookingId);
@@ -259,8 +262,8 @@ public class BookingDAO {
             LocalDate bookingCheckOutDate = booking.getCheckOutDate().toLocalDate();
 
             for (LocalDate date : datesInRange) {
-                if ((date.isEqual(bookingCheckInDate) || date.isAfter(bookingCheckInDate)) &&
-                        (date.isEqual(bookingCheckOutDate) || date.isBefore(bookingCheckOutDate))) {
+                if ((date.isEqual(bookingCheckInDate) || date.isAfter(bookingCheckInDate))
+                        && (date.isEqual(bookingCheckOutDate) || date.isBefore(bookingCheckOutDate))) {
                     result2.add(booking);
                     break; // Không cần kiểm tra các ngày còn lại, đã tìm thấy ngày phù hợp
                 }
@@ -268,5 +271,66 @@ public class BookingDAO {
 
         }
         return result2;
+    }
+
+    public ArrayList<BookingActionRow> getBookingByStatus(String status, String orderByCheck) {
+        ArrayList<BookingActionRow> result = new ArrayList<>();
+
+        switch (orderByCheck == null ? "" : orderByCheck.toLowerCase()) {
+            case "checkout":
+                orderByCheck = "b.CheckOutDate";
+                break;
+            case "booking":
+                orderByCheck = "b.BookingDate";
+                break;   
+            case "checkin":
+                orderByCheck = "b.CheckInDate";
+                break;   
+        }
+
+        String sql = "SELECT b.BookingID,b.RoomID,b.CheckInDate,b.CheckOutDate,\n"
+                + "       g.FullName,g.Email,g.Phone,\n"
+                + "       r.RoomNumber,rt.TypeName\n"
+                + "FROM BOOKING b JOIN GUEST g ON g.GuestID=b.GuestID JOIN ROOM  r ON r.RoomID=b.RoomID\n"
+                + "JOIN ROOM_TYPE rt ON rt.RoomTypeID=r.RoomTypeID\n"
+                + "WHERE b.Status = ?\n"
+                + "ORDER BY " + orderByCheck;
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, status);
+            rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+
+                    int bookingId = rs.getInt("BookingID");
+                    int roomId = rs.getInt("RoomID");
+                    LocalDateTime checkInDate = rs.getObject("CheckInDate", LocalDateTime.class);
+                    LocalDateTime checkOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
+                    String fullname = rs.getString("FullName");
+                    String email = rs.getString("Email");
+                    String phone = rs.getString("Phone");
+                    String roomNum = rs.getString("RoomNumber");
+                    String roomType = rs.getString("TypeName");
+
+                    Room r = new Room(roomNum);
+                    Booking b = new Booking(bookingId, roomId, checkInDate, checkOutDate);
+                    Guest g = new Guest(fullname, phone, email);
+                    RoomType t = new RoomType(roomType);
+
+                    BookingActionRow booking = new BookingActionRow(b, r, g, t);
+                    result.add(booking);
+                }
+            }
+            
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
     }
 }

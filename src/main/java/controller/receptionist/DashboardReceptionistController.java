@@ -1,4 +1,4 @@
-package controller;
+package controller.receptionist;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -24,8 +24,8 @@ import utils.IConstant;
  *
  * @author trinhdtu
  */
-@WebServlet(urlPatterns = {"/receptionist"})
-public class ReceptionistController extends HttpServlet {
+@WebServlet(urlPatterns = {"/Dashboard"})
+public class DashboardReceptionistController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,37 +39,42 @@ public class ReceptionistController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        BookingDAO d = new BookingDAO();
-        RoomDAO roomDao = new RoomDAO();
-        RoomTypeDAO roomTypeDao = new RoomTypeDAO();
-        
-        int checkedIn = d.countCurrCheckedInRooms("Reserved");
-        int checkedOut = d.countCurrCheckedInRooms("Checked-out");
-        int availableRoom = roomDao.countAvailableRoom("Available");
-        int countOccupied = roomDao.countAvailableRoom("Occupied");
-        int countMaintaince = roomDao.countAvailableRoom("Maintenance");
-        
-        int countRoom = roomDao.countRoom();
-        int occupancyRate = ((countRoom - countMaintaince) > 0)
-                ? (int) Math.round((countOccupied * 100.0) / (countRoom - countMaintaince)) // 0 ch? s?
-                : 0;
-        
-        ArrayList<Room> roomList = roomDao.getAllRoom();
-        ArrayList<RoomType> roomTypes = roomTypeDao.getAllRoomType();
-        
-        request.setAttribute("TYPES_LIST", roomTypes);
-        request.setAttribute("COUNTIN", checkedIn);
-        request.setAttribute("COUNTOUT", checkedOut);
-        request.setAttribute("COUNTAVLB", availableRoom);
-        request.setAttribute("COUNTOCC", countOccupied);
-        request.setAttribute("COUNTROOM", countRoom - countMaintaince);
-        request.setAttribute("RATE", occupancyRate);
-        request.setAttribute("COUNTMAINTAIN", countMaintaince);
-        
-        request.setAttribute("ROOM_LIST", roomList);
-        
-        
-        request.getRequestDispatcher(IConstant.receptionistPage).forward(request, response);
+
+        try {
+            
+            BookingDAO d = new BookingDAO();
+            RoomDAO roomDao = new RoomDAO();
+            RoomTypeDAO roomTypeDao = new RoomTypeDAO();
+
+            int checkedIn = d.countCurrCheckedInRooms("Reserved");
+            int checkedOut = d.countCurrCheckedInRooms("Checked-out");
+            int availableRoom = roomDao.countAvailableRoom("Available");
+            int countOccupied = roomDao.countAvailableRoom("Occupied");
+            int countMaintaince = roomDao.countAvailableRoom("Maintenance");
+
+            int countRoom = roomDao.countRoom();
+            int occupancyRate = ((countRoom - countMaintaince) > 0)
+                    ? (int) Math.round((countOccupied * 100.0) / (countRoom - countMaintaince)) // 0 ch? s?
+                    : 0;
+
+            ArrayList<Room> roomList = roomDao.getAllRoom();
+            ArrayList<RoomType> roomTypes = roomTypeDao.getAllRoomType();
+
+            request.setAttribute("TYPES_LIST", roomTypes);
+            request.setAttribute("COUNTIN", checkedIn);
+            request.setAttribute("COUNTOUT", checkedOut);
+            request.setAttribute("COUNTAVLB", availableRoom);
+            request.setAttribute("COUNTOCC", countOccupied);
+            request.setAttribute("COUNTROOM", countRoom - countMaintaince);
+            request.setAttribute("RATE", occupancyRate);
+            request.setAttribute("COUNTMAINTAIN", countMaintaince);
+
+            request.setAttribute("ROOM_LIST", roomList);
+
+            request.getRequestDispatcher("/receptionist/receptionistPage.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

@@ -23,24 +23,13 @@
         <div class="container">
             <!-- Header -->
             <jsp:include page="../receptionist/components/header.jsp" />
-
+            
             <!-- Tabs -->
-            <nav class="tabs" role="tablist">
-                <button class="tab active" data-target="dashboard"><span class="icon">🗂️</span>Dashboard</button>
-                <button class="tab" data-target="bookings"><span class="icon">📅</span>Bookings</button>
-                <button class="tab" data-target="checkin"><span class="icon">➡️</span>Check-in/Out</button>
-                <button class="tab" data-target="rooms"><span class="icon">🛏️</span>Room Status</button>
-            </nav>
+            <jsp:include page="../receptionist/components/nav.jsp"/>
 
             <jsp:include page="../receptionist/components/dashboard.jsp"/>
 
-            <jsp:include page="../receptionist/components/bookingsManage.jsp"/>
-
-            <jsp:include page="../receptionist/components/checkManage.jsp"/>
-            <jsp:include page="../receptionist/components/roomStatus.jsp" />
-        </div>
-
         <!-- ====== JavaScript (inline) ====== -->
-        <<script src="../receptionist/style.js"></script>
+        <script src="../receptionist/style.js"></script>
     </body>
 </html>

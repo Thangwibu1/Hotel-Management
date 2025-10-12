@@ -4,17 +4,17 @@ const fmt = new Intl.DateTimeFormat(undefined, {weekday: 'long', year: 'numeric'
 document.getElementById('today').textContent = fmt.format(new Date());
 
 // Main tabs
-const mainTabs = document.querySelectorAll('.tabs .tab:not([data-subtab])');
-mainTabs.forEach(btn => {
-    btn.addEventListener('click', () => {
-        // deactivate all in this nav
-        btn.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        btn.classList.add('active');
-        // switch screen
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(btn.dataset.target).classList.add('active');
-    });
-});
+//const mainTabs = document.querySelectorAll('.tabs .tab:not([data-subtab])');
+//mainTabs.forEach(btn => {
+//    btn.addEventListener('click', () => {
+//        // deactivate all in this nav
+//        btn.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+//        btn.classList.add('active');
+//        // switch screen
+//        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+//        document.getElementById(btn.dataset.target).classList.add('active');
+//    });
+//});
 
 // Sub tabs inside Check-in/Out
 document.querySelectorAll('.tabs .tab[data-subtab]').forEach(btn => {

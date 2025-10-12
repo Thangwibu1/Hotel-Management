@@ -13,10 +13,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
         <title>JSP Page</title>
+        <link rel="stylesheet" href="../receptionist/style.css"/>
+
     </head>
     <body>
         <!-- ROOMS -->
-        <section id="rooms" class="screen">
+        <section id="rooms">
             <div class="kpi-strip">
                 <div class="card kpi"><div class="muted">Available</div><div class="big"><%= request.getAttribute("COUNTAVLB")%></div></div>
                 <div class="card kpi"><div class="muted">Occupied</div><div class="big"><%= request.getAttribute("COUNTOCC")%></div></div>
