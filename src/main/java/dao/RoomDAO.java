@@ -42,9 +42,15 @@ public class RoomDAO {
         } finally {
             // Close resources in reverse order
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (con != null) con.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 System.err.println("Error closing resources: " + e.getMessage());
             }
@@ -83,9 +89,15 @@ public class RoomDAO {
             e.printStackTrace();
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (con != null) con.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 System.err.println("Error closing resources: " + e.getMessage());
             }
@@ -131,6 +143,38 @@ public class RoomDAO {
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    public int countAvailableRoom(String status) {
+        int result = 0;
+        String sql = "SELECT COUNT([RoomID]) as total\n"
+                + "  FROM [HotelManagement].[dbo].[ROOM]\n"
+                + "  WHERE [Status] = ?";
+        try ( Connection conn = DBConnection.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                result = rs.getInt("total");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    
+    public int countRoom() {
+        int result = 0;
+        String sql = "SELECT COUNT([RoomID]) as total\n"
+                + "  FROM [HotelManagement].[dbo].[ROOM]\n";
+        try ( Connection conn = DBConnection.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                result = rs.getInt("total");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return result;
     }

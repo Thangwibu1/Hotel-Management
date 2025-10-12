@@ -75,6 +75,7 @@
         .status.checked-in { background-color: #28a745; }
         .status.checked-out { background-color: #6c757d; }
         .status.canceled { background-color: #dc3545; }
+        .btn-warning { background-color: #ffc107; color: #212529; }
     </style>
 </head>
 <body>
@@ -129,11 +130,21 @@
                         </span>
                     </td>
                     <td>
-                        <form action=<%=IConstant.detailBooking%> method="post" style="display: inline;">
+                        <form action="<%=IConstant.detailBooking%>" method="post" style="display: inline; margin-right: 5px;">
                             <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>">
                             <input type="hidden" name="guestId" value="<%= guest.getGuestId() %>">
                             <button type="submit" class="btn btn-primary">Chi tiết</button>
                         </form>
+
+                        <%-- NÚT CHỈNH SỬA DỊCH VỤ --%>
+                        <% if (!"Checked-out".equalsIgnoreCase(booking.getStatus()) && !"Canceled".equalsIgnoreCase(booking.getStatus())) { %>
+                            <form action="<%=IConstant.getBookingInfoServlet%>" method="post" style="display: inline;">
+                                <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>">
+                                <input type="hidden" name="guestId" value="<%= guest.getGuestId() %>">
+                                <button type="submit" class="btn btn-warning">Chỉnh sửa dịch vụ</button>
+                            </form>
+                        <% } %>
+
                     </td>
                 </tr>
                 <% } %>
