@@ -282,10 +282,10 @@ public class BookingDAO {
                 break;
             case "booking":
                 orderByCheck = "b.BookingDate";
-                break;   
+                break;
             case "checkin":
                 orderByCheck = "b.CheckInDate";
-                break;   
+                break;
         }
 
         String sql = "SELECT b.BookingID,b.RoomID,b.CheckInDate,b.CheckOutDate,\n"
@@ -326,7 +326,28 @@ public class BookingDAO {
                     result.add(booking);
                 }
             }
-            
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
+    }
+
+    public boolean updateBookingStatus(int bookingId, String status) {
+        boolean result = false;
+
+        String sql = "UPDATE [dbo].[BOOKING] SET Status = ? WHERE [BookingID] = ? ";
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, status);
+            ps.setInt(2, bookingId);
+            result = ps.executeUpdate() > 0;
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

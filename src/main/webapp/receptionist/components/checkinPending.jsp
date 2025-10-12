@@ -40,7 +40,8 @@
 
                     <td>
                         <form action="CheckInController" method="post">
-                            <button type="submit" name="action" value="checkIn" class="btn primary">Check In</button>
+                            <input type="hidden" name="bookingId" value="<%= row.getBooking().getBookingId() %>">
+                            <button type="submit" value="checkIn" class="btn primary">Check In</button>
                         </form>
                     </td>
                 </tr>

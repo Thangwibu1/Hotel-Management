@@ -36,7 +36,7 @@
                         <div class="muted" style="font-size:14px"><%= row.getRoomType().getTypeName()%></div>
                     </td>
                     <td><%= row.getBooking().getCheckOutDate().format(IConstant.dateFormat)%></td>
-                    <td><form action="CheckInController" method="post">
+                    <td><form action="CheckOutController" method="post">
                             <button class="btn primary">Generate Bill & Check Out</button>
                         </form>
                     </td>
