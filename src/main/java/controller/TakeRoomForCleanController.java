@@ -6,6 +6,7 @@
 package controller;
 
 
+import dao.RoomDAO;
 import dao.RoomTaskDAO;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Room;
 import model.RoomTask;
 import utils.IConstant;
 
@@ -32,12 +34,27 @@ public class TakeRoomForCleanController extends HttpServlet {
         
         try {
             RoomTaskDAO d = new RoomTaskDAO();
-            ArrayList<RoomTask> list = d.getAllRoom();
-            if(list != null){
-                request.setAttribute("ROOM_CLEAN", list);
+            ArrayList<RoomTask> listTask = d.getAllRoom();
+            ArrayList<RoomTask> listPending = d.getRoomBaseStatus("Pending");
+            ArrayList<RoomTask> listMaintenance = d.getRoomBaseStatus("Maintenance");
+            ArrayList<RoomTask> listCleaned = d.getRoomBaseStatus("Cleaned");
+            ArrayList<RoomTask> listInProgress = d.getRoomBaseStatus("In Progress");
+            
+            RoomDAO rd = new RoomDAO();
+            ArrayList<Room> listR = rd.getAllRoom();
+            
+            
+            if(listTask != null){
+                request.setAttribute("ROOM_TASK", listTask);
+                request.setAttribute("ROOM_CLEANED", listCleaned);
+                request.setAttribute("ROOM_PENDING", listPending);
+                request.setAttribute("ROOM_IN_PROGRESS", listInProgress);
+                request.setAttribute("ROOM_MATAINTENANCE", listMaintenance);
+                request.setAttribute("ROOM_LIST", listR);
                 request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
             }else{
                 //list null thì làm gì 
+                System.out.println("Kh?ng l?y ???c list room Task");
             }
 
         } catch (Exception e) {

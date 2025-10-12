@@ -19,7 +19,7 @@ import utils.DBConnection;
 public class RoomTaskDAO {
     public ArrayList<RoomTask> getAllRoom() {
         ArrayList<RoomTask> result = new ArrayList<RoomTask>();
-        String sql = "SELECT [RoomTaskID],[RoomID],[StatusClean] FROM [HotelManagement].[dbo].[ROOMTASK]";
+        String sql = "SELECT [RoomTaskID] ,[RoomID],[StaffID],[StartTime],[EndTime],[StatusClean],[Notes] FROM [HotelManagement].[dbo].[ROOM_TASK]";
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -59,7 +59,7 @@ public class RoomTaskDAO {
     
     public ArrayList<RoomTask> getRoomBaseStatus(String statusClean) {
         ArrayList<RoomTask> result = new ArrayList<RoomTask>();
-        String sql = "SELECT [RoomTaskID],[RoomID],[StatusClean] FROM [HotelManagement].[dbo].[ROOMTASK] WHERE [StatusClean] = ?";
+        String sql = "SELECT [RoomTaskID],[RoomID],[StatusClean] FROM [HotelManagement].[dbo].[ROOM_TASK] WHERE [StatusClean] = ?";
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -103,7 +103,7 @@ public class RoomTaskDAO {
         return result;
     }
     public int updateStatusRoomTask(int roomTaskID, String statusCleanUpdate) {
-        String sql = "UPDATE [HotelManagement].[dbo].[ROOMTASK] SET [StatusClean] = ? WHERE [RoomTaskID] = ?";
+        String sql = "UPDATE [HotelManagement].[dbo].[ROOM_TASK] SET [StatusClean] = ? WHERE [RoomTaskID] = ?";
         Connection con = null;
         PreparedStatement ps = null;
         int rowsAffected = 0;

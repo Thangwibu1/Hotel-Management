@@ -156,8 +156,14 @@ body {
     border-radius: 8px;
     padding: 20px;
     background: white;
+    transition: 0.3s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); 
 }
-
+.room-card:hover{
+    box-shadow: 3px 3px 8px 1px #817c7c;
+    transform: translateY(-5px) !important;
+    border-color: #3b82f6; 
+}
 .room-header {
     display: flex;
     justify-content: space-between;
@@ -176,6 +182,31 @@ body {
     border-radius: 4px;
     font-size: 12px;
     font-weight: 600;
+}
+.room-status.status-pending-danger {
+    background-color: #dc3545; /* ?? */
+    color: white;
+}
+
+.room-status.status-inprogress-warning {
+    background-color: #ffc107; /* Vàng */
+    color: white;
+}
+
+.room-status.status-cleaned-success {
+    background-color: #28a745; /* Xanh lá */
+    color: white;
+}
+
+.room-status.status-maintenance-dark {
+    background-color: #343a40; 
+    color: white;
+}
+
+.room-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
 }
 
 .status-pending {
