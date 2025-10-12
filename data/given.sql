@@ -61,12 +61,12 @@ GO
 -- Bảng Thiết bị trong phòng (ROOM_DEVICE)
 -- Bảng này tạo quan hệ N-N giữa ROOM và DEVICE
 CREATE TABLE ROOM_DEVICE (
-                             RoomDeviceID INT IDENTITY(1,1) PRIMARY KEY,
-                             RoomID INT NOT NULL,
-                             DeviceID INT NOT NULL,
-                             Quantity INT DEFAULT 1 CHECK (Quantity > 0),
-                             FOREIGN KEY (RoomID) REFERENCES ROOM(RoomID),
-                             FOREIGN KEY (DeviceID) REFERENCES DEVICE(DeviceID)
+                            RoomDeviceID INT IDENTITY(1,1) PRIMARY KEY,
+                            RoomID INT NOT NULL,
+                            DeviceID INT NOT NULL,
+                            Quantity INT DEFAULT 1 CHECK (Quantity > 0),
+                            FOREIGN KEY (RoomID) REFERENCES ROOM(RoomID),
+                            FOREIGN KEY (DeviceID) REFERENCES DEVICE(DeviceID)
 );
 GO
 
@@ -90,12 +90,12 @@ GO
 -- Bảng Lịch sử dọn dẹp (ROOM_KEEPING)
 -- Quan hệ 1-M với ROOM (một phòng có thể được dọn dẹp nhiều lần)
 CREATE TABLE ROOM_TASK (
-    RoomKeepingID INT IDENTITY(1,1) PRIMARY KEY,
+    RoomTaskID INT IDENTITY(1,1) PRIMARY KEY,
     RoomID INT NOT NULL,
     StaffID INT NULL, 
     StartTime DATETIME NOT NULL,
     EndTime DATETIME NULL,
-    Status NVARCHAR(50) CHECK (Status IN ('Dirty', 'In Progress', 'Completed', 'Maintance')),
+    StatusClean NVARCHAR(50) CHECK (Status IN ('Dirty', 'In Progress', 'Completed', 'Maintance')),
     Notes NVARCHAR(500) NULL,
     FOREIGN KEY (RoomID) REFERENCES ROOM(RoomID)
 );
@@ -171,6 +171,13 @@ CREATE TABLE STAFF (
                         PasswordHash NVARCHAR(255) NOT NULL,
                         Phone NVARCHAR(20),
                         Email NVARCHAR(100)
+);
+GO
+
+CREATE TABLE SYSTEM_CONFIG(
+                        ConfigID INT IDENTITY(1,1) PRIMARY KEY,
+                        ConfigName NVARCHAR(50) NOT NULL,
+                        ConfigValue NVARCHAR(50) NOT NULL
 );
 GO
 

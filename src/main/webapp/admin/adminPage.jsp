@@ -217,7 +217,7 @@
     // Open Add modal
     document.getElementById("addStaffBtn").onclick = function() {
         staffForm.reset();
-        staffForm.action = '<%= request.getContextPath() %>/admin/add-staff';
+        staffForm.action = 'AddStaffController';
         modalTitle.textContent = "Add New Staff";
         passwordInput.required = true;
         staffIdInput.value = "";
@@ -228,7 +228,7 @@
     document.querySelectorAll('.edit-link').forEach(function(button) {
         button.onclick = function() {
             staffForm.reset();
-            staffForm.action = '<%= request.getContextPath() %>/admin/update-staff';
+            staffForm.action = 'UpdateStaffController';
             modalTitle.textContent = "Update Staff";
             
             // Populate form
