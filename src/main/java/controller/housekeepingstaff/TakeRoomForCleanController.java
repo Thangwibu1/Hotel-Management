@@ -25,13 +25,13 @@ import utils.IConstant;
  *
  * @author TranHongGam
  */
-@WebServlet(name="TakeRoomForCleanController", urlPatterns={"/takeRoomForCleanController"})
+@WebServlet(name="TakeRoomForCleanController", urlPatterns={"/housekeepingstaff/takeRoomForCleanController"})
 public class TakeRoomForCleanController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         try {
             RoomTaskDAO d = new RoomTaskDAO();
             ArrayList<RoomTask> listTask = d.getAllRoom();
@@ -39,10 +39,10 @@ public class TakeRoomForCleanController extends HttpServlet {
             ArrayList<RoomTask> listMaintenance = d.getRoomBaseStatus("Maintenance");
             ArrayList<RoomTask> listCleaned = d.getRoomBaseStatus("Cleaned");
             ArrayList<RoomTask> listInProgress = d.getRoomBaseStatus("In Progress");
-            
+
             RoomDAO rd = new RoomDAO();
             ArrayList<Room> listR = rd.getAllRoom();
-            
+
             String active = request.getParameter("active");
             request.setAttribute("ROOM_TASK", listTask);
             request.setAttribute("ROOM_CLEANED", listCleaned);
@@ -54,12 +54,13 @@ public class TakeRoomForCleanController extends HttpServlet {
 
             if(active == null){
                 request.setAttribute("LIST_DISPLAY_HOME", listTask);
-                request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
+                request.getRequestDispatcher("homeHouseKeeping.jsp").forward(request, response);
             } else {
                 if (listTask != null) {
                     request.setAttribute("ACTIVE", active);
 
                     if (active.equalsIgnoreCase("pending")) {
+                        System.out.println(request.getContextPath());
                         request.setAttribute("LIST_DISPLAY_HOME", listPending);
                     } else if (active.equalsIgnoreCase("cleaned")) {
                         request.setAttribute("LIST_DISPLAY_HOME", listCleaned);
@@ -71,29 +72,29 @@ public class TakeRoomForCleanController extends HttpServlet {
                         request.setAttribute("LIST_DISPLAY_HOME", listTask);
                     }
 
-                    request.getRequestDispatcher("./" + IConstant.housekeeping).forward(request, response);
+                    request.getRequestDispatcher("homeHouseKeeping.jsp").forward(request, response);
                 } else {
-                    //list null th� l�m g� 
-                    request.getRequestDispatcher("./" + IConstant.housekeeping).forward(request, response);
+                    //list null th� l�m g�
+                    request.getRequestDispatcher("homeHouseKeeping.jsp").forward(request, response);
                 }
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-        } 
-        
-    } 
+        }
+
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
-    } 
+    }
 
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 }

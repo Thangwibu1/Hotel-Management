@@ -6,13 +6,14 @@ public interface IConstant {
     public static final DateTimeFormatter localDateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-// Name for refactor
+    // Name for refactor
     public static final String adminFilter = "admin";
+    public static final String housekeepingFilter = "housekeepingstaff";
 
     public static final String receptionistRole = "receptionist";
     public static final String managerRole = "manager";
     public static final String adminRole =  "./" + adminFilter + "/admin";
-    public static final String housekeeping = "/housekeepingstaff/homeHouseKeeping.jsp";
+    public static final String housekeeping = "/" + housekeepingFilter + "/homeHouseKeeping.jsp";
     public static final String serviceStaff = "service-staff";
 
     public static final String systemConfigServlet = "SystemController";
