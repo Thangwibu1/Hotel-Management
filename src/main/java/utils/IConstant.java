@@ -6,7 +6,7 @@ public interface IConstant {
     public static final DateTimeFormatter localDateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-     //tên th? m?c 
+     //tï¿½n th? m?c 
      public static final String houseKeepingFolder = "housekeepingstaff";
     
     public static final String receptionistRole = "receptionist";
@@ -25,7 +25,7 @@ public interface IConstant {
     public static final String rentalServlet = "rentalRoom";
     public static final String viewBookingServlet = "viewBooking";
     public static final String detailBooking = "detailBooking";
-    public static final String takeRoomForCleanController = "..//takeRoomForCleanController";
+    public static final String takeRoomForCleanController = "../takeRoomForCleanController";
 
     public static final String detailBookingPage = "detailBooking.jsp";
     public static final String bookingDashboard = "bookingDashboard.jsp";

@@ -64,27 +64,27 @@
 
                 <div class="status-filters">
 
-                    <form action="takeRoomForCleanController" method="POST" class="filter-form-inline">
+                    <form action="../takeRoomForCleanController" method="POST" class="filter-form-inline">
                         <input type="hidden" name="active" value="all">
                         <button type="submit" class="filter-btn <%= (active == null || "all".equals(active)) ? "active" : "" %>  ">All Tasks <span class="count"> <%= listTask.size()%> </span></button>
                     </form>
 
-                    <form action="takeRoomForCleanController" method="POST" class="filter-form-inline">
+                    <form action="../takeRoomForCleanController" method="POST" class="filter-form-inline">
                         <input type="hidden" name="active" value="pending">
                         <button type="submit" class="filter-btn <%= "pending".equals(active) ? "active" : "" %>">Pending <span class="count"><%= listPending.size()%></span></button>
                     </form>
 
-                    <form action="takeRoomForCleanController" method="POST" class="filter-form-inline">
+                    <form action="../takeRoomForCleanController" method="POST" class="filter-form-inline">
                         <input type="hidden" name="active" value="in_progress">
                         <button type="submit" class="filter-btn <%= "in_progress".equals(active) ? "active" : "" %>">In Progress <span class="count"><%= listInProgress.size()%></span></button>
                     </form>
 
-                    <form action="takeRoomForCleanController" method="POST" class="filter-form-inline">
+                    <form action="../takeRoomForCleanController" method="POST" class="filter-form-inline">
                         <input type="hidden" name="active" value="cleaned">
                         <button type="submit" class="filter-btn <%= "cleaned".equals(active) ? "active" : "" %>">Cleaned <span class="count"><%= listCleaned.size()%></span></button>
                     </form>
 
-                    <form action="takeRoomForCleanController" method="POST" class="filter-form-inline">
+                    <form action="../takeRoomForCleanController" method="POST" class="filter-form-inline">
                         <input type="hidden" name="active" value="maintenance">
                         <button type="submit" class="filter-btn <%= "maintenance".equals(active) ? "active" : "" %>">Maintenance <span class="count"><%= listMaintenance.size()%></span></button>
                     </form>

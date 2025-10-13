@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controller;
+package controller.housekeepingstaff;
 
 import dao.RoomTaskDAO;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.RoomTask;
+
 import utils.IConstant;
 
 /**
@@ -36,7 +36,7 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
             if(rowAffected > 0){
                 request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
             }else{
-                System.out.println("SAI R?I LÀM L?I ?I");
+                System.out.println("SAI R?I Lï¿½M L?I ?I");
             }
             
         } catch (Exception e) {

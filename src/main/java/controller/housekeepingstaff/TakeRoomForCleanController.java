@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controller;
+package controller.housekeepingstaff;
 
 
 import dao.RoomDAO;
@@ -73,7 +73,7 @@ public class TakeRoomForCleanController extends HttpServlet {
 
                     request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
                 } else {
-                    //list null thì làm gì 
+                    //list null thï¿½ lï¿½m gï¿½ 
                     request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
                 }
             }
