@@ -71,10 +71,10 @@ public class TakeRoomForCleanController extends HttpServlet {
                         request.setAttribute("LIST_DISPLAY_HOME", listTask);
                     }
 
-                    request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
+                    request.getRequestDispatcher("./" + IConstant.housekeeping).forward(request, response);
                 } else {
                     //list null th� l�m g� 
-                    request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
+                    request.getRequestDispatcher("./" + IConstant.housekeeping).forward(request, response);
                 }
             }
 

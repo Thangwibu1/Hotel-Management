@@ -50,7 +50,7 @@
             String maintainForPress = "In Progress Maintain";
             
             if (list_Display_Home == null && listR == null ) {
-                request.getRequestDispatcher(IConstant.takeRoomForCleanController).forward(request, response);
+                request.getRequestDispatcher("../" + IConstant.takeRoomForCleanController).forward(request, response);
                 
             } else {
                 String active = (String)request.getAttribute("ACTIVE");
