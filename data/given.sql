@@ -50,74 +50,135 @@ CREATE TABLE ROOM (
 );
 GO
 
+-- Bảng Thiết bị (DEVICE)
+CREATE TABLE DEVICE (
+                        DeviceID INT IDENTITY(1,1) PRIMARY KEY,
+                        DeviceName NVARCHAR(100) NOT NULL,
+                        Description NVARCHAR(500) NULL
+);
+GO
+
+-- Bảng Thiết bị trong phòng (ROOM_DEVICE)
+-- Bảng này tạo quan hệ N-N giữa ROOM và DEVICE
+
+CREATE TABLE ROOM_DEVICE (
+                        RoomDeviceID INT IDENTITY(1,1) PRIMARY KEY,
+                        RoomID INT NOT NULL,
+                        DeviceID INT NOT NULL,
+                        Quantity INT DEFAULT 1 CHECK (Quantity > 0),
+                        FOREIGN KEY (RoomID) REFERENCES ROOM(RoomID),
+                        FOREIGN KEY (DeviceID) REFERENCES DEVICE(DeviceID)
+);
+GO
+
+-- Bảng Sửa chữa (REPAIR)
+-- Quan hệ 1-M với ROOM_DEVICE (một thiết bị trong phòng có thể được sửa nhiều lần)
+CREATE TABLE REPAIR (
+                        RepairID INT IDENTITY(1,1) PRIMARY KEY,
+                        RoomDeviceID INT NOT NULL,
+                        StaffID INT NULL, -- Nhân viên chịu trách nhiệm, có thể null ban đầu
+                        ReportDate DATETIME NOT NULL DEFAULT GETDATE(),
+                        CompletionDate DATETIME NULL,
+                        NextdateMaintaince Date NULL,
+                        Description NVARCHAR(500) NOT NULL,
+                        Cost DECIMAL(10, 2) DEFAULT 0,
+                        Status NVARCHAR(50) CHECK (Status IN ('Pending', 'In Progress', 'Completed', 'Canceled')),
+                        FOREIGN KEY (RoomDeviceID) REFERENCES ROOM_DEVICE(RoomDeviceID),
+);
+GO
+
+
+-- Bảng Lịch sử dọn dẹp (ROOM_KEEPING)
+-- Quan hệ 1-M với ROOM (một phòng có thể được dọn dẹp nhiều lần)
+CREATE TABLE ROOM_TASK (
+    RoomTaskID INT IDENTITY(1,1) PRIMARY KEY,
+    RoomID INT NOT NULL,
+    StaffID INT NULL, 
+    StartTime DATETIME NULL,
+    EndTime DATETIME NULL,
+    StatusClean NVARCHAR(50) CHECK (StatusClean IN ('Cleaned', 'In Progress', 'Pending', 'Maintance')),
+    Notes NVARCHAR(500) NULL,
+    FOREIGN KEY (RoomID) REFERENCES ROOM(RoomID)
+);
+GO
+-- 1 101 5 8/10/2025 15:00 16:00 Dirty Khách đái bậy trên giường 
+
 -- 4. Bảng Đặt phòng (BOOKING)
 CREATE TABLE BOOKING (
-                         BookingID INT IDENTITY(1,1) PRIMARY KEY,
-                         GuestID INT NOT NULL,
-                         RoomID INT NOT NULL,
-                         CheckInDate DATETIME NOT NULL,
-                         CheckOutDate DATETIME NOT NULL,
-                         BookingDate DATE DEFAULT GETDATE(),
-                         Status NVARCHAR(20) CHECK (Status IN ('Reserved', 'Checked-in', 'Checked-out', 'Canceled')),
-                         FOREIGN KEY (GuestID) REFERENCES GUEST(GuestID),
-                         FOREIGN KEY (RoomID) REFERENCES ROOM(RoomID),
-                         CHECK (CheckOutDate > CheckInDate)
+                        BookingID INT IDENTITY(1,1) PRIMARY KEY,
+                        GuestID INT NOT NULL,
+                        RoomID INT NOT NULL,
+                        CheckInDate DATETIME NOT NULL,
+                        CheckOutDate DATETIME NOT NULL,
+                        BookingDate DATE DEFAULT GETDATE(),
+                        Status NVARCHAR(20) CHECK (Status IN ('Reserved', 'Checked-in', 'Checked-out', 'Canceled')),
+                        FOREIGN KEY (GuestID) REFERENCES GUEST(GuestID),
+                        FOREIGN KEY (RoomID) REFERENCES ROOM(RoomID),
+                        CHECK (CheckOutDate > CheckInDate)
 );
 GO
 
 -- 5. Bảng Dịch vụ (SERVICE)
 CREATE TABLE SERVICE (
-                         ServiceID INT IDENTITY(1,1) PRIMARY KEY,
-                         ServiceName NVARCHAR(100) NOT NULL,
-                         ServiceType NVARCHAR(50),
-                         Price DECIMAL(10,2) NOT NULL CHECK (Price >= 0)
+                        ServiceID INT IDENTITY(1,1) PRIMARY KEY,
+                        ServiceName NVARCHAR(100) NOT NULL,
+                        ServiceType NVARCHAR(50),
+                        Price DECIMAL(10,2) NOT NULL CHECK (Price >= 0)
 );
 GO
 
 -- 6. Bảng Chi tiết Dịch vụ của Đặt phòng (BOOKING_SERVICE)
 CREATE TABLE BOOKING_SERVICE (
-                                 Booking_Service_ID INT IDENTITY(1,1) PRIMARY KEY,
-                                 BookingID INT NOT NULL,
-                                 ServiceID INT NOT NULL,
-                                 Quantity INT DEFAULT 1 CHECK (Quantity > 0),
-                                 ServiceDate DATE DEFAULT GETDATE(),
-                                 FOREIGN KEY (BookingID) REFERENCES BOOKING(BookingID),
-                                 FOREIGN KEY (ServiceID) REFERENCES SERVICE(ServiceID)
+                                Booking_Service_ID INT IDENTITY(1,1) PRIMARY KEY,
+                                BookingID INT NOT NULL,
+                                ServiceID INT NOT NULL,
+                                Quantity INT DEFAULT 1 CHECK (Quantity > 0),
+                                ServiceDate DATE DEFAULT GETDATE(),
+                                Status INT DEFAULT 0, -- 0 Chưa làm, 1. Inprogress, 2. Làm rùi, -1. Huỷ
+                                FOREIGN KEY (BookingID) REFERENCES BOOKING(BookingID),
+                                FOREIGN KEY (ServiceID) REFERENCES SERVICE(ServiceID)
 );
 GO
 
 -- 7. Bảng Hóa đơn (INVOICE)
 CREATE TABLE INVOICE (
-                         InvoiceID INT IDENTITY(1,1) PRIMARY KEY,
-                         BookingID INT NOT NULL UNIQUE,
-                         IssueDate DATE DEFAULT GETDATE(),
-                         TotalAmount DECIMAL(12,2) NOT NULL CHECK (TotalAmount >= 0),
-                         Status NVARCHAR(20) CHECK (Status IN ('Unpaid', 'Paid', 'Canceled')),
-                         FOREIGN KEY (BookingID) REFERENCES BOOKING(BookingID)
+                        InvoiceID INT IDENTITY(1,1) PRIMARY KEY,
+                        BookingID INT NOT NULL UNIQUE,
+                        IssueDate DATE DEFAULT GETDATE(),
+                        TotalAmount DECIMAL(12,2) NOT NULL CHECK (TotalAmount >= 0),
+                        Status NVARCHAR(20) CHECK (Status IN ('Unpaid', 'Paid', 'Canceled')),
+                        FOREIGN KEY (BookingID) REFERENCES BOOKING(BookingID)
 );
 GO
 
 -- 8. Bảng Thanh toán (PAYMENT)
 CREATE TABLE PAYMENT (
-                         PaymentID INT IDENTITY(1,1) PRIMARY KEY,
-                         BookingID INT NOT NULL,
-                         PaymentDate DATE DEFAULT GETDATE(),
-                         Amount DECIMAL(12,2) NOT NULL CHECK (Amount >= 0),
-                         PaymentMethod NVARCHAR(50) CHECK (PaymentMethod IN ('Cash', 'Credit Card', 'Debit Card', 'Online')),
-                         Status NVARCHAR(20) CHECK (Status IN ('Pending', 'Completed', 'Failed')),
-                         FOREIGN KEY (BookingID) REFERENCES BOOKING(BookingID)
+                        PaymentID INT IDENTITY(1,1) PRIMARY KEY,
+                        BookingID INT NOT NULL,
+                        PaymentDate DATE DEFAULT GETDATE(),
+                        Amount DECIMAL(12,2) NOT NULL CHECK (Amount >= 0),
+                        PaymentMethod NVARCHAR(50) CHECK (PaymentMethod IN ('Cash', 'Credit Card', 'Debit Card', 'Online')),
+                        Status NVARCHAR(20) CHECK (Status IN ('Pending', 'Completed', 'Failed')),
+                        FOREIGN KEY (BookingID) REFERENCES BOOKING(BookingID)
 );
 GO
 
 -- 9. Bảng Nhân viên (STAFF)
 CREATE TABLE STAFF (
-                       StaffID INT IDENTITY(1,1) PRIMARY KEY,
-                       FullName NVARCHAR(100) NOT NULL,
-                       Role NVARCHAR(50) CHECK (Role IN ('Receptionist', 'Manager', 'Housekeeping', 'ServiceStaff', 'Admin')),
-                       Username NVARCHAR(50) UNIQUE NOT NULL,
-                       PasswordHash NVARCHAR(255) NOT NULL,
-                       Phone NVARCHAR(20),
-                       Email NVARCHAR(100)
+                        StaffID INT IDENTITY(1,1) PRIMARY KEY,
+                        FullName NVARCHAR(100) NOT NULL,
+                        Role NVARCHAR(50) CHECK (Role IN ('Receptionist', 'Manager', 'Housekeeping', 'ServiceStaff', 'Admin', 'Repair')),
+                        Username NVARCHAR(50) UNIQUE NOT NULL,
+                        PasswordHash NVARCHAR(255) NOT NULL,
+                        Phone NVARCHAR(20),
+                        Email NVARCHAR(100)
+);
+GO
+
+CREATE TABLE SYSTEM_CONFIG(
+                        ConfigID INT IDENTITY(1,1) PRIMARY KEY,
+                        ConfigName NVARCHAR(50) NOT NULL,
+                        ConfigValue NVARCHAR(50) NOT NULL
 );
 GO
 
@@ -169,14 +230,11 @@ GO
 
 -- 4. Dữ liệu bảng SERVICE
 INSERT INTO SERVICE (ServiceName, ServiceType, Price) VALUES
-('Breakfast Buffet', 'Food', 15.00),
-('Set Menu Lunch', 'Food', 25.00),
-('Laundry Service (per kg)', 'Laundry', 5.00),
-('Spa Massage (60 mins)', 'Spa', 40.00),
-('Airport Transfer (One-way)', 'Transport', 20.00),
-('Minibar - Soft Drink', 'Food', 2.00),
-('Minibar - Beer', 'Food', 4.00),
-('Extra Bed', 'Room', 30.00);
+    ('Breakfast Buffet', 'Food', 15.00),
+    ('Set Menu Lunch', 'Food', 25.00),
+    ('Laundry Service (per kg)', 'Laundry', 5.00),
+    ('Spa Massage (60 mins)', 'Spa', 40.00),
+    ('Room Keeping', 'HouseKeeping', 30.00)
 GO
 
 -- 5. Dữ liệu bảng STAFF
@@ -184,50 +242,6 @@ INSERT INTO STAFF (FullName, Role, Username, PasswordHash, Phone, Email) VALUES
 ('Phạm Minh Quân', 'Manager', 'manager01', 'hash_placeholder_staff_1', '0331112222', 'quan.pm@hotel.com'),
 ('Hoàng Thị Lan', 'Receptionist', 'receptionist01', 'hash_placeholder_staff_2', '0333334444', 'lan.ht@hotel.com'),
 ('Trần Văn Bình', 'Receptionist', 'receptionist02', 'hash_placeholder_staff_3', '0333334445', 'binh.tv@hotel.com');
-GO
-
--- 6. Dữ liệu bảng BOOKING
-INSERT INTO BOOKING (GuestID, RoomID, CheckInDate, CheckOutDate, Status)
-VALUES
-(1, 1, '2025-08-10 14:05:00', '2025-08-12 11:50:00', 'Checked-out'),
-(2, 5, '2025-09-18 15:30:00', '2025-09-21 12:00:00', 'Checked-in'),
-(3, 7, '2025-09-25 14:00:00', '2025-09-27 12:00:00', 'Reserved'),
-(4, 8, '2025-10-01 14:00:00', '2025-10-03 12:00:00', 'Canceled'),
-(5, 11, '2025-09-01 16:00:00', '2025-09-05 12:00:00', 'Checked-out'),
-(6, 10, '2025-09-19 13:00:00', '2025-09-22 12:00:00', 'Checked-in'),
-(7, 12, '2025-11-11 14:00:00', '2025-11-15 12:00:00', 'Reserved'),
-(8, 3, '2025-09-15 20:15:00', '2025-09-16 10:30:00', 'Checked-out');
-GO
-
--- 7. Dữ liệu bảng BOOKING_SERVICE
-INSERT INTO BOOKING_SERVICE (BookingID, ServiceID, Quantity, ServiceDate) VALUES (1, 1, 2, '2025-08-11');
-INSERT INTO BOOKING_SERVICE (BookingID, ServiceID, Quantity, ServiceDate) VALUES (2, 4, 1, '2025-09-19');
-INSERT INTO BOOKING_SERVICE (BookingID, ServiceID, Quantity, ServiceDate) VALUES (2, 7, 4, '2025-09-19');
-INSERT INTO BOOKING_SERVICE (BookingID, ServiceID, Quantity, ServiceDate) VALUES (5, 5, 2, '2025-09-01');
-INSERT INTO BOOKING_SERVICE (BookingID, ServiceID, Quantity, ServiceDate) VALUES (5, 1, 4, '2025-09-02');
-INSERT INTO BOOKING_SERVICE (BookingID, ServiceID, Quantity, ServiceDate) VALUES (5, 1, 4, '2025-09-03');
-INSERT INTO BOOKING_SERVICE (BookingID, ServiceID, Quantity, ServiceDate) VALUES (5, 3, 2, '2025-09-03');
-INSERT INTO BOOKING_SERVICE (BookingID, ServiceID, Quantity, ServiceDate) VALUES (6, 8, 1, '2025-09-19');
-GO
-
--- 8. Dữ liệu bảng INVOICE
-INSERT INTO INVOICE (BookingID, IssueDate, TotalAmount, Status) VALUES (1, '2025-08-12', 130.00, 'Paid');
-INSERT INTO INVOICE (BookingID, IssueDate, TotalAmount, Status) VALUES (2, '2025-09-21', 416.00, 'Unpaid');
-INSERT INTO INVOICE (BookingID, IssueDate, TotalAmount, Status) VALUES (3, '2025-09-20', 240.00, 'Unpaid');
-INSERT INTO INVOICE (BookingID, IssueDate, TotalAmount, Status) VALUES (4, '2025-09-20', 0.00, 'Canceled');
-INSERT INTO INVOICE (BookingID, IssueDate, TotalAmount, Status) VALUES (5, '2025-09-05', 890.00, 'Paid');
-INSERT INTO INVOICE (BookingID, IssueDate, TotalAmount, Status) VALUES (6, '2025-09-22', 630.00, 'Unpaid');
-INSERT INTO INVOICE (BookingID, IssueDate, TotalAmount, Status) VALUES (7, '2025-09-20', 1400.00, 'Unpaid');
-INSERT INTO INVOICE (BookingID, IssueDate, TotalAmount, Status) VALUES (8, '2025-09-16', 80.00, 'Paid');
-GO
-
--- 9. Dữ liệu bảng PAYMENT
-INSERT INTO PAYMENT (BookingID, PaymentDate, Amount, PaymentMethod, Status) VALUES (1, '2025-08-12', 130.00, 'Credit Card', 'Completed');
-INSERT INTO PAYMENT (BookingID, PaymentDate, Amount, PaymentMethod, Status) VALUES (2, '2025-09-17', 200.00, 'Online', 'Completed');
-INSERT INTO PAYMENT (BookingID, PaymentDate, Amount, PaymentMethod, Status) VALUES (3, '2025-09-20', 100.00, 'Cash', 'Completed');
-INSERT INTO PAYMENT (BookingID, PaymentDate, Amount, PaymentMethod, Status) VALUES (5, '2025-09-05', 890.00, 'Credit Card', 'Completed');
-INSERT INTO PAYMENT (BookingID, PaymentDate, Amount, PaymentMethod, Status) VALUES (8, '2025-09-16', 80.00, 'Cash', 'Completed');
-INSERT INTO PAYMENT (BookingID, PaymentDate, Amount, PaymentMethod, Status) VALUES (7, '2025-09-20', 500.00, 'Online', 'Completed');
 GO
 
 select [TypeName], [Capacity], [PricePerNight] from ROOM_TYPE;
