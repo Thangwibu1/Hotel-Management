@@ -4,18 +4,27 @@
     Author      : TranHongGam
 --%>
 
-<%@page import="model.RoomTask"%>
-<%@page import="utils.IConstant"%>
-<%@page import="model.Room"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="model.Staff"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.time.format.DateTimeFormatter" %>
+<%@page import="java.util.Locale" %>
+<%@page import="java.time.LocalDateTime" %>
+<%@page import="model.RoomTask" %>
+<%@page import="utils.IConstant" %>
+<%@page import="model.Room" %>
+<%@page import="java.util.ArrayList" %>
+<%@page import="model.Staff" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Room Management</title>
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+            crossorigin="anonymous"
+    />
     <link rel="stylesheet" href="./../housekeepingstaff/stylehomeHouseKepping.css"/>
     <style>
         .room-card {
@@ -26,7 +35,8 @@
             transition: 0.3s;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         }
-        .room-card:hover{
+
+        .room-card:hover {
             box-shadow: 3px 3px 8px 1px #817c7c;
             transform: translateY(-5px) !important;
             border-color: #9CA3AF;
@@ -35,6 +45,7 @@
 </head>
 <body>
 <%
+
     Staff staff = (Staff) session.getAttribute("userStaff");
     ArrayList<RoomTask> list_Display_Home = (ArrayList) request.getAttribute("LIST_DISPLAY_HOME");
     ArrayList<RoomTask> listTask = (ArrayList) request.getAttribute("ROOM_TASK");
@@ -49,73 +60,87 @@
     String inProgressForPress = "In Progress Clean";
     String maintainForPress = "In Progress Maintain";
 
-    if (list_Display_Home == null && listR == null ) {
+    if (list_Display_Home == null && listR == null) {
         request.getRequestDispatcher(IConstant.takeRoomForCleanController).forward(request, response);
 
     } else {
-        String active = (String)request.getAttribute("ACTIVE");
+        String active = (String) request.getAttribute("ACTIVE");
 
 %>
-<div class="container">
-    <jsp:include page="header.jsp"/>
+<jsp:include page="header.jsp"/>
+<div class="container main-content">
+
 
     <div class="status-section">
-        <h3 class="status-title"> Room Status</h3>
+        <h2 class="status-title"> Room Status</h2>
 
         <div class="status-filters">
 
             <form action="./takeRoomForCleanController" method="POST" class="filter-form-inline">
                 <input type="hidden" name="active" value="all">
-                <button type="submit" class="filter-btn <%= (active == null || "all".equals(active)) ? "active" : "" %>  ">All Tasks <span class="count"> <%= listTask.size()%> </span></button>
+                <button type="submit"
+                        class="filter-btn <%= (active == null || "all".equals(active)) ? "active" : "" %>  ">All Tasks
+                    <span class="count"> <%= listTask.size()%> </span></button>
             </form>
 
             <form action="./takeRoomForCleanController" method="POST" class="filter-form-inline">
                 <input type="hidden" name="active" value="pending">
-                <button type="submit" class="filter-btn <%= "pending".equals(active) ? "active" : "" %>">Pending <span class="count"><%= listPending.size()%></span></button>
+                <button type="submit" class="filter-btn <%= "pending".equals(active) ? "active" : "" %>">Pending <span
+                        class="count"><%= listPending.size()%></span></button>
             </form>
 
             <form action="./takeRoomForCleanController" method="POST" class="filter-form-inline">
                 <input type="hidden" name="active" value="in_progress">
-                <button type="submit" class="filter-btn <%= "in_progress".equals(active) ? "active" : "" %>">In Progress <span class="count"><%= listInProgress.size()%></span></button>
+                <button type="submit" class="filter-btn <%= "in_progress".equals(active) ? "active" : "" %>">In Progress
+                    <span class="count"><%= listInProgress.size()%></span></button>
             </form>
 
             <form action="./takeRoomForCleanController" method="POST" class="filter-form-inline">
                 <input type="hidden" name="active" value="cleaned">
-                <button type="submit" class="filter-btn <%= "cleaned".equals(active) ? "active" : "" %>">Cleaned <span class="count"><%= listCleaned.size()%></span></button>
+                <button type="submit" class="filter-btn <%= "cleaned".equals(active) ? "active" : "" %>">Cleaned <span
+                        class="count"><%= listCleaned.size()%></span></button>
             </form>
 
             <form action="./takeRoomForCleanController" method="POST" class="filter-form-inline">
                 <input type="hidden" name="active" value="maintenance">
-                <button type="submit" class="filter-btn <%= "maintenance".equals(active) ? "active" : "" %>">Maintenance <span class="count"><%= listMaintenance.size()%></span></button>
+                <button type="submit" class="filter-btn <%= "maintenance".equals(active) ? "active" : "" %>">Maintenance
+                    <span class="count"><%= listMaintenance.size()%></span></button>
             </form>
 
         </div>
 
         <div class="status-summary">
             <div class="summary-item">
-                <div class="summary-number pending"><%= listPending.size() %></div>
+                <div class="summary-number pending"><%= listPending.size() %>
+                </div>
                 <div class="summary-label">Pending</div>
             </div>
             <div class="summary-item">
-                <div class="summary-number processing"><%= listInProgress.size() %></div>
+                <div class="summary-number processing"><%= listInProgress.size() %>
+                </div>
                 <div class="summary-label">In Progress</div>
             </div>
             <div class="summary-item">
-                <div class="summary-number completed"> <%= listCleaned.size() %></div>
+                <div class="summary-number completed"><%= listCleaned.size() %>
+                </div>
                 <div class="summary-label">Cleaned</div>
             </div>
             <div class="summary-item">
-                <div class="summary-number reserved"><%= listMaintenance.size() %></div>
+                <div class="summary-number reserved"><%= listMaintenance.size() %>
+                </div>
                 <div class="summary-label">Maintenance</div>
             </div>
             <div class="summary-item">
-                <div class="summary-number total"><%= listTask.size()%></div>
+                <div class="summary-number total"><%= listTask.size()%>
+                </div>
                 <div class="summary-label">Total</div>
             </div>
         </div>
     </div>
 
-    <h3 class="status-title"> All Tasks <span style="background: #e5e7eb; padding: 2px 10px; border-radius: 12px; font-size: 14px;"><%= listTask.size()%></span></h3>
+    <h3 class="status-title"> All Tasks <span
+            style="background: #e5e7eb; padding: 2px 10px; border-radius: 12px; font-size: 14px;"><%= listTask.size()%></span>
+    </h3>
 
     <div class="rooms-grid">
         <%
@@ -125,7 +150,8 @@
         %>
         <div class="room-card">
             <div class="room-header">
-                <div class="room-name">Room: <%= rl.getRoomNumber()%></div>
+                <div class="room-name">Room: <%= rl.getRoomNumber()%>
+                </div>
                 <%
                     String status = r.getStatusClean();
                     String statusClass = "";
@@ -140,10 +166,11 @@
                         statusClass = "status-maintenance-dark";
                     }
                 %>
-                <div class="room-status <%= statusClass%>"> <%= r.getStatusClean()%> </div>
+                <div class="room-status <%= statusClass%>"><%= r.getStatusClean()%>
+                </div>
             </div>
             <div class="room-details">
-                <div>Staff: </div>
+                <div>Staff:</div>
                 <div>
                     <%
                         if ("Pending".equals(r.getStatusClean())) {
@@ -212,11 +239,11 @@
 
     </div>
 
-    <jsp:include page="footer.jsp"/>
 
 </div>
+<jsp:include page="footer.jsp"/>
 
-<%       }
+<% }
 %>
 </body>
 </html>

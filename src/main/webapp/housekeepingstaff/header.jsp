@@ -11,14 +11,7 @@
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>JSP Page</title>
-    <link rel="stylesheet" href="./../housekeepingstaff/stylehomeHouseKepping.css"/>
 
-</head>
-<body>
 <%
 
     LocalDateTime now = LocalDateTime.now();
@@ -26,17 +19,15 @@
     String pattern = "EEEE, d 'tháng' M, yyyy - HH:mm:ss";
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern, vietnamLocale);
     String formattedDateTime = now.format(formatter);
-    Staff staff = (Staff)session.getAttribute("userStaff");
+    Staff staff = (Staff) session.getAttribute("userStaff");
 
 %>
-<div class="header">
-    <div class="employee-info">
-        <h2>Staff: <%= staff.getFullName() %></h2>
-        <p>Start at: <%= formattedDateTime %> </p>
+<div class="header" style="padding:1.5rem 2.5rem; background: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 0.1rem solid #e5e7eb;position: fixed; top: 0; width: 100%; z-index: 1030;">
+    <div class="employee-info" >
+        <h2 style="font-size: 3rem; margin-bottom: 0.8rem; color: #1f2937;">Staff: <%= staff.getFullName()%></h2>
+        <p style="color: #6b7280; font-size: 1.4rem; margin-bottom: 0;">Start at: <%= formattedDateTime%> </p>
     </div>
     <form action="<%= request.getContextPath() %>/logout" method="get" style="margin-right: 2rem;">
-        <button type="submit" class="export-btn">Logout</button>
+        <button type="submit" class="export-btn" style="background: #374151; color: white; padding: 1rem 2rem; border: none; border-radius: 0.6rem; cursor: pointer; font-size: 1.4rem;">Logout</button>
     </form>
 </div>
-</body>
-</html>

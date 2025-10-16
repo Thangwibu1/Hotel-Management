@@ -19,7 +19,7 @@ import utils.IConstant;
  *
  * @author TranHongGam
  */
-@WebServlet(name="UpdateStatusCleanRoomController", urlPatterns={"/UpdateStatusCleanRoomController"})
+@WebServlet(name="UpdateStatusCleanRoomController", urlPatterns={"/housekeepingstaff/UpdateStatusCleanRoomController"})
 public class UpdateStatusCleanRoomController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

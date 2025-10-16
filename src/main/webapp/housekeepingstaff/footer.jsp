@@ -5,64 +5,54 @@
 --%>
 
 <%@page import="model.Staff"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%> 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%-- ĐÃ SỬA THÀNH UTF-8 --%>
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
-        <%-- ĐÃ SỬA THÀNH UTF-8 --%>
-        <title>JSP Page</title>
-        <link rel="stylesheet" href="./stylehomeHouseKeeping.css"/>
-    </head>
-    <body>
-        <%
-            Staff staff = (Staff)session.getAttribute("userStaff");
-        %>
-        <div class="footer-info">
-            <div class="info-section">
-                <h3> Thống kê ca làm việc</h3>
-                <div class="info-item">
-                    <span class="info-label">Tổng phòng:</span>
-                    <span class="info-value">8</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Đã hoàn thành:</span>
-                    <span class="info-value">2</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Còn lại:</span>
-                    <span class="info-value">5</span>
-                </div>
+
+
+<%
+    Staff staff = (Staff) session.getAttribute("userStaff");
+%>
+<div class="footer-info bg-light border-top" style="padding:2rem ">
+    <div class="row justify-content-center">
+
+        <div class="info-section col-12 col-md-4 text-center">
+            <h3 class="fs-5 fw-bold mb-3 "> Thống kê ca làm việc</h3>
+            <div class="info-item d-flex justify-content-around mb-1">
+                <span class="info-label text-muted me-3">Tổng phòng:</span>
+                <span class="info-value fw-bold text-dark">8</span>
             </div>
-            
-            <div class="info-section">
-                <h3> Thông tin hệ thống</h3>
-                <div class="info-item">
-                    <span class="info-label">Hệ thống quản lý phòng v2.1</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">The current staff : <%= staff.getFullName() %></span>
-                </div>
+            <div class="info-item d-flex justify-content-around mb-1">
+                <span class="info-label text-muted me-3">Đã hoàn thành:</span>
+                <span class="info-value fw-bold text-success">2</span>
             </div>
-            
-            <div class="info-section">
-                <h3>📞 Hỗ trợ & Liên hệ</h3>
-                <div class="info-item">
-                    <span class="info-label">📞 Hotline: 1800-1234</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">✉️ support@hotel.com</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Bộ phận IT: Ext. 2345</span>
-                </div>
+            <div class="info-item d-flex justify-content-around mb-1">
+                <span class="info-label text-muted me-3">Còn lại:</span>
+                <span class="info-value fw-bold text-warning">5</span>
             </div>
         </div>
-        <div class="footer-bottom">
-            <div>© 2024 Hệ thống quản lý phòng khách sạn. Phiên bản 2.1.0</div>
-            <div>Cập nhật cuối: 15:56:35 🔄</div>
+
+        <div class="info-section col-12 col-md-4 text-center">
+            <h3 class="fs-5 fw-bold mb-3 "> Thông tin hệ thống</h3>
+            <div class="info-item mb-1">
+                <span class="info-label text-muted">Hệ thống quản lý phòng <strong class="text-dark">v2.1</strong></span>
+            </div>
+            <div class="info-item mb-1">
+                <span class="info-label text-muted">Nhân viên hiện tại: <strong class="text-success"><%= staff.getFullName()%></strong></span>
+            </div>
         </div>
-    </body>
-</html>
+
+        <div class="info-section col-12 col-md-4 text-center">
+            <h3 class="fs-5 fw-bold mb-3 ">📞 Hỗ trợ & Liên hệ</h3>
+            <div class="info-item mb-1">
+                <span class="info-label text-muted">📞 Hotline: <strong class="text-dark">1800-1234</strong></span>
+            </div>
+            <div class="info-item mb-1">
+                <span class="info-label text-muted">✉️ support@hotel.com</span>
+            </div>
+            <div class="info-item mb-1">
+                <span class="info-label text-muted">Bộ phận IT: <strong class="text-dark">Ext. 2345</strong></span>
+            </div>
+        </div>
+    </div>
+</div>
