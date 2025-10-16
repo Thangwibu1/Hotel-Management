@@ -62,7 +62,7 @@
             <thead>
                 <tr>
                     <th>Staff Name</th>
-                    <th>Number of Tasks</th>
+                    <th>Tasks (Room - Status)</th>
                 </tr>
             </thead>
             <tbody>
@@ -70,11 +70,20 @@
                     if (staffs != null && !staffs.isEmpty() && roomTaskByStaff != null) {
                         for (Staff staff : staffs) {
                             ArrayList<RoomTask> tasks = roomTaskByStaff.get(staff.getStaffId());
-                            int taskCount = (tasks != null) ? tasks.size() : 0;
                 %>
                 <tr>
                     <td><%= staff.getFullName() %></td>
-                    <td><%= taskCount %></td>
+                    <td>
+                        <% if (tasks != null && !tasks.isEmpty()) { %>
+                            <ul>
+                                <% for (RoomTask task : tasks) { %>
+                                    <li>Room: <%= task.getRoomID() %> - Status: <%= task.getStatusClean() %></li>
+                                <% } %>
+                            </ul>
+                        <% } else { %>
+                            No tasks assigned.
+                        <% } %>
+                    </td>
                 </tr>
                 <%
                         }

@@ -32,6 +32,7 @@ public class RoomTaskDAO {
             while (rs.next()) {
                 RoomTask room = new RoomTask();
                 room.setRoomTaskID(rs.getInt("RoomTaskID"));
+                room.setRoomID(rs.getInt("RoomID"));
                 room.setStaffID(rs.getInt("StaffID"));
                 room.setStatusClean(rs.getString("StatusClean"));
                 
