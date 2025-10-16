@@ -16,7 +16,8 @@ public interface IConstant {
     public static final String adminRole =  "./" + adminFilter + "/admin";
     public static final String housekeeping = "/" + housekeepingFilter + "/homeHouseKeeping.jsp";
     public static final String serviceRole = "./" + serviceFilter + "/homeService.jsp";
-//    public static final String serviceStaff = "service-staff";
+  
+
 
     public static final String systemConfigServlet = "SystemController";
     public static final String systemConfigController = "./" + adminFilter + "/system";
@@ -33,9 +34,12 @@ public interface IConstant {
     public static final String viewBookingServlet = "viewBooking";
     public static final String detailBooking = "detailBooking";
     public static final String searchController = "search";
-
-    public static final String takeRoomForCleanController = "takeRoomForCleanController";
-
+    
+    public static final String servletBetween = "./servletbetween";
+    public static final String takeRoomForCleanController = "./takeRoomForCleanController";
+    public static final String updateStatusCleanRoomController = "./UpdateStatusCleanRoomController";
+    public static final String detailProfileStaffController = "./detailProfileStaff";
+    public static final String completeHouseKeeping = "./completeHouseKeeping.jsp";
     public static final String systemConfigPage = "/" + adminFilter + "/systemConfig.jsp";
     public static final String adminPage = "/" + adminFilter + "/adminPage.jsp";
     public static final String editServicePage = "editService.jsp";

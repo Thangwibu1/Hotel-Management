@@ -66,7 +66,7 @@ body {
     background-color: #FFFFFF;
 
     box-shadow:
-            0 0 15px 7px rgba(224, 224, 224, 0.5);
+        0 0 15px 7px rgba(224, 224, 224, 0.5);
     transform: translateY(-1px);
 }
 .filter-btn.active {
@@ -257,7 +257,12 @@ body {
     box-shadow: 0 0 8px 2px rgba(138, 43, 226, 0.9); /* Ph�t s�ng m?nh h?n khi active */
     transform: translateY(0); /* V? v? tr� ban ??u */
 }
-
+.btn-primary:focus {
+    background: #1e293b;
+    outline: none;       /* R?t quan tr?ng ?? lo?i b? vi?n focus xanh m?c ??nh */
+    box-shadow: 0 0 5px 3px rgba(0, 123, 255, 0.8);
+    transform: none;
+}
 .info-section h3 {
     font-size: 1.4rem;
     color: #6b7280;

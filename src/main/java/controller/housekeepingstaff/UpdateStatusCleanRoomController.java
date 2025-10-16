@@ -27,16 +27,20 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         try {
-            int roomID = Integer.parseInt(request.getParameter("room").trim());
+            //int roomID = Integer.parseInt(request.getParameter("room").trim());
             int roomTaskID = Integer.parseInt(request.getParameter("room_Task_ID").trim());
             String statusWantUpdate = request.getParameter("status_want_update");
-            
+            System.out.println(roomTaskID);
+            System.out.println(statusWantUpdate);
+            System.out.println("DEBUG");
+            request.setAttribute("THONGBAO", "Update successfully!!");
             RoomTaskDAO d = new RoomTaskDAO();
+            
             int rowAffected = d.updateStatusRoomTask(roomTaskID, statusWantUpdate);
             if(rowAffected > 0){
                 request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
             }else{
-                System.out.println("SAI R?I L�M L?I ?I");
+                System.out.println("SAI ROI NHA");
             }
             
         } catch (Exception e) {

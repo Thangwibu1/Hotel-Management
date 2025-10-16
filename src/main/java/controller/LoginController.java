@@ -62,7 +62,6 @@ public class LoginController extends HttpServlet {
             return; // Dừng thực thi
         }
 
-// Nếu cả hai đ�?u null
         request.setAttribute("error", "Invalid username or password");
         request.getRequestDispatcher(IConstant.loginPage).forward(request, response);
     }

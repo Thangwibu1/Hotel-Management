@@ -12,6 +12,7 @@
 <%@page import="model.Room" %>
 <%@page import="java.util.ArrayList" %>
 <%@page import="model.Staff" %>
+<%@page import="utils.IConstant" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -69,14 +70,12 @@
 %>
 <jsp:include page="header.jsp"/>
 <div class="container main-content">
-
-
     <div class="status-section">
         <h2 class="status-title"> Room Status</h2>
 
         <div class="status-filters">
 
-            <form action="./takeRoomForCleanController" method="POST" class="filter-form-inline">
+            <form action= <%= IConstant.takeRoomForCleanController %> method="POST" class="filter-form-inline">
                 <input type="hidden" name="active" value="all">
                 <button type="submit"
                         class="filter-btn <%= (active == null || "all".equals(active)) ? "active" : "" %>  ">All Tasks
@@ -185,15 +184,31 @@
                 <%
                     if (r.getStatusClean().equalsIgnoreCase("Cleaned")) {
                 %>
-                <button class="btn btn-primary">
-                    <%= cleanedForPress%>
-                </button>
+                <div style="width: 100%">
+                    <button style="width: 100%" class="btn btn-primary">
+                        <%= cleanedForPress%>
+                    </button>
+                </div>
                 <%
                 } else if (r.getStatusClean().equalsIgnoreCase("In Progress")) {
+                   String roomNumber = rl.getRoomNumber();
+                   int roomTaskID = r.getRoomTaskID();
+                   String targetStatus = "Cleaned";
+
                 %>
-                <button class="btn btn-primary">
-                    <%= inProgressForPress%>
-                </button>
+                <form action="<%= IConstant.completeHouseKeeping %>" method="POST">
+                    <input type="hidden" name="room" value="<%= roomNumber%>">
+                    <input type="hidden" name="status_want_update" value="<%= targetStatus%>">
+                    <input type="hidden" name="room_Task_ID" value="<%= roomTaskID%>">
+
+                    <div style="width: 100%">
+                        <button style="width: 100%" type="submit" class="btn btn-primary">
+                        <%= inProgressForPress%>
+                        </button>
+                    </div>
+                </form>
+                
+
                 <%
                 } else if (r.getStatusClean().equalsIgnoreCase("Pending")) {
                 %>
@@ -204,9 +219,11 @@
 
                     <input type="hidden" name="room_Task_ID" value="<%= r.getRoomTaskID() %>">
 
-                    <button type="submit" class="btn btn-primary">
-                        <%= pendingForPress%>
-                    </button>
+                    <div style="width: 100%">
+                        <button style="width: 100%" type="submit" class="btn btn-primary">
+                            <%= pendingForPress%>
+                        </button>
+                    </div>
                 </form>
                 <%
                 } else if (r.getStatusClean().equalsIgnoreCase("Maintenance")) {
@@ -218,9 +235,11 @@
 
                     <input type="hidden" name="room_Task_ID" value="<%= r.getRoomTaskID() %>">
 
-                    <button type="submit" class="btn btn-primary">
-                        <%= maintainForPress%>
-                    </button>
+                    <div style="width: 100%">
+                        <button style="width: 100%" type="submit" class="btn btn-primary">
+                            <%= maintainForPress%>
+                        </button>
+                    </div>
                 </form>
 
                 <%
@@ -228,6 +247,7 @@
                 %>
             </div>
         </div>
+            
         <%
                     }
                 }
@@ -245,5 +265,6 @@
 
 <% }
 %>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
