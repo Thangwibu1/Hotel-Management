@@ -62,6 +62,7 @@
     </div>
     <div class="header-actions">
         <a href="./system">Change System Info</a>
+        <a href="./housekeeping-statistic">Housekeeping Statistic</a>
         <a href="<%= request.getContextPath() %>/logout">Logout</a>
     </div>
 </div>

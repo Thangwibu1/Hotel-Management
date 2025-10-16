@@ -32,9 +32,52 @@ public class RoomTaskDAO {
             while (rs.next()) {
                 RoomTask room = new RoomTask();
                 room.setRoomTaskID(rs.getInt("RoomTaskID"));
-                room.setRoomID(rs.getInt("RoomID"));
+                room.setStaffID(rs.getInt("StaffID"));
                 room.setStatusClean(rs.getString("StatusClean"));
                 
+                result.add(room);
+            }
+        } catch (SQLException e) {
+            System.err.println("Database error in getAllRoom: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("General error in getAllRoom: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            // Close resources in reverse order
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+
+        return result;
+    }
+
+    public ArrayList<RoomTask> getAllRoomV2() {
+        ArrayList<RoomTask> result = new ArrayList<RoomTask>();
+        String sql = "SELECT [RoomTaskID] ,[RoomID],[StaffID],[StartTime],[EndTime],[StatusClean],[Notes] FROM [HotelManagement].[dbo].[ROOM_TASK]";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                RoomTask room = new RoomTask();
+                room.setRoomTaskID(rs.getInt("RoomTaskID"));
+                room.setRoomID(rs.getInt("RoomID"));
+                room.setStaffID(rs.getInt("StaffID"));
+                room.setStartTime(rs.getString("StartTime"));
+                room.setEndTime(rs.getString("EndTime"));
+                room.setStatusClean(rs.getString("StatusClean"));
+                room.setNotes(rs.getString("Notes"));
                 result.add(room);
             }
         } catch (SQLException e) {
@@ -121,6 +164,7 @@ public class RoomTaskDAO {
             System.err.println("Database error  " + e.getMessage());
             e.printStackTrace();
         } catch (Exception e) {
+            
             System.err.println("General error " + e.getMessage());
             e.printStackTrace();
         } finally {
@@ -137,5 +181,37 @@ public class RoomTaskDAO {
         }
 
         return rowsAffected;
+    }
+
+    public ArrayList<RoomTask> getRoomTaskByStaffId(int staffId) {
+        ArrayList<RoomTask> result = new ArrayList<RoomTask>();
+
+        String sql = "SELECT [RoomTaskID] ,[RoomID],[StaffID],[StartTime],[EndTime],[StatusClean],[Notes] FROM [HotelManagement].[dbo].[ROOM_TASK] where [StaffID] = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, staffId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("RoomTaskID");
+                int roomId = rs.getInt("RoomID");
+                // int staffId = rs.getInt("StaffID");
+                String startTime = rs.getString("StartTime");
+                String endTime = rs.getString("EndTime");
+                String statusClean = rs.getString("StatusClean");
+                String notes = rs.getString("Notes");
+                RoomTask roomTask = new RoomTask(id, roomId, staffId, startTime, endTime, statusClean, notes);
+                result.add(roomTask);
+            }
+        } catch (Exception e) {
+            
+        }
+
+        return result;
     }
 }

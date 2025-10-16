@@ -89,5 +89,16 @@ public class RoomTask {
         this.notes = notes;
     }
 
- 
+    @Override
+    public String toString() {
+        return "RoomTask{" +
+                "roomTaskID=" + roomTaskID +
+                ", roomID=" + roomID +
+                ", staffID=" + staffID +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", statusClean='" + statusClean + '\'' +
+                ", notes='" + notes + '\'' +
+                '}';
+    }
 }
