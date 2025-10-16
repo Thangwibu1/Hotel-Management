@@ -36,11 +36,9 @@
                         <div class="muted" style="font-size:14px"><%= row.getRoomType().getTypeName()%></div>
                     </td>
                     <td><%= row.getBooking().getCheckOutDate().format(IConstant.dateFormat)%></td>
-                    <td><form action="CheckOutController" method="post">
-                            <button class="btn primary">Generate Bill & Check Out</button>
-                        </form>
+                    <td>
+                        <button class="btn primary btnGenerateBill">Generate Bill & Check Out</button>
                     </td>
-
                 </tr>
                 <%
                         }
@@ -49,5 +47,6 @@
 
             </tbody>
         </table>
+        <jsp:include page="../components/guestBill.jsp" />
     </body>
 </html>

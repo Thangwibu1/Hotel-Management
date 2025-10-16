@@ -1,9 +1,8 @@
-package controller.receptionist;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
+package controller.receptionist;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,14 +11,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import utils.IConstant;
 
 /**
  *
  * @author trinhdtu
  */
-@WebServlet(urlPatterns = {"/receptionist"})
-public class ReceptionistController extends HttpServlet {
+@WebServlet(name = "BookingsController", urlPatterns = {"/BookingsController"})
+public class BookingsController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,30 +31,10 @@ public class ReceptionistController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            String tab = request.getParameter("tab");
-            if (tab == null) {
-                tab = "dashboard";
-            }
-
-            switch (tab) {
-                case "bookings":
-                    request.setAttribute("CURRENT_TAB", "bookings");
-                    request.getRequestDispatcher(IConstant.bookingController).forward(request, response);
-                    break;
-                case "checkin":
-                    request.setAttribute("CURRENT_TAB", "checkin");
-                    request.getRequestDispatcher(IConstant.getPendingCheckinController).forward(request, response);
-                    break;
-                case "rooms":
-                    request.setAttribute("CURRENT_TAB", "rooms");
-                    request.getRequestDispatcher(IConstant.roomsStatusReceptionistController).forward(request, response);
-                    break;
-                default:
-                    request.setAttribute("CURRENT_TAB", "dashboard");
-                    request.getRequestDispatcher(IConstant.dashboardReceptionistController).forward(request, response);
-                    break;
-            }
+        try {
+           request.getRequestDispatcher("/receptionist/bookingPage.jsp").forward(request, response);
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 

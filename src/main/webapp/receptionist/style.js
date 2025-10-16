@@ -45,3 +45,47 @@ document.querySelectorAll('.status .badge').forEach(badge=>{
   else if (s === 'maintenance') badge.classList.add('red'); // ho?c gray
   else                        badge.classList.add('gray');
 });
+
+// ====== M? POPUP ======
+document.addEventListener('DOMContentLoaded', function() {
+  const popup = document.getElementById('billPopup');
+  if (!popup) return; // N?u popup ch?a t?n t?i, d?ng luôn (tránh l?i)
+
+  const modal = popup.querySelector('.bill-modal');
+  const openButtons = document.querySelectorAll('.btnGenerateBill');
+  const closeBtn = popup.querySelector('.bill-close');
+
+  function openBillPopup(e) {
+    e.preventDefault();
+    popup.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeBillPopup(e) {
+    e.preventDefault();
+    popup.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+
+  // G?n cho t?t c? nút m? popup
+  openButtons.forEach(btn => {
+    btn.addEventListener('click', openBillPopup);
+  });
+
+  // G?n nút ?óng n?u có
+  if (closeBtn) closeBtn.addEventListener('click', closeBillPopup);
+
+  // ?óng khi click n?n
+  popup.addEventListener('click', function(e) {
+    if (e.target === popup) closeBillPopup(e);
+  });
+
+  // Ch?n click trong modal
+  if (modal) modal.addEventListener('click', e => e.stopPropagation());
+
+  // ?óng b?ng ESC
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeBillPopup(e);
+  });
+});
+
