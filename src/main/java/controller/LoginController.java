@@ -47,7 +47,7 @@ public class LoginController extends HttpServlet {
                     response.sendRedirect(IConstant.managerRole);
                     return;
                 case "housekeeping":
-                    response.sendRedirect(IConstant.housekeeping);
+                    response.sendRedirect(request.getContextPath() + IConstant.housekeeping);
                     return;
                 case "servicestaff":
                     response.sendRedirect(IConstant.serviceStaff);
