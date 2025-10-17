@@ -9,10 +9,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import model.BookingActionRow;
-import model.Guest;
-import model.Room;
-import model.RoomType;
 
 public class BookingDAO {
 
@@ -20,7 +16,9 @@ public class BookingDAO {
         ArrayList<Booking> result = new ArrayList<>();
         String sql = "SELECT TOP (1000) [BookingID], [GuestID], [RoomID], [CheckInDate], [CheckOutDate], [BookingDate], [Status] FROM [HotelManagement].[dbo].[BOOKING]";
 
-        try ( Connection conn = DBConnection.getConnection();  PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
             if (rs != null) {
                 while (rs.next()) {
@@ -30,12 +28,12 @@ public class BookingDAO {
                     int roomId = rs.getInt("RoomID");
                     String status = rs.getString("Status");
 
-                    // Lấy thẳng đối tượng ngày gi�?
+                    // Lấy thẳng đối tượng ngày giờ
                     LocalDateTime checkInDate = rs.getObject("CheckInDate", LocalDateTime.class);
                     LocalDateTime checkOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
                     LocalDate bookingDate = rs.getObject("BookingDate", LocalDate.class);
 
-                    // Bước 2: Tạo đối tượng Booking và set trực tiếp các đối tượng ngày gi�?
+                    // Bước 2: Tạo đối tượng Booking và set trực tiếp các đối tượng ngày giờ
                     Booking booking = new Booking();
                     booking.setBookingId(bookingId);
                     booking.setGuestId(guestId);
@@ -58,7 +56,8 @@ public class BookingDAO {
     public boolean addBooking(Booking booking) {
         boolean result = false;
         String sql = "INSERT INTO [dbo].[BOOKING] (GuestID, RoomID, CheckInDate, CheckOutDate, BookingDate, Status) VALUES (?, ?, ?, ?, ?, ?)";
-        try ( Connection conn = DBConnection.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, booking.getGuestId());
             ps.setInt(2, booking.getRoomId());
@@ -75,11 +74,12 @@ public class BookingDAO {
     }
 
     public int addBookingV2(Booking booking) {
-        int generatedBookingId = -1; // Sẽ chứa ID trả v�?, mặc định là -1 (thất bại)
+        int generatedBookingId = -1; // Sẽ chứa ID trả về, mặc định là -1 (thất bại)
         String sql = "INSERT INTO [dbo].[BOOKING] (GuestID, RoomID, CheckInDate, CheckOutDate, BookingDate, Status) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try ( Connection conn = DBConnection.getConnection(); // BƯỚC 1: Yêu cầu JDBC trả v�? các key (ID) được tự động sinh ra
-                  PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = DBConnection.getConnection();
+             // BƯỚC 1: Yêu cầu JDBC trả về các key (ID) được tự động sinh ra
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setInt(1, booking.getGuestId());
             ps.setInt(2, booking.getRoomId());
@@ -92,8 +92,8 @@ public class BookingDAO {
 
             // BƯỚC 2: Nếu insert thành công, tiến hành lấy ID
             if (rowsAffected > 0) {
-                // Lấy v�? một ResultSet chứa các ID vừa được sinh ra
-                try ( ResultSet rs = ps.getGeneratedKeys()) {
+                // Lấy về một ResultSet chứa các ID vừa được sinh ra
+                try (ResultSet rs = ps.getGeneratedKeys()) {
                     // Di chuyển đến dòng đầu tiên và lấy ID
                     if (rs.next()) {
                         // Lấy giá trị int từ cột đầu tiên, đó chính là BookingID
@@ -103,10 +103,10 @@ public class BookingDAO {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // Nếu có lỗi, hàm sẽ trả v�? giá trị mặc định là -1
+            // Nếu có lỗi, hàm sẽ trả về giá trị mặc định là -1
         }
 
-        // BƯỚC 3: Trả v�? ID đã lấy được
+        // BƯỚC 3: Trả về ID đã lấy được
         return generatedBookingId;
     }
 
@@ -128,7 +128,7 @@ public class BookingDAO {
                     int roomId = rs.getInt("RoomID");
                     String status = rs.getString("Status");
 
-                    // Lấy thẳng đối tượng ngày gi�?
+                    // Lấy thẳng đối tượng ngày giờ
                     LocalDateTime checkInDate = rs.getObject("CheckInDate", LocalDateTime.class);
                     LocalDateTime checkOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
                     LocalDate bookingDate = rs.getObject("BookingDate", LocalDate.class);
@@ -182,24 +182,6 @@ public class BookingDAO {
         return result;
     }
 
-    public int countCurrCheckedInRooms(String str) {
-        int result = 0;
-        System.out.println("status param = [" + str + "]");
-        String sql = "SELECT COUNT(*) as total \n"
-                + "FROM [HotelManagement].[dbo].[BOOKING]\n"
-                + "WHERE [Status] = ?";
-        try ( Connection conn = DBConnection.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, str);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                result = rs.getInt("total");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
     public ArrayList<Booking> getBookingByCheckInCheckOutDate(LocalDateTime checkInDate, LocalDateTime checkOutDate) {
         ArrayList<Booking> result = new ArrayList<>();
 
@@ -222,7 +204,7 @@ public class BookingDAO {
                     LocalDateTime dbCheckOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
                     LocalDate bookingDate = rs.getObject("BookingDate", LocalDate.class);
 
-                    // Kiểm tra đi�?u kiện ngày
+                    // Kiểm tra điều kiện ngày
                     if (dbCheckInDate.isBefore(checkOutDate) && dbCheckOutDate.isAfter(checkInDate)) {
                         Booking booking = new Booking();
                         booking.setBookingId(bookingId);
@@ -262,8 +244,8 @@ public class BookingDAO {
             LocalDate bookingCheckOutDate = booking.getCheckOutDate().toLocalDate();
 
             for (LocalDate date : datesInRange) {
-                if ((date.isEqual(bookingCheckInDate) || date.isAfter(bookingCheckInDate))
-                        && (date.isEqual(bookingCheckOutDate) || date.isBefore(bookingCheckOutDate))) {
+                if ((date.isEqual(bookingCheckInDate) || date.isAfter(bookingCheckInDate)) &&
+                        (date.isEqual(bookingCheckOutDate) || date.isBefore(bookingCheckOutDate))) {
                     result2.add(booking);
                     break; // Không cần kiểm tra các ngày còn lại, đã tìm thấy ngày phù hợp
                 }
@@ -271,87 +253,5 @@ public class BookingDAO {
 
         }
         return result2;
-    }
-
-    public ArrayList<BookingActionRow> getBookingByStatus(String status, String orderByCheck) {
-        ArrayList<BookingActionRow> result = new ArrayList<>();
-
-        switch (orderByCheck == null ? "" : orderByCheck.toLowerCase()) {
-            case "checkout":
-                orderByCheck = "b.CheckOutDate";
-                break;
-            case "booking":
-                orderByCheck = "b.BookingDate";
-                break;
-            case "checkin":
-                orderByCheck = "b.CheckInDate";
-                break;
-        }
-
-        String sql = "SELECT b.BookingID,b.RoomID,b.CheckInDate,b.CheckOutDate,\n"
-                + "       g.FullName,g.Email,g.Phone,\n"
-                + "       r.RoomNumber,rt.TypeName\n"
-                + "FROM BOOKING b JOIN GUEST g ON g.GuestID=b.GuestID JOIN ROOM  r ON r.RoomID=b.RoomID\n"
-                + "JOIN ROOM_TYPE rt ON rt.RoomTypeID=r.RoomTypeID\n"
-                + "WHERE b.Status = ?\n"
-                + "ORDER BY " + orderByCheck;
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        try {
-            con = DBConnection.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setString(1, status);
-            rs = ps.executeQuery();
-            if (rs != null) {
-                while (rs.next()) {
-
-                    int bookingId = rs.getInt("BookingID");
-                    int roomId = rs.getInt("RoomID");
-                    LocalDateTime checkInDate = rs.getObject("CheckInDate", LocalDateTime.class);
-                    LocalDateTime checkOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
-                    String fullname = rs.getString("FullName");
-                    String email = rs.getString("Email");
-                    String phone = rs.getString("Phone");
-                    String roomNum = rs.getString("RoomNumber");
-                    String roomType = rs.getString("TypeName");
-
-                    Room r = new Room(roomNum);
-                    Booking b = new Booking(bookingId, roomId, checkInDate, checkOutDate);
-                    Guest g = new Guest(fullname, phone, email);
-                    RoomType t = new RoomType(roomType);
-
-                    BookingActionRow booking = new BookingActionRow(b, r, g, t);
-                    result.add(booking);
-                }
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        return result;
-    }
-
-    public boolean updateBookingStatus(int bookingId, String status) {
-        boolean result = false;
-
-        String sql = "UPDATE [dbo].[BOOKING] SET Status = ? WHERE [BookingID] = ? ";
-        Connection con = null;
-        PreparedStatement ps = null;
-
-        try {
-            con = DBConnection.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setString(1, status);
-            ps.setInt(2, bookingId);
-            result = ps.executeUpdate() > 0;
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        return result;
     }
 }

@@ -16,12 +16,6 @@ public class Guest {
     // Constructors
     public Guest() {}
 
-    public Guest(String fullName, String phone, String email) {
-        this.fullName = fullName;
-        this.phone = phone;
-        this.email = email;
-    }
-
     public Guest(String fullName, String phone, String email, String address, String idNumber, String dateOfBirth, String passwordHash) {
         this.fullName = fullName;
         this.phone = phone;

@@ -168,6 +168,27 @@ public class GuestDAO {
         return result;
     }
 
-
-    
+    public boolean deleteStaff(int id) {
+        boolean result = false;
+        String sql = "DELETE FROM [HotelManagement].[dbo].[GUEST] WHERE [GuestID] = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            int rowsAffected = ps.executeUpdate();
+            result = rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
 }
