@@ -1,6 +1,7 @@
 package dao;
 
 import model.Room;
+import model.RoomTask;
 import model.RoomType;
 import utils.DBConnection;
 
@@ -92,5 +93,36 @@ public class RoomTypeDAO {
         }
 
         return roomType;
+    }
+
+    public ArrayList<RoomTask> getRoomTaskByStaffId(int staffId) {
+        ArrayList<RoomTask> result = new ArrayList<RoomTask>();
+
+        String sql = "SELECT [RoomTaskID] ,[RoomID],[StaffID],[StartTime],[EndTime],[StatusClean],[Notes] FROM [HotelManagement].[dbo].[ROOM_TASK] where [StaffID] = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, staffId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("RoomTaskID");
+                int roomId = rs.getInt("RoomID");
+                String startTime = rs.getString("StartTime");
+                String endTime = rs.getString("EndTime");
+                String statusClean = rs.getString("StatusClean");
+                String notes = rs.getString("Notes");
+                RoomTask roomTask = new RoomTask(id, roomId, staffId, startTime, endTime, statusClean, notes);
+                result.add(roomTask);
+            }
+        } catch (Exception e) {
+            
+        }
+
+        return result;
     }
 }
