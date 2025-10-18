@@ -3,6 +3,7 @@ package utils;
 import java.time.format.DateTimeFormatter;
 
 public interface IConstant {
+
     public static final DateTimeFormatter localDateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -10,7 +11,7 @@ public interface IConstant {
     public static final String adminFilter = "admin";
     public static final String housekeepingFilter = "housekeepingstaff";
 
-    public static final String receptionistRole = "receptionist";
+    public static final String receptionistRole = "./receptionist/receptionist";
     public static final String managerRole = "manager";
     public static final String adminRole =  "./" + adminFilter + "/admin";
     public static final String housekeeping = "/" + housekeepingFilter + "/homeHouseKeeping.jsp";
@@ -32,6 +33,11 @@ public interface IConstant {
     public static final String viewBookingServlet = "viewBooking";
     public static final String detailBooking = "detailBooking";
     public static final String searchController = "search";
+    //    --------------------receptionist servlet------------------------
+    public static final String dashboardReceptionistController = "./Dashboard";
+    public static final String bookingController = "./BookingsController";
+    public static final String getPendingCheckinController = "./GetPendingCheckinController";
+    public static final String roomsStatusReceptionistController = "./RoomsStatusBoard";
 
     public static final String takeRoomForCleanController = "takeRoomForCleanController";
 
@@ -47,4 +53,7 @@ public interface IConstant {
     public static final String registerPage = "registerPage.jsp";
     public static final String rentalPage = "rentalPage.jsp";
     public static final String registerSuccess = "registerSuccess.jsp";
+    //    --------------------receptionist page------------------------
+    public static final String receptionistPage = "/receptionist/receptionistPage.jsp";
+
 }

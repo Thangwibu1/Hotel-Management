@@ -14,6 +14,10 @@ public class RoomType {
     // Constructors
     public RoomType() {}
 
+    public RoomType(String typeName) {
+        this.typeName = typeName;
+    }
+
     public RoomType(String typeName, int capacity, BigDecimal pricePerNight) {
         this.typeName = typeName;
         this.capacity = capacity;

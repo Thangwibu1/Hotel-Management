@@ -230,7 +230,7 @@
     document.querySelectorAll('.edit-link').forEach(function(button) {
         button.onclick = function() {
             staffForm.reset();
-            staffForm.action = 'UpdateStaffController';
+            staffForm.action = './update-staff';
             modalTitle.textContent = "Update Staff";
             
             // Populate form

@@ -19,6 +19,13 @@ public class Booking {
     // Constructors
     public Booking() {}
 
+    public Booking(int bookingId, int roomId, LocalDateTime checkInDate, LocalDateTime checkOutDate) {
+        this.bookingId = bookingId;
+        this.roomId = roomId;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+    }
+
     public Booking(int guestId, int roomId, LocalDateTime checkInDate, LocalDateTime checkOutDate, LocalDate bookingDate, String status) {
         this.guestId = guestId;
         this.roomId = roomId;

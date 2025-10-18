@@ -1,6 +1,6 @@
 package dao;
 
-import model.Booking;
+import model.*;
 import utils.DBConnection;
 // Không cần import IConstant chứa formatter nữa (trừ khi dùng ở nơi khác)
 
@@ -253,5 +253,105 @@ public class BookingDAO {
 
         }
         return result2;
+    }
+
+    public int countCurrCheckedInRooms(String str) {
+        int result = 0;
+        System.out.println("status param = [" + str + "]");
+        String sql = "SELECT COUNT(*) as total \n"
+                + "FROM [HotelManagement].[dbo].[BOOKING]\n"
+                + "WHERE [Status] = ?";
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, str);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                result = rs.getInt("total");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public ArrayList<BookingActionRow> getBookingByStatus(String status, String orderByCheck) {
+        ArrayList<BookingActionRow> result = new ArrayList<>();
+
+        switch (orderByCheck == null ? "" : orderByCheck.toLowerCase()) {
+            case "checkout":
+                orderByCheck = "b.CheckOutDate";
+                break;
+            case "booking":
+                orderByCheck = "b.BookingDate";
+                break;
+            case "checkin":
+                orderByCheck = "b.CheckInDate";
+                break;
+        }
+
+        String sql = "SELECT b.BookingID,b.RoomID,b.CheckInDate,b.CheckOutDate,\n"
+                + "       g.FullName,g.Email,g.Phone,\n"
+                + "       r.RoomNumber,rt.TypeName\n"
+                + "FROM BOOKING b JOIN GUEST g ON g.GuestID=b.GuestID JOIN ROOM  r ON r.RoomID=b.RoomID\n"
+                + "JOIN ROOM_TYPE rt ON rt.RoomTypeID=r.RoomTypeID\n"
+                + "WHERE b.Status = ?\n"
+                + "ORDER BY " + orderByCheck;
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, status);
+            rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+
+                    int bookingId = rs.getInt("BookingID");
+                    int roomId = rs.getInt("RoomID");
+                    LocalDateTime checkInDate = rs.getObject("CheckInDate", LocalDateTime.class);
+                    LocalDateTime checkOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
+                    String fullname = rs.getString("FullName");
+                    String email = rs.getString("Email");
+                    String phone = rs.getString("Phone");
+                    String roomNum = rs.getString("RoomNumber");
+                    String roomType = rs.getString("TypeName");
+
+                    Room r = new Room(roomNum);
+                    Booking b = new Booking(bookingId, roomId, checkInDate, checkOutDate);
+                    Guest g = new Guest(fullname, phone, email);
+                    RoomType t = new RoomType(roomType);
+
+                    BookingActionRow booking = new BookingActionRow(b, r, g, t);
+                    result.add(booking);
+                }
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
+    }
+
+    public boolean updateBookingStatus(int bookingId, String status) {
+        boolean result = false;
+
+        String sql = "UPDATE [dbo].[BOOKING] SET Status = ? WHERE [BookingID] = ? ";
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, status);
+            ps.setInt(2, bookingId);
+            result = ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
     }
 }
