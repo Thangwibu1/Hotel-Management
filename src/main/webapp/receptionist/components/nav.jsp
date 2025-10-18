@@ -13,7 +13,7 @@
     </head>
     <body>
         <nav class="tabs" role="tablist">
-            <form action="/receptionist" method="get">
+            <form action="./receptionist" method="get">
                 <%
                     String currentTab = (String) request.getAttribute("CURRENT_TAB");
                     if (currentTab == null)

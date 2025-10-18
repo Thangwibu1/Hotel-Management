@@ -32,6 +32,7 @@ public class BookingsController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
+            System.out.println("DEBUG: BookingsController");
            request.getRequestDispatcher("./bookingPage.jsp").forward(request, response);
         }catch(Exception e){
             e.printStackTrace();

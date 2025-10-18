@@ -42,7 +42,8 @@ public class ReceptionistController extends HttpServlet {
             switch (tab) {
                 case "bookings":
                     request.setAttribute("CURRENT_TAB", "bookings");
-                    request.getRequestDispatcher(IConstant.bookingController).forward(request, response);
+                    System.out.println(request.getContextPath());
+                    request.getRequestDispatcher("./" + IConstant.bookingController).forward(request, response);
                     break;
                 case "checkin":
                     request.setAttribute("CURRENT_TAB", "checkin");

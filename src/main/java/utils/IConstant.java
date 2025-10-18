@@ -35,7 +35,7 @@ public interface IConstant {
     public static final String searchController = "search";
     //    --------------------receptionist servlet------------------------
     public static final String dashboardReceptionistController = "./Dashboard";
-    public static final String bookingController = "./BookingsController";
+    public static final String bookingController = "/BookingsController";
     public static final String getPendingCheckinController = "./GetPendingCheckinController";
     public static final String roomsStatusReceptionistController = "./RoomsStatusBoard";
 
