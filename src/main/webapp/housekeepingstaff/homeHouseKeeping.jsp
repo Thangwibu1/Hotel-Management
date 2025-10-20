@@ -20,6 +20,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Room Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
             rel="stylesheet"
@@ -113,6 +114,11 @@
 
         <div class="status-summary">
             <div class="summary-item">
+                <div class="summary-number total"><%= list_all_tasks_sumary.size()%>
+                </div>
+                <div class="summary-label">Total</div>
+            </div>
+            <div class="summary-item">
                 <div class="summary-number pending"><%= listPending.size() %>
                 </div>
                 <div class="summary-label">Pending</div>
@@ -132,11 +138,6 @@
                 </div>
                 <div class="summary-label">Maintenance</div>
             </div>
-            <div class="summary-item">
-                <div class="summary-number total"><%= list_all_tasks_sumary.size()%>
-                </div>
-                <div class="summary-label">Total</div>
-            </div>
         </div>
     </div>
     <%
@@ -150,7 +151,7 @@
     
     %>
 
-    <h3 class="status-title"> All Tasks <span
+    <h3 class="status-title"> Tasks Detail <span
             style="background: #e5e7eb; padding: 2px 10px; border-radius: 12px; font-size: 14px;"><%= list_Display_Home.size()%></span>
     </h3>
 
@@ -240,7 +241,7 @@
                 <%
                 } else if (r.getStatusClean().equalsIgnoreCase("Maintenance")) {
                 %>
-                <form action="UpdateStatusCleanRoomController" method="POST">
+                <form action="#" method="POST">
                     <input type="hidden" name="room" value="<%= r.getRoomID()%>">
 
                     <input type="hidden" name="status_want_update" value="Cleaned">

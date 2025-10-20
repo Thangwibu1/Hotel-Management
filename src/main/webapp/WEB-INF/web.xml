@@ -9,7 +9,6 @@
         <servlet-name>ServletBetween</servlet-name>
         <servlet-class>controller.housekeepingstaff.ServletBetween</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>DetailProfileStaff</servlet-name>
         <url-pattern>/housekeepingstaff/detailProfileStaff</url-pattern>
@@ -18,7 +17,7 @@
         <servlet-name>ServletBetween</servlet-name>
         <url-pattern>/ServletBetween</url-pattern>
     </servlet-mapping>
- 
+
     <welcome-file-list>
         <welcome-file>home</welcome-file>
     </welcome-file-list>

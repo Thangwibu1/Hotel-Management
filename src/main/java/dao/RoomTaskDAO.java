@@ -108,7 +108,7 @@ public class RoomTaskDAO {
     }
     //ham lay rôm dua vao status va ngay
     public ArrayList<RoomTask> getRoomBaseStatus(String statusClean, LocalDateTime dayToGetTask) {
-        System.out.println("getRoomBaseStatus(String statusClean, LocalDateTime dayToGetTask) ");
+//        System.out.println("getRoomBaseStatus(String statusClean, LocalDateTime dayToGetTask) ");
         ArrayList<RoomTask> result = new ArrayList<RoomTask>();
         String sql = "SELECT [RoomTaskID], [RoomID], [StaffID], [StartTime], [EndTime], [StatusClean], [Notes] "
            + "FROM [HotelManagement].[dbo].[ROOM_TASK] "
@@ -162,7 +162,6 @@ public class RoomTaskDAO {
         return result;
     }
     public ArrayList<RoomTask> getAllRoomTaskBaseDate(LocalDateTime dayToGetTask) {
-         System.out.println("VO room TASK DAO ne ");
         ArrayList<RoomTask> result = new ArrayList<RoomTask>();
         String sql = "SELECT [RoomTaskID],[RoomID],[StatusClean],[StaffID],[StartTime],[EndTime],[Notes] FROM [HotelManagement].[dbo].[ROOM_TASK] "
            + "WHERE CAST([StartTime] AS DATE) = CAST(? AS DATE) ";
@@ -185,7 +184,6 @@ public class RoomTaskDAO {
                 room.setStartTime(rs.getObject("StartTime", LocalDateTime.class));
                 room.setEndTime(rs.getObject("EndTime", LocalDateTime.class));
                 room.setNotes(rs.getString("Notes"));
-                System.out.println(room.toString());
                 result.add(room);
             }
         } catch (SQLException e) {
@@ -209,7 +207,6 @@ public class RoomTaskDAO {
                 System.err.println("Error closing resources: " + e.getMessage());
             }
         }
-        System.out.println("ROOMTASKDAO");
         return result;
     }
     
@@ -249,7 +246,43 @@ public class RoomTaskDAO {
 
         return rowsAffected;
     }
+    public int updateStatusRoomTask(int roomTaskID, String note,String statusCleanUpdate) {
+        String sql = "UPDATE [HotelManagement].[dbo].[ROOM_TASK] SET [StatusClean] = ? , [Notes] = ? WHERE [RoomTaskID] = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        int rowsAffected = 0;
 
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+
+            ps.setString(1, statusCleanUpdate);
+            ps.setString(2, note);
+            ps.setInt(3, roomTaskID);
+
+            rowsAffected = ps.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("Database error  " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("General error " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+
+        return rowsAffected;
+    }
 
     public int insertRoomTask(RoomTask roomTask, Connection con) throws SQLException {
 

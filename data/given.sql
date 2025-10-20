@@ -183,7 +183,7 @@ CREATE TABLE SYSTEM_CONFIG(
 GO
 CREATE TABLE ASSIGN_TASK (
     ID VARCHAR(10) PRIMARY KEY, 
-    LastTimeAssign DATETIME
+    LastTimeAssign DATETIME NOT NULL
 );
 
 -- ===================================================================

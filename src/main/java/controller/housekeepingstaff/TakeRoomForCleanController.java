@@ -39,10 +39,9 @@ public class TakeRoomForCleanController extends HttpServlet {
             ArrayList<RoomTask> listTask = d.getAllRoomTaskBaseDate(LocalDateTime.now());
             
             if (d.getAllRoomTaskBaseDate(LocalDateTime.now()) == null || listTask.isEmpty()) {
-                System.out.println("check xem co lay dc roomTask cua hom nay ko ne . VO DAY LA KO LAY DC");
+//                System.out.println("check xem co lay dc roomTask cua hom nay ko ne . VO DAY LA KO LAY DC");
                 request.getRequestDispatcher(IConstant.makeNewRoomTaskController).forward(request, response);
             } else {
-                System.out.println("VO DAY LA LAY DC R NE ");
                 ArrayList<RoomTask> listPending = d.getRoomBaseStatus("Pending", LocalDateTime.now());
                 ArrayList<RoomTask> listMaintenance = d.getRoomBaseStatus("Maintenance", LocalDateTime.now());
                 ArrayList<RoomTask> listCleaned = d.getRoomBaseStatus("Cleaned", LocalDateTime.now());

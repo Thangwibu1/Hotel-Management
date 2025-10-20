@@ -15,10 +15,7 @@
 <%
 
     LocalDateTime now = LocalDateTime.now();
-    Locale vietnamLocale = new Locale("vi", "VN");
-    String pattern = "EEEE, d 'tháng' M, yyyy - HH:mm:ss";
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern, vietnamLocale);
-    String formattedDateTime = now.format(formatter);
+    
     Staff staff = (Staff) session.getAttribute("userStaff");
     if (staff == null) { 
         response.sendRedirect(IConstant.loginPage);
@@ -44,7 +41,11 @@
     
     <div class="employee-info" style="width: 70%" >
         <h2 style="font-size: 3rem; margin-bottom: 0.8rem; color: #1f2937;">Staff: <%= staff.getFullName()%></h2>
-        <p style="color: #6b7280; font-size: 1.4rem; margin-bottom: 0;">Start at: <%= formattedDateTime%> </p>
+        <p style="color: #6b7280; font-size: 1.4rem; margin-bottom: 0;">
+            <i class="bi bi-circle-fill text-success" 
+               style="font-size: 1em; vertical-align: text-top; margin-right: 5px;"></i>
+            is active 
+        </p>
     </div>
     
     <div style="
