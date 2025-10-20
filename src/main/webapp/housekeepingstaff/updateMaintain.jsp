@@ -1,18 +1,16 @@
 <%-- 
-    Document   : completeMaintain
-    Created on : Oct 18, 2025, 11:54:56 PM
+    Document   : updateMaintain.jsp
+    Created on : Oct 19, 2025, 8:46:54 AM
     Author     : TranHongGam
 --%>
 
-<%@page import="model.Staff"%>
-<%@page import="utils.IConstant"%>
 <%@page contentType="text/html" pageEncoding="windows-1252"%>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report For Maintain</title>
+    <title>Báo cáo h? h?i - Phòng 101</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         * {
@@ -25,7 +23,6 @@
             font-family: sans-serif;
         }
         .container {
-            padding-top: 7rem;
             max-width: 1320px;
             margin: 0 auto;
         }
@@ -100,8 +97,8 @@
         .btn-maintenance {
             background-color: #495057; /* Màu xám ?en */
             color: white;
-            padding: 12px 30px;
-            font-size: 16px;
+            /* padding: 1rem 1rem; */
+            font-size: 1.6rem;
             border: none;
             border-radius: 4px;
             font-weight: 500;
@@ -114,9 +111,10 @@
         }
         .modal-footer {
             border-top: 1px solid #dee2e6;
-            padding: 15px 20px;           
+            padding: 15px 20px;
         }
         
+        /* CSS TÙY CH?NH CHECKBOX (Màu Xám) */
         .form-check-input:not(:checked) {
             border-color: #6c757d; 
         }
@@ -138,34 +136,16 @@
     </style>
 </head>
 <body>
-     <%
-        
-        String room =(String) request.getParameter("room");
-        int roomTaskID = Integer.parseInt(request.getParameter("room_Task_ID"));
-        String status_want_update = (String) request.getParameter("status_want_update");
-        Staff staff =(Staff) session.getAttribute("userStaff");
-        if(staff == null || roomTaskID == 0 || status_want_update == null || room == null ){
-            %>
-            <h4>Ko co data</h4> <%
-        } else{
-        
-        %>
 <jsp:include page="header.jsp"/>
-
 <div class="container mt-5">
     <div class="modal-dialog modal-dialog-centered modal-lg ">
         <div class="modal-content " >
             <div class="modal-header mb-5 " >
                 <h3 class="modal-title ms-4">
-                    <span class="warning-icon">?</span>
-                    Malfunction Report - Room 101
+                    <span class="warning-icon bi bi-exclamation-triangle">?</span>
+                    Malfunction Detail - Room 101
                 </h3>
-                <div class="d-flex align-items-center gap-3">
-                    <form action="<%= IConstant.takeRoomForCleanController %>" method="GET">
-                        <button type="submit" class="btn-close"></button>
-                    </form>
-
-                </div>
+                <button type="button" class="btn-close" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="alert alert-warning" role="alert">
@@ -175,8 +155,8 @@
 
                 
                 
-                <div class="checkbox-list d-flex justify-content-center  ">
-                    <form action="" method="post" style="width: 55% ; padding-bottom: 4rem;">
+                <div class="checkbox-list d-flex justify-content-center ">
+                    <form action="your-servlet-url" method="post" style="width: 55%;">
                         <div class="card shadow-sm " style="max-width: 70rem;">
                             <div >
                                 <h3 class=" p-4 text-center bg-light bg-gradient shadow rounded-3"
@@ -241,8 +221,15 @@
                                 </div>
                             </div>
                             
-                            <div class="card-footer text-end" style="width: 100%; ">
-                                <button style="width: 100%; " type="submit" class="btn btn-maintenance">Completed Maintenance</button>
+                            <div class="card-footer text-end" style="width: 100%;">
+                                <div class="row m-0 p-0"> 
+                                    <div class="col-6 ">
+                                        <button type="submit" class="btn btn-danger p-4 w-100 fs-4 ">Update Maintenance</button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button type="submit" class="btn btn-maintenance w-100">Completed Maintenance</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -252,9 +239,7 @@
         </div>
     </div>
 </div>
-                        <%}
-                        %>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

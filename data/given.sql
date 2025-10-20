@@ -181,6 +181,10 @@ CREATE TABLE SYSTEM_CONFIG(
                         ConfigValue NVARCHAR(50) NOT NULL
 );
 GO
+CREATE TABLE ASSIGN_TASK (
+    ID VARCHAR(10) PRIMARY KEY, 
+    LastTimeAssign DATETIME
+);
 
 -- ===================================================================
 -- PHẦN 2: CHÈN DỮ LIỆU MẪU
@@ -243,5 +247,7 @@ INSERT INTO STAFF (FullName, Role, Username, PasswordHash, Phone, Email) VALUES
 ('Hoàng Thị Lan', 'Receptionist', 'receptionist01', 'hash_placeholder_staff_2', '0333334444', 'lan.ht@hotel.com'),
 ('Trần Văn Bình', 'Receptionist', 'receptionist02', 'hash_placeholder_staff_3', '0333334445', 'binh.tv@hotel.com');
 GO
+INSERT INTO ASSIGN_TASK (ID, LastTimeAssign)
+VALUES ('ASS01', GETDATE());
 
 select [TypeName], [Capacity], [PricePerNight] from ROOM_TYPE;

@@ -37,9 +37,12 @@ public interface IConstant {
     
     public static final String servletBetween = "./servletbetween";
     public static final String takeRoomForCleanController = "./takeRoomForCleanController";
+    public static final String makeNewRoomTaskController = "./makeNewRoomTaskController";
     public static final String updateStatusCleanRoomController = "./UpdateStatusCleanRoomController";
     public static final String detailProfileStaffController = "./detailProfileStaff";
-    public static final String completeHouseKeeping = "./completeHouseKeeping.jsp";
+    public static final String completeHouseKeeping = "./completeIngroressTask.jsp";
+    public static final String completeMaintain = "./completeMaintain.jsp";
+    public static final String updateMaintain = "./updateMaintain.jsp";
     public static final String systemConfigPage = "/" + adminFilter + "/systemConfig.jsp";
     public static final String adminPage = "/" + adminFilter + "/adminPage.jsp";
     public static final String editServicePage = "editService.jsp";

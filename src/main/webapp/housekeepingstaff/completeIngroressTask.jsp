@@ -1,3 +1,4 @@
+
 <%--
     Document    : completeHouseKeeping (Complete Housekeeping)
     Created on : Oct 16, 2025, 1:08:23 PM
@@ -39,7 +40,7 @@
             <div class="modal-content shadow-lg rounded-3">
 
                 <div class="d-flex align-items-center justify-content-between p-4 border-bottom">
-                    <h5 class="modal-title h4 fw-bold text-dark" id="roomModalLabel">🚪 Room <%= room%></h5>
+                    <h5 class="modal-title h4 fw-bold text-dark ps-2" id="roomModalLabel"> Room <%= room%></h5>
 
                     <div class="d-flex align-items-center gap-3">
                         <span class="d-flex align-items-center gap-2 p-2 rounded-3 fw-medium" style="background: #fef3c7; color: #92400e;">
@@ -58,8 +59,8 @@
 
                 <div class="p-4">
 
-                    <div class="p-3 mb-4 rounded-3 border" style="background: #eff6ff; border-color: #bfdbfe !important;">
-                        <p class="text-primary fw-bold mb-0"> Staff: <%= staff.getFullName() %></p>
+                    <div class="p-3 mb-4 rounded-3 border bg-light border-secondary">
+                        <p class="text-dark fw-bold mb-0"> Staff: <%= staff.getFullName() %></p>
                     </div>
 
                     <div class="mb-4 text-secondary">
@@ -70,8 +71,8 @@
                     <div class="mb-4">
                         <label for="statusSelect" class="form-label text-dark fw-medium"> Update Status</label>
                         <select class="form-select" id="statusSelect">
-                            <option value="inprogress" selected>In Progress</option>
-                            <option value="cleaned">Cleaned</option>
+                            <option value="inprogress" selected>Cleaned</option>
+                            <option value="cleaned">In Progress</option>
                         </select>
                     </div>
 
@@ -84,7 +85,7 @@
                             <span class="form-label mb-0 text-dark fw-medium">Photos of the Room after Cleaning</span>
                         </div>
                         <div>
-                            <input type="file" />
+                            <input type="file" required/>
                         </div>
                         
                     </div>
@@ -106,10 +107,11 @@
                                    id="completeBtn">
                         </form>
 
-                        <form action="completeMaintain.jsp" method="POST" class="d-flex flex-fill" style="padding: 0; margin: 0;">
+                        <form action="<%= IConstant.completeMaintain %>" method="POST" class="d-flex flex-fill" style="padding: 0; margin: 0;">
                             <input type="hidden" name="action" value="report">
-                            <input type="hidden" name="room_id" value="<%= room%>">
-
+                            <input type="hidden" name="room_Task_ID" value="<%= roomTaskID%>">
+                            <input type="hidden" name="room" value="<%= room %>">
+                            <input type="hidden" name="status_want_update" value="Maintenance">
                             <input type="submit" 
                                    value="Report Issue" 
                                    class="btn btn-danger flex-fill fw-medium" 

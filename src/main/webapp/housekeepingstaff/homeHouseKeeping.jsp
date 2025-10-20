@@ -45,11 +45,12 @@
     </style>
 </head>
 <body>
+
 <%
 
     Staff staff = (Staff) session.getAttribute("userStaff");
+    
     ArrayList<RoomTask> list_Display_Home = (ArrayList) request.getAttribute("LIST_DISPLAY_HOME");
-    ArrayList<RoomTask> listTask = (ArrayList) request.getAttribute("ROOM_TASK");
     ArrayList<RoomTask> listCleaned = (ArrayList) request.getAttribute("ROOM_CLEANED");
     ArrayList<RoomTask> listPending = (ArrayList) request.getAttribute("ROOM_PENDING");
     ArrayList<RoomTask> listInProgress = (ArrayList) request.getAttribute("ROOM_IN_PROGRESS");
@@ -60,10 +61,11 @@
     String cleanedForPress = "Cleaned";
     String inProgressForPress = "In Progress Clean";
     String maintainForPress = "In Progress Maintain";
-
-    if (list_Display_Home == null && listR == null) {
+    
+    
+    if (list_Display_Home == null || listR == null) {
         request.getRequestDispatcher(IConstant.takeRoomForCleanController).forward(request, response);
-
+        
     } else {
         String active = (String) request.getAttribute("ACTIVE");
 
@@ -79,28 +81,28 @@
                 <input type="hidden" name="active" value="all">
                 <button type="submit"
                         class="filter-btn <%= (active == null || "all".equals(active)) ? "active" : "" %>  ">All Tasks
-                    <span class="count"> <%= listTask.size()%> </span></button>
+                    <span class="count"> <%= (list_Display_Home != null) ? list_Display_Home.size() : 0 %> </span></button>
             </form>
 
-            <form action="./takeRoomForCleanController" method="POST" class="filter-form-inline">
+            <form action="<%= IConstant.takeRoomForCleanController %>" method="POST" class="filter-form-inline">
                 <input type="hidden" name="active" value="pending">
                 <button type="submit" class="filter-btn <%= "pending".equals(active) ? "active" : "" %>">Pending <span
                         class="count"><%= listPending.size()%></span></button>
             </form>
 
-            <form action="./takeRoomForCleanController" method="POST" class="filter-form-inline">
+            <form action="<%= IConstant.takeRoomForCleanController %>" method="POST" class="filter-form-inline">
                 <input type="hidden" name="active" value="in_progress">
                 <button type="submit" class="filter-btn <%= "in_progress".equals(active) ? "active" : "" %>">In Progress
                     <span class="count"><%= listInProgress.size()%></span></button>
             </form>
 
-            <form action="./takeRoomForCleanController" method="POST" class="filter-form-inline">
+            <form action="<%= IConstant.takeRoomForCleanController %>" method="POST" class="filter-form-inline">
                 <input type="hidden" name="active" value="cleaned">
                 <button type="submit" class="filter-btn <%= "cleaned".equals(active) ? "active" : "" %>">Cleaned <span
                         class="count"><%= listCleaned.size()%></span></button>
             </form>
 
-            <form action="./takeRoomForCleanController" method="POST" class="filter-form-inline">
+            <form action="<%= IConstant.takeRoomForCleanController %>" method="POST" class="filter-form-inline">
                 <input type="hidden" name="active" value="maintenance">
                 <button type="submit" class="filter-btn <%= "maintenance".equals(active) ? "active" : "" %>">Maintenance
                     <span class="count"><%= listMaintenance.size()%></span></button>
@@ -130,15 +132,25 @@
                 <div class="summary-label">Maintenance</div>
             </div>
             <div class="summary-item">
-                <div class="summary-number total"><%= listTask.size()%>
+                <div class="summary-number total"><%= list_Display_Home.size()%>
                 </div>
                 <div class="summary-label">Total</div>
             </div>
         </div>
     </div>
+    <%
+    if(request.getAttribute("THONGBAO") != null){
+    String msgUpdate = (String)request.getAttribute("THONGBAO");
+    %>
+    <h4 class="text-success pt-3 pb-3"> <%= msgUpdate %> </h4>
+    <%
+    }
+    
+    
+    %>
 
     <h3 class="status-title"> All Tasks <span
-            style="background: #e5e7eb; padding: 2px 10px; border-radius: 12px; font-size: 14px;"><%= listTask.size()%></span>
+            style="background: #e5e7eb; padding: 2px 10px; border-radius: 12px; font-size: 14px;"><%= list_Display_Home.size()%></span>
     </h3>
 
     <div class="rooms-grid">
@@ -172,23 +184,23 @@
                 <div>Staff:</div>
                 <div>
                     <%
-                        if ("Pending".equals(r.getStatusClean())) {
+                    if ("Pending".equals(r.getStatusClean())) {
                     %>
-                    <span class="time-badge">Priority</span>
+                        <span class="time-badge">Priority</span>
                     <%
-                        }
+                    }
                     %>
                 </div>
             </div>
             <div class="room-actions">
                 <%
-                    if (r.getStatusClean().equalsIgnoreCase("Cleaned")) {
+                if (r.getStatusClean().equalsIgnoreCase("Cleaned")) {
                 %>
-                <div style="width: 100%">
-                    <button style="width: 100%" class="btn btn-primary">
-                        <%= cleanedForPress%>
-                    </button>
-                </div>
+                    <div style="width: 100%">
+                        <button style="width: 100%" class="btn btn-primary">
+                            <%= cleanedForPress%>
+                        </button>
+                    </div>
                 <%
                 } else if (r.getStatusClean().equalsIgnoreCase("In Progress")) {
                    String roomNumber = rl.getRoomNumber();
@@ -208,11 +220,10 @@
                     </div>
                 </form>
                 
-
                 <%
                 } else if (r.getStatusClean().equalsIgnoreCase("Pending")) {
                 %>
-                <form action="UpdateStatusCleanRoomController" method="POST">
+                <form action= "<%= IConstant.updateStatusCleanRoomController %>" method="POST">
                     <input type="hidden" name="room" value="<%= r.getRoomID()%>">
 
                     <input type="hidden" name="status_want_update" value="In Progress">
