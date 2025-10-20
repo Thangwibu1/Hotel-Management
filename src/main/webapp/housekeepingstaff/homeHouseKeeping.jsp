@@ -210,11 +210,11 @@
                    String targetStatus = "Cleaned";
 
                 %>
-                <form action="<%= IConstant.completeHouseKeeping %>" method="POST">
+                <form action="<%= IConstant.completeIngroressTask %>" method="POST">
                     <input type="hidden" name="room" value="<%= roomNumber%>">
                     <input type="hidden" name="status_want_update" value="<%= targetStatus%>">
                     <input type="hidden" name="room_Task_ID" value="<%= roomTaskID%>">
-
+                    <% System.out.println("status in home khi nhan INPROGRESS" + targetStatus );%>
                     <div style="width: 100%">
                         <button style="width: 100%" type="submit" class="btn btn-primary">
                         <%= inProgressForPress%>
@@ -241,7 +241,7 @@
                 <%
                 } else if (r.getStatusClean().equalsIgnoreCase("Maintenance")) {
                 %>
-                <form action="#" method="POST">
+                <form action="" method="POST" >
                     <input type="hidden" name="room" value="<%= r.getRoomID()%>">
 
                     <input type="hidden" name="status_want_update" value="Cleaned">
@@ -249,7 +249,7 @@
                     <input type="hidden" name="room_Task_ID" value="<%= r.getRoomTaskID() %>">
 
                     <div style="width: 100%">
-                        <button style="width: 100%" type="submit" class="btn btn-primary">
+                        <button style="width: 100%" type="submit" class="btn btn-primary" >
                             <%= maintainForPress%>
                         </button>
                     </div>

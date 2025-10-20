@@ -27,6 +27,7 @@
         String room =(String) request.getParameter("room");
         int roomTaskID = Integer.parseInt(request.getParameter("room_Task_ID"));
         String status_want_update = (String) request.getParameter("status_want_update");
+        System.out.println("STATUS updtae trong completeIngroressTask " + status_want_update);
         Staff staff =(Staff) session.getAttribute("userStaff");
         if(staff == null || roomTaskID == 0 || status_want_update == null || room == null ){
             %>
@@ -99,6 +100,8 @@
                             <input type="hidden" name="action" value="complete">
                             <input type="hidden" name="room_Task_ID" value="<%= roomTaskID%>">
                             <input type="hidden" name="room" value="<%= room %>">
+                            <!--done task nen can update data vao db-->
+                            <input type="hidden" name="DONE_TASK" value="done">
                             <input type="hidden" name="status_want_update" value="<%= status_want_update %>">
                             <input type="submit" 
                                    value="Complete" 

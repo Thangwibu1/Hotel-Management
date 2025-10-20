@@ -59,7 +59,7 @@
             flex-shrink: 0; 
             padding-right: 2rem;
 			text-align: end;"> 
-            <form action="<%= request.getContextPath() %>/logout"  method="get">
+            <form action="<%= IConstant.detailProfileStaffController %>"  method="get">
                 <button type="submit" class="export-btn filter-btn" 
                         style="
                             background: white; 

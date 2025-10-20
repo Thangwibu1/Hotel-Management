@@ -39,8 +39,9 @@ public interface IConstant {
     public static final String takeRoomForCleanController = "./takeRoomForCleanController";
     public static final String makeNewRoomTaskController = "./makeNewRoomTaskController";
     public static final String updateStatusCleanRoomController = "./UpdateStatusCleanRoomController";
-    public static final String detailProfileStaffController = "./detailProfileStaff";
-    public static final String completeHouseKeeping = "./completeIngroressTask.jsp";
+    public static final String detailProfileStaffController = "./detailProfileStaffController";
+    public static final String completeIngroressTask = "./completeIngroressTask.jsp";
+    public static final String detailProfileStaffPage = "./detailProfileStaffPage.jsp";
     public static final String completeMaintain = "./completeMaintain.jsp";
     public static final String takeDeviceForNoteMaintenanceController = "./takeDeviceForNoteMaintenanceController";
     public static final String updateMaintain = "./updateMaintain.jsp";

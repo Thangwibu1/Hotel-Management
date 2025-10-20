@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -246,8 +247,44 @@ public class RoomTaskDAO {
 
         return rowsAffected;
     }
-    public int updateStatusRoomTask(int roomTaskID, String note,String statusCleanUpdate) {
-        String sql = "UPDATE [HotelManagement].[dbo].[ROOM_TASK] SET [StatusClean] = ? , [Notes] = ? WHERE [RoomTaskID] = ?";
+    public int updateStatusRoomTaskToCleand(int staffID, String statusCleanUpdate,int roomTaskID) {
+        String sql = "UPDATE [HotelManagement].[dbo].[ROOM_TASK] SET [StaffID] = ?,[StatusClean] = ?,[EndTime] = ? WHERE [RoomTaskID] = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        int rowsAffected = 0;
+        Timestamp endTimestamp = Timestamp.valueOf(LocalDateTime.now());
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, staffID);
+            ps.setString(2, statusCleanUpdate);
+            ps.setTimestamp(3, endTimestamp);
+            ps.setInt(4, roomTaskID);
+            rowsAffected = ps.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("Database error  " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("General error " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+
+        return rowsAffected;
+    }
+    public int updateStatusRoomTask(int staffID,int roomTaskID, String note,String statusCleanUpdate) {
+        String sql = "UPDATE [HotelManagement].[dbo].[ROOM_TASK] SET [StaffID] = ? , [StatusClean] = ? , [Notes] = ? WHERE [RoomTaskID] = ?";
         Connection con = null;
         PreparedStatement ps = null;
         int rowsAffected = 0;
@@ -255,10 +292,10 @@ public class RoomTaskDAO {
         try {
             con = DBConnection.getConnection();
             ps = con.prepareStatement(sql);
-
-            ps.setString(1, statusCleanUpdate);
-            ps.setString(2, note);
-            ps.setInt(3, roomTaskID);
+            ps.setInt(1, staffID);
+            ps.setString(2, statusCleanUpdate);
+            ps.setString(3, note);
+            ps.setInt(4, roomTaskID);
 
             rowsAffected = ps.executeUpdate();
 

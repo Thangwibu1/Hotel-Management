@@ -12,6 +12,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import model.Staff;
 
 import utils.IConstant;
 
@@ -31,6 +33,12 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
         int rowAffected  = 0;
         String[] damagedItemsArray = null;
         StringBuilder sb = new StringBuilder();
+        if(request.getSession().getAttribute("userStaff") == null){
+            response.sendRedirect(IConstant.loginPage);
+            return;
+        }
+        HttpSession session = request.getSession();
+        Staff staff = (Staff)session.getAttribute("userStaff");
         try {
             if (request.getAttribute("LIST_DEVICE_BROKEN") != null) {
                 damagedItemsArray = (String[]) request.getAttribute("LIST_DEVICE_BROKEN");
@@ -42,10 +50,6 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                     }
                 }
                 String deviceBroken = sb.toString();
-
-//                  N?u chu?i không r?ng, lo?i b? d?u ph?y cu?i cùng
-//                  if (deviceBroken.length() > 0) {
-//                    deviceBroken = deviceBroken.substring(0, deviceBroken.length() - 1);   }
                 System.out.println(deviceBroken != null ? deviceBroken : "roi chuoi rong luon ro / UpdateStatus" );
                 Object roomTaskIDObj = request.getAttribute("room_Task_ID"); 
                 String idString = roomTaskIDObj.toString(); 
@@ -56,13 +60,23 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                 System.out.println("ID: " + roomTaskID);
                 System.out.println("Note: " + deviceBroken);
                 System.out.println("Status: " + statusWantUpdate);
-                rowAffected = d.updateStatusRoomTask(roomTaskID, deviceBroken, statusWantUpdate);
+                int staffID = staff.getStaffId();
+                rowAffected = d.updateStatusRoomTask(staffID,roomTaskID, deviceBroken, statusWantUpdate);
+            }else if(request.getParameter("DONE_TASK") != null){
+                roomTaskID = Integer.parseInt(request.getParameter("room_Task_ID").trim());
+                statusWantUpdate = request.getParameter("status_want_update");
+                int staffID = staff.getStaffId();
+                rowAffected = d.updateStatusRoomTaskToCleand(staffID, statusWantUpdate, roomTaskID);
+                System.out.println("DA XU LY" + rowAffected);
             }else{
                 roomTaskID = Integer.parseInt(request.getParameter("room_Task_ID").trim());
                 statusWantUpdate = request.getParameter("status_want_update");
                 rowAffected = d.updateStatusRoomTask(roomTaskID, statusWantUpdate);
             }
 
+            
+            
+            //?a chay xong update
             if(rowAffected > 0){
                 request.setAttribute("THONGBAO", "Update successfully!!");
                 request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);

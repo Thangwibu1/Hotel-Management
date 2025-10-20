@@ -7,27 +7,40 @@ package controller.housekeepingstaff;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import model.Staff;
+import utils.IConstant;
 
 /**
  *
  * @author TranHongGam
  */
-public class DetailProfileStaff extends HttpServlet {
+@WebServlet(name="DetailProfileStaffController", urlPatterns={"/housekeepingstaff/detailProfileStaffController"})
+public class DetailProfileStaffController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
         try {
-
+            HttpSession session = request.getSession();
+            Staff staff = (Staff) session.getAttribute("userStaff");
+            
+            if (staff == null) {
+                response.sendRedirect(IConstant.loginPage);
+                return;
+            } else {
+                //Lay roomTask no da lam
+                System.out.println("hehehe");
+                request.getRequestDispatcher(IConstant.detailProfileStaffPage).forward(request, response);
+            }    
         } catch (Exception e) {
-
-        } finally {
-
-        }
+            System.out.println("Bi Loi o DETAIL PROFILE roi a nha");
+            e.printStackTrace();
+        } 
     } 
 
     @Override

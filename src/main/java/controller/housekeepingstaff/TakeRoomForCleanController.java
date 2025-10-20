@@ -34,7 +34,7 @@ public class TakeRoomForCleanController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         try {
-            System.out.println("check vo take new ko ne");  
+            System.out.println("DAY LA TAKEROOMCLEAN");  
             RoomTaskDAO d = new RoomTaskDAO();
             ArrayList<RoomTask> listTask = d.getAllRoomTaskBaseDate(LocalDateTime.now());
             

@@ -143,6 +143,7 @@
             String room = (String) request.getParameter("room");
             int roomTaskID = Integer.parseInt(request.getParameter("room_Task_ID"));
             String status_want_update = (String) request.getParameter("status_want_update");
+            System.out.println("STATUS IN CompleteMAINTAIN" + status_want_update);
 
             Staff staff = (Staff) session.getAttribute("userStaff");
             if (staff == null || roomTaskID == 0 || status_want_update == null || room == null) {
