@@ -34,16 +34,19 @@ public class MakeNewRoomTaskController extends HttpServlet {
     int assignedWork = 0;
 
     try {
+        System.out.println("co vo Make New  ");
         con = DBConnection.getConnection(); 
         con.setAutoCommit(false); 
         AssignTaskDAO assignTaskDAO = new AssignTaskDAO();
         
         LocalDateTime lastAssign = assignTaskDAO.getLastTimeAssign(); 
-        System.out.println(lastAssign.toString() + " DEBUG ");
+//        System.out.println(lastAssign.toString() + " DEBUG ");
         if( lastAssign!= null && lastAssign.toLocalDate().equals(LocalDate.now())){
+            System.out.println("sang take new nè ");
             request.getRequestDispatcher(IConstant.takeRoomForCleanController).forward(request, response);
             return;
         }else{
+            System.out.println("Ko sang ma lam task moi ne");
             RoomTaskDAO roomTaskDAO = new RoomTaskDAO(); 
             RoomDAO roomDAO = new RoomDAO(); 
             
@@ -60,7 +63,14 @@ public class MakeNewRoomTaskController extends HttpServlet {
                 cleanableRoomsCount++;
                 
                 int rows = roomTaskDAO.insertRoomTask(
-                        new RoomTask(room.getRoomId(), "Pending", LocalDateTime.now()),
+                        new RoomTask(
+                                room.getRoomId(), 
+                                null, 
+                                LocalDateTime.now(), 
+                                null, 
+                                "Pending", 
+                                null 
+                        ),
                         con
                 );
                 

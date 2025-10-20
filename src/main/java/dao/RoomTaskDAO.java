@@ -58,7 +58,7 @@ public class RoomTaskDAO {
 
         return result;
     }
-    
+    //ham nay lay het theo 
     public ArrayList<RoomTask> getRoomBaseStatus(String statusClean) {
         ArrayList<RoomTask> result = new ArrayList<RoomTask>();
         String sql = "SELECT [RoomTaskID],[RoomID],[StatusClean],[StaffID],[StartTime],[EndTime],[Notes] FROM [HotelManagement].[dbo].[ROOM_TASK] ";
@@ -127,8 +127,13 @@ public class RoomTaskDAO {
                 room.setRoomTaskID(rs.getInt("RoomTaskID"));
                 room.setRoomID(rs.getInt("RoomID"));
                 room.setStatusClean(rs.getString("StatusClean"));
-
+                room.setStaffID(rs.getObject("StaffID", Integer.class));
+                room.setStartTime(rs.getObject("StartTime", LocalDateTime.class));
+                room.setEndTime(rs.getObject("EndTime", LocalDateTime.class));
+                room.setNotes(rs.getString("Notes"));
+                
                 result.add(room);
+
             }
         } catch (SQLException e) {
             System.err.println("Database error in getRoomBaseStatus: " + e.getMessage());
@@ -155,6 +160,7 @@ public class RoomTaskDAO {
         return result;
     }
     public ArrayList<RoomTask> getAllRoomTaskBaseDate(LocalDateTime dayToGetTask) {
+         System.out.println("VO room TASK DAO ne ");
         ArrayList<RoomTask> result = new ArrayList<RoomTask>();
         String sql = "SELECT [RoomTaskID],[RoomID],[StatusClean],[StaffID],[StartTime],[EndTime],[Notes] FROM [HotelManagement].[dbo].[ROOM_TASK] "
            + "WHERE CAST([StartTime] AS DATE) = CAST(? AS DATE) ";
@@ -177,7 +183,7 @@ public class RoomTaskDAO {
                 room.setStartTime(rs.getObject("StartTime", LocalDateTime.class));
                 room.setEndTime(rs.getObject("EndTime", LocalDateTime.class));
                 room.setNotes(rs.getString("Notes"));
-
+                System.out.println(room.toString());
                 result.add(room);
             }
         } catch (SQLException e) {
@@ -201,7 +207,7 @@ public class RoomTaskDAO {
                 System.err.println("Error closing resources: " + e.getMessage());
             }
         }
-
+        System.out.println("ROOMTASKDAO");
         return result;
     }
     

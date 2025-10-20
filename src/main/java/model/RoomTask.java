@@ -15,7 +15,22 @@ public class RoomTask {
     public RoomTask() {
     }
 
-
+    public RoomTask(
+        int roomID,            
+        Integer staffID,       
+        LocalDateTime startTime,
+        LocalDateTime endTime,  
+        String statusClean,     
+        String notes            
+    ) {
+        this.roomID = roomID;
+        this.staffID = staffID;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.statusClean = statusClean;
+        this.notes = notes;
+       
+    }
 
     public RoomTask(int roomTaskID, int roomID, Integer staffID, LocalDateTime startTime, LocalDateTime endTime, String statusClean, String notes) {
         this.roomTaskID = roomTaskID;

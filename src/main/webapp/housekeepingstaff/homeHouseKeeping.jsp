@@ -64,6 +64,7 @@
     
     
     if (list_Display_Home == null || listR == null) {
+        System.out.println("HomeHouseKeeping DEBUG");
         request.getRequestDispatcher(IConstant.takeRoomForCleanController).forward(request, response);
         
     } else {

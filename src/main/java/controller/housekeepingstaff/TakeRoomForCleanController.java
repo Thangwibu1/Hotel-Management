@@ -34,13 +34,15 @@ public class TakeRoomForCleanController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         try {
-
+            System.out.println("check vo take new ko ne");  
             RoomTaskDAO d = new RoomTaskDAO();
             ArrayList<RoomTask> listTask = d.getAllRoomTaskBaseDate(LocalDateTime.now());
             
-            if (listTask == null) {
+            if (d.getAllRoomTaskBaseDate(LocalDateTime.now()) == null || listTask.isEmpty()) {
+                System.out.println("check xem co lay dc roomTask cua hom nay ko ne . VO DAY LA KO LAY DC");
                 request.getRequestDispatcher(IConstant.makeNewRoomTaskController).forward(request, response);
             } else {
+                System.out.println("VO DAY LA LAY DC R NE ");
                 ArrayList<RoomTask> listPending = d.getRoomBaseStatus("Pending", LocalDateTime.now());
                 ArrayList<RoomTask> listMaintenance = d.getRoomBaseStatus("Maintenance", LocalDateTime.now());
                 ArrayList<RoomTask> listCleaned = d.getRoomBaseStatus("Cleaned", LocalDateTime.now());
@@ -50,7 +52,7 @@ public class TakeRoomForCleanController extends HttpServlet {
                 ArrayList<Room> listR = rd.getAllRoom();
 
                 String active = request.getParameter("active");
-
+               
                 request.setAttribute("LIST_DISPLAY_HOME", listTask);
                 request.setAttribute("ROOM_CLEANED", listCleaned);
                 request.setAttribute("ROOM_PENDING", listPending);
@@ -58,7 +60,8 @@ public class TakeRoomForCleanController extends HttpServlet {
                 request.setAttribute("ROOM_MATAINTENANCE", listMaintenance);
                 request.setAttribute("ROOM_LIST", listR);
 
-                if (active == null) {
+                if (active == null && !active.trim().isEmpty()) {
+                    
                     request.getRequestDispatcher("homeHouseKeeping.jsp").forward(request, response);
                 } else {
 
