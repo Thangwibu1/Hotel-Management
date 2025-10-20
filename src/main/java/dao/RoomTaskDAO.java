@@ -108,9 +108,11 @@ public class RoomTaskDAO {
     }
     //ham lay rôm dua vao status va ngay
     public ArrayList<RoomTask> getRoomBaseStatus(String statusClean, LocalDateTime dayToGetTask) {
+        System.out.println("getRoomBaseStatus(String statusClean, LocalDateTime dayToGetTask) ");
         ArrayList<RoomTask> result = new ArrayList<RoomTask>();
-        String sql = "SELECT [RoomTaskID],[RoomID],[StatusClean] FROM [HotelManagement].[dbo].[ROOM_TASK] "
-           + "WHERE [StatusClean] = ? AND CAST([StartTime] AS DATE) = CAST(? AS DATE) ";
+        String sql = "SELECT [RoomTaskID], [RoomID], [StaffID], [StartTime], [EndTime], [StatusClean], [Notes] "
+           + "FROM [HotelManagement].[dbo].[ROOM_TASK] "
+           + "WHERE [StatusClean] = ? AND CAST([StartTime] AS DATE) = CAST(? AS DATE)";
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;

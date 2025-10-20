@@ -41,7 +41,7 @@ public class MakeNewRoomTaskController extends HttpServlet {
         
         LocalDateTime lastAssign = assignTaskDAO.getLastTimeAssign(); 
 //        System.out.println(lastAssign.toString() + " DEBUG ");
-        if( lastAssign!= null && lastAssign.toLocalDate().equals(LocalDate.now())){
+        if( lastAssign != null && lastAssign.toLocalDate().equals(LocalDateTime.now().toLocalDate())){
             System.out.println("sang take new nè ");
             request.getRequestDispatcher(IConstant.takeRoomForCleanController).forward(request, response);
             return;

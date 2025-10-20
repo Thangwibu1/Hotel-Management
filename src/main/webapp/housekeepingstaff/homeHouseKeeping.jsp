@@ -55,6 +55,7 @@
     ArrayList<RoomTask> listPending = (ArrayList) request.getAttribute("ROOM_PENDING");
     ArrayList<RoomTask> listInProgress = (ArrayList) request.getAttribute("ROOM_IN_PROGRESS");
     ArrayList<RoomTask> listMaintenance = (ArrayList) request.getAttribute("ROOM_MATAINTENANCE");
+    ArrayList<RoomTask> list_all_tasks_sumary = (ArrayList) request.getAttribute("LIST_ALL_TASKS_SUMMARY");
     ArrayList<Room> listR = (ArrayList) request.getAttribute("ROOM_LIST");
 
     String pendingForPress = "Start Cleaning";
@@ -64,7 +65,6 @@
     
     
     if (list_Display_Home == null || listR == null) {
-        System.out.println("HomeHouseKeeping DEBUG");
         request.getRequestDispatcher(IConstant.takeRoomForCleanController).forward(request, response);
         
     } else {
@@ -82,7 +82,7 @@
                 <input type="hidden" name="active" value="all">
                 <button type="submit"
                         class="filter-btn <%= (active == null || "all".equals(active)) ? "active" : "" %>  ">All Tasks
-                    <span class="count"> <%= (list_Display_Home != null) ? list_Display_Home.size() : 0 %> </span></button>
+                    <span class="count"> <%= (list_all_tasks_sumary != null) ? list_all_tasks_sumary.size() : 0 %> </span></button>
             </form>
 
             <form action="<%= IConstant.takeRoomForCleanController %>" method="POST" class="filter-form-inline">
@@ -133,7 +133,7 @@
                 <div class="summary-label">Maintenance</div>
             </div>
             <div class="summary-item">
-                <div class="summary-number total"><%= list_Display_Home.size()%>
+                <div class="summary-number total"><%= list_all_tasks_sumary.size()%>
                 </div>
                 <div class="summary-label">Total</div>
             </div>

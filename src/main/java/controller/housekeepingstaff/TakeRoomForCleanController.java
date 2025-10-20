@@ -52,7 +52,7 @@ public class TakeRoomForCleanController extends HttpServlet {
                 ArrayList<Room> listR = rd.getAllRoom();
 
                 String active = request.getParameter("active");
-               
+                request.setAttribute("LIST_ALL_TASKS_SUMMARY", listTask);
                 request.setAttribute("LIST_DISPLAY_HOME", listTask);
                 request.setAttribute("ROOM_CLEANED", listCleaned);
                 request.setAttribute("ROOM_PENDING", listPending);
@@ -60,8 +60,7 @@ public class TakeRoomForCleanController extends HttpServlet {
                 request.setAttribute("ROOM_MATAINTENANCE", listMaintenance);
                 request.setAttribute("ROOM_LIST", listR);
 
-                if (active == null && !active.trim().isEmpty()) {
-                    
+                if (active == null ) {
                     request.getRequestDispatcher("homeHouseKeeping.jsp").forward(request, response);
                 } else {
 
