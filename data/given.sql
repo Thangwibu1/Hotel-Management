@@ -250,4 +250,8 @@ GO
 INSERT INTO ASSIGN_TASK (ID, LastTimeAssign)
 VALUES ('ASS01', GETDATE());
 
+INSERT INTO [HotelManagement].[dbo].[STAFF] 
+    (FullName, Role, Username, PasswordHash, Phone, Email)
+VALUES 
+    (N'Mai Thanh', 'ServiceStaff', 'mai', '1', '0901234567', 'maithanh@hotel.com');
 select [TypeName], [Capacity], [PricePerNight] from ROOM_TYPE;
