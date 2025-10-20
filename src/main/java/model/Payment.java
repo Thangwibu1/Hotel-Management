@@ -1,6 +1,5 @@
 package model;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
@@ -8,33 +7,33 @@ import java.time.LocalDate;
  */
 public class Payment {
     private int paymentId;
-    private Booking booking; // Quan hệ khóa ngoại đến BOOKING
+    private int bookingId; // Quan hệ khóa ngoại đến BOOKING
     private LocalDate paymentDate;
-    private BigDecimal amount;
+    private double amount;
     private String paymentMethod;
     private String status;
 
     // Constructors
     public Payment() {}
 
-    public Payment(Booking booking, LocalDate paymentDate, BigDecimal amount, String paymentMethod, String status) {
-        this.booking = booking;
+    public Payment(int bookingId, LocalDate paymentDate, double amount, String paymentMethod, String status) {
+        this.bookingId = bookingId;
         this.paymentDate = paymentDate;
         this.amount = amount;
         this.paymentMethod = paymentMethod;
         this.status = status;
     }
 
-    public Payment(Booking booking, BigDecimal amount, String paymentMethod, String status) {
-        this.booking = booking;
+    public Payment(int bookingId, double amount, String paymentMethod, String status) {
+        this.bookingId = bookingId;
         this.amount = amount;
         this.paymentMethod = paymentMethod;
         this.status = status;
     }
 
-    public Payment(int paymentId, Booking booking, LocalDate paymentDate, BigDecimal amount, String paymentMethod, String status) {
+    public Payment(int paymentId, int bookingId, LocalDate paymentDate, double amount, String paymentMethod, String status) {
         this.paymentId = paymentId;
-        this.booking = booking;
+        this.bookingId = bookingId;
         this.paymentDate = paymentDate;
         this.amount = amount;
         this.paymentMethod = paymentMethod;
@@ -45,14 +44,14 @@ public class Payment {
     public int getPaymentId() { return paymentId; }
     public void setPaymentId(int paymentId) { this.paymentId = paymentId; }
 
-    public Booking getBooking() { return booking; }
-    public void setBooking(Booking booking) { this.booking = booking; }
+    public int getBookingId() { return bookingId; }
+    public void setBookingId(int bookingId) { this.bookingId = bookingId; }
 
     public LocalDate getPaymentDate() { return paymentDate; }
     public void setPaymentDate(LocalDate paymentDate) { this.paymentDate = paymentDate; }
 
-    public BigDecimal getAmount() { return amount; }
-    public void setAmount(BigDecimal amount) { this.amount = amount; }
+    public double getAmount() { return amount; }
+    public void setAmount(double amount) { this.amount = amount; }
 
     public String getPaymentMethod() { return paymentMethod; }
     public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
@@ -62,6 +61,6 @@ public class Payment {
 
     @Override
     public String toString() {
-        return "Payment{" + "paymentId=" + paymentId + ", bookingId=" + booking.getBookingId() + ", amount=" + amount + ", status='" + status + '\'' + '}';
+        return "Payment{" + "paymentId=" + paymentId + ", bookingId=" + bookingId + ", amount=" + amount + ", status='" + status + '\'' + '}';
     }
 }
