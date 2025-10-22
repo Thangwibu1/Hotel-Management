@@ -307,6 +307,12 @@ VALUES (N'Nguyễn Thị Lan', 'Housekeeping', 'lan.nt', 'hashed_password_1', '0
        (N'Trần Văn An', 'Housekeeping', 'an.tv', 'hashed_password_2', '0907654321', 'an.tv@hotel.com');
 GO
 
+ALTER TABLE BOOKING_SERVICE
+    ADD StaffID int;
+
+
+
+
 -- Cập nhật StaffID trong bảng ROOM_TASK
 -- Gán công việc cho nhân viên mới 'Nguyễn Thị Lan' (StaffID = 9)
 UPDATE ROOM_TASK
