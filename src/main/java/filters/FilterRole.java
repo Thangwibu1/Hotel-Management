@@ -28,9 +28,23 @@ public class FilterRole implements Filter {
         if (staff != null && !url.contains("logout")) {
             String role = staff.getRole().toLowerCase();
             if (!url.contains(role)) {
-
-                response.sendRedirect(request.getContextPath() + "/" + role + "/" + role);
-                return;
+                switch (role) {
+                    case "admin":
+                        response.sendRedirect(IConstant.adminRole);
+                        return;
+                    case "receptionist":
+                        response.sendRedirect(IConstant.receptionistRole);
+                        return;
+                    case "manager":
+                        response.sendRedirect(IConstant.managerRole);
+                        return;
+                    case "housekeeping":
+                        response.sendRedirect(request.getContextPath() + IConstant.housekeeping);
+                        return;
+                    case "servicestaff":
+                        response.sendRedirect(IConstant.serviceStaff);
+                        return;
+                }
             }
         }
         filterChain.doFilter(request, response);
