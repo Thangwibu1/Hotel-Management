@@ -92,6 +92,8 @@ public class BookingController extends HttpServlet {
         String[] serviceId = (String[]) req.getParameterValues("serviceId");
         String[] serviceQuantity = (String[]) req.getParameterValues("serviceQuantity");
         String[] serviceDate = (String[]) req.getParameterValues("serviceDate");
+        String totalAmount = req.getParameter("totalAmount");
+        System.out.println("Total amount: " + totalAmount);
         if (serviceId != null && serviceQuantity != null && serviceDate != null) {
             for (int i = 0; i < serviceId.length; i++) {
                 ChoosenService tmpService = new ChoosenService(Integer.parseInt(serviceId[i]), Integer.parseInt(serviceQuantity[i]), LocalDate.parse(serviceDate[i]));
@@ -99,11 +101,17 @@ public class BookingController extends HttpServlet {
             }
         }
         int newBookingId = 0;
+        // add new booking
         try {
             newBookingId = bookingHandle(Integer.parseInt(roomId), Integer.parseInt(guestId), inDateTime, outDateTime, bookDate);
             if (newBookingId > 0) {
                 roomDAO.updateRoomStatus(Integer.parseInt(roomId), "Occupied");
                 boolean bookingServiceResult = bookingServiceHandle(services, newBookingId);
+                // make new payment
+                Payment newPayment = new Payment(newBookingId, bookDate, (double) (Integer.parseInt(totalAmount)) / 2.0, "cash", "Pending");
+                PaymentDAO paymentDAO = new PaymentDAO();
+                boolean newPaymentId = paymentDAO.addPayment(newPayment);
+                System.out.println("New payment id: " + newPaymentId);
             }
         } catch (Exception e) {
             e.printStackTrace();
