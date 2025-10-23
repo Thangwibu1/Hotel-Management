@@ -105,7 +105,7 @@ public class BookingController extends HttpServlet {
         try {
             newBookingId = bookingHandle(Integer.parseInt(roomId), Integer.parseInt(guestId), inDateTime, outDateTime, bookDate);
             if (newBookingId > 0) {
-                roomDAO.updateRoomStatus(Integer.parseInt(roomId), "Occupied");
+                roomDAO.updateRoomStatus(Integer.parseInt(roomId), "Available");
                 boolean bookingServiceResult = bookingServiceHandle(services, newBookingId);
                 // make new payment
                 Payment newPayment = new Payment(newBookingId, bookDate, (double) (Integer.parseInt(totalAmount)) / 2.0, "cash", "Pending");

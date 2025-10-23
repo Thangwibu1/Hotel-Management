@@ -21,6 +21,8 @@ public class InvoiceDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
         return invoices;
     }
@@ -38,6 +40,8 @@ public class InvoiceDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
         return null;
     }
@@ -55,6 +59,8 @@ public class InvoiceDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
         return null;
     }
@@ -73,6 +79,8 @@ public class InvoiceDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
         return invoices;
     }
@@ -94,6 +102,8 @@ public class InvoiceDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 

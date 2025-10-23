@@ -90,17 +90,17 @@ public class Invoice {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "Invoice{" +
-                "invoiceId=" + invoiceId +
-                ", bookingId=" + bookingId +
-                ", issueDate=" + issueDate +
-                ", price=" + price +
-                ", discount=" + discount +
-                ", tax=" + tax +
-                ", totalAmount=" + totalAmount +
-                ", status='" + status + ''' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Invoice{" +
+//                "invoiceId=" + invoiceId +
+//                ", bookingId=" + bookingId +
+//                ", issueDate=" + issueDate +
+//                ", price=" + price +
+//                ", discount=" + discount +
+//                ", tax=" + tax +
+//                ", totalAmount=" + totalAmount +
+//                ", status='" + status + ' +
+//                '}';
+//    }
 }
