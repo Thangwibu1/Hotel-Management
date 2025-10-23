@@ -30,7 +30,7 @@
 
         <div class="tabs d-flex flex-column flex-md-row gap-2">
 
-            <form action="<%= IConstant.registerServiceController %>" method="get" class="tab-form active w-100 w-md-auto">
+            <form action="<%= IConstant.registerServiceController %>" method="get" class="tab-form  w-100 w-md-auto">
                 <button type="submit" class="tab w-100 active">
                     Register Service
                 </button>

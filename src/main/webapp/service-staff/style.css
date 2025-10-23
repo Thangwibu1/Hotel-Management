@@ -144,15 +144,22 @@ body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-    
+
 }
+
 
 .tab:hover {
     box-shadow: 0 4px 10px rgba(138, 43, 226, 0.25);
-    transform: translateY(-2px); 
+    transform: translateY(-2px);
+    border-color: #aaa;
+    color: #d63384;
+}
+.active:hover{
+    color: white;
+    box-shadow: 0 4px 10px rgba(138, 43, 226, 0.25);
+    transform: translateY(-2px);
     border-color: #aaa;
 }
-
 
 
 /* Card Styles */
@@ -380,3 +387,120 @@ body {
 }
 
 /*Update*/
+/* CSS cho Nút Quay L?i ? update*/
+.btn-comeback {
+    /* Thi?t l?p màu n?n và ch? m?c ??nh */
+    background-color: #6c757d;
+    color: #ffffff;
+    border-radius: 5px;
+    font-weight: 400;
+    text-decoration: none;
+    padding: 6px 12px;
+    display: inline-block;
+    transition: background-color 0.3s ease, transform 0.1s ease; /* Thêm hi?u ?ng chuy?n ??i */
+}
+
+
+.btn-comeback:hover {
+    background-color: #5a6268; /* Màu xám t?i h?n khi hover */
+    color: #ffffff;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Thêm bóng nh? */
+}
+
+.btn-comeback:active {
+    background-color: #494e52; /* Màu t?i h?n n?a khi nh?n */
+    transform: translateY(1px); /* Nút lún xu?ng m?t chút */
+}
+
+.section-header .btn-comeback {
+    margin-left: -10px;
+}
+.main-content-area {
+    padding: 20px 0;
+}
+
+.service-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.section-title-link {
+    font-size: 1.1rem;
+    color: #007bff; /* Màu xanh d??ng cho link Quay l?i */
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.section-title-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.restaurant-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #343a40;
+}
+
+/* B?ng */
+.service-table thead th {
+    font-weight: 600;
+    color: #6c757d;
+    background-color: #f1f1f1;
+}
+
+.service-table tbody tr {
+    transition: background-color 0.2s;
+}
+
+.service-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 50px; /* Bo tròn nh? hình */
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.status-complete {
+    background-color: #e6f7ee; /* N?n xanh nh?t */
+    color: #28a745; /* Ch? xanh ??m */
+    border: 1px solid #c8e6c9; /* Vi?n nh? */
+}
+
+.status-complete .dot {
+    height: 8px;
+    width: 8px;
+    background-color: #28a745;
+    border-radius: 50%;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+/* Nút Thao tác */
+.action-link {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.action-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}

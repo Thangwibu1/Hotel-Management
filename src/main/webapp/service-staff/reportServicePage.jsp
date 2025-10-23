@@ -30,7 +30,7 @@
 
         <div class="tabs d-flex flex-column flex-md-row gap-2">
 
-            <form action="<%= IConstant.registerServiceController %>" method="get" class="tab-form active w-100 w-md-auto">
+            <form action="<%= IConstant.registerServiceController %>" method="get" class="tab-form w-100 w-md-auto">
                 <button type="submit" class="tab w-100">
                     Register Service
                 </button>
@@ -91,77 +91,7 @@
             <button class="btn-add-service">Create Service</button>
         </div>
 
-        <div class="card">
-            <div class="section-title">Recently Logged Services</div>
-            
-            <div class="services-list">
-                
-                <div class="service-item">
-                    <div class="service-icon" style="background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);">?</div>
-                    <div class="service-content">
-                        <div class="service-name">Buffet Breakfast</div>
-                        <div class="service-details">Nguyen Van A • Room 101</div>
-                    </div>
-                    <span class="service-status status-completed">
-                        <span class="status-dot"></span>
-                        Completed
-                    </span>
-                    <span class="service-time">08:30</span>
-                </div>
-
-                <div class="service-item">
-                    <div class="service-icon" style="background: linear-gradient(135deg, #fab1a0 0%, #ff7675 100%);">?</div>
-                    <div class="service-content">
-                        <div class="service-name">Full Body Massage</div>
-                        <div class="service-details">Tran Thi B • Room 205</div>
-                    </div>
-                    <span class="service-status status-waiting">
-                        <span class="status-dot"></span>
-                        Pending
-                    </span>
-                    <span class="service-time">09:15</span>
-                </div>
-
-                <div class="service-item">
-                    <div class="service-icon" style="background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);">?</div>
-                    <div class="service-content">
-                        <div class="service-name">Laundry Service</div>
-                        <div class="service-details">Le Van C • Room 312</div>
-                    </div>
-                    <span class="service-status status-processing">
-                        <span class="status-dot"></span>
-                        In Progress
-                    </span>
-                    <span class="service-time">10:00</span>
-                </div>
-
-                <div class="service-item">
-                    <div class="service-icon" style="background: linear-gradient(135deg, #55efc4 0%, #00b894 100%);">?</div>
-                    <div class="service-content">
-                        <div class="service-name">Special Service</div>
-                        <div class="service-details">Pham Thi D • Room 108</div>
-                    </div>
-                    <span class="service-status status-completed">
-                        <span class="status-dot"></span>
-                        Completed
-                    </span>
-                    <span class="service-time">11:20</span>
-                </div>
-
-                <div class="service-item">
-                    <div class="service-icon" style="background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);">?</div>
-                    <div class="service-content">
-                        <div class="service-name">Airport Shuttle</div>
-                        <div class="service-details">Hoang Van E • Room 407</div>
-                    </div>
-                    <span class="service-status status-waiting">
-                        <span class="status-dot"></span>
-                        Pending
-                    </span>
-                    <span class="service-time">14:30</span>
-                </div>
-            </div>
-        </div>
+       
         
     </div>
     <jsp:include page="footerService.jsp"/>
