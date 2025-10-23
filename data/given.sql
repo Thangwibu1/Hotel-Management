@@ -156,6 +156,9 @@ CREATE TABLE INVOICE
     InvoiceID   INT IDENTITY (1,1) PRIMARY KEY,
     BookingID   INT            NOT NULL UNIQUE,
     IssueDate   DATE DEFAULT GETDATE(),
+    Price       DECIMAL(12,2) NOT NULL CHECK (Price >= 0),
+    Discount    DECIMAL(12,2) NOT NULL DEFAULT 0 CHECK (Discount >= 0),
+    Tax         DECIMAL(12,2) NOT NULL DEFAULT 0 CHECK (Tax >= 0),
     TotalAmount DECIMAL(12, 2) NOT NULL CHECK (TotalAmount >= 0),
     Status      NVARCHAR(20) CHECK (Status IN ('Unpaid', 'Paid', 'Canceled')),
     FOREIGN KEY (BookingID) REFERENCES BOOKING (BookingID)
