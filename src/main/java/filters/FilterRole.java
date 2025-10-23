@@ -42,7 +42,7 @@ public class FilterRole implements Filter {
                         response.sendRedirect(request.getContextPath() + IConstant.housekeeping);
                         return;
                     case "servicestaff":
-                        response.sendRedirect(IConstant.serviceStaff);
+                        response.sendRedirect(IConstant.serviceRole);
                         return;
                 }
             }

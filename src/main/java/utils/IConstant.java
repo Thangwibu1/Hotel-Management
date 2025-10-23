@@ -10,12 +10,14 @@ public interface IConstant {
     // Name for refactor
     public static final String adminFilter = "admin";
     public static final String housekeepingFilter = "housekeepingstaff";
+    public static final String serviceFilter = "service-staff";
 
     public static final String receptionistRole = "./receptionist/receptionist";
     public static final String managerRole = "manager";
     public static final String adminRole =  "./" + adminFilter + "/admin";
     public static final String housekeeping = "/" + housekeepingFilter + "/homeHouseKeeping.jsp";
-    public static final String serviceStaff = "service-staff";
+    public static final String serviceStaff = "service-staff"; //folder service
+    public static final String serviceRole = "./" + serviceFilter + "/homeServicePage.jsp";
 
     public static final String systemConfigServlet = "SystemController";
     public static final String systemConfigController = "./" + adminFilter + "/system";
@@ -56,4 +58,9 @@ public interface IConstant {
     //    --------------------receptionist page------------------------
     public static final String receptionistPage = "/receptionist/receptionistPage.jsp";
 
+
+    // -------------------------service constant-----------------------
+
+
+    
 }
