@@ -17,7 +17,8 @@
     LocalDateTime now = LocalDateTime.now();
     
     Staff staff = (Staff) session.getAttribute("userStaff");
-    if (staff == null) { 
+    if (staff == null) {
+        System.out.println("Chua dang nhap");
         response.sendRedirect(IConstant.loginPage);
     } else {
             

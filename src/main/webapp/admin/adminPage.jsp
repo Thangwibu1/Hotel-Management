@@ -219,7 +219,7 @@
     // Open Add modal
     document.getElementById("addStaffBtn").onclick = function() {
         staffForm.reset();
-        staffForm.action = 'AddStaffController';
+        staffForm.action = './add-staff';
         modalTitle.textContent = "Add New Staff";
         passwordInput.required = true;
         staffIdInput.value = "";

@@ -50,7 +50,7 @@ public class LoginController extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + IConstant.housekeeping);
                     return;
                 case "servicestaff":
-                    response.sendRedirect(IConstant.serviceStaff);
+                    response.sendRedirect(IConstant.serviceRole);
                     return;
             }
 

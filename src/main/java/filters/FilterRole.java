@@ -27,6 +27,9 @@ public class FilterRole implements Filter {
         Staff staff = (Staff) session.getAttribute("userStaff");
         if (staff != null && !url.contains("logout")) {
             String role = staff.getRole().toLowerCase();
+            if (role.equalsIgnoreCase("servicestaff")) {
+                role = "service-staff";
+            }
             if (!url.contains(role)) {
                 switch (role) {
                     case "admin":

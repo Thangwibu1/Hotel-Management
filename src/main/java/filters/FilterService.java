@@ -23,12 +23,12 @@ public class FilterService implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpSession session = request.getSession();
         String url = request.getRequestURI();
+        System.out.println("FilterService URL: " + url);
         Staff admin = (Staff) session.getAttribute("userStaff");
         if (admin == null) {
             response.sendRedirect("../" + IConstant.loginPage);
             return;
         } else if (!"servicestaff".equalsIgnoreCase(admin.getRole().toLowerCase())) {
-            System.out.println("DEBUG");
             response.sendRedirect("../" + IConstant.loginPage);
             return;
         }
