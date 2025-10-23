@@ -177,6 +177,7 @@ public class RoomTaskDAO {
             rs = ps.executeQuery();
 
             while (rs.next()) {
+//                System.out.println("VO VO");
                 RoomTask room = new RoomTask();
                 room.setRoomTaskID(rs.getInt("RoomTaskID"));
                 room.setRoomID(rs.getInt("RoomID"));
@@ -207,6 +208,12 @@ public class RoomTaskDAO {
             } catch (SQLException e) {
                 System.err.println("Error closing resources: " + e.getMessage());
             }
+        }
+        if(result.isEmpty()){
+            System.out.println("Ko lay duoc phong");
+            
+        }else{
+            System.out.println("Lay duoc nha");
         }
         return result;
     }
