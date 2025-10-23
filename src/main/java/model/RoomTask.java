@@ -11,6 +11,7 @@ public class RoomTask {
     private LocalDateTime endTime;   
     private String statusClean;
     private String notes;
+    private int isSystemTask;
 
     public RoomTask() {
     }
@@ -21,7 +22,8 @@ public class RoomTask {
         LocalDateTime startTime,
         LocalDateTime endTime,  
         String statusClean,     
-        String notes            
+        String notes,
+        int isSystemTask
     ) {
         this.roomID = roomID;
         this.staffID = staffID;
@@ -29,10 +31,11 @@ public class RoomTask {
         this.endTime = endTime;
         this.statusClean = statusClean;
         this.notes = notes;
+        this.isSystemTask = isSystemTask;
        
     }
 
-    public RoomTask(int roomTaskID, int roomID, Integer staffID, LocalDateTime startTime, LocalDateTime endTime, String statusClean, String notes) {
+    public RoomTask(int roomTaskID, int roomID, Integer staffID, LocalDateTime startTime, LocalDateTime endTime, String statusClean, String notes, int isSystemTask) {
         this.roomTaskID = roomTaskID;
         this.roomID = roomID;
         this.staffID = staffID;
@@ -40,6 +43,7 @@ public class RoomTask {
         this.endTime = endTime;
         this.statusClean = statusClean;
         this.notes = notes;
+        this.isSystemTask = isSystemTask;
     }
 //[RoomID], [StaffID], [StartTime], [EndTime], [StatusClean], [Notes])
     public RoomTask(int roomID, String statusClean , LocalDateTime startTime) {
@@ -50,7 +54,12 @@ public class RoomTask {
         this.endTime = null;
         this.statusClean = statusClean;
         this.notes = "";
+        this.isSystemTask = 0;
         
+    }
+
+    public RoomTask(int roomId, Object object, LocalDateTime now, Object object0, String pending, Object object1) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 
@@ -110,10 +119,18 @@ public class RoomTask {
     public void setNotes(String notes) {
         this.notes = notes;
     }
+    
+    public int getIsSystemTask() {
+        return isSystemTask;
+    }
+
+    public void setIsSystemTask(int isSystemTask) {
+        this.isSystemTask = isSystemTask;
+    }
 
     @Override
     public String toString() {
-        return "RoomTask{" + "roomTaskID=" + roomTaskID + ", roomID=" + roomID + ", staffID=" + staffID + ", startTime=" + startTime + ", endTime=" + endTime + ", statusClean=" + statusClean + ", notes=" + notes + '}';
+        return "RoomTask{" + "roomTaskID=" + roomTaskID + ", roomID=" + roomID + ", staffID=" + staffID + ", startTime=" + startTime + ", endTime=" + endTime + ", statusClean=" + statusClean + ", notes=" + notes + ", isSystemTask=" + isSystemTask + '}';
     }
     
 }
