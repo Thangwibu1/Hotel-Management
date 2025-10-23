@@ -1,58 +1,30 @@
-<%-- 
-    Document  : footer
-    Created on : Oct 5, 2025, 11:32:30 AM
-    Author     : TranHongGam
---%>
+<div class="footer bg-white border-top mt-5 pt-4 pb-3">
+    <div class="container">
+        <div class="row justify-content-between g-4">
 
-<%@page import="model.Staff"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%-- ĐÃ SỬA THÀNH UTF-8 --%>
+            <div class="footer-section col-12 col-md-4 text-start">
+                <h4 class="fs-6 mb-3 text-dark border-bottom pb-1">Hotel Service Management System</h4>
+                <p class="text-muted small">Optimize workflows with a user-friendly and efficient interface.</p>
+                <p class="text-muted small mb-0 mt-3">� 2024 Hotel Service Management</p>
+            </div>
 
+            <div class="footer-section col-12 col-md-4 text-start border-start border-end px-md-4">
+                <h4 class="fs-6  mb-3 text-dark border-bottom pb-1">Technical Support</h4>
+                <ul class="list-unstyled small mb-0">
+                    <li>Hotline: 1900-xxxx</li>
+                    <li>Email: support@hotel.com</li>
+                    <li>24/7 Support</li>
+                </ul>
+            </div>
 
+            <div class="footer-section col-12 col-md-4 text-start">
+                <h4 class="fs-6  mb-3 text-dark border-bottom pb-1">Version Information</h4>
+                <ul class="list-unstyled small mb-0">
+                    <li>Version 3.0.0 - Workshop Edition</li>
+                    <li>Update: 12/10/2025</li>
+                </ul>
+            </div>
 
-<%
-    Staff staff = (Staff) session.getAttribute("userStaff");
-%>
-<div class="footer-info bg-light border-top" style="padding:2rem ">
-    <div class="row justify-content-center">
-
-        <div class="info-section col-12 col-md-4 text-center">
-            <h3 class="fs-5 fw-bold mb-3 "> Thống kê ca làm việc</h3>
-            <div class="info-item d-flex justify-content-around mb-1">
-                <span class="info-label text-muted me-3">Tổng phòng:</span>
-                <span class="info-value fw-bold text-dark">8</span>
-            </div>
-            <div class="info-item d-flex justify-content-around mb-1">
-                <span class="info-label text-muted me-3">Đã hoàn thành:</span>
-                <span class="info-value fw-bold text-success">2</span>
-            </div>
-            <div class="info-item d-flex justify-content-around mb-1">
-                <span class="info-label text-muted me-3">Còn lại:</span>
-                <span class="info-value fw-bold text-warning">5</span>
-            </div>
-        </div>
-
-        <div class="info-section col-12 col-md-4 text-center">
-            <h3 class="fs-5 fw-bold mb-3 "> Thông tin hệ thống</h3>
-            <div class="info-item mb-1">
-                <span class="info-label text-muted">Hệ thống quản lý phòng <strong class="text-dark">v2.1</strong></span>
-            </div>
-            <div class="info-item mb-1">
-                <span class="info-label text-muted">Nhân viên hiện tại: <strong class="text-success"><%= staff.getFullName()%></strong></span>
-            </div>
-        </div>
-
-        <div class="info-section col-12 col-md-4 text-center">
-            <h3 class="fs-5 fw-bold mb-3 ">📞 Hỗ trợ & Liên hệ</h3>
-            <div class="info-item mb-1">
-                <span class="info-label text-muted">📞 Hotline: <strong class="text-dark">1800-1234</strong></span>
-            </div>
-            <div class="info-item mb-1">
-                <span class="info-label text-muted">✉️ support@hotel.com</span>
-            </div>
-            <div class="info-item mb-1">
-                <span class="info-label text-muted">Bộ phận IT: <strong class="text-dark">Ext. 2345</strong></span>
-            </div>
         </div>
     </div>
 </div>

@@ -17,7 +17,7 @@ public interface IConstant {
     public static final String adminRole =  "./" + adminFilter + "/admin";
     public static final String housekeeping = "/" + housekeepingFilter + "/homeHouseKeeping.jsp";
     public static final String serviceStaff = "service-staff"; //folder service
-    public static final String serviceRole = "./" + serviceFilter + "/homeServicePage.jsp";
+    public static final String serviceRole = "./" + serviceFilter + "/registerServiceController";
 
     public static final String systemConfigServlet = "SystemController";
     public static final String systemConfigController = "./" + adminFilter + "/system";
@@ -60,7 +60,15 @@ public interface IConstant {
 
 
     // -------------------------service constant-----------------------
-
-
+    //---service page---------------------
+    public static final String registerServicePage = "./registerServicePage.jsp";
+    public static final String updateStatusServicePage = "./updateStatusServicePage.jsp";
+    public static final String reportServicePage = "./reportServicePage.jsp";
+    
+    
+    //---service servlet------------------
+    public static final String registerServiceController = "./registerServiceController";
+    public static final  String reportServiceController = "./reportServiceController";
+    public static final String updateStatusServiceController = "./updateStatusServiceController";
     
 }
