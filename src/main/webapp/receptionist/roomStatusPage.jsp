@@ -22,7 +22,8 @@
             <jsp:include page="../receptionist/components/nav.jsp"/>
             <jsp:include page="../receptionist/components/roomStatus.jsp" />
         </div>
+        <script src="../receptionist/style.js"></script>
     </body>
     <!-- ====== JavaScript (inline) ====== -->
-    <script src="../receptionist/style.js"></script>
+    
 </html>

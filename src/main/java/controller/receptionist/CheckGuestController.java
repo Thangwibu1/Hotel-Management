@@ -4,23 +4,23 @@
  */
 package controller.receptionist;
 
-import dao.BookingDAO;
+import dao.GuestDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.BookingActionRow;
+import javax.servlet.http.HttpSession;
+import model.Guest;
 
 /**
  *
  * @author trinhdtu
  */
-@WebServlet(name = "BookingsController", urlPatterns = {"/receptionist/BookingsController"})
-public class BookingsController extends HttpServlet {
+@WebServlet(name = "CheckGuestController", urlPatterns = {"/CheckGuestController"})
+public class CheckGuestController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,13 +35,28 @@ public class BookingsController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
-            
-            BookingDAO bookingDao = new BookingDAO();
-            ArrayList<BookingActionRow> result = bookingDao.getInforBooking();
-            
-            request.setAttribute("RESULT", result);
-            request.getRequestDispatcher("/receptionist/bookingPage.jsp").forward(request, response);
-        }catch(Exception e){
+            String guestId = request.getParameter("guestId");
+            GuestDAO guestDao = new GuestDAO();
+            boolean checkExist = guestDao.checkDuplicateIdNumber(guestId);
+            HttpSession ss = request.getSession();
+            // XÓA H?T flash data c? tr??c
+            ss.removeAttribute("GUEST");
+            ss.removeAttribute("FLASH_NEXT_WAY");
+            ss.removeAttribute("FLASH_ID_NUM");
+
+            // Set l?i data m?i
+            ss.setAttribute("FLASH_NEXT_WAY", checkExist ? "booking" : "createAcc");
+            ss.setAttribute("FLASH_ID_NUM", guestId);
+
+            if (checkExist) {
+                ss.setAttribute("GUEST", guestDao.getGuestByIdNumber(guestId));
+            } else {
+                ss.removeAttribute("GUEST");
+            }
+            ss.setAttribute("FLASH_ID_NUM", guestId);
+            response.sendRedirect(request.getContextPath() + "/receptionist/receptionist?tab=bookings");
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -58,6 +73,8 @@ public class BookingsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+//        HttpSession ss = request.getSession(false);
+        
         processRequest(request, response);
     }
 

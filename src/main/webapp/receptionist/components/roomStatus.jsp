@@ -42,7 +42,7 @@
                         %>
                         <small><%= rt.getTypeName()%></small><br/>
                         <small>$<%= rt.getPricePerNight()%>/night</small>
-                        <div class="status"><span class="badge green"><%= room.getStatus()%></span></div>
+                        <div class="status"><span class="badge"><%= room.getStatus()%></span></div>
                     </div>
                     <%
                                 }

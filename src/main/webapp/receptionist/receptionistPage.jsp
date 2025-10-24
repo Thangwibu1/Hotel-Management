@@ -30,6 +30,7 @@
             <jsp:include page="../receptionist/components/dashboard.jsp"/>
 
         <!-- ====== JavaScript (inline) ====== -->
+        </div>
         <script src="../receptionist/style.js"></script>
     </body>
 </html>

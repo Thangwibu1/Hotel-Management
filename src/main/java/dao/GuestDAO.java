@@ -191,4 +191,30 @@ public class GuestDAO {
         }
         return result;
     }
+    
+    public Guest getGuestByIdNumber(String idNumber) {
+        Guest guest = null;
+
+        String sql = "SELECT * FROM [HotelManagement].[dbo].[GUEST] where IDNumber = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, idNumber);
+            ResultSet rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+                    String fullName = rs.getString("FullName");
+                    String phone = rs.getString("Phone");
+                    String email = rs.getString("Email");
+                    guest = new Guest(fullName, phone, email);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return guest;
+    }
 }
