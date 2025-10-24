@@ -6,8 +6,16 @@ const selectedServicesList = document.getElementById('selected-services-list');
 // Lấy ngày check-in và check-out từ JSP để giới hạn date picker
 //fix khuc nay sau
 
-const checkInDate = "<%= booking.getCheckInDate().toLocalDate() %>";
-const checkOutDate = "<%= booking.getCheckOutDate().toLocalDate() %>";
+const checkin = document.getElementById('checkin-date').textContent.trim();
+const checkout = document.getElementById('checkout-date').textContent.trim();
+
+const checkInArray = checkin.split('/');
+const checkOutArray = checkout.split('/');
+
+const checkInDate = `${checkInArray[2]}-${checkInArray[1].padStart(2, '0')}-${checkInArray[0].slice(12).padStart(2, '0')}`;
+const checkOutDate = `${checkOutArray[2]}-${checkOutArray[1].padStart(2, '0')}-${checkOutArray[0].slice(11).padStart(2, '0')}`;
+
+console.log(checkInDate, checkOutDate)
 
 // --- HÀM XỬ LÝ ---
 function addServiceItem() {

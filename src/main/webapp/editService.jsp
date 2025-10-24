@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.util.List, model.*, utils.IConstant, java.time.format.DateTimeFormatter, java.text.NumberFormat, java.util.Locale" %>
+<%@ page
+        import="java.util.List, model.*, utils.IConstant, java.time.format.DateTimeFormatter, java.text.NumberFormat, java.util.Locale" %>
 
 <%
     // Lấy dữ liệu đã được gửi từ GetBookingInfoController
@@ -25,7 +26,7 @@
 <html>
 <head>
     <title>Chỉnh sửa Dịch vụ - Luxury Hotel</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
     <style>
         :root {
             --color-gold: #c9ab81;
@@ -82,8 +83,14 @@
             border-left: 5px solid var(--color-gold);
         }
 
-        .booking-info p { margin: 0 0 10px; }
-        .booking-info strong { min-width: 120px; display: inline-block; }
+        .booking-info p {
+            margin: 0 0 10px;
+        }
+
+        .booking-info strong {
+            min-width: 120px;
+            display: inline-block;
+        }
 
         .section-title {
             border-bottom: 2px solid var(--color-gold);
@@ -103,13 +110,38 @@
             text-align: left;
         }
 
-        th { background-color: #f2f2f2; }
+        th {
+            background-color: #f2f2f2;
+        }
 
-        .service-status { padding: 3px 8px; border-radius: 12px; color: #fff; font-size: 0.8em; }
-        .status-0 { background-color: #007bff; } /* Chưa làm */
-        .status-1 { background-color: #ffc107; color: #212529; } /* Đang làm */
-        .status-2 { background-color: #28a745; } /* Đã làm */
-        .status--1 { background-color: #6c757d; } /* Đã hủy */
+        .service-status {
+            padding: 3px 8px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 0.8em;
+        }
+
+        .status-0 {
+            background-color: #007bff;
+        }
+
+        /* Chưa làm */
+        .status-1 {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        /* Đang làm */
+        .status-2 {
+            background-color: #28a745;
+        }
+
+        /* Đã làm */
+        .status--1 {
+            background-color: #6c757d;
+        }
+
+        /* Đã hủy */
 
         .btn {
             display: inline-block;
@@ -148,40 +180,124 @@
         }
 
         /* --- CSS CHO TÍNH NĂNG THÊM DỊCH VỤ ĐỘNG (TỪ rentalPage.jsp) --- */
-        .form-group-rental { margin-bottom: 20px; }
-        .form-group-rental label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
-        .form-group-rental select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; }
+        .form-group-rental {
+            margin-bottom: 20px;
+        }
 
-        .service-adder { display: flex; gap: 10px; align-items: flex-end; }
-        .service-adder .form-group-rental { flex-grow: 1; margin-bottom: 0; }
-        #add-service-btn { padding: 12px 20px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1.2rem; line-height: 1; }
-        #add-service-btn:hover { background-color: #218838; }
+        .form-group-rental label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
 
-        #selected-services-list { margin-top: 20px; }
-        .selected-service-item { display: flex; align-items: center; gap: 10px; background-color: #f9f9f9; padding: 10px; border: 1px solid #eee; border-radius: 4px; margin-bottom: 10px; }
-        .selected-service-item span { flex-grow: 1; }
-        .service-quantity, .service-date { padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 80px; font-size: 1rem; }
-        .service-date { width: 155px; }
-        .remove-service-btn { background: #dc3545; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; flex-shrink: 0; font-weight: bold; }
-        .remove-service-btn:hover { background: #c82333; }
+        .form-group-rental select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .service-adder {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .service-adder .form-group-rental {
+            flex-grow: 1;
+            margin-bottom: 0;
+        }
+
+        #add-service-btn {
+            padding: 12px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        #add-service-btn:hover {
+            background-color: #218838;
+        }
+
+        #selected-services-list {
+            margin-top: 20px;
+        }
+
+        .selected-service-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .selected-service-item span {
+            flex-grow: 1;
+        }
+
+        .service-quantity, .service-date {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 80px;
+            font-size: 1rem;
+        }
+
+        .service-date {
+            width: 155px;
+        }
+
+        .remove-service-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+
+        .remove-service-btn:hover {
+            background: #c82333;
+        }
     </style>
 </head>
 <body>
 <div class="container">
-    <a href="<%= request.getContextPath() %>/viewbooking" class="back-link"><i class="fa-solid fa-arrow-left"></i> Quay lại danh sách</a>
+    <span>
+        <i class="fa-solid fa-arrow-left back-link" style="display: inline"></i>
+        <form style="display: inline" action="<%=request.getContextPath()%>/viewBooking" method="post">
+            <input type="hidden" name="guestId" value="${sessionScope.userGuest.getGuestId()}">
+            <input type="submit" value="Quay lai danh sach" class="back-link" style="border: none; background: none">
+        </form>
+    </span>
     <h1>Chỉnh sửa Dịch vụ</h1>
 
     <div class="booking-info">
         <h3>Thông tin Đặt phòng</h3>
-        <p><strong>Mã đặt phòng:</strong> #<%= booking.getBookingId() %></p>
+        <p><strong>Mã đặt phòng:</strong> #<%= booking.getBookingId() %>
+        </p>
         <p><strong>Phòng:</strong> <%= room.getRoomNumber() %> (<%= roomType.getTypeName() %>)</p>
-        <p><strong>Nhận phòng:</strong> <%= checkInStr %></p>
-        <p><strong>Trả phòng:</strong> <%= checkOutStr %></p>
+        <p id="checkin-date"><strong>Nhận phòng:</strong> <%= checkInStr %>
+        </p>
+        <p id="checkout-date"><strong>Trả phòng:</strong> <%= checkOutStr %>
+        </p>
     </div>
 
     <form action="<%=IConstant.bookingChangeServlet%>" method="post">
-        <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>" />
-        <input type="hidden" name="action" value="updateServices" />
+        <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>"/>
+        <input type="hidden" name="action" value="updateServices"/>
 
         <h2 class="section-title">Các dịch vụ đã chọn</h2>
         <% if (chosenServices != null && !chosenServices.isEmpty()) { %>
@@ -201,21 +317,34 @@
                 if (service == null) continue;
                 String statusText;
                 switch (bs.getStatus()) {
-                    case 0: statusText = "Chưa làm"; break;
-                    case 1: statusText = "Đang làm"; break;
-                    case 2: statusText = "Đã làm"; break;
-                    case -1: statusText = "Đã hủy"; break;
-                    default: statusText = "Không xác định";
+                    case 0:
+                        statusText = "Chưa làm";
+                        break;
+                    case 1:
+                        statusText = "Đang làm";
+                        break;
+                    case 2:
+                        statusText = "Đã làm";
+                        break;
+                    case -1:
+                        statusText = "Đã hủy";
+                        break;
+                    default:
+                        statusText = "Không xác định";
                 }
             %>
             <tr>
-                <td><%= service.getServiceName() %></td>
-                <td><%= bs.getQuantity() %></td>
-                <td><%= bs.getServiceDate().format(dtf) %></td>
+                <td><%= service.getServiceName() %>
+                </td>
+                <td><%= bs.getQuantity() %>
+                </td>
+                <td><%= bs.getServiceDate().format(dtf) %>
+                </td>
                 <td><span class="service-status status-<%= bs.getStatus() %>"><%= statusText %></span></td>
                 <td>
                     <% if (bs.getStatus() == 0) { %>
-                    <input type="checkbox" name="cancelService" value="<%= bs.getBookingServiceId() %>" title="Chọn để hủy dịch vụ này" />
+                    <input type="checkbox" name="cancelService" value="<%= bs.getBookingServiceId() %>"
+                           title="Chọn để hủy dịch vụ này"/>
                     <% } else { %>
                     <span style="color: var(--color-grey)">Đã xử lý</span>
                     <% } %>
@@ -240,7 +369,8 @@
                         <% if (allServices != null && !allServices.isEmpty()) {
                             for (Service service : allServices) {
                         %>
-                        <option value="<%= service.getServiceId() %>" data-price="<%= service.getPrice() %>" data-name="<%= service.getServiceName() %>">
+                        <option value="<%= service.getServiceId() %>" data-price="<%= service.getPrice() %>"
+                                data-name="<%= service.getServiceName() %>">
                             <%= service.getServiceName() %> (+<%= currencyFormatter.format(service.getPrice()) %>)
                         </option>
                         <%
@@ -248,7 +378,8 @@
                             } %>
                     </select>
                 </div>
-                <button type="button" id="add-service-btn" title="Thêm dịch vụ đã chọn vào danh sách bên dưới">+</button>
+                <button type="button" id="add-service-btn" title="Thêm dịch vụ đã chọn vào danh sách bên dưới">+
+                </button>
             </div>
         </div>
 
