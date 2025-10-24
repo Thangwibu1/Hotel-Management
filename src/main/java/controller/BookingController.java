@@ -73,6 +73,7 @@ public class BookingController extends HttpServlet {
          * serviceId=1&serviceQuantity=1&serviceDate=2025-09-27&
          * serviceId=1&serviceQuantity=1&serviceDate=2025-09-28&
          * serviceId=3&serviceQuantity=1&serviceDate=2025-09-27
+         *
          * */
         String roomId = req.getParameter("roomId");
         String guestId = req.getParameter("guestId");
@@ -132,5 +133,10 @@ public class BookingController extends HttpServlet {
         req.setAttribute("services", servicesList);
 
         req.getRequestDispatcher(IConstant.bookingDashboard).forward(req, resp);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req, resp);
     }
 }

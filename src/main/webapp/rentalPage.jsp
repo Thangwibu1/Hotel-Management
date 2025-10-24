@@ -117,10 +117,10 @@
     <div class="container">
         <div class="booking-form-section">
             <h2>Thông tin đặt phòng cho phòng <%= room.getRoomNumber() %> (<%= roomType.getTypeName() %>)</h2>
-            <form id="bookingForm" action="<%= IConstant.bookingServlet %>" method="post">
+            <form id="bookingForm" action="<%= IConstant.bookingServlet %>" method="get">
                 <input type="hidden" name="roomId" value="<%= room.getRoomId() %>">
                 <input type="hidden" id="price-per-night" value="<%= roomType.getPricePerNight() %>">
-                <input type="hidden" id="bookingDate" name="bookingDate">
+                <input type="hidden" id="bookingDate" name="bookingDate" value= "">
                 <input type="hidden" id="guestId" name="guestId" value="<%= guest.getGuestId() %>">
 
                 <div class="form-group-rental">
@@ -182,146 +182,304 @@
 
 <script>
     // --- Lấy các phần tử DOM chính ---
-    const checkInInput = document.getElementById('check-in');
-    const checkOutInput = document.getElementById('check-out');
-    const totalPriceElement = document.getElementById('total-price-value');
-    const pricePerNight = parseFloat(document.getElementById('price-per-night').value);
-    const today = new Date().toISOString().split('T')[0];
-    const bookingForm = document.getElementById('bookingForm');
-    const bookingDateInput = document.getElementById('bookingDate');
+    // --- Lấy các phần tử DOM chính ---
+    // --- Lấy các phần tử DOM chính ---
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('✅ DOM loaded successfully');
 
-    const serviceSelect = document.getElementById('service-select');
-    const addServiceBtn = document.getElementById('add-service-btn');
-    const selectedServicesList = document.getElementById('selected-services-list');
+        const checkInInput = document.getElementById('check-in');
+        const checkOutInput = document.getElementById('check-out');
+        const totalPriceElement = document.getElementById('total-price-value');
+        const pricePerNight = parseFloat(document.getElementById('price-per-night').value);
+        const today = new Date().toISOString().split('T')[0];
+        const bookingForm = document.getElementById('bookingForm');
+        const bookingDateInput = document.getElementById('bookingDate');
 
-    checkInInput.setAttribute('min', today);
 
-    // --- CÁC HÀM XỬ LÝ ---
-    function addServiceItem() {
-        const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
-        if (!selectedOption.value) return;
 
-        const serviceId = selectedOption.value;
-        const serviceName = selectedOption.dataset.name;
-        const servicePrice = selectedOption.dataset.price;
+        const serviceSelect = document.getElementById('service-select');
+        const addServiceBtn = document.getElementById('add-service-btn');
+        const selectedServicesList = document.getElementById('selected-services-list');
 
-        const newItem = document.createElement('div');
-        newItem.classList.add('selected-service-item');
-        newItem.dataset.price = servicePrice;
+        console.log('🔍 Checking elements:', {
+            checkInInput,
+            checkOutInput,
+            serviceSelect,
+            addServiceBtn,
+            selectedServicesList
+        });
 
-        newItem.innerHTML = `
-            <span>${serviceName}</span>
-            <input type="number" value="1" min="1" class="service-quantity">
-            <input type="date" class="service-date" required>
-            <button type="button" class="remove-service-btn">&times;</button>
-            <input type="hidden" name="serviceId" value="${serviceId}">
-            <input type="hidden" name="serviceQuantity" class="hidden-quantity" value="1">
-            <input type="hidden" name="serviceDate" class="hidden-date" value="">
-        `;
-        selectedServicesList.appendChild(newItem);
-        updateSingleServiceDatePicker(newItem.querySelector('.service-date'));
-        attachEventsToServiceItem(newItem);
-        calculateTotal();
-    }
+        checkInInput.setAttribute('min', today);
 
-    function attachEventsToServiceItem(item) {
-        const quantityInput = item.querySelector('.service-quantity');
-        const dateInput = item.querySelector('.service-date');
-        const removeBtn = item.querySelector('.remove-service-btn');
-        const hiddenQuantity = item.querySelector('.hidden-quantity');
-        const hiddenDate = item.querySelector('.hidden-date');
+        // --- CÁC HÀM XỬ LÝ ---
 
-        quantityInput.addEventListener('input', () => {
-            hiddenQuantity.value = quantityInput.value;
+        function addServiceItem() {
+            console.log('🔵 addServiceItem được gọi');
+
+
+
+            const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+            console.log('Selected option:', selectedOption, 'Value:', selectedOption.value);
+
+            if (!selectedOption.value || selectedOption.value === '') {
+                console.log('⚠️ Không có dịch vụ nào được chọn');
+                alert('Vui lòng chọn một dịch vụ!');
+                return;
+            }
+
+            const serviceId = selectedOption.value;
+            const serviceName = selectedOption.getAttribute('data-name');
+            const servicePrice = selectedOption.getAttribute('data-price');
+
+            console.log('✅ Service Info:', {
+                serviceId: serviceId,
+                serviceName: serviceName,
+                servicePrice: servicePrice
+            });
+
+            if (!serviceId || !serviceName || !servicePrice) {
+                console.error('❌ Thiếu thông tin dịch vụ!', {serviceId, serviceName, servicePrice});
+                alert('Dữ liệu dịch vụ không hợp lệ!');
+                return;
+            }
+
+            const newItem = document.createElement('div');
+            newItem.classList.add('selected-service-item');
+            newItem.dataset.price = servicePrice;
+            newItem.dataset.serviceId = serviceId;
+
+            // Tạo từng element riêng biệt thay vì innerHTML
+            const span = document.createElement('span');
+            span.textContent = serviceName;
+
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'number';
+            quantityInput.value = '1';
+            quantityInput.min = '1';
+            quantityInput.className = 'service-quantity';
+
+            const dateInput = document.createElement('input');
+            dateInput.type = 'date';
+            dateInput.className = 'service-date';
+            dateInput.required = true;
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'remove-service-btn';
+            removeBtn.innerHTML = '&times;';
+
+            const hiddenServiceId = document.createElement('input');
+            hiddenServiceId.type = 'hidden';
+            hiddenServiceId.name = 'serviceId';
+            hiddenServiceId.value = serviceId;
+            hiddenServiceId.className = 'hidden-service-id';
+
+            const hiddenQuantity = document.createElement('input');
+            hiddenQuantity.type = 'hidden';
+            hiddenQuantity.name = 'serviceQuantity';
+            hiddenQuantity.value = '1';
+            hiddenQuantity.className = 'hidden-quantity';
+
+            const hiddenDate = document.createElement('input');
+            hiddenDate.type = 'hidden';
+            hiddenDate.name = 'serviceDate';
+            hiddenDate.value = '';
+            hiddenDate.className = 'hidden-date';
+
+            // Append tất cả vào newItem
+            newItem.appendChild(span);
+            newItem.appendChild(quantityInput);
+            newItem.appendChild(dateInput);
+            newItem.appendChild(removeBtn);
+            newItem.appendChild(hiddenServiceId);
+            newItem.appendChild(hiddenQuantity);
+            newItem.appendChild(hiddenDate);
+
+            selectedServicesList.appendChild(newItem);
+
+            // Verify sau khi append
+            const addedServiceId = newItem.querySelector('.hidden-service-id').value;
+            console.log('✅ Service item đã được thêm. ServiceId in DOM:', addedServiceId);
+
+            if (!addedServiceId || addedServiceId === '') {
+                console.error('❌ LỖI: ServiceId không được gán vào hidden input!');
+                alert('Lỗi kỹ thuật: Không thể thêm dịch vụ!');
+                newItem.remove();
+                return;
+            }
+
+            updateSingleServiceDatePicker(newItem.querySelector('.service-date'));
+            attachEventsToServiceItem(newItem);
+
+            calculateTotal();
+
+            // Reset select về trạng thái ban đầu
+            serviceSelect.selectedIndex = 0;
+        }
+
+        function attachEventsToServiceItem(item) {
+            console.log('🔗 Gắn events cho service item');
+
+            const quantityInput = item.querySelector('.service-quantity');
+            const dateInput = item.querySelector('.service-date');
+            const removeBtn = item.querySelector('.remove-service-btn');
+            const hiddenQuantity = item.querySelector('.hidden-quantity');
+            const hiddenDate = item.querySelector('.hidden-date');
+
+            quantityInput.addEventListener('input', () => {
+                console.log('Quantity changed:', quantityInput.value);
+                hiddenQuantity.value = quantityInput.value;
+                calculateTotal();
+            });
+
+            dateInput.addEventListener('change', () => {
+                console.log('Service date changed:', dateInput.value);
+                hiddenDate.value = dateInput.value;
+            });
+
+            removeBtn.addEventListener('click', () => {
+                console.log('🗑️ Removing service item');
+                item.remove();
+                calculateTotal();
+            });
+        }
+
+        function updateSingleServiceDatePicker(dateInput) {
+            if (checkInInput.value) {
+                dateInput.min = checkInInput.value;
+                if(!dateInput.value || dateInput.value < checkInInput.value){
+                    dateInput.value = checkInInput.value;
+                    dateInput.closest('.selected-service-item').querySelector('.hidden-date').value = dateInput.value;
+                }
+            }
+            if (checkOutInput.value) {
+                let maxDate = new Date(checkOutInput.value);
+                dateInput.max = maxDate.toISOString().split('T')[0];
+                if(dateInput.value > dateInput.max){
+                    dateInput.value = dateInput.max;
+                    dateInput.closest('.selected-service-item').querySelector('.hidden-date').value = dateInput.value;
+                }
+            }
+        }
+
+        function updateAllServiceDatePickers() {
+            document.querySelectorAll('.service-date').forEach(updateSingleServiceDatePicker);
+        }
+
+        function calculateTotal() {
+            console.log('💰 Calculating total...');
+
+            let roomTotal = 0;
+            if (checkInInput.value && checkOutInput.value && new Date(checkOutInput.value) > new Date(checkInInput.value)) {
+                const timeDiff = new Date(checkOutInput.value).getTime() - new Date(checkInInput.value).getTime();
+                const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                roomTotal = nights > 0 ? nights * pricePerNight : 0;
+            }
+
+            let servicesTotal = 0;
+            document.querySelectorAll('.selected-service-item').forEach(item => {
+                const price = parseFloat(item.dataset.price);
+                const quantity = parseInt(item.querySelector('.service-quantity').value, 10) || 1;
+                servicesTotal += price * quantity;
+            });
+
+            const finalTotal = roomTotal + servicesTotal;
+            console.log('Room total:', roomTotal, 'Services total:', servicesTotal, 'Final total:', finalTotal);
+
+            totalPriceElement.textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(finalTotal);
+
+            // Cập nhật giá trị totalAmount vào trường hidden
+            document.getElementById('totalAmount').value = finalTotal;
+        }
+
+        // --- GẮN CÁC SỰ KIỆN BAN ĐẦU ---
+        checkInInput.addEventListener('change', () => {
+            console.log('📅 Check-in changed:', checkInInput.value);
+            if (checkInInput.value) {
+                let nextDay = new Date(checkInInput.value);
+                nextDay.setDate(nextDay.getDate() + 1);
+                const nextDayString = nextDay.toISOString().split('T')[0];
+                checkOutInput.setAttribute('min', nextDayString);
+                if (checkOutInput.value && checkOutInput.value < nextDayString) {
+                    checkOutInput.value = nextDayString;
+                }
+            }
+            updateAllServiceDatePickers();
             calculateTotal();
         });
-        dateInput.addEventListener('change', () => {
-            hiddenDate.value = dateInput.value;
-        });
-        removeBtn.addEventListener('click', () => {
-            item.remove();
+
+        checkOutInput.addEventListener('change', () => {
+            console.log('📅 Check-out changed:', checkOutInput.value);
+            updateAllServiceDatePickers();
             calculateTotal();
         });
-    }
 
-    function updateSingleServiceDatePicker(dateInput) {
-        if (checkInInput.value) {
-            dateInput.min = checkInInput.value;
-            if(!dateInput.value || dateInput.value < checkInInput.value){
-                dateInput.value = checkInInput.value;
-                dateInput.closest('.selected-service-item').querySelector('.hidden-date').value = dateInput.value;
-            }
-        }
-        if (checkOutInput.value) {
-            let maxDate = new Date(checkOutInput.value);
-            dateInput.max = maxDate.toISOString().split('T')[0];
-            if(dateInput.value > dateInput.max){
-                dateInput.value = dateInput.max;
-                dateInput.closest('.selected-service-item').querySelector('.hidden-date').value = dateInput.value;
-            }
-        }
-    }
+        // QUAN TRỌNG: Sửa phần này - thêm preventDefault
+        addServiceBtn.addEventListener('click', function(e) {
+            console.log('🟢 ADD SERVICE BUTTON CLICKED!');
+            e.preventDefault(); // Ngăn form submit hoặc hành động mặc định
+            e.stopPropagation(); // Ngăn event bubble lên
 
-    function updateAllServiceDatePickers() {
-        document.querySelectorAll('.service-date').forEach(updateSingleServiceDatePicker);
-    }
-
-    function calculateTotal() {
-        let roomTotal = 0;
-        if (checkInInput.value && checkOutInput.value && new Date(checkOutInput.value) > new Date(checkInInput.value)) {
-            const timeDiff = new Date(checkOutInput.value).getTime() - new Date(checkInInput.value).getTime();
-            const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
-            roomTotal = nights > 0 ? nights * pricePerNight : 0;
-        }
-        let servicesTotal = 0;
-        document.querySelectorAll('.selected-service-item').forEach(item => {
-            const price = parseFloat(item.dataset.price);
-            const quantity = parseInt(item.querySelector('.service-quantity').value, 10) || 1;
-            servicesTotal += price * quantity;
+            addServiceItem();
         });
-        const finalTotal = roomTotal + servicesTotal;
-        totalPriceElement.textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(finalTotal);
-        
-        // Cập nhật giá trị totalAmount vào trường hidden
-        document.getElementById('totalAmount').value = finalTotal;
-    }
 
-    // --- GẮN CÁC SỰ KIỆN BAN ĐẦU ---
-    checkInInput.addEventListener('change', () => {
-        if (checkInInput.value) {
-            let nextDay = new Date(checkInInput.value);
-            nextDay.setDate(nextDay.getDate() + 1);
-            const nextDayString = nextDay.toISOString().split('T')[0];
-            checkOutInput.setAttribute('min', nextDayString);
-            if (checkOutInput.value && checkOutInput.value < nextDayString) {
-                checkOutInput.value = nextDayString;
+        bookingForm.addEventListener('submit', function(event) {
+            console.log('📝 Form submitting...');
+
+            // Set booking date
+
+            const todaySubmit = new Date();
+            const year = todaySubmit.getFullYear();
+            const month = String(todaySubmit.getMonth() + 1).padStart(2, '0');
+            const day = String(todaySubmit.getDate()).padStart(2, '0');
+            const bookDate = year;
+            console.log('Booking date:', bookDate);
+            bookingDateInput.value = bookDate + '-' + month + '-' + day;
+            console.log('Booking date set to:', bookingDateInput.value);
+
+            // XÓA TẤT CẢ các input service rỗng khỏi form trước khi submit
+            const emptyServiceInputs = bookingForm.querySelectorAll('input[name="serviceId"]');
+            emptyServiceInputs.forEach(input => {
+                if (!input.value || input.value.trim() === '') {
+                    // Tìm parent service item và xóa hết
+                    const serviceItem = input.closest('.selected-service-item');
+                    if (serviceItem) {
+                        console.log('🗑️ Xóa service item rỗng trước khi submit');
+                        serviceItem.remove();
+                    } else {
+                        // Nếu không có parent, xóa chính input đó và các input liên quan
+                        input.remove();
+                        const relatedQuantity = bookingForm.querySelector('input[name="serviceQuantity"]');
+                        const relatedDate = bookingForm.querySelector('input[name="serviceDate"]');
+                        if (relatedQuantity && !relatedQuantity.closest('.selected-service-item')) {
+                            relatedQuantity.remove();
+                        }
+                        if (relatedDate && !relatedDate.closest('.selected-service-item')) {
+                            relatedDate.remove();
+                        }
+                    }
+                }
+            });
+
+            console.log('Total services being submitted:', document.querySelectorAll('.selected-service-item').length);
+
+            // Log tất cả data sẽ được submit
+            const formData = new FormData(bookingForm);
+            console.log('📤 Form data:');
+            for (let [key, value] of formData.entries()) {
+                console.log(`  ${key}: ${value}`);
             }
+        });
+
+        // Tự động kích hoạt các hàm cần thiết khi tải trang
+        if (checkInInput.value) {
+            checkInInput.dispatchEvent(new Event('change'));
         }
         updateAllServiceDatePickers();
         calculateTotal();
+
+        console.log('✅ All event listeners attached');
     });
-
-    checkOutInput.addEventListener('change', () => {
-        updateAllServiceDatePickers();
-        calculateTotal();
-    });
-
-    addServiceBtn.addEventListener('click', addServiceItem);
-
-    bookingForm.addEventListener('submit', function(event) {
-        const todaySubmit = new Date();
-        const year = todaySubmit.getFullYear();
-        const month = String(todaySubmit.getMonth() + 1).padStart(2, '0');
-        const day = String(todaySubmit.getDate()).padStart(2, '0');
-        bookingDateInput.value = `${year}-${month}-${day}`;
-    });
-
-    // Tự động kích hoạt các hàm cần thiết khi tải trang
-    if (checkInInput.value) {
-        checkInInput.dispatchEvent(new Event('change'));
-    }
-    updateAllServiceDatePickers();
-    calculateTotal();
 </script>
 </body>
 </html>

@@ -277,29 +277,82 @@
     // --- HÀM XỬ LÝ ---
     function addServiceItem() {
         const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
-        if (!selectedOption.value) return; // Không làm gì nếu chọn option rỗng
+        if (!selectedOption.value) {
+            alert('Vui lòng chọn một dịch vụ!');
+            return;
+        }
 
         const serviceId = selectedOption.value;
         const serviceName = selectedOption.dataset.name;
+        const servicePrice = selectedOption.dataset.price;
 
-        // Tạo một item dịch vụ mới
+        if (!serviceId || !serviceName || !servicePrice) {
+            alert('Dữ liệu dịch vụ không hợp lệ!');
+            return;
+        }
+
+        // Tạo container cho service item
         const newItem = document.createElement('div');
         newItem.classList.add('selected-service-item');
+        newItem.dataset.price = servicePrice;
+        newItem.dataset.serviceId = serviceId;
 
-        // Cấu trúc HTML cho một item dịch vụ
-        newItem.innerHTML = `
-            <span>${serviceName}</span>
-            <input type="number" value="1" min="1" class="service-quantity" placeholder="Số lượng">
-            <input type="date" class="service-date" required>
-            <button type="button" class="remove-service-btn">&times;</button>
-            <input type="hidden" name="newServiceId" value="${serviceId}">
-            <input type="hidden" name="newServiceQuantity" class="hidden-quantity" value="1">
-            <input type="hidden" name="newServiceDate" class="hidden-date" value="">
-        `;
+        // Tạo từng element riêng biệt
+        const span = document.createElement('span');
+        span.textContent = serviceName;
 
+        const quantityInput = document.createElement('input');
+        quantityInput.type = 'number';
+        quantityInput.value = '1';
+        quantityInput.min = '1';
+        quantityInput.className = 'service-quantity';
+        quantityInput.placeholder = 'Số lượng';
+
+        const dateInput = document.createElement('input');
+        dateInput.type = 'date';
+        dateInput.className = 'service-date';
+        dateInput.required = true;
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'remove-service-btn';
+        removeBtn.innerHTML = '&times;';
+
+        const hiddenServiceId = document.createElement('input');
+        hiddenServiceId.type = 'hidden';
+        hiddenServiceId.name = 'newServiceId';
+        hiddenServiceId.value = serviceId;
+
+        const hiddenQuantity = document.createElement('input');
+        hiddenQuantity.type = 'hidden';
+        hiddenQuantity.name = 'newServiceQuantity';
+        hiddenQuantity.value = '1';
+        hiddenQuantity.className = 'hidden-quantity';
+
+        const hiddenDate = document.createElement('input');
+        hiddenDate.type = 'hidden';
+        hiddenDate.name = 'newServiceDate';
+        hiddenDate.value = '';
+        hiddenDate.className = 'hidden-date';
+
+        // Append tất cả vào newItem
+        newItem.appendChild(span);
+        newItem.appendChild(quantityInput);
+        newItem.appendChild(dateInput);
+        newItem.appendChild(removeBtn);
+        newItem.appendChild(hiddenServiceId);
+        newItem.appendChild(hiddenQuantity);
+        newItem.appendChild(hiddenDate);
+
+        // Thêm vào danh sách
         selectedServicesList.appendChild(newItem);
+
+        // Cập nhật và gắn events
         updateSingleServiceDatePicker(newItem.querySelector('.service-date'));
         attachEventsToServiceItem(newItem);
+
+        // Reset select về ban đầu
+        serviceSelect.selectedIndex = 0;
     }
 
     function attachEventsToServiceItem(item) {
