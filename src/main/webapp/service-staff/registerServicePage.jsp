@@ -58,9 +58,19 @@
                     <label>Room Number *</label>
                     <input type="text" placeholder="E.g., 101, 205A">
                 </div>
-                <div class="form-group">
-                    <label>Customer Information *</label>
-                    <input type="text" placeholder="Enter customer name">
+
+            </div>
+            <div class="form-row">
+                <div class="row">
+                    <div class="col-md-6 mb-3 form-group">
+                        <label for="dateInput" class="form-label">Time Register *</label>
+                        <input type="date" class="form-control" id="dateInput" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3 form-group">
+                        <label for="timeInput" class="form-label">Start at *</label>
+                        <input type="time" class="form-control" id="timeInput" required>
+                    </div>
                 </div>
             </div>
 
