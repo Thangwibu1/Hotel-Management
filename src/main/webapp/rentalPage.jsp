@@ -170,6 +170,7 @@
                     Tổng cộng: <span id="total-price-value">0 VNĐ</span>
                 </div>
                 <button type="submit" class="btn btn-book" style="width: 100%; margin-top: 20px;">Xác nhận đặt phòng</button>
+                <input type="hidden" id="totalAmount" name="totalAmount" value="">
             </form>
         </div>
     </div>
@@ -280,6 +281,9 @@
         });
         const finalTotal = roomTotal + servicesTotal;
         totalPriceElement.textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(finalTotal);
+        
+        // Cập nhật giá trị totalAmount vào trường hidden
+        document.getElementById('totalAmount').value = finalTotal;
     }
 
     // --- GẮN CÁC SỰ KIỆN BAN ĐẦU ---
