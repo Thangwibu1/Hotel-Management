@@ -93,6 +93,46 @@ public class RoomDAO {
 
         return room;
     }
+    public Room getRoomByRoomNumber(String roomNumber) {
+        Room room = null;
+        String sql = "SELECT [RoomID] ,[RoomNumber] ,[RoomTypeID] ,[Description] ,[Status] FROM [HotelManagement].[dbo].[ROOM] WHERE [RoomNumber] = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, roomNumber);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int id = rs.getInt("RoomID");
+                String retrievedRoomNumber = rs.getString("RoomNumber");
+                int roomTypeId = rs.getInt("RoomTypeID");
+                String description = rs.getString("Description");
+                String status = rs.getString("Status");
+                room = new Room(id, roomNumber, roomTypeId, description, status);
+
+            }
+        } catch (SQLException e) {
+            System.err.println("Database error in getRoomById: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("General error in getRoomById: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+
+        return room;
+    }
 
     public boolean updateRoomStatus(int roomId, String status) {
         boolean result = false;

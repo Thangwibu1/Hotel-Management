@@ -70,5 +70,6 @@ public interface IConstant {
     public static final String registerServiceController = "./registerServiceController";
     public static final  String reportServiceController = "./reportServiceController";
     public static final String updateStatusServiceController = "./updateStatusServiceController";
+    public static final String makeNewServiceController = "./makeNewServiceController";
     
 }

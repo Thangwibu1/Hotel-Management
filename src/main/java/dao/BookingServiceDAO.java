@@ -24,10 +24,10 @@ public class BookingServiceDAO {
                     int bookingId = rs.getInt("BookingID");
                     int serviceId = rs.getInt("ServiceID");
                     int quantity = rs.getInt("Quantity");
-                    java.time.LocalDate serviceDate = rs.getObject("ServiceDate", java.time.LocalDate.class); // THAY ĐỔI
+                    java.time.LocalDate serviceDate = rs.getObject("ServiceDate", java.time.LocalDate.class); // THAY �?ỔI
                     int status = rs.getInt("Status");
 
-                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, status); // THAY ĐỔI
+                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, status); // THAY �?ỔI
                     result.add(bookingService);
                 }
             }
@@ -52,10 +52,10 @@ public class BookingServiceDAO {
                     int bookingServiceId = rs.getInt("Booking_Service_ID");
                     int serviceId = rs.getInt("ServiceID");
                     int quantity = rs.getInt("Quantity");
-                    java.time.LocalDate serviceDate = rs.getObject("ServiceDate", java.time.LocalDate.class); // THAY ĐỔI
+                    java.time.LocalDate serviceDate = rs.getObject("ServiceDate", java.time.LocalDate.class); // THAY �?ỔI
                     int status = rs.getInt("Status");
 
-                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, status); // THAY ĐỔI
+                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, status); // THAY �?ỔI
                     result.add(bookingService);
                 }
             }
@@ -66,23 +66,31 @@ public class BookingServiceDAO {
     }
 
     public boolean addBookingService(BookingService bookingService) {
-        String sql = "INSERT INTO [dbo].[BOOKING_SERVICE] (BookingID, ServiceID, Quantity, ServiceDate, Status) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+    String sql = "INSERT INTO [dbo].[BOOKING_SERVICE] "
+               + "(BookingID, ServiceID, Quantity, ServiceDate, Status, Note) "
+               + "VALUES (?, ?, ?, ?, ?, ?)";
+    
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, bookingService.getBookingId());
-            ps.setInt(2, bookingService.getServiceId());
-            ps.setInt(3, bookingService.getQuantity());
-            ps.setObject(4, bookingService.getServiceDate()); // THAY ĐỔI
-            ps.setInt(5, bookingService.getStatus());
+        ps.setInt(1, bookingService.getBookingId());
+        ps.setInt(2, bookingService.getServiceId());
+        ps.setInt(3, bookingService.getQuantity());
+        
+        ps.setObject(4, bookingService.getServiceDate()); 
+        
+        ps.setInt(5, 0);
+        
+        ps.setString(6, bookingService.getNote()); 
 
-            int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+        
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+    return false;
+}
 
     public boolean updateBookingServiceStatus(int bookingServiceId, int status) {
         String sql = "UPDATE [dbo].[BOOKING_SERVICE] SET Status = ? WHERE Booking_Service_ID = ?";

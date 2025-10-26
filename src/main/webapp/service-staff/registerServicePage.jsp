@@ -24,9 +24,22 @@
    
     <jsp:include page="headerService.jsp"/>
     <div class="container">
-        <div class="search-box">
-            <input type="text" placeholder="Search customer, room, or service...">
-        </div>
+        <% String MSG = (String)request.getAttribute("MSG"); 
+            if(MSG != null){
+            String color = (String) request.getAttribute("color");
+            if(color.equalsIgnoreCase("red")){
+              color = "text-danger";
+            }else{
+              color = "text-success";
+            }
+            %>
+            <div class="search-box">
+                <h4 class="<%= color %>"><%= MSG %></h4>
+            </div>
+            <%
+            }
+        %>
+        
 
         <div class="tabs d-flex flex-column flex-md-row gap-2">
 
@@ -49,56 +62,73 @@
             </form>
         </div>
 
-        <div class="card">
-            <div class="section-title">Register New Service for Guest</div>
-            
-            <div class="form-row">
-                
-                <div class="form-group">
-                    <label>Room Number *</label>
-                    <input type="text" placeholder="E.g., 101, 205A">
+                <div class="card">
+                    <div class="section-title">Register New Service for Guest</div>
+                    <form action="<%= IConstant.makeNewServiceController %>" method="POST">
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                    <label for="roomNumber">Room Number *</label>
+
+                                    <select id="roomNumber" name="room_number" required>
+                                        <option value="" disabled selected>E.g., 101, 205</option> 
+
+                                        <option value="101">101</option>
+                                        <option value="102">102</option>
+                                        <option value="103">103</option>
+                                        <option value="201">201</option>
+                                        <option value="202">202</option>
+                                        <option value="203">203</option>
+                                        <option value="301">301</option>
+                                        <option value="302">302</option>
+                                        <option value="303">303</option>
+                                        <option value="401">401</option>
+                                        <option value="402">402</option>
+                                        <option value="501">501</option>
+                                    </select> 
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="row">
+                                <div class="col-md-6 mb-3 form-group">
+                                    <label for="dateInput" class="form-label">Time Register *</label>
+                                    <input type="date" class="form-control" id="dateInput" name="register_Date" required>
+                                </div>
+
+                                <div class="col-md-6 mb-3 form-group">
+                                    <label for="timeInput" class="form-label">Start at *</label>
+                                    <input type="time" class="form-control" id="timeInput" name="start_Time" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="serviceId">Service Type *</label>
+                                <select id="serviceId" name="service_Id" required>
+                                    <option value="">Select service type</option> <option value="Massage">Massage</option>
+                                    <option value="1">Breakfast</option>
+                                    <option value="3">Laundry</option>
+                                    <option value="5">Housekeeping</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1" max="10">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="note">Additional Notes</label>
+                            <textarea id="note" name="note" placeholder="Special requests, preferred habits..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-add-service" style="width: 100%">Create Service</button>
+
+                    </form>
                 </div>
-
-            </div>
-            <div class="form-row">
-                <div class="row">
-                    <div class="col-md-6 mb-3 form-group">
-                        <label for="dateInput" class="form-label">Time Register *</label>
-                        <input type="date" class="form-control" id="dateInput" required>
-                    </div>
-
-                    <div class="col-md-6 mb-3 form-group">
-                        <label for="timeInput" class="form-label">Start at *</label>
-                        <input type="time" class="form-control" id="timeInput" required>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Service Type *</label>
-                    <select>
-                        <option>Select service type</option>
-                        <option>Massage</option>
-                        <option>Breakfast</option>
-                        <option>Laundry</option>
-                        <option>Housekeeping</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Quantity</label>
-                <input type="number" value="1" min="1">
-            </div>
-
-            <div class="form-group">
-                <label>Additional Notes</label>
-                <textarea placeholder="Special requests, preferred habits..."></textarea>
-            </div>
-
-            <button class="btn-add-service">Create Service</button>
-        </div>
 
         <div class="card">
             <div class="section-title">Recently Logged Services</div>
