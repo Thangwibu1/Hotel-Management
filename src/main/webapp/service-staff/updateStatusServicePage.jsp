@@ -44,7 +44,7 @@
 
                 <form action="<%= IConstant.reportServiceController%>" method="get" class="tab-form w-100 w-md-auto">
                     <button type="submit" class="tab w-100">
-                        Reports
+                        Statistic
                     </button>
                 </form>
             </div>
@@ -53,10 +53,7 @@
 
             <div class="card">
                 <div class="container main-content-area">
-                    <div class="service-container">
-                        <div class="section-header">
-                            <a href="#" class="section-title-link btn-comeback bg-secondary text-white p-2 " style="margin-left: -10px ; text-decoration: none;">&larr; Comeback</a> </div>
-
+                    
                         <div class="table-responsive pt-3">
                             <table class="table service-table align-middle">
                                 <thead>

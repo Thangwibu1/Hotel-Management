@@ -64,12 +64,14 @@ public interface IConstant {
     public static final String registerServicePage = "./registerServicePage.jsp";
     public static final String updateStatusServicePage = "./updateStatusServicePage.jsp";
     public static final String reportServicePage = "./reportServicePage.jsp";
-    
-    
+    public static final String listServiceTodayPage = "./listServiceTodayPage.jsp";
+    public static final String employeePerformancePage = "./employeePerformancePage.jsp";
     //---service servlet------------------
     public static final String registerServiceController = "./registerServiceController";
-    public static final  String reportServiceController = "./reportServiceController";
+    public static final String reportServiceController = "./reportServiceController";
     public static final String updateStatusServiceController = "./updateStatusServiceController";
     public static final String makeNewServiceController = "./makeNewServiceController";
-    
+    public static final String listServiceTodayController = "./listServiceTodayController";
+    public static final String employeePerformanceController = "./employeePerformanceController";
+    public static final String serviceRevenueController = "./serviceRevenueController";
 }

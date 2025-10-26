@@ -1,11 +1,8 @@
 package model;
 
-import java.time.LocalDate; // THAY �?ỔI: Thêm import cho LocalDate
+import java.time.LocalDate; // THAY �?ỔI: Thêm import cho LocalDate
 
-/**
- * Model cho bảng BOOKING_SERVICE
- * (�?ã được cập nhật để sử dụng LocalDate cho serviceDate)
- */
+
 public class BookingService {
     private int bookingServiceId;
     private int bookingId;
@@ -14,6 +11,38 @@ public class BookingService {
     private LocalDate serviceDate; 
     private int status;
     private String note;
+    private int staffID;
+
+ 
+
+    public int getStaffID() {
+        return staffID;
+    }
+
+    public BookingService(int bookingServiceId, int bookingId, int serviceId, int quantity, LocalDate serviceDate, int status, String note, int staffID) {
+        this.bookingServiceId = bookingServiceId;
+        this.bookingId = bookingId;
+        this.serviceId = serviceId;
+        this.quantity = quantity;
+        this.serviceDate = serviceDate;
+        this.status = status;
+        this.note = note;
+        this.staffID = staffID;
+    }
+
+    public BookingService(int bookingServiceId, int bookingId, int serviceId, int quantity, LocalDate serviceDate, int status, int staffID) {
+        this.bookingServiceId = bookingServiceId;
+        this.bookingId = bookingId;
+        this.serviceId = serviceId;
+        this.quantity = quantity;
+        this.serviceDate = serviceDate;
+        this.status = status;
+        this.staffID = staffID;
+    }
+
+    public void setStaffID(int staffID) {
+        this.staffID = staffID;
+    }
     // --- Constructors được cập nhật ---
     public BookingService() {}
 
@@ -81,7 +110,7 @@ public class BookingService {
     public int getStatus() { return status; }
     public void setStatus(int status) { this.status = status; }
 
-    // --- THAY �?ỔI: toString() được cập nhật ---
+    // --- THAY �?ỔI: toString() được cập nhật ---
     @Override
     public String toString() {
         return "BookingService{" +
@@ -91,6 +120,7 @@ public class BookingService {
                 ", quantity=" + quantity +
                 ", serviceDate=" + serviceDate + 
                 ", status=" + status +
+                ", staffID=" + staffID +
                 '}';
     }
 }

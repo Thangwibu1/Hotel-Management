@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class="header-right">
-        <div class="date-badge">12/10/2025</div>
+        
         <form action="<%= request.getContextPath()%>/logout" method="get" style="margin-right: 2rem;">
             <button class="btn-publish">Logout</button>
         </form>
