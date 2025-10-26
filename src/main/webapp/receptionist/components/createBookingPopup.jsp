@@ -88,7 +88,7 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label class="form-label" for="checkout">Check-in</label>
-                                <input type="date" id="checkin" name="checkin class="form-input" required>
+                                <input type="date" id="checkin" name="checkin" class="form-input" required>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="checkout">Check-out</label>

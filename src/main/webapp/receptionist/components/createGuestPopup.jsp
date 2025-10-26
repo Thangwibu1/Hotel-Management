@@ -16,7 +16,6 @@
     <body>
         <%
             String guestIdNum = (String) session.getAttribute("FLASH_ID_NUM");
-            // N?u null, th? l?y t? session
             if (guestIdNum != null) {
                 session.removeAttribute("FLASH_ID_NUM");
 
@@ -46,11 +45,15 @@
                         </svg>
                         <div class="alert-text">
                             No account found for <strong><%= guestIdNum != null ? guestIdNum : ""%></strong>. Please create a guest account first.
-
                         </div>
                     </div>
 
-                    <form id="guestForm" onsubmit="handleSubmit(event)">
+                    <form id="guestForm" action="CreateAccountController" method="post">
+                        <div class="form-group">
+                            <label class="form-label" for="idNumber">ID Number (Passport/Driver's License)</label>
+                            <input type="text" id="idNumber" name="idNumber" class="form-input" value="<%= guestIdNum != null ? guestIdNum : ""%>" required>
+                        </div>
+
                         <div class="form-group">
                             <label class="form-label" for="fullName">Full Name</label>
                             <input type="text" id="fullName" name="fullName" class="form-input" placeholder="John Doe" required>
@@ -67,19 +70,14 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" for="address">Address</label>
-                            <input type="text" id="address" name="address" class="form-input" placeholder="123 Main St, City, State" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="idNumber">ID Number (Passport/Driver's License)</label>
-                            <input type="text" id="idNumber" name="idNumber" class="form-input" value="<%= guestIdNum != null ? guestIdNum : ""%>" required>
+                            <label class="form-label" for="address">Password</label>
+                            <input type="password" id="password" name="password" class="form-input" placeholder="123 Main St, City, State" required>
                         </div>
 
                         <div class="bill-divider"></div>
 
                         <div class="payment-methods">
-                            <button type="submit" class="complete-checkout-btn" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                            <button type="submit" class="create-guest-account complete-checkout-btn" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>

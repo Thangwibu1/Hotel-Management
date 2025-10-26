@@ -46,7 +46,7 @@
                                 <polyline points="22,6 12,13 2,6"></polyline>
                                 </svg>
                                 <input 
-                                    type="idNum" 
+                                    type="text" 
                                     id="guestId" 
                                     name="guestId" 
                                     placeholder="012345600001"

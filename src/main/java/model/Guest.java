@@ -22,6 +22,14 @@ public class Guest {
         this.email = email;
     }
 
+    public Guest(String fullName, String phone, String email, String idNumber, String passwordHash) {
+        this.fullName = fullName;
+        this.phone = phone;
+        this.email = email;
+        this.idNumber = idNumber;
+        this.passwordHash = passwordHash;
+    }
+    
     public Guest(String fullName, String phone, String email, String address, String idNumber, String dateOfBirth, String passwordHash) {
         this.fullName = fullName;
         this.phone = phone;

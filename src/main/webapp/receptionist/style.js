@@ -142,10 +142,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Khoi tao Verify Guest Popup
     initPopup('verifyGuestPopup', 'btnNewBooking');
-
+    
     // Khoi taoo Booking Popup v?i reload khi ?óng
     initPopup('bookingPopup', null, function () {
         // Reload trang ?? xóa flash session
+        window.location.href = window.location.pathname + '?tab=bookings';
+    });
+    
+    initPopup('bookingPopup', 'create-guest-account', function () {
         window.location.href = window.location.pathname + '?tab=bookings';
     });
 

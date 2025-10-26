@@ -7,7 +7,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class GuestDAO {
@@ -107,8 +110,7 @@ public class GuestDAO {
     public boolean checkDuplicateIdNumber(String idNumber) {
         boolean isDuplicate = false;
         String sql = "SELECT COUNT(*) AS count FROM [HotelManagement].[dbo].[GUEST] WHERE [IDNumber] = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( Connection conn = DBConnection.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, idNumber);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -124,8 +126,7 @@ public class GuestDAO {
     public boolean checkDuplicateEmail(String email) {
         boolean isDuplicate = false;
         String sql = "SELECT COUNT(*) AS count FROM [HotelManagement].[dbo].[GUEST] WHERE [Email] = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( Connection conn = DBConnection.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -159,8 +160,12 @@ public class GuestDAO {
             e.printStackTrace();
         } finally {
             try {
-                if (ps != null) ps.close();
-                if (con != null) con.close();
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -183,15 +188,19 @@ public class GuestDAO {
             e.printStackTrace();
         } finally {
             try {
-                if (ps != null) ps.close();
-                if (con != null) con.close();
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
         return result;
     }
-    
+
     public Guest getGuestByIdNumber(String idNumber) {
         Guest guest = null;
 
@@ -216,5 +225,47 @@ public class GuestDAO {
         }
 
         return guest;
+    }
+
+    public boolean addGuestForRecep(Guest guest) {
+        boolean result = false;
+        String sql = "INSERT INTO [HotelManagement].[dbo].[GUEST] ([FullName] ,[Phone] ,[Email] ,[PasswordHash] ,[Address] ,[IDNumber] ,[DateOfBirth]) VALUES (?,?,?,?,?,?,?)";
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, guest.getFullName());
+            ps.setString(2, guest.getPhone());
+            ps.setString(3, guest.getEmail());
+            ps.setString(4, guest.getPasswordHash());
+            ps.setString(5, guest.getAddress());
+            ps.setString(6, guest.getIdNumber());
+            String dobStr = guest.getDateOfBirth();
+            if (dobStr == null || dobStr.isEmpty()) {
+                ps.setNull(7, Types.TIMESTAMP);
+            } else {
+                // N?u ng??i dùng nh?p d?ng yyyy-MM-dd t? <input type="date">
+                LocalDate dob = LocalDate.parse(dobStr);
+                LocalDateTime dobDT = dob.atStartOfDay(); // 00:00:00
+                ps.setTimestamp(7, Timestamp.valueOf(dobDT));
+            }
+            int rowsAffected = ps.executeUpdate();
+            result = rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 }
