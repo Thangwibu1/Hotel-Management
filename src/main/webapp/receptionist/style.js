@@ -69,8 +69,9 @@ document.querySelectorAll('.booking-status .badge').forEach(badge => {
 
 function initPopup(popupId, openButtonClass = null, onCloseCallback = null) {
     const popup = document.getElementById(popupId);
-    if (!popup)
+    if (!popup) 
         return;
+        
     const modal = popup.querySelector('.bill-modal');
     const closeBtn = popup.querySelector('.bill-close');
 

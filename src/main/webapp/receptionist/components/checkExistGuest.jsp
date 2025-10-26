@@ -35,7 +35,7 @@
                         <p style="color: #6b7280; margin-bottom: 20px;">Enter guest ID Number to check</p>
                     </div>
 
-                    <form id="verifyGuestForm" method="post" action="${pageContext.request.contextPath}/CheckGuestController">
+                    <form id="verifyGuestForm" method="get" action="CheckGuestController">
                         <div style="margin-bottom: 20px;">
                             <label for="guestId" style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">
                                 ID Number (Passport/Driver's License)

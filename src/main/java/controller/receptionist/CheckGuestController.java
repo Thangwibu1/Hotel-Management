@@ -19,7 +19,7 @@ import model.Guest;
  *
  * @author trinhdtu
  */
-@WebServlet(name = "CheckGuestController", urlPatterns = {"/CheckGuestController"})
+@WebServlet(name = "CheckGuestController", urlPatterns = {"/receptionist/CheckGuestController"})
 public class CheckGuestController extends HttpServlet {
 
     /**
