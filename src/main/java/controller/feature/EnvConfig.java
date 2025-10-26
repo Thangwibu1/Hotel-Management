@@ -31,29 +31,18 @@ public class EnvConfig {
             return;
         }
 
-        try {
-            // Thử load từ file system (thư mục gốc project)
-            FileInputStream fis = new FileInputStream(".env");
-            properties.load(fis);
-            fis.close();
-            isLoaded = true;
-            System.out.println("✓ Đã load file .env thành công từ file system!");
-        } catch (IOException e) {
-            // Nếu không tìm thấy, thử load từ classpath (resources folder)
-            try {
-                InputStream is = EnvConfig.class.getClassLoader().getResourceAsStream(".env");
-                if (is != null) {
-                    properties.load(is);
-                    is.close();
-                    isLoaded = true;
-                    System.out.println("✓ Đã load file .env thành công từ classpath!");
-                } else {
-                    System.err.println("✗ Không tìm thấy file .env");
-                    System.err.println("Vui lòng tạo file .env trong thư mục gốc project hoặc trong resources folder");
-                }
-            } catch (IOException ex) {
-                System.err.println("✗ Lỗi khi đọc file .env: " + ex.getMessage());
+        // For web applications, loading from the classpath is the most reliable method.
+        try (InputStream is = EnvConfig.class.getClassLoader().getResourceAsStream(".env")) {
+            if (is != null) {
+                properties.load(is);
+                isLoaded = true;
+                System.out.println("✓ Đã load file .env thành công từ classpath!");
+            } else {
+                System.err.println("✗ Không tìm thấy file .env trong classpath.");
+                System.err.println("Vui lòng tạo thư mục 'src/main/resources' và đặt file .env vào đó.");
             }
+        } catch (IOException ex) {
+            System.err.println("✗ Lỗi khi đọc file .env từ classpath: " + ex.getMessage());
         }
     }
 
