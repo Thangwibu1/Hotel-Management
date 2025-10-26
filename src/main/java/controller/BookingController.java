@@ -124,15 +124,16 @@ public class BookingController extends HttpServlet {
         }
         Guest viewGuest = guestDAO.getGuestById(Integer.parseInt(guestId));
 
-        req.setAttribute("booking", bookingDAO.getBookingById(newBookingId));
+//        req.setAttribute("booking", bookingDAO.getBookingById(newBookingId));
+//
+//        req.setAttribute("chosenServices", services);
+//        req.setAttribute("roomType", roomTypeDAO.getRoomTypeById(viewRoom.getRoomTypeId()));
+//        req.setAttribute("room", viewRoom);
+//        req.setAttribute("guest", viewGuest);
+//        req.setAttribute("services", servicesList);
 
-        req.setAttribute("chosenServices", services);
-        req.setAttribute("roomType", roomTypeDAO.getRoomTypeById(viewRoom.getRoomTypeId()));
-        req.setAttribute("room", viewRoom);
-        req.setAttribute("guest", viewGuest);
-        req.setAttribute("services", servicesList);
 
-        req.getRequestDispatcher(IConstant.bookingDashboard).forward(req, resp);
+        resp.sendRedirect("./viewBookingAfter?" + "bookingId=" + newBookingId);
     }
 
     @Override
