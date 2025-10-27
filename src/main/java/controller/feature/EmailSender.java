@@ -51,8 +51,28 @@ public class EmailSender {
         props.put("mail.smtp.host", smtpHost);
         props.put("mail.smtp.port", String.valueOf(smtpPort));
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        
+        // Nếu port 465, dùng SSL, nếu port 587 dùng STARTTLS
+        if (smtpPort == 465) {
+            // SSL Mode (Port 465)
+            props.put("mail.smtp.ssl.enable", "true");
+            props.put("mail.smtp.ssl.protocols", "TLSv1.2 TLSv1.3");
+            props.put("mail.smtp.ssl.trust", smtpHost);
+        } else {
+            // STARTTLS Mode (Port 587)
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.starttls.required", "true");
+            props.put("mail.smtp.ssl.protocols", "TLSv1.2 TLSv1.3");
+            props.put("mail.smtp.ssl.trust", smtpHost);
+        }
+        
+        // Timeout settings
+        props.put("mail.smtp.connectiontimeout", "10000");
+        props.put("mail.smtp.timeout", "10000");
+        props.put("mail.smtp.writetimeout", "10000");
+        
+        // Debug mode (có thể bỏ comment để debug)
+        // props.put("mail.debug", "true");
 
         return Session.getInstance(props, new Authenticator() {
             @Override

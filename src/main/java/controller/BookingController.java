@@ -1,8 +1,8 @@
 package controller;
 
+import controller.feature.EmailSender;
 import dao.*;
 import model.*;
-import utils.IConstant;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,8 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +69,236 @@ public class BookingController extends HttpServlet {
         return resutlt;
     }
 
+    /**
+     * Hàm gửi email xác nhận booking cho khách hàng
+     * 
+     * @param recipientEmail Email người nhận
+     * @param bookingId ID của booking vừa tạo
+     * @return true nếu gửi thành công, false nếu thất bại
+     */
+    protected boolean sendBookingConfirmationEmail(String recipientEmail, int bookingId) {
+        try {
+            // Lấy thông tin booking
+            Booking booking = bookingDAO.getBookingById(bookingId);
+            if (booking == null) {
+                System.err.println("Không tìm thấy booking với ID: " + bookingId);
+                return false;
+            }
+
+            // Lấy thông tin guest
+            Guest guest = guestDAO.getGuestById(booking.getGuestId());
+            
+            // Lấy thông tin room
+            Room room = roomDAO.getRoomById(booking.getRoomId());
+            
+            // Lấy thông tin room type
+            RoomType roomType = roomTypeDAO.getRoomTypeById(room.getRoomTypeId());
+            
+            // Lấy danh sách services của booking này
+            List<BookingService> bookingServices = bookingServiceDAO.getBookingServiceByBookingId(bookingId);
+            
+            // Tính tổng số đêm
+            long numberOfNights = ChronoUnit.DAYS.between(
+                booking.getCheckInDate().toLocalDate(), 
+                booking.getCheckOutDate().toLocalDate()
+            );
+            
+            // Tính tổng tiền phòng
+            BigDecimal roomTotal = roomType.getPricePerNight().multiply(BigDecimal.valueOf(numberOfNights));
+            
+            // Tính tổng tiền services và tạo bảng services
+            BigDecimal servicesTotal = BigDecimal.ZERO;
+            StringBuilder servicesHtml = new StringBuilder();
+            
+            if (bookingServices != null && !bookingServices.isEmpty()) {
+                for (BookingService bs : bookingServices) {
+                    Service service = serviceDAO.getServiceById(bs.getServiceId());
+                    BigDecimal serviceItemTotal = service.getPrice().multiply(BigDecimal.valueOf(bs.getQuantity()));
+                    servicesTotal = servicesTotal.add(serviceItemTotal);
+                    
+                    servicesHtml.append(String.format(
+                        "<tr>" +
+                        "<td style='padding: 12px; border-bottom: 1px solid #eee;'>%s</td>" +
+                        "<td style='padding: 12px; border-bottom: 1px solid #eee; text-align: center;'>%d</td>" +
+                        "<td style='padding: 12px; border-bottom: 1px solid #eee; text-align: center;'>%s</td>" +
+                        "<td style='padding: 12px; border-bottom: 1px solid #eee; text-align: right;'>%,d VNĐ</td>" +
+                        "<td style='padding: 12px; border-bottom: 1px solid #eee; text-align: right;'>%,d VNĐ</td>" +
+                        "</tr>",
+                        service.getServiceName(),
+                        bs.getQuantity(),
+                        bs.getServiceDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                        service.getPrice().intValue(),
+                        serviceItemTotal.intValue()
+                    ));
+                }
+            }
+            
+            // Tính tổng tiền
+            BigDecimal grandTotal = roomTotal.add(servicesTotal);
+            
+            // Format ngày tháng
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            
+            // Tạo nội dung email HTML
+            String htmlContent = String.format(
+                "<!DOCTYPE html>" +
+                "<html>" +
+                "<head>" +
+                "<meta charset='UTF-8'>" +
+                "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
+                "</head>" +
+                "<body style='margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;'>" +
+                "<div style='max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);'>" +
+                
+                // Header
+                "<div style='background: linear-gradient(135deg, #667eea 0%%, #764ba2 100%%); padding: 30px; text-align: center;'>" +
+                "<h1 style='color: #ffffff; margin: 0; font-size: 28px;'>✓ Xác Nhận Đặt Phòng</h1>" +
+                "<p style='color: #ffffff; margin: 10px 0 0 0; opacity: 0.9;'>Mã đặt phòng: #%d</p>" +
+                "</div>" +
+                
+                // Content
+                "<div style='padding: 30px;'>" +
+                
+                // Greeting
+                "<p style='color: #333; font-size: 16px; line-height: 1.6;'>Xin chào <strong>%s</strong>,</p>" +
+                "<p style='color: #666; font-size: 14px; line-height: 1.6;'>Cảm ơn bạn đã đặt phòng tại khách sạn của chúng tôi. Dưới đây là thông tin chi tiết về đặt phòng của bạn:</p>" +
+                
+                // Booking Information
+                "<div style='background-color: #f8f9fa; border-left: 4px solid #667eea; padding: 20px; margin: 20px 0; border-radius: 4px;'>" +
+                "<h2 style='color: #333; margin: 0 0 15px 0; font-size: 18px;'>📋 Thông Tin Đặt Phòng</h2>" +
+                "<table style='width: 100%%; border-collapse: collapse;'>" +
+                "<tr><td style='padding: 8px 0; color: #666; width: 40%%;'>Mã đặt phòng:</td><td style='padding: 8px 0; color: #333; font-weight: bold;'>#%d</td></tr>" +
+                "<tr><td style='padding: 8px 0; color: #666;'>Ngày đặt:</td><td style='padding: 8px 0; color: #333;'>%s</td></tr>" +
+                "<tr><td style='padding: 8px 0; color: #666;'>Trạng thái:</td><td style='padding: 8px 0;'><span style='background-color: #28a745; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;'>%s</span></td></tr>" +
+                "</table>" +
+                "</div>" +
+                
+                // Room Information
+                "<div style='background-color: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 20px 0; border-radius: 4px;'>" +
+                "<h2 style='color: #333; margin: 0 0 15px 0; font-size: 18px;'>🏨 Thông Tin Phòng</h2>" +
+                "<table style='width: 100%%; border-collapse: collapse;'>" +
+                "<tr><td style='padding: 8px 0; color: #666; width: 40%%;'>Số phòng:</td><td style='padding: 8px 0; color: #333; font-weight: bold;'>%s</td></tr>" +
+                "<tr><td style='padding: 8px 0; color: #666;'>Loại phòng:</td><td style='padding: 8px 0; color: #333;'>%s</td></tr>" +
+                "<tr><td style='padding: 8px 0; color: #666;'>Sức chứa:</td><td style='padding: 8px 0; color: #333;'>%d người</td></tr>" +
+                "<tr><td style='padding: 8px 0; color: #666;'>Giá phòng/đêm:</td><td style='padding: 8px 0; color: #333; font-weight: bold;'>%,d VNĐ</td></tr>" +
+                "</table>" +
+                "</div>" +
+                
+                // Check-in/out Information
+                "<div style='background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; margin: 20px 0; border-radius: 4px;'>" +
+                "<h2 style='color: #333; margin: 0 0 15px 0; font-size: 18px;'>📅 Thời Gian Lưu Trú</h2>" +
+                "<table style='width: 100%%; border-collapse: collapse;'>" +
+                "<tr><td style='padding: 8px 0; color: #666; width: 40%%;'>Nhận phòng:</td><td style='padding: 8px 0; color: #333; font-weight: bold;'>%s</td></tr>" +
+                "<tr><td style='padding: 8px 0; color: #666;'>Trả phòng:</td><td style='padding: 8px 0; color: #333; font-weight: bold;'>%s</td></tr>" +
+                "<tr><td style='padding: 8px 0; color: #666;'>Số đêm:</td><td style='padding: 8px 0; color: #333;'>%d đêm</td></tr>" +
+                "</table>" +
+                "</div>" +
+                
+                // Services (if any)
+                "%s" +
+                
+                // Total Amount
+                "<div style='background-color: #d1ecf1; border-left: 4px solid #17a2b8; padding: 20px; margin: 20px 0; border-radius: 4px;'>" +
+                "<h2 style='color: #333; margin: 0 0 15px 0; font-size: 18px;'>💰 Chi Tiết Thanh Toán</h2>" +
+                "<table style='width: 100%%; border-collapse: collapse;'>" +
+                "<tr><td style='padding: 8px 0; color: #666;'>Tiền phòng (%d đêm):</td><td style='padding: 8px 0; color: #333; text-align: right;'>%,d VNĐ</td></tr>" +
+                "<tr><td style='padding: 8px 0; color: #666;'>Tiền dịch vụ:</td><td style='padding: 8px 0; color: #333; text-align: right;'>%,d VNĐ</td></tr>" +
+                "<tr style='border-top: 2px solid #17a2b8;'><td style='padding: 12px 0; color: #333; font-size: 18px; font-weight: bold;'>Tổng cộng:</td><td style='padding: 12px 0; color: #17a2b8; font-size: 20px; font-weight: bold; text-align: right;'>%,d VNĐ</td></tr>" +
+                "<tr><td style='padding: 8px 0; color: #666;'>Đã thanh toán - Cọc 50%%:</td><td style='padding: 8px 0; color: #28a745; font-weight: bold; text-align: right;'>%,d VNĐ</td></tr>" +
+                "<tr><td style='padding: 8px 0; color: #666;'>Còn lại:</td><td style='padding: 8px 0; color: #dc3545; font-weight: bold; text-align: right;'>%,d VNĐ</td></tr>" +
+                "</table>" +
+                "</div>" +
+                
+                // Note
+                "<div style='background-color: #f8f9fa; padding: 15px; margin: 20px 0; border-radius: 4px;'>" +
+                "<p style='color: #666; font-size: 13px; margin: 0; line-height: 1.6;'>" +
+                "<strong>Lưu ý:</strong><br>" +
+                "• Vui lòng mang theo giấy tờ tùy thân khi nhận phòng<br>" +
+                "• Giờ nhận phòng: 14:00 | Giờ trả phòng: 12:00<br>" +
+                "• Số tiền còn lại sẽ được thanh toán khi trả phòng<br>" +
+                "• Nếu cần hỗ trợ, vui lòng liên hệ: support@hotel.com hoặc gọi: 1900-xxxx" +
+                "</p>" +
+                "</div>" +
+                
+                "</div>" +
+                
+                // Footer
+                "<div style='background-color: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #dee2e6;'>" +
+                "<p style='color: #666; font-size: 14px; margin: 0;'>Cảm ơn bạn đã tin tưởng và lựa chọn dịch vụ của chúng tôi!</p>" +
+                "<p style='color: #999; font-size: 12px; margin: 10px 0 0 0;'>© 2025 Hotel Management System. All rights reserved.</p>" +
+                "</div>" +
+                
+                "</div>" +
+                "</body>" +
+                "</html>",
+                
+                // Parameters
+                bookingId,
+                guest.getFullName(),
+                bookingId,
+                booking.getBookingDate().format(dateFormatter),
+                booking.getStatus(),
+                room.getRoomNumber(),
+                roomType.getTypeName(),
+                roomType.getCapacity(),
+                roomType.getPricePerNight().intValue(),
+                booking.getCheckInDate().format(dateTimeFormatter),
+                booking.getCheckOutDate().format(dateTimeFormatter),
+                numberOfNights,
+                
+                // Services section (conditional)
+                bookingServices != null && !bookingServices.isEmpty() ? 
+                    String.format(
+                        "<div style='background-color: #f8f9fa; border-left: 4px solid #28a745; padding: 20px; margin: 20px 0; border-radius: 4px;'>" +
+                        "<h2 style='color: #333; margin: 0 0 15px 0; font-size: 18px;'>🛎️ Dịch Vụ Đã Đặt</h2>" +
+                        "<table style='width: 100%%; border-collapse: collapse;'>" +
+                        "<thead>" +
+                        "<tr style='background-color: #e9ecef;'>" +
+                        "<th style='padding: 12px; text-align: left; color: #495057;'>Dịch vụ</th>" +
+                        "<th style='padding: 12px; text-align: center; color: #495057;'>SL</th>" +
+                        "<th style='padding: 12px; text-align: center; color: #495057;'>Ngày sử dụng</th>" +
+                        "<th style='padding: 12px; text-align: right; color: #495057;'>Đơn giá</th>" +
+                        "<th style='padding: 12px; text-align: right; color: #495057;'>Thành tiền</th>" +
+                        "</tr>" +
+                        "</thead>" +
+                        "<tbody>" +
+                        "%s" +
+                        "</tbody>" +
+                        "</table>" +
+                        "</div>",
+                        servicesHtml.toString()
+                    ) : "",
+                
+                numberOfNights,
+                roomTotal.intValue(),
+                servicesTotal.intValue(),
+                grandTotal.intValue(),
+                grandTotal.divide(BigDecimal.valueOf(2)).intValue(),
+                grandTotal.divide(BigDecimal.valueOf(2)).intValue()
+            );
+            
+            // Gửi email
+            EmailSender emailSender = new EmailSender();
+            boolean result = emailSender.sendHtmlEmail(
+                recipientEmail, 
+                "Xác nhận đặt phòng #" + bookingId + " - Hotel Management System",
+                htmlContent
+            );
+            
+            if (result) {
+                System.out.println("✓ Đã gửi email xác nhận booking #" + bookingId + " đến: " + recipientEmail);
+            }
+            
+            return result;
+            
+        } catch (Exception e) {
+            System.err.println("✗ Lỗi khi gửi email xác nhận booking: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*
@@ -107,7 +340,7 @@ public class BookingController extends HttpServlet {
             newBookingId = bookingHandle(Integer.parseInt(roomId), Integer.parseInt(guestId), inDateTime, outDateTime, bookDate);
             if (newBookingId > 0) {
                 roomDAO.updateRoomStatus(Integer.parseInt(roomId), "Available");
-                boolean bookingServiceResult = bookingServiceHandle(services, newBookingId);
+                bookingServiceHandle(services, newBookingId);
                 // make new payment
                 Payment newPayment = new Payment(newBookingId, bookDate, (double) (Integer.parseInt(totalAmount)) / 2.0, "cash", "Pending");
                 PaymentDAO paymentDAO = new PaymentDAO();
@@ -116,11 +349,6 @@ public class BookingController extends HttpServlet {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        Room viewRoom = roomDAO.getRoomById(Integer.parseInt(roomId));
-        ArrayList<Service> servicesList = new ArrayList<>();
-        for (ChoosenService service : services) {
-            servicesList.add(serviceDAO.getServiceById(service.getServiceId()));
         }
         Guest viewGuest = guestDAO.getGuestById(Integer.parseInt(guestId));
 
@@ -131,7 +359,19 @@ public class BookingController extends HttpServlet {
 //        req.setAttribute("room", viewRoom);
 //        req.setAttribute("guest", viewGuest);
 //        req.setAttribute("services", servicesList);
-
+        
+        // Gửi email xác nhận booking nếu booking thành công
+        if (newBookingId > 0) {
+            String recipientEmail = viewGuest.getEmail();
+            if (recipientEmail != null && !recipientEmail.trim().isEmpty()) {
+                // Gửi email trong thread riêng để không block response
+                final int finalBookingId = newBookingId;
+                final String finalEmail = recipientEmail;
+                new Thread(() -> {
+                    sendBookingConfirmationEmail(finalEmail, finalBookingId);
+                }).start();
+            }
+        }
 
         resp.sendRedirect("./viewBookingAfter?" + "bookingId=" + newBookingId);
     }
