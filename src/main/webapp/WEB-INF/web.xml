@@ -7,6 +7,10 @@
 
     <display-name>PRJ_Assignment</display-name>
 
+    <listener>
+        <listener-class>listener.StartupEmailListener</listener-class>
+    </listener>
+
     <!-- Ví dụ cấu hình welcome file (tuỳ bạn) -->
     <welcome-file-list>
         <welcome-file>home</welcome-file>

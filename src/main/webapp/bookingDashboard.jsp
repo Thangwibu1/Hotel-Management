@@ -11,7 +11,7 @@
     Room room = (Room) request.getAttribute("room");
     RoomType roomType = (RoomType) request.getAttribute("roomType");
     List<Service> services = (List<Service>) request.getAttribute("services");
-    List<ChoosenService> chosenServices = (List<ChoosenService>) request.getAttribute("chosenServices");
+    List<BookingService> bookingServices = (List<BookingService>) request.getAttribute("bookingServices");
 %>
 
 <!DOCTYPE html>
@@ -102,8 +102,7 @@
 
             <div class="detail-section">
                 <h2><i class="fa-solid fa-concierge-bell"></i> Dịch vụ đã đặt</h2>
-                <%-- Thay thế <c:choose> bằng if-else --%>
-                <% if (chosenServices != null && !chosenServices.isEmpty()) { %>
+                <% if (bookingServices != null && !bookingServices.isEmpty()) { %>
                 <table class="services-table">
                     <thead>
                     <tr>
@@ -113,19 +112,23 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <%-- Thay thế <c:forEach> bằng vòng lặp for của Java --%>
-                    <% for (int i = 0; i < services.size(); i++) {
-                        Service service = services.get(i);
-                        ChoosenService chosenService = chosenServices.get(i);
-                    %>
+                    <% for (BookingService bookingService : bookingServices) {
+                        Service currentService = null;
+                        for (Service service : services) {
+                            if (service.getServiceId() == bookingService.getServiceId()) {
+                                currentService = service;
+                                break;
+                            }
+                        }
+                        if (currentService != null) { %>
                     <tr>
-                        <td><%= service.getServiceName() %></td>
-                        <td><%= chosenService.getQuantity() %></td>
+                        <td><%= currentService.getServiceName() %></td>
+                        <td><%= bookingService.getQuantity() %></td>
                         <td>
-                            <%= IConstant.dateFormat.format(chosenService.getServiceDate()) %>
+                            <%= IConstant.dateFormat.format(bookingService.getServiceDate()) %>
                         </td>
                     </tr>
-                    <% } %>
+                    <% } } %>
                     </tbody>
                 </table>
                 <% } else { %>
