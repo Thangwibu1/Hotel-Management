@@ -23,7 +23,7 @@
             <jsp:include page="../receptionist/components/nav.jsp"/>
 
             <jsp:include page="../receptionist/components/bookingsManage.jsp"/>
-
+            
             <!-- ====== JavaScript (inline) ====== -->
         </div>
         <script src="${pageContext.request.contextPath}/receptionist/style.js"></script>

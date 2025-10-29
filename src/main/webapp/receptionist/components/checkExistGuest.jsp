@@ -13,78 +13,70 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <div id="verifyGuestPopup" class="bill-overlay" style="display: none;">
-            <div class="bill-modal">
-                <div class="bill-header">
-                    <div class="bill-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <%
+            String idNum = (String) request.getAttribute("FLASH_ID_NUM");
+            Guest guest = (Guest) request.getAttribute("GUEST");
+
+        %>
+        <div class="booking-header">
+            <h1 class="booking-title">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                New Booking
+            </h1>
+            <a href="${pageContext.request.contextPath}/receptionist/BookingsController" class="back-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                Back to List
+            </a>
+        </div>
+
+        <!-- Verification Form -->
+        <div class="card verification-card">
+                <h2 class="verification-title">Verify Guest Account</h2>
+                <p class="verification-subtitle">Enter guest email to check if account exists</p>
+            <form id="verificationForm" action="CheckGuestController" method="POST">
+                <div class="verify">
+                    <div class="form-group">
+                        <input 
+                            type="text" 
+                            id="guestId" 
+                            name="guestId" 
+                            class="form-input form-input-large" 
+                            placeholder="012345678"
+                            required
+                            value="<%= idNum != null ? idNum : "" %>"
+                            >
+                    </div>
+
+                    <button type="submit" class="btn primary submit-btn" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                         </svg>
-                        <h2>Verify Guest Account</h2>
-                    </div>
-                    <button class="bill-close" onclick="closeVerifyGuestPopup()">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
+                        Check Guest Account
                     </button>
                 </div>
-                <div class="bill-content">
-                    <div class="hotel-info">
-                        <p style="color: #6b7280; margin-bottom: 20px;">Enter guest ID Number to check</p>
-                    </div>
+            </form>
 
-                    <form id="verifyGuestForm" method="get" action="CheckGuestController">
-                        <div style="margin-bottom: 20px;">
-                            <label for="guestId" style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">
-                                ID Number (Passport/Driver's License)
-                            </label>
-                            <div class="search" style="margin: 0;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                <polyline points="22,6 12,13 2,6"></polyline>
-                                </svg>
-                                <input 
-                                    type="text" 
-                                    id="guestId" 
-                                    name="guestId" 
-                                    placeholder="012345600001"
-                                    required
-                                    />
-                            </div>
-                        </div>
-
-                        <button type="submit" class="complete-checkout-btn" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                            Check Guest Account
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <%
-            String action = (String) session.getAttribute("FLASH_NEXT_WAY");
-            if (action != null) {
-                if (action.equalsIgnoreCase("booking")) {
-        %>
-        <jsp:include page="../components/createBookingPopup.jsp" />
-        <%
-        } else if (action.equalsIgnoreCase("createAcc")) {
-        %>
-        <jsp:include page="../components/createGuestPopup.jsp" />
-        <%
+            <%            if (guest != null) {
+            %>
+            <jsp:include page="../components/createBookingPopup.jsp"/>
+            <%
+            } else {
+            %>
+            <jsp:include page="../components/createGuestPopup.jsp"/>
+            <%
                 }
-            }
-            HttpSession ss = request.getSession(false);
-            if (ss != null) {
-                ss.removeAttribute("FLASH_ID_NUM");
-                ss.removeAttribute("FLASH_NEXT_WAY");
-            }
-        %>
+            %>
+        </div>
+
 
 
     </body>

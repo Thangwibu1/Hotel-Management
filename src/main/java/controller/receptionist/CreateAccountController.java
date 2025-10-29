@@ -50,7 +50,7 @@ public class CreateAccountController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession ss = request.getSession();
-        
+
         try {
             String idNumber = request.getParameter("idNumber");
             String password = request.getParameter("password");
@@ -62,14 +62,16 @@ public class CreateAccountController extends HttpServlet {
                 System.out.println("hahahahahha");
                 addGuest(fullName, phone, email, password, idNumber);
                 Guest newGuest = new GuestDAO().getGuestByIdNumber(idNumber);
-                ss.setAttribute("FLASH_NEXT_WAY", "booking");
-                ss.setAttribute("FLASH_ID_NUM", idNumber);
-                ss.setAttribute("GUEST", newGuest);
-                response.sendRedirect(request.getContextPath() + "/receptionist/receptionist?tab=bookings");
+                request.setAttribute("FLASH_ID_NUM", idNumber);
+                request.setAttribute("GUEST", newGuest);
+                request.setAttribute("STATUS", "true");
+                request.setAttribute("CURRENT_TAB", "bookings");
+                request.getRequestDispatcher("/receptionist/bookingPage.jsp?tab=bookings").forward(request, response);
             } else {
-                ss.setAttribute("FLASH_NEXT_WAY", "createAcc");
-                ss.setAttribute("FLASH_ID_NUM", idNumber);
-                response.sendRedirect(request.getContextPath() + "/receptionist/receptionist?tab=bookings");
+                request.setAttribute("STATUS", "true");
+                request.setAttribute("CURRENT_TAB", "bookings");
+                request.setAttribute("FLASH_ID_NUM", idNumber);
+                request.getRequestDispatcher("/receptionist/bookingPage.jsp?tab=bookings").forward(request, response);
             }
         } catch (Exception e) {
             e.printStackTrace();
