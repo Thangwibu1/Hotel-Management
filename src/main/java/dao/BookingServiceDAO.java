@@ -104,6 +104,40 @@ public ArrayList<BookingService> getAllBookingService(int staffID)  {
         }
         return result;
     }
+    
+    //dùng cho lay list bao 
+    public ArrayList<BookingService> getAllBookingServiceBaseStartEndDate(LocalDate startDateReport, LocalDate endDateReport, int staffID) {
+        ArrayList<BookingService> result = new ArrayList<>();
+
+        String sql = "SELECT  [Booking_Service_ID],[BookingID],[ServiceID],[Quantity] ,[ServiceDate], [Status], [StaffID] FROM [HotelManagement].[dbo].[BOOKING_SERVICE] WHERE CONVERT(DATE, ServiceDate) BETWEEN ? AND ? and  [StaffID]  = ?";
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setObject(1, startDateReport);
+            ps.setObject(2, endDateReport);
+            ps.setInt(3, staffID);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                while (rs.next()) {
+                    int bookingServiceId = rs.getInt("Booking_Service_ID");
+                    int bookingId = rs.getInt("BookingID");
+                    int serviceId = rs.getInt("ServiceID");
+                    int quantity = rs.getInt("Quantity");
+                    java.time.LocalDate serviceDate = rs.getObject("ServiceDate", java.time.LocalDate.class);
+                    int status = rs.getInt("Status");
+
+                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, status); // THAY ?á»”I
+                    bookingService.setStaffID(rs.getInt("StaffID"));
+                    result.add(bookingService);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
     public ArrayList<BookingService> getBookingServiceByBookingId(int bookingId) {
 

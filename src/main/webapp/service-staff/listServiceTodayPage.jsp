@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : showBookingServiceToday
     Created on : Oct 26, 2025, 12:59:39 PM
     Author     : TranHongGam
@@ -25,12 +25,7 @@
             body {
                 background-color: #f5f5f5;
             }
-            .header {
-
-                color: white;
-                padding: 20px 0;
-                margin-bottom: 30px;
-            }
+            
             .booking-card {
                 transition: all 0.3s ease;
                 border: 1px solid #e5e7eb;
@@ -153,17 +148,12 @@
             ArrayList<Booking> bookingList = bookingDAO.getAllBookings();
             RoomDAO roomDAO = new RoomDAO();
             ArrayList<Room> roomList = roomDAO.getAllRoom();
-
-            if (listBookingService == null || listBookingService.isEmpty()) {
         %>
-        <p>Khong co booking service trong hom nay</p>
-        <%
-        } else {
-        %>
+        
         <div class="container">
-            <div class="tabs d-flex flex-column flex-md-row gap-2">
+            <div class="nav-main tabs d-flex flex-column flex-md-row gap-2">
 
-                <form action="<%= IConstant.registerServiceController%>" method="get" class="tab-form  w-100 w-md-auto">
+                <form action="<%= IConstant.registerServiceController%>" method="get" class="tab-form w-100 w-md-auto">
                     <button type="submit" class="tab w-100 ">
                         Register Service
                     </button>
@@ -181,8 +171,93 @@
                     </button>
                 </form>
             </div>
-            <!-- Thong ke -->
-            <div class="row mb-4">
+            <div class="type-report row g-4 justify-content-center">
+
+                        
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <form action="<%= IConstant.listServiceTodayController%>" method="POST" class="h-100"> 
+
+                        <input type="hidden" name="report_type" value="today_services">
+                        <button type="submit" 
+                                class="card report-card shadow-sm w-100 border-0 h-100" 
+                                style="cursor: pointer; background-color: white;"> 
+
+                            <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
+                                <h4 class="card-title fw-bold text-dark">Today's Services</h4>
+                                <p class="card-text text-muted mb-4">List of all services provided today</p>
+                                
+                            </div>
+
+                        </button>
+
+                    </form>
+                </div>
+
+
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <form action="<%= IConstant.employeePerformanceController%>" method="POST" class="h-100"> 
+
+                        <input type="hidden" name="report_type" value="employee_performance">
+
+                        <button type="submit" 
+                                class="card report-card shadow-sm w-100 border-0 h-100" 
+                                style="cursor: pointer; background-color: white;">
+
+                            <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#8a2be2" class="bi bi-people-fill mb-3" viewBox="0 0 16 16">
+                                <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-9.975.324A.286.286 0 0 0 5 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5c0-.12-.016-.238-.046-.352zM.024 12.289V12.5l.004.148v.005c.036.702.392 1.28.883 1.636A2.887 2.887 0 0 0 2 13.064V12.5a.286.286 0 0 0-.25-.375H1.455a.299.299 0 0 0-.083.018zM3.454 13a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zM3 12.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zM3 12a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                                </svg>
+
+                                <h4 class="card-title fw-bold text-dark">Employee Performance</h4>
+                                <p class="card-text text-muted mb-4">Statistics of work performance by shift/day</p>
+                                
+                            </div>
+
+                        </button>
+
+                    </form>
+                </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <form action="<%= IConstant.serviceRevenueController %>" method="POST" class="h-100">
+
+                            <input type="hidden" name="report_type" value="service_revenue">
+
+                            <button type="submit"
+                                    class="card report-card shadow-sm w-100 border-0 h-100"
+                                    style="cursor: pointer; background-color: white;">
+
+                                <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#fbc531" class="bi bi-currency-dollar mb-3" viewBox="0 0 16 16">
+                                    <path d="M4 10.78a.5.5 0 0 0 .5.5h2a.5.5 0 0 1 0 1h-2.5a.5.5 0 0 0 0 1h2.5a1.5 1.5 0 0 0 0-3H5.5a.5.5 0 0 1 0-1h2.5a.5.5 0 0 0 0-1h-2.5a1.5 1.5 0 0 1 0-3H12a.5.5 0 0 0 0-1h-2.5a.5.5 0 0 1 0-1H12a1.5 1.5 0 0 0 0-3H4.5a.5.5 0 0 0 0 1h2a.5.5 0 0 1 0 1H4.5a.5.5 0 0 0 0 1h2.5a1.5 1.5 0 0 1 0 3H4z"/>
+                                    </svg>
+                                    <h4 class="card-title fw-bold text-dark">Service Revenue</h4>
+                                    <p class="card-text text-muted mb-4">Total revenue value by time period</p>
+                                    
+                                </div>
+
+                            </button>
+
+                        </form>
+                    </div>
+            </div>
+            
+            <%
+                if (listBookingService == null || listBookingService.isEmpty()) {
+            %>
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="alert alert-info text-center" role="alert">
+                        Không có booking service nào trong hôm nay.
+                    </div>
+                </div>
+            </div>
+            <%
+            } else {
+            %>
+            
+            <div class="row mb-4 mt-4">
                 <div class="col-md-12">
                     <div class="card stat-card text-center border-0 shadow-sm">
                         <div class="card-body">
@@ -226,7 +301,6 @@
             </div>
 
 
-            <!-- Danh sách Booking Services -->
             <div class="row">
                 <%
                     for (BookingService bs : listBookingService) {
@@ -242,27 +316,28 @@
                         <div class="card-header-custom d-flex justify-content-between align-items-center">
                             <span><%= service.getServiceName()%></span>
                             <span class="badge status-badge
-                                  <%
-                                      if (bs.getStatus() == 0) {
-                                  %> status-pending  <%
-                                  } else if (bs.getStatus() == 1) {
-                                  %> status-confirmed  <%
-                                  } else if (bs.getStatus() == 2) {
-                                  %> status-completed   <%
-                                  } else {
+                                <%
+                                    if (bs.getStatus() == 0) {
+                                %> status-pending  <%
+                                    } else if (bs.getStatus() == 1) {
+                                %> status-confirmed  <%
+                                    } else if (bs.getStatus() == 2) {
+                                %> status-completed   <%
+                                    } else {
 
-                                  %> status-cancelled   <%                                                                        }%>">
+                                %> status-cancelled   <%         
+                                    }%>">
                                 <%
                                     if (bs.getStatus() == 0) {
                                 %> Pending  <%
-                                        } else if (bs.getStatus() == 1) {
+                                    } else if (bs.getStatus() == 1) {
                                 %> In Progress  <%
-                                         } else if (bs.getStatus() == 2) {
+                                     } else if (bs.getStatus() == 2) {
                                 %> Completed  <%
-                                         } else {
+                                     } else {
                                              // = -1
                                 %> Cancelled  <%
-                                             }
+                                     }
                                 %>
                             </span>
                         </div>
@@ -301,11 +376,12 @@
                 %>
                 
             </div>
+            <%  
+            }
+            %>
         </div>
 
 
-        <%            }
-        %>
         <jsp:include page="footerService.jsp"/>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>

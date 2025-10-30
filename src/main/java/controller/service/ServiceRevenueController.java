@@ -5,12 +5,15 @@
 
 package controller.service;
 
+import dao.BookingServiceDAO;
 import java.io.IOException;
+import java.time.LocalDate;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import utils.IConstant;
 
 /**
  *
@@ -24,7 +27,12 @@ public class ServiceRevenueController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         try {
-
+            
+            String report_type =(String) request.getParameter("report_type");
+            if(report_type.equals("service_revenue")){
+                 request.getRequestDispatcher(IConstant.serviceRevenuePage).forward(request, response);
+            }
+            
         } catch (Exception e) {
 
         } finally {
