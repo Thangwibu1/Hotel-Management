@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 
 @WebServlet("/register")
 public class RegisterController extends HttpServlet {
@@ -47,24 +46,36 @@ public class RegisterController extends HttpServlet {
         String dateOfBirth = req.getParameter("dateOfBirth");
         String address = req.getParameter("address");
         String idNumber = req.getParameter("idNumber");
-        System.out.println(dateOfBirth);
+        
         try {
+            // Validate password match
+            if (!password.equals(confirmPassword)) {
+                resp.sendRedirect(IConstant.registerPage + "?error=Mật khẩu xác nhận không khớp");
+                return;
+            }
+            
             if (!validate(email, idNumber)) {
-                addGuest(fullName, phone, email, password, address, idNumber, dateOfBirth);
-                req.setAttribute("fullName", fullName);
-                req.setAttribute("email", email);
-                req.setAttribute("phone", phone);
-                req.setAttribute("dateOfBirth", dateOfBirth);
-                req.setAttribute("address", address);
-                req.setAttribute("idNumber", idNumber);
-                req.getRequestDispatcher(IConstant.registerSuccess).forward(req, resp);
+                boolean success = addGuest(fullName, phone, email, password, address, idNumber, dateOfBirth);
+                if (success) {
+                    req.setAttribute("fullName", fullName);
+                    req.setAttribute("email", email);
+                    req.setAttribute("phone", phone);
+                    req.setAttribute("dateOfBirth", dateOfBirth);
+                    req.setAttribute("address", address);
+                    req.setAttribute("idNumber", idNumber);
+                    req.getRequestDispatcher(IConstant.registerSuccess).forward(req, resp);
+                } else {
+                    resp.sendRedirect(IConstant.registerPage + "?error=Không thể tạo tài khoản. Vui lòng thử lại sau.");
+                    return;
+                }
             } else {
-                System.out.println("Toi day la dung ne");
+                System.out.println("Email hoặc CMND/CCCD đã được sử dụng");
                 resp.sendRedirect(IConstant.registerPage + "?error=Email or ID number is already used");
                 return;
             }
         } catch (Exception e) {
             e.printStackTrace();
+            resp.sendRedirect(IConstant.registerPage + "?error=Đã có lỗi xảy ra. Vui lòng thử lại sau.");
         }
 
 

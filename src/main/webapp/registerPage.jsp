@@ -319,6 +319,110 @@
             margin-right: 8px;
         }
         
+        /* === ERROR POPUP STYLES === */
+        .error-popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        .error-popup-overlay.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .error-popup {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            animation: slideDown 0.4s ease-out;
+            position: relative;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .error-popup-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .error-popup-icon i {
+            font-size: 3em;
+            color: white;
+        }
+        
+        .error-popup h2 {
+            font-family: var(--font-heading);
+            font-size: 2em;
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+        
+        .error-popup p {
+            font-size: 1.1em;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .error-popup-close {
+            background: linear-gradient(135deg, var(--color-gold), #f4e4a6);
+            color: #fff;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(201, 171, 129, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .error-popup-close:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(201, 171, 129, 0.4);
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .form-row {
@@ -331,6 +435,14 @@
             
             .register-container h2 {
                 font-size: 2.2em;
+            }
+            
+            .error-popup {
+                padding: 30px 20px;
+            }
+            
+            .error-popup h2 {
+                font-size: 1.6em;
             }
         }
     </style>
@@ -398,8 +510,8 @@
                     <span class="error-text" id="phone-error">Số điện thoại không hợp lệ</span>
                 </div>
                 <div class="form-group">
-                    <label for="dateOfBirth"><i class="fa-solid fa-cake-candles form-icon"></i>Ngày sinh</label>
-                    <input type="date" id="dateOfBirth" name="dateOfBirth">
+                    <label for="dateOfBirth"><i class="fa-solid fa-cake-candles form-icon"></i>Ngày sinh <span style="color: #e74c3c;">*</span></label>
+                    <input type="date" id="dateOfBirth" name="dateOfBirth" required>
                     <span class="error-text" id="dateOfBirth-error">Vui lòng chọn ngày sinh</span>
                 </div>
             </div>
@@ -429,10 +541,80 @@
     </div>
 </main>
 
+<!-- ERROR POPUP -->
+<div id="errorPopupOverlay" class="error-popup-overlay">
+    <div class="error-popup">
+        <div class="error-popup-icon">
+            <i class="fa-solid fa-exclamation-triangle"></i>
+        </div>
+        <h2>Đăng Ký Thất Bại!</h2>
+        <p id="errorMessage">Đã có lỗi xảy ra trong quá trình đăng ký. Vui lòng thử lại sau hoặc liên hệ với chúng tôi để được hỗ trợ.</p>
+        <button class="error-popup-close" onclick="closeErrorPopup()">Đã hiểu</button>
+    </div>
+</div>
+
 <script>
+    // === ERROR POPUP LOGIC ===
+    function closeErrorPopup() {
+        const overlay = document.getElementById('errorPopupOverlay');
+        overlay.classList.remove('show');
+        // Xóa param error khỏi URL
+        const url = new URL(window.location);
+        url.searchParams.delete('error');
+        window.history.replaceState({}, '', url);
+    }
+    
+    // Kiểm tra param error khi trang load
+    const urlParams = new URLSearchParams(window.location.search);
+    const errorParam = urlParams.get('error');
+    
+    if (errorParam) {
+        const overlay = document.getElementById('errorPopupOverlay');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        // Tùy chỉnh message dựa trên error type
+        if (errorParam.includes('Email') || errorParam.includes('ID number')) {
+            errorMessage.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Email hoặc số CMND/CCCD đã được sử dụng.<br>Vui lòng kiểm tra lại thông tin hoặc đăng nhập nếu bạn đã có tài khoản.';
+        } else {
+            errorMessage.textContent = decodeURIComponent(errorParam);
+        }
+        
+        // Hiển thị popup
+        overlay.classList.add('show');
+    }
+    
+    // Đóng popup khi click bên ngoài
+    document.getElementById('errorPopupOverlay').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeErrorPopup();
+        }
+    });
+    
+    // Đóng popup khi nhấn ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const overlay = document.getElementById('errorPopupOverlay');
+            if (overlay.classList.contains('show')) {
+                closeErrorPopup();
+            }
+        }
+    });
+    
+    // === VALIDATION LOGIC ===
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('registerForm');
         const inputs = form.querySelectorAll('input[required]');
+        
+        // Set min and max date for date of birth
+        const dateOfBirthInput = document.getElementById('dateOfBirth');
+        if (dateOfBirthInput) {
+            const today = new Date();
+            const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+            const minDate = new Date(today.getFullYear() - 120, today.getMonth(), today.getDate());
+            
+            dateOfBirthInput.max = maxDate.toISOString().split('T')[0];
+            dateOfBirthInput.min = minDate.toISOString().split('T')[0];
+        }
         
         // Validate individual field
         function validateField(input) {
@@ -482,6 +664,36 @@
                     isValid = false;
                     if (errorElement) {
                         errorElement.textContent = 'Số điện thoại không hợp lệ (10-11 số)';
+                    }
+                }
+            }
+            // Check date of birth
+            else if (input.id === 'dateOfBirth' && input.value) {
+                const selectedDate = new Date(input.value);
+                const today = new Date();
+                const age = today.getFullYear() - selectedDate.getFullYear();
+                const monthDiff = today.getMonth() - selectedDate.getMonth();
+                const dayDiff = today.getDate() - selectedDate.getDate();
+                
+                // Check if date is in the future
+                if (selectedDate > today) {
+                    isValid = false;
+                    if (errorElement) {
+                        errorElement.textContent = 'Ngày sinh không thể là ngày tương lai';
+                    }
+                }
+                // Check minimum age (18 years old)
+                else if (age < 18 || (age === 18 && (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)))) {
+                    isValid = false;
+                    if (errorElement) {
+                        errorElement.textContent = 'Bạn phải đủ 18 tuổi để đăng ký';
+                    }
+                }
+                // Check maximum age (120 years old)
+                else if (age > 120) {
+                    isValid = false;
+                    if (errorElement) {
+                        errorElement.textContent = 'Ngày sinh không hợp lệ';
                     }
                 }
             }
