@@ -22,23 +22,21 @@
     <title>Xác Nhận Đặt Phòng - Luxury Hotel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
     <style>
-        /* === MODERN LUXURY DESIGN === */
+        /* === BASIC LUXURY WHITE THEME === */
         :root { 
-            --primary-color: #2c3e50;
-            --accent-color: #d4af37;
-            --success-color: #27ae60;
-            --dark-text: #2c3e50;
-            --light-gray: #ecf0f1;
-            --gradient-start: #667eea;
-            --gradient-end: #764ba2;
+            --gold: #d4af37;
+            --black: #1a1a1a;
+            --gray: #666;
+            --light-gray: #f8f8f8;
+            --border: #e0e0e0;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
-            color: var(--dark-text);
+            background: #fafafa;
+            color: var(--black);
             line-height: 1.6;
             min-height: 100vh;
             padding: 40px 20px;
@@ -56,141 +54,107 @@
         }
         
         .booking-summary-card { 
-            background: #fff; 
-            border-radius: 20px; 
-            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+            background: #ffffff;
+            border-radius: 8px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid var(--border);
             overflow: hidden;
-            animation: slideUp 0.6s ease-out;
+            animation: slideUp 0.5s ease-out;
         }
         
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(50px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
         .card-header { 
-            background: linear-gradient(135deg, var(--success-color) 0%, #2ecc71 100%);
-            color: white; 
-            padding: 50px 30px;
+            background: var(--black);
+            color: #ffffff;
+            padding: 40px 30px;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .card-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: pulse 3s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.8; }
+            border-bottom: 3px solid var(--gold);
         }
         
         .card-header .icon { 
-            font-size: 4em; 
-            margin-bottom: 15px;
-            animation: bounce 1s ease-in-out;
-        }
-        
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-20px); }
-            60% { transform: translateY(-10px); }
+            font-size: 3.5em; 
+            margin-bottom: 12px;
+            color: var(--gold);
         }
         
         .card-header h1 { 
             margin: 0 0 10px 0;
-            font-size: 2.2em;
-            font-weight: bold;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            font-size: 2em;
+            font-weight: 600;
         }
         
         .card-header p {
-            font-size: 1.1em;
-            opacity: 0.95;
+            font-size: 1em;
+            opacity: 0.9;
         }
         
         .card-body { 
-            padding: 40px;
-            background: linear-gradient(to bottom, #fff 0%, #f8f9fa 100%);
+            padding: 35px;
+            background: #ffffff;
         }
         
         .detail-section { 
-            margin-bottom: 35px;
-            background: white;
+            margin-bottom: 30px;
+            background: var(--light-gray);
             padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-        }
-        
-        .detail-section:hover {
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transform: translateY(-2px);
+            border-radius: 6px;
+            border-left: 3px solid var(--gold);
         }
         
         .detail-section h2 { 
-            font-size: 1.5em;
-            color: var(--primary-color);
-            border-bottom: 3px solid var(--accent-color);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            font-size: 1.3em;
+            color: var(--black);
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 12px;
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-weight: 600;
         }
         
         .detail-section h2 i {
-            color: var(--accent-color);
+            color: var(--gold);
         }
         
         .detail-item { 
             display: flex; 
             justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #e9ecef;
-            transition: background 0.3s ease;
-        }
-        
-        .detail-item:hover {
-            background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.05) 50%, transparent 100%);
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
         }
         
         .detail-item:last-child { border-bottom: none; }
         
         .detail-item strong { 
-            color: #555;
-            font-weight: 600;
+            color: var(--gray);
+            font-weight: 500;
             display: flex;
             align-items: center;
             gap: 8px;
         }
         
         .detail-item strong i {
-            color: var(--accent-color);
-            width: 20px;
+            color: var(--gold);
+            width: 18px;
         }
         
         .detail-item span {
-            color: var(--primary-color);
+            color: var(--black);
             font-weight: 500;
         }
         
         .booking-id-badge {
-            background: linear-gradient(135deg, var(--accent-color), #f4e4a6);
-            color: var(--primary-color);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
+            background: var(--gold);
+            color: var(--black);
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-weight: 600;
         }
         
         .services-table { 
@@ -202,93 +166,73 @@
         }
         
         .services-table thead {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
+            background: var(--light-gray);
+            color: var(--black);
         }
         
         .services-table th { 
             text-align: left; 
-            padding: 15px;
+            padding: 12px;
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.9em;
+            font-size: 0.8rem;
             letter-spacing: 0.5px;
         }
         
         .services-table td {
-            padding: 15px;
-            border-bottom: 1px solid #e9ecef;
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
         }
         
         .services-table tbody tr {
-            transition: all 0.3s ease;
+            transition: background 0.2s ease;
         }
         
         .services-table tbody tr:hover { 
-            background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.1) 50%, transparent 100%);
-            transform: scale(1.01);
+            background: var(--light-gray);
         }
         
         .no-services {
             text-align: center;
             padding: 30px;
-            color: #777;
+            color: var(--gray);
             font-style: italic;
         }
         
         .card-footer { 
-            background: linear-gradient(135deg, var(--light-gray) 0%, #dfe6e9 100%);
-            padding: 30px;
+            background: var(--light-gray);
+            padding: 25px;
             text-align: center;
-            border-top: 3px solid var(--accent-color);
+            border-top: 2px solid var(--border);
         }
         
         .btn { 
             display: inline-block; 
-            padding: 15px 35px;
-            border-radius: 50px;
+            padding: 12px 30px;
+            border-radius: 4px;
             border: none;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             text-decoration: none;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+            font-weight: 500;
         }
         
         .btn-primary { 
-            background: linear-gradient(135deg, var(--accent-color), #f4e4a6);
-            color: var(--primary-color);
+            background: var(--gold);
+            color: var(--black);
         }
         
         .btn-primary:hover { 
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+            opacity: 0.9;
         }
         
         .error-message {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            background: #f44336;
             color: white;
             padding: 30px;
-            border-radius: 15px;
+            border-radius: 6px;
             text-align: center;
-        }
-        
-        .success-checkmark {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px auto;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255,255,255,0.2);
-            animation: scaleIn 0.5s ease-out;
-        }
-        
-        @keyframes scaleIn {
-            from { transform: scale(0); }
-            to { transform: scale(1); }
         }
     </style>
 </head>

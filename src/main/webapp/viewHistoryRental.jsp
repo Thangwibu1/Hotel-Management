@@ -39,43 +39,339 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lịch Sử Đặt Phòng - Luxury Hotel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        /* (CSS giữ nguyên) */
-        :root { --primary-color: #007bff; --secondary-color: #6c757d; --dark-bg: #222; --light-text: #fff; --dark-text: #333; }
+        /* === LUXURY ELEGANT THEME === */
+        :root { 
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Lato', sans-serif;
+            --color-gold: #c9ab81;
+            --color-charcoal: #1a1a1a;
+            --color-offwhite: #f8f7f5;
+            --color-grey: #666;
+            --color-light: #999;
+            --border-color: #e5e5e5;
+        }
+        
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: var(--dark-text); background-color: #f4f4f4; }
-        .container { max-width: 1200px; margin: auto; padding: 0 20px; }
+        
+        body { 
+            font-family: var(--font-body);
+            line-height: 1.8;
+            color: var(--color-charcoal);
+            background: var(--color-offwhite);
+            min-height: 100vh;
+        }
+        
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 20px; 
+        }
+        
         a { text-decoration: none; color: inherit; }
-        .header { background-color: var(--dark-bg); color: var(--light-text); padding: 1rem 0; }
-        .header .container { display: flex; justify-content: space-between; align-items: center; }
-        .logo a { font-size: 1.5em; font-weight: bold; }
-        .main-nav { display: flex; align-items: center; }
-        .main-nav form { margin-left: 10px; }
-        .btn { display: inline-block; padding: 8px 15px; border-radius: 5px; border: none; cursor: pointer; font-size: 0.9rem; text-align: center; }
-        .btn-secondary { background-color: var(--secondary-color); color: white; }
-        .btn-primary { background-color: var(--primary-color); color: white; }
-        .footer { background: #333; color: #fff; padding: 2rem 0 0; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding-bottom: 2rem; }
-        .footer-col h3 { margin-bottom: 1rem; }
-        .footer-col p, .footer-col li { margin-bottom: 0.5rem; color: #ccc; }
-        .footer-col ul { list-style-type: none; }
-        .footer-col a:hover { color: var(--primary-color); }
-        .footer-bottom { text-align: center; padding: 1rem 0; border-top: 1px solid #444; }
-        .main-content { padding: 2rem 0; }
-        .history-container { background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
-        .page-title { font-size: 2.5rem; color: var(--dark-text); margin-bottom: 1rem; border-bottom: 2px solid var(--primary-color); padding-bottom: 0.5rem; display: inline-block; }
-        .history-table { width: 100%; border-collapse: collapse; margin-top: 2rem; font-size: 0.95rem; }
-        .history-table th, .history-table td { padding: 12px 10px; border: 1px solid #ddd; text-align: left; vertical-align: middle; }
-        .history-table th { background-color: #f2f2f2; font-weight: bold; }
-        .history-table tr:nth-child(even) { background-color: #f9f9f9; }
-        .history-table tr:hover { background-color: #f1f1f1; }
-        .no-booking { text-align: center; padding: 40px; font-size: 1.2em; color: #777; }
-        .status { padding: 5px 10px; border-radius: 15px; color: white; font-size: 0.8em; font-weight: bold; text-align: center; display: inline-block; min-width: 90px; }
-        .status.reserved { background-color: #007bff; }
-        .status.checked-in { background-color: #28a745; }
-        .status.checked-out { background-color: #6c757d; }
-        .status.canceled { background-color: #dc3545; }
-        .btn-warning { background-color: #ffc107; color: #212529; }
+        
+        /* === HEADER === */
+        .header { 
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header .container { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        .logo a { 
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+        
+        .main-nav { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+        }
+        
+        .main-nav span { 
+            color: #fff; 
+            font-size: 0.95rem;
+        }
+        
+        .main-nav form { margin: 0; }
+        
+        .btn { 
+            display: inline-block;
+            padding: 10px 24px;
+            border-radius: 5px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-weight: 700;
+        }
+        
+        .btn:hover { opacity: 0.9; }
+        
+        .btn-secondary { 
+            background: #6c757d;
+            color: #fff;
+            border-color: #6c757d;
+        }
+        
+        .btn-primary { 
+            background: var(--color-gold);
+            color: #fff;
+            border-color: var(--color-gold);
+        }
+        
+        .btn-primary:hover { 
+            background: transparent;
+            color: var(--color-gold);
+        }
+        
+        .btn-warning { 
+            background: #ffa500;
+            color: #fff;
+            border-color: #ffa500;
+        }
+        
+        .btn-warning:hover {
+            background: transparent;
+            color: #ffa500;
+        }
+        
+        /* === FOOTER === */
+        .footer { 
+            background: var(--color-charcoal);
+            color: #ccc;
+            padding: 3rem 0 0;
+            margin-top: 100px;
+        }
+        
+        .footer-grid { 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            padding-bottom: 2rem;
+        }
+        
+        .footer-col h3 { 
+            font-family: var(--font-heading);
+            margin-bottom: 1.2rem;
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .footer-col p, 
+        .footer-col li { 
+            margin-bottom: 0.7rem;
+        }
+        
+        .footer-col ul { list-style: none; }
+        .footer-col a { transition: all 0.3s ease; }
+        .footer-col a:hover { 
+            color: var(--color-gold);
+            padding-left: 5px;
+        }
+        .footer-col i { color: var(--color-gold); margin-right: 10px; }
+        
+        .footer-bottom { 
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid #444;
+            font-size: 0.9rem;
+            color: var(--color-grey);
+        }
+        
+        /* === MAIN CONTENT === */
+        .main-content { 
+            padding: 60px 0; 
+            min-height: 70vh;
+        }
+        
+        .page-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .page-title { 
+            font-family: var(--font-heading);
+            font-size: 3em;
+            color: var(--color-charcoal);
+            margin-bottom: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .page-title i {
+            color: var(--color-gold);
+            font-size: 0.8em;
+        }
+        
+        .page-subtitle {
+            color: var(--color-grey);
+            font-size: 1.2em;
+            font-weight: 300;
+        }
+        
+        .history-container { 
+            background: #fff;
+            padding: 0;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+        
+        .history-table { 
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1rem;
+        }
+        
+        .history-table th, 
+        .history-table td { 
+            padding: 20px 24px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        
+        .history-table thead {
+            background: linear-gradient(135deg, var(--color-charcoal) 0%, #2c2c2c 100%);
+        }
+        
+        .history-table th { 
+            color: #fff;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-bottom: none;
+        }
+        
+        .history-table tbody tr { 
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .history-table tbody tr:last-child {
+            border-bottom: none;
+        }
+        
+        .history-table tbody tr:hover { 
+            background: var(--color-offwhite);
+            transform: scale(1.005);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .history-table tbody td {
+            color: var(--color-charcoal);
+            font-weight: 400;
+        }
+        
+        .history-table tbody td:first-child {
+            font-weight: 700;
+            color: var(--color-gold);
+        }
+        
+        /* === ACTION BUTTONS COLUMN === */
+        .history-table tbody td:last-child {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .history-table tbody td:last-child form {
+            margin: 0 !important;
+        }
+        
+        .history-table .btn {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .history-table .btn i {
+            font-size: 0.9em;
+        }
+        
+        .no-booking { 
+            text-align: center;
+            padding: 100px 40px;
+            color: var(--color-grey);
+        }
+        
+        .no-booking i { 
+            font-size: 5rem;
+            color: var(--color-gold);
+            margin-bottom: 30px;
+            display: block;
+            opacity: 0.3;
+        }
+        
+        .no-booking p {
+            font-size: 1.3rem;
+            font-weight: 300;
+            margin-top: 15px;
+        }
+        
+        .status { 
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+            display: inline-block;
+            min-width: 110px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            border: 2px solid;
+        }
+        
+        .status.reserved { 
+            background: #e3f2fd;
+            color: #1976d2;
+            border-color: #1976d2;
+        }
+        .status.checkedin { 
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-color: #2e7d32;
+        }
+        .status.checkedout { 
+            background: #f5f5f5;
+            color: #616161;
+            border-color: #9e9e9e;
+        }
+        .status.canceled { 
+            background: #ffebee;
+            color: #c62828;
+            border-color: #c62828;
+        }
     </style>
 </head>
 <body>
@@ -96,9 +392,15 @@
 
 <main class="main-content">
     <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-history"></i>
+                Lịch Sử Đặt Phòng
+            </h1>
+            <p class="page-subtitle">Quản lý và xem chi tiết các lần đặt phòng của bạn</p>
+        </div>
+        
         <div class="history-container">
-            <h1 class="page-title">Lịch Sử Đặt Phòng Của Bạn</h1>
-
             <% if (bookings != null && !bookings.isEmpty()) { %>
             <table class="history-table">
                 <thead>
@@ -130,18 +432,22 @@
                         </span>
                     </td>
                     <td>
-                        <form action="<%=IConstant.detailBooking%>" method="post" style="display: inline; margin-right: 5px;">
+                        <form action="./detailBooking" method="post">
                             <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>">
                             <input type="hidden" name="guestId" value="<%= guest.getGuestId() %>">
-                            <button type="submit" class="btn btn-primary">Chi tiết</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-eye"></i> Chi tiết
+                            </button>
                         </form>
 
-                        <%-- NÚT CHỈNH SỬA DỊCH VỤ --%>
-                        <% if (!"Checked-out".equalsIgnoreCase(booking.getStatus()) && !"Canceled".equalsIgnoreCase(booking.getStatus())) { %>
-                            <form action="<%=IConstant.getBookingInfoServlet%>" method="post" style="display: inline;">
+                        <%-- NÚT CHỈNH SỬA DỊCH VỤ - CHỈ CHO PHÉP KHI TRẠNG THÁI LÀ "Reserved" --%>
+                        <% if ("Reserved".equalsIgnoreCase(booking.getStatus())) { %>
+                            <form action="<%=IConstant.getBookingInfoServlet%>" method="post">
                                 <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>">
                                 <input type="hidden" name="guestId" value="<%= guest.getGuestId() %>">
-                                <button type="submit" class="btn btn-warning">Chỉnh sửa dịch vụ</button>
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-edit"></i> Chỉnh sửa
+                                </button>
                             </form>
                         <% } %>
 
@@ -152,6 +458,7 @@
             </table>
             <% } else { %>
             <div class="no-booking">
+                <i class="fas fa-calendar-times"></i>
                 <p>Bạn chưa có lịch sử đặt phòng nào.</p>
             </div>
             <% } %>

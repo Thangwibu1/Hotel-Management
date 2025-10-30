@@ -49,18 +49,13 @@
     <title>Đặt phòng - <%= roomType.getTypeName() %> - Luxury Hotel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
     <style>
-        /* --- General, Header, Footer Styles --- */
+        /* --- BASIC LUXURY WHITE THEME --- */
         :root { 
-            --primary-color: #2c3e50;
-            --accent-color: #d4af37;
-            --secondary-color: #34495e;
-            --light-bg: #ecf0f1;
-            --dark-bg: #1a252f;
-            --light-text: #fff;
-            --dark-text: #2c3e50;
-            --border-color: #bdc3c7;
-            --success-color: #27ae60;
-            --danger-color: #e74c3c;
+            --gold: #d4af37;
+            --black: #1a1a1a;
+            --gray: #666;
+            --light-gray: #f8f8f8;
+            --border: #e0e0e0;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -68,8 +63,8 @@
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             line-height: 1.6; 
-            color: var(--dark-text); 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--black);
+            background: #fafafa;
             min-height: 100vh;
         }
         
@@ -77,127 +72,129 @@
         a { text-decoration: none; color: inherit; }
         
         .header { 
-            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
-            color: var(--light-text); 
-            padding: 1.2rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            background: var(--black);
+            color: #ffffff;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .header .container { display: flex; justify-content: space-between; align-items: center; }
         
         .logo a { 
             font-size: 1.8em; 
-            font-weight: bold; 
-            background: linear-gradient(135deg, #d4af37, #f4e4a6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-weight: 600; 
+            color: var(--gold);
+            letter-spacing: 1px;
         }
         
         .main-nav { display: flex; align-items: center; gap: 15px; }
-        .main-nav span { color: var(--accent-color); font-weight: 500; }
+        .main-nav span { color: #ffffff; font-weight: 400; }
         
         .btn { 
             display: inline-block; 
-            padding: 10px 25px; 
-            border-radius: 8px; 
+            padding: 10px 24px; 
+            border-radius: 4px; 
             border: none; 
             cursor: pointer; 
-            font-size: 1rem; 
+            font-size: 0.95rem; 
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             font-weight: 500;
         }
         
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        .btn-secondary { background-color: var(--secondary-color); color: white; }
+        .btn:hover { opacity: 0.9; }
+        .btn-secondary { background-color: var(--black); color: white; }
         .btn-book { 
-            background: linear-gradient(135deg, var(--accent-color), #f4e4a6);
-            color: var(--dark-bg);
-            font-weight: bold;
+            background: var(--gold);
+            color: var(--black);
+            font-weight: 600;
         }
         
         .footer { 
-            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
-            color: #fff; 
+            background: var(--black);
+            color: #999;
             padding: 2rem 0; 
-            margin-top: 40px; 
+            margin-top: 60px; 
             text-align: center;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+            border-top: 3px solid var(--gold);
         }
 
         /* --- CSS CHO TRANG ĐẶT PHÒNG --- */
         .main-content { padding: 40px 0; }
         
         .booking-form-section { 
-            background: #fff; 
-            padding: 50px; 
-            border-radius: 20px; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            background: #ffffff;
+            padding: 45px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid var(--border);
         }
         
         .booking-form-section h2 { 
             margin-top: 0; 
-            margin-bottom: 30px; 
-            border-bottom: 3px solid var(--accent-color);
-            padding-bottom: 20px; 
-            font-size: 2em;
-            color: var(--primary-color);
+            margin-bottom: 25px; 
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 15px; 
+            font-size: 1.8em;
+            color: var(--black);
             display: flex;
             align-items: center;
             gap: 10px;
+            font-weight: 600;
         }
         
         .section-header {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin: 35px 0 25px 0;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--light-bg);
+            gap: 12px;
+            margin: 30px 0 20px 0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
         }
         
         .section-header i {
-            font-size: 1.5em;
-            color: var(--accent-color);
+            font-size: 1.3em;
+            color: var(--gold);
         }
         
         .section-header h3 {
-            color: var(--primary-color);
-            font-size: 1.5em;
+            color: var(--black);
+            font-size: 1.3em;
             margin: 0;
+            font-weight: 600;
         }
         
         .form-group-rental { margin-bottom: 25px; }
         
         .form-group-rental label { 
             display: block; 
-            margin-bottom: 10px; 
-            font-weight: 600; 
-            color: var(--primary-color);
+            margin-bottom: 8px; 
+            font-weight: 500; 
+            color: var(--black);
             font-size: 0.95rem;
         }
         
         .form-group-rental input, .form-group-rental select { 
             width: 100%; 
-            padding: 14px; 
-            border: 2px solid var(--border-color);
-            border-radius: 10px; 
+            padding: 12px; 
+            border: 1px solid var(--border);
+            border-radius: 4px; 
             box-sizing: border-box; 
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            background: #ffffff;
+            color: var(--black);
+            transition: all 0.2s ease;
         }
         
         .form-group-rental input:focus, .form-group-rental select:focus {
-            border-color: var(--accent-color);
+            border-color: var(--gold);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
         }
         
         .form-group-rental input:read-only { 
-            background-color: var(--light-bg);
+            background-color: var(--light-gray);
             cursor: not-allowed;
-            border-color: #ddd;
+            color: var(--gray);
         }
         
         .form-row {
@@ -207,29 +204,30 @@
         }
         
         .total-price { 
-            margin-top: 35px; 
-            padding: 25px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 15px;
-            font-size: 1.8em; 
-            font-weight: bold; 
+            margin-top: 30px; 
+            padding: 20px;
+            background: var(--light-gray);
+            border-radius: 6px;
+            border-left: 3px solid var(--gold);
+            font-size: 1.5em; 
+            font-weight: 600; 
             text-align: right;
-            color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            color: var(--black);
         }
 
         /* === CSS CHO CREDIT CARD === */
         .credit-card-section {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            padding: 30px;
-            border-radius: 15px;
-            margin: 30px 0;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            background: var(--light-gray);
+            padding: 25px;
+            border-radius: 6px;
+            margin: 25px 0;
+            border-left: 3px solid var(--gold);
         }
         
         .credit-card-section h3 {
-            color: white;
-            margin: 0 0 20px 0;
+            color: var(--black);
+            margin: 0 0 18px 0;
+            font-weight: 600;
         }
         
         .card-visual {
@@ -302,29 +300,28 @@
         
         .card-form-group label {
             display: block;
-            color: white;
-            margin-bottom: 8px;
+            color: var(--black);
+            margin-bottom: 6px;
             font-weight: 500;
         }
         
         .card-form-group input {
             width: 100%;
-            padding: 12px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 8px;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: #ffffff;
+            color: var(--black);
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
         }
         
         .card-form-group input::placeholder {
-            color: rgba(255,255,255,0.5);
+            color: var(--gray);
         }
         
         .card-form-group input:focus {
-            border-color: var(--accent-color);
-            background: rgba(255,255,255,0.15);
+            border-color: var(--gold);
             outline: none;
         }
         
@@ -339,96 +336,88 @@
         .service-adder .form-group-rental { flex-grow: 1; margin-bottom: 0; }
         
         #add-service-btn { 
-            padding: 14px 25px; 
-            background: linear-gradient(135deg, var(--success-color), #2ecc71);
+            padding: 12px 20px; 
+            background: #4CAF50;
             color: white; 
             border: none; 
-            border-radius: 10px; 
+            border-radius: 4px; 
             cursor: pointer; 
-            font-size: 1.3rem; 
+            font-size: 1.1rem; 
             line-height: 1;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+            transition: all 0.2s ease;
         }
         
         #add-service-btn:hover { 
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+            opacity: 0.9;
         }
         
-        #selected-services-list { margin-top: 20px; }
+        #selected-services-list { margin-top: 18px; }
         
         .selected-service-item { 
             display: flex; 
             align-items: center; 
-            gap: 15px; 
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            padding: 15px; 
-            border: 2px solid var(--border-color);
-            border-radius: 12px; 
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
+            gap: 12px; 
+            background: var(--light-gray);
+            padding: 14px; 
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--gold);
+            border-radius: 6px; 
+            margin-bottom: 12px;
         }
         
-        .selected-service-item:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transform: translateX(5px);
-        }
-        
-        .selected-service-item span { flex-grow: 1; font-weight: 500; color: var(--primary-color); }
+        .selected-service-item span { flex-grow: 1; font-weight: 500; color: var(--black); }
         
         .service-quantity, .service-date { 
-            padding: 10px; 
-            border: 2px solid var(--border-color);
-            border-radius: 8px; 
+            padding: 8px; 
+            border: 1px solid var(--border);
+            border-radius: 4px; 
             width: 80px; 
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
+            font-size: 0.95rem;
+            transition: border-color 0.2s ease;
         }
         
         .service-quantity:focus, .service-date:focus {
-            border-color: var(--accent-color);
+            border-color: var(--gold);
             outline: none;
         }
         
         .service-date { width: 155px; }
         
         .remove-service-btn { 
-            background: linear-gradient(135deg, var(--danger-color), #c0392b);
+            background: #f44336;
             color: white; 
             border: none; 
             border-radius: 50%; 
-            width: 35px; 
-            height: 35px; 
+            width: 32px; 
+            height: 32px; 
             cursor: pointer; 
             flex-shrink: 0; 
             font-weight: bold;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            transition: all 0.2s ease;
         }
         
         .remove-service-btn:hover { 
-            transform: rotate(90deg);
-            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+            opacity: 0.9;
         }
         
         .info-box {
-            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-            border-left: 5px solid var(--success-color);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 25px 0;
+            background: #e8f5e9;
+            border-left: 3px solid #4CAF50;
+            padding: 18px;
+            border-radius: 6px;
+            margin: 20px 0;
         }
         
         .info-box i {
-            color: var(--success-color);
-            margin-right: 10px;
+            color: #4CAF50;
+            margin-right: 8px;
         }
         
         .info-box p {
             margin: 0;
-            color: var(--primary-color);
-            line-height: 1.8;
+            color: var(--black);
+            line-height: 1.6;
         }
     </style>
 </head>

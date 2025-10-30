@@ -28,175 +28,213 @@
     <title>Chỉnh sửa Dịch vụ - Luxury Hotel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
     <style>
+        /* === BASIC LUXURY WHITE THEME === */
         :root {
-            --color-gold: #c9ab81;
-            --color-charcoal: #1a1a1a;
-            --color-offwhite: #f8f7f5;
-            --color-grey: #666;
-            --primary-color: #007bff;
+            --gold: #d4af37;
+            --black: #1a1a1a;
+            --gray: #666;
+            --light-gray: #f8f8f8;
+            --border: #e0e0e0;
         }
 
         body {
-            font-family: "Lato", sans-serif;
-            background-color: var(--color-offwhite);
-            color: var(--color-charcoal);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #fafafa;
+            color: var(--black);
             line-height: 1.6;
-            margin: 0;
-            padding: 20px;
+            min-height: 100vh;
+            padding: 40px 20px;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 20px auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid var(--border);
         }
 
         h1, h2, h3 {
-            font-family: "Playfair Display", serif;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         h1 {
             text-align: center;
-            color: var(--color-charcoal);
-            margin-bottom: 10px;
+            color: var(--black);
+            margin-bottom: 25px;
+            font-size: 2rem;
+            font-weight: 600;
         }
 
         .back-link {
             display: inline-block;
             margin-bottom: 20px;
-            color: var(--color-gold);
-            font-weight: bold;
+            color: var(--gold);
+            font-weight: 500;
+            padding: 8px 15px;
+            border: 1px solid var(--gold);
+            border-radius: 4px;
+            transition: all 0.2s ease;
         }
 
         .back-link:hover {
-            text-decoration: underline;
+            background: var(--gold);
+            color: var(--black);
         }
 
         .booking-info {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
+            background: var(--light-gray);
+            padding: 25px;
+            border-radius: 6px;
             margin-bottom: 30px;
-            border-left: 5px solid var(--color-gold);
+            border-left: 3px solid var(--gold);
+        }
+
+        .booking-info h3 {
+            color: var(--black);
+            margin-bottom: 15px;
+            font-weight: 600;
         }
 
         .booking-info p {
-            margin: 0 0 10px;
+            margin: 0 0 12px;
         }
 
         .booking-info strong {
-            min-width: 120px;
+            min-width: 150px;
             display: inline-block;
+            color: var(--gray);
         }
 
         .section-title {
-            border-bottom: 2px solid var(--color-gold);
-            padding-bottom: 10px;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 12px;
             margin-bottom: 20px;
+            color: var(--black);
+            font-size: 1.5em;
+            font-weight: 600;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+            background: #ffffff;
         }
 
         th, td {
             padding: 12px;
-            border: 1px solid #ddd;
+            border-bottom: 1px solid var(--border);
             text-align: left;
         }
 
         th {
-            background-color: #f2f2f2;
+            background: var(--light-gray);
+            color: var(--black);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: var(--light-gray);
         }
 
         .service-status {
-            padding: 3px 8px;
-            border-radius: 12px;
-            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
             font-size: 0.8em;
+            display: inline-block;
+            font-weight: 600;
+            border: 2px solid;
         }
 
-        .status-0 {
-            background-color: #007bff;
+        .status-0 { 
+            background: #e3f2fd;
+            color: #1976d2;
+            border-color: #1976d2;
         }
-
-        /* Chưa làm */
-        .status-1 {
-            background-color: #ffc107;
-            color: #212529;
+        .status-1 { 
+            background: #fff3e0;
+            color: #e65100;
+            border-color: #e65100;
         }
-
-        /* Đang làm */
-        .status-2 {
-            background-color: #28a745;
+        .status-2 { 
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-color: #2e7d32;
         }
-
-        /* Đã làm */
-        .status--1 {
-            background-color: #6c757d;
+        .status--1 { 
+            background: #f5f5f5;
+            color: #616161;
+            border-color: #9e9e9e;
         }
-
-        /* Đã hủy */
 
         .btn {
             display: inline-block;
-            padding: 10px 20px;
-            border-radius: 5px;
-            border: 1px solid transparent;
+            padding: 10px 24px;
+            border-radius: 4px;
+            border: none;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.95rem;
             text-align: center;
-            font-weight: 700;
-            transition: all 0.3s ease;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
+
+        .btn:hover { opacity: 0.9; }
 
         .btn-primary {
-            background-color: var(--color-gold);
-            color: #fff;
-            border-color: var(--color-gold);
-        }
-
-        .btn-primary:hover {
-            background-color: transparent;
-            color: var(--color-gold);
+            background: var(--gold);
+            color: var(--black);
         }
 
         .no-services {
             text-align: center;
-            color: var(--color-grey);
-            padding: 20px;
-            background: #fafafa;
-            border-radius: 5px;
+            color: var(--gray);
+            padding: 35px;
+            background: var(--light-gray);
+            border-radius: 6px;
         }
 
         .form-actions {
             text-align: right;
-            margin-top: 30px;
+            margin-top: 35px;
         }
 
-        /* --- CSS CHO TÍNH NĂNG THÊM DỊCH VỤ ĐỘNG (TỪ rentalPage.jsp) --- */
+        /* --- CSS CHO TÍNH NĂNG THÊM DỊCH VỤ ĐỘNG --- */
         .form-group-rental {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .form-group-rental label {
             display: block;
             margin-bottom: 8px;
-            font-weight: bold;
-            color: #555;
+            font-weight: 500;
+            color: var(--black);
         }
 
         .form-group-rental select {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border);
             border-radius: 4px;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            background: #ffffff;
+            color: var(--black);
+            transition: all 0.2s ease;
+        }
+
+        .form-group-rental select:focus {
+            border-color: var(--gold);
+            outline: none;
         }
 
         .service-adder {
@@ -212,17 +250,18 @@
 
         #add-service-btn {
             padding: 12px 20px;
-            background-color: #28a745;
+            background: #4CAF50;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             line-height: 1;
+            transition: all 0.2s ease;
         }
 
         #add-service-btn:hover {
-            background-color: #218838;
+            opacity: 0.9;
         }
 
         #selected-services-list {
@@ -232,24 +271,35 @@
         .selected-service-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            background-color: #f9f9f9;
-            padding: 10px;
-            border: 1px solid #eee;
-            border-radius: 4px;
-            margin-bottom: 10px;
+            gap: 12px;
+            background: var(--light-gray);
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--gold);
+            border-radius: 6px;
+            margin-bottom: 12px;
         }
 
         .selected-service-item span {
             flex-grow: 1;
+            font-weight: 500;
+            color: var(--black);
         }
 
         .service-quantity, .service-date {
             padding: 8px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border);
             border-radius: 4px;
             width: 80px;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            background: #ffffff;
+            color: var(--black);
+            transition: border-color 0.2s ease;
+        }
+
+        .service-quantity:focus, .service-date:focus {
+            border-color: var(--gold);
+            outline: none;
         }
 
         .service-date {
@@ -257,19 +307,21 @@
         }
 
         .remove-service-btn {
-            background: #dc3545;
+            background: #f44336;
             color: white;
             border: none;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             cursor: pointer;
             flex-shrink: 0;
             font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.2s ease;
         }
 
         .remove-service-btn:hover {
-            background: #c82333;
+            opacity: 0.9;
         }
     </style>
 </head>
