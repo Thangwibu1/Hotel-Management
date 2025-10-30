@@ -44,8 +44,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --gold: #D4AF37;
-            --gold-dark: #B8941F;
+            --gold: #c9ab81;
+            --gold-dark: #b8941f;
             --black: #000000;
             --white: #FFFFFF;
             --off-white: #FAFAFA;
@@ -119,6 +119,7 @@
             display: inline-block;
             padding: 0.75rem 2rem;
             border: 2px solid;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 0.85rem;
             font-weight: 500;
@@ -160,6 +161,28 @@
         .btn-edit:hover {
             background: var(--black);
             color: var(--white);
+        }
+        
+        .btn-info { 
+            background: transparent;
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        
+        .btn-info:hover { 
+            background: var(--gold);
+            color: var(--black);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: transparent;
+            color: #6c757d;
         }
         
         /* === MAIN CONTENT === */
@@ -206,6 +229,7 @@
         .booking-card {
             background: var(--white);
             border: 1px solid var(--border);
+            border-radius: 8px;
             padding: 2rem;
             transition: all 0.3s ease;
             position: relative;
@@ -256,6 +280,7 @@
         
         .status { 
             padding: 0.5rem 1.5rem;
+            border-radius: 6px;
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
@@ -480,13 +505,15 @@
         </div>
         <nav class="main-nav">
             <% if (guest != null) { %>
-            <span>Xin chào, <%= guest.getFullName() %></span>
-            <% } %>
-            <form style="display: inline;">
-                <button class="btn btn-logout">
-                    <a href="logout" style="text-decoration: none; color: inherit;">Đăng xuất</a>
-                </button>
+            <span style="color: white; margin-right: 15px;">Xin chào, <%= guest.getFullName() %>!</span>
+            <form action="<%= IConstant.viewBookingServlet %>" method="post" style="display: inline;">
+                <input type="hidden" name="guestId" value="<%= guest.getGuestId() %>">
+                <button type="submit" class="btn btn-info">Phòng đã đặt</button>
             </form>
+            <form action="logout" method="get" style="display: inline;">
+                <button type="submit" class="btn btn-secondary">Đăng xuất</button>
+            </form>
+            <% } %>
         </nav>
     </div>
 </header>

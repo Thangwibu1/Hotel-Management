@@ -49,8 +49,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --gold: #D4AF37;
-            --gold-dark: #B8941F;
+            --gold: #c9ab81;
+            --gold-dark: #b8941f;
             --black: #000000;
             --white: #FFFFFF;
             --off-white: #FAFAFA;
@@ -73,16 +73,58 @@
             background: var(--white);
             color: var(--black);
             line-height: 1.6;
-            padding: 4rem 2rem;
         }
         
-        .container { max-width: 1200px; margin: 0 auto; }
+        /* === HEADER === */
+        .header { 
+            background: var(--black);
+            border-bottom: 2px solid var(--gold);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header .container { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        .logo a { 
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .logo a span {
+            color: var(--gold);
+        }
+        
+        .main-nav { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
+        
+        .main-nav span { 
+            color: var(--white); 
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
         a { text-decoration: none; color: inherit; }
         
         .btn { 
             display: inline-block;
             padding: 0.75rem 2rem;
             border: 2px solid;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 0.85rem;
             font-weight: 500;
@@ -92,6 +134,17 @@
             letter-spacing: 1px;
             font-family: var(--font-sans);
             background: transparent;
+        }
+        
+        .btn-info { 
+            background: transparent;
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        
+        .btn-info:hover { 
+            background: var(--gold);
+            color: var(--black);
         }
         
         .btn-primary { 
@@ -121,6 +174,8 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             margin-bottom: 3rem;
             border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
         }
         
         .card-header { 
@@ -149,6 +204,7 @@
             padding: 2rem;
             background: var(--gray-light);
             border: 1px solid var(--border);
+            border-radius: 8px;
         }
         
         .detail-section h2 { 
@@ -191,6 +247,8 @@
             margin-top: 1.5rem;
             font-size: 1rem;
             background: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
         }
         
         .services-table th, .services-table td, .history-table th, .history-table td { 
@@ -225,7 +283,7 @@
         
         .status { 
             padding: 5px 12px;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 0.8em;
             font-weight: 600;
             text-align: center;
@@ -259,7 +317,7 @@
         
         .service-status { 
             padding: 5px 10px;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 0.8em;
             display: inline-block;
             font-weight: 600;
@@ -290,7 +348,27 @@
 </head>
 <body>
 
-<div class="container">
+<header class="header">
+    <div class="container">
+        <div class="logo">
+            <a href="<%= IConstant.homeServlet %>">LUXURY <span>HOTEL</span></a>
+        </div>
+        <nav class="main-nav">
+            <% if (guest != null) { %>
+            <span style="color: white; margin-right: 15px;">Xin chào, <%= guest.getFullName() %>!</span>
+            <form action="<%= IConstant.viewBookingServlet %>" method="post" style="display: inline;">
+                <input type="hidden" name="guestId" value="<%= guest.getGuestId() %>">
+                <button type="submit" class="btn btn-info">Phòng đã đặt</button>
+            </form>
+            <form action="logout" method="get" style="display: inline;">
+                <button type="submit" class="btn btn-secondary">Đăng xuất</button>
+            </form>
+            <% } %>
+        </nav>
+    </div>
+</header>
+
+<div class="container" style="margin-top: 100px;">
     <div class="card">
         <% if (booking != null) { %>
         <div class="card-header">

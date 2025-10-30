@@ -21,13 +21,13 @@
         :root { 
             --font-heading: 'Cormorant Garamond', serif; 
             --font-body: 'Montserrat', sans-serif; 
-            --color-gold: #D4AF37; 
+            --color-gold: #c9ab81; 
             --color-charcoal: #000000; 
             --color-offwhite: #FAFAFA; 
             --color-grey: #666666; 
-            --primary-color: #D4AF37; 
+            --primary-color: #c9ab81; 
             --secondary-color: #6c757d; 
-            --info-color: #D4AF37; 
+            --info-color: #c9ab81; 
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
@@ -42,7 +42,7 @@
         .logo a { font-family: var(--font-heading); font-size: 2rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
         .logo a span { color: var(--color-gold); }
         .main-nav { display: flex; align-items: center; gap: 10px; }
-        .btn { display: inline-block; padding: 0.75rem 2rem; border: 2px solid; cursor: pointer; font-size: 0.85rem; text-align: center; font-weight: 500; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; font-family: var(--font-body); background: transparent; }
+        .btn { display: inline-block; padding: 0.75rem 2rem; border: 2px solid; border-radius: 6px; cursor: pointer; font-size: 0.85rem; text-align: center; font-weight: 500; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; font-family: var(--font-body); background: transparent; }
         .btn-primary { background-color: var(--color-gold); color: var(--color-charcoal); border-color: var(--color-gold); }
         .btn-primary:hover { background-color: transparent; color: var(--color-gold); }
         .btn-secondary { background-color: var(--secondary-color); color: white; border-color: var(--secondary-color);}
@@ -92,7 +92,7 @@
         .booking-form-modal h2 { text-align: center; font-family: var(--font-heading); margin-bottom: 30px; }
         .booking-form-modal .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
         .booking-form-modal .form-group label { display: block; margin-bottom: 8px; text-transform: uppercase; font-size: 0.9em; letter-spacing: 1px; }
-        .booking-form-modal input, .booking-form-modal select { width: 100%; padding: 12px; border: 1px solid #555; border-radius: 5px; background: #333; color: white; }
+        .booking-form-modal input, .booking-form-modal select { width: 100%; padding: 12px; border: 1px solid #555; border-radius: 6px; background: #333; color: white; }
         .reveal { opacity: 0; transform: translateY(50px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
         /* --- ROOM FEATURE (ZIGZAG) --- */
@@ -368,7 +368,7 @@
             <a href="loginPage.jsp" class="btn btn-secondary">Đăng nhập</a>
             <a href="registerPage.jsp" class="btn btn-primary">Đăng ký</a>
             <% } %>
-            <button class="btn" id="headerSearchIcon" title="Tìm kiếm phòng"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button class="btn" id="headerSearchIcon" title="Tìm kiếm phòng"><i style="color: white;" class="fa-solid fa-magnifying-glass"></i></button>
         </nav>
     </div>
 </header>

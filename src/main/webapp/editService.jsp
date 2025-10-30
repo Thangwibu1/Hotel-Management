@@ -32,14 +32,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: #D4AF37;
-            --gold-dark: #B8941F;
+            --gold: #c9ab81;
+            --gold-dark: #b8941f;
             --black: #000000;
             --white: #FFFFFF;
             --off-white: #FAFAFA;
             --gray-light: #F5F5F5;
             --gray: #666666;
             --border: #E0E0E0;
+            --secondary-color: #6c757d;
             
             --font-serif: 'Cormorant Garamond', serif;
             --font-sans: 'Montserrat', sans-serif;
@@ -50,7 +51,51 @@
             background: var(--white);
             color: var(--black);
             line-height: 1.6;
-            padding: 4rem 2rem;
+        }
+        
+        /* === HEADER === */
+        .header { 
+            background: var(--black);
+            border-bottom: 2px solid var(--gold);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container { 
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        .logo a { 
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .logo a span {
+            color: var(--gold);
+        }
+        
+        .main-nav { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
+        
+        .main-nav span { 
+            color: var(--white); 
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
         }
 
         .container {
@@ -60,6 +105,7 @@
             padding: 3rem;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             border: 1px solid var(--border);
+            border-radius: 8px;
         }
 
         h1 {
@@ -82,6 +128,7 @@
             font-weight: 500;
             padding: 0.75rem 2rem;
             border: 2px solid var(--gold);
+            border-radius: 6px;
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -98,6 +145,7 @@
             padding: 2rem;
             margin-bottom: 3rem;
             border: 1px solid var(--border);
+            border-radius: 8px;
         }
 
         .booking-info h3 {
@@ -145,6 +193,8 @@
             border-collapse: collapse;
             margin-bottom: 2rem;
             background: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         th, td {
@@ -176,7 +226,7 @@
 
         .service-status {
             padding: 5px 10px;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 0.8em;
             display: inline-block;
             font-weight: 600;
@@ -208,6 +258,7 @@
             display: inline-block;
             padding: 0.75rem 2rem;
             border: 2px solid;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 0.85rem;
             text-align: center;
@@ -217,6 +268,28 @@
             letter-spacing: 1px;
             font-family: var(--font-sans);
             background: transparent;
+        }
+        
+        .btn-info { 
+            background: transparent;
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        
+        .btn-info:hover { 
+            background: var(--gold);
+            color: var(--black);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+        
+        .btn-secondary:hover {
+            background: transparent;
+            color: var(--secondary-color);
         }
 
         .btn-primary {
@@ -236,6 +309,7 @@
             padding: 3rem;
             background: var(--gray-light);
             border: 1px solid var(--border);
+            border-radius: 8px;
         }
 
         .form-actions {
@@ -259,6 +333,7 @@
             width: 100%;
             padding: 0.75rem 1rem;
             border: 1px solid var(--border);
+            border-radius: 6px;
             font-size: 1rem;
             background: var(--white);
             color: var(--black);
@@ -288,7 +363,7 @@
             background: #4CAF50;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 1.1rem;
             line-height: 1;
@@ -310,6 +385,7 @@
             background: var(--white);
             padding: 1rem;
             border: 1px solid var(--border);
+            border-radius: 6px;
             margin-bottom: 1rem;
             transition: all 0.3s ease;
         }
@@ -327,6 +403,7 @@
         .service-quantity, .service-date {
             padding: 0.5rem;
             border: 1px solid var(--border);
+            border-radius: 6px;
             width: 80px;
             font-size: 0.95rem;
             background: var(--white);
@@ -365,7 +442,31 @@
     </style>
 </head>
 <body>
-<div class="container">
+
+<header class="header">
+    <div class="header-container">
+        <div class="logo">
+            <a href="<%= IConstant.homeServlet %>">LUXURY <span>HOTEL</span></a>
+        </div>
+        <nav class="main-nav">
+            <% 
+                Guest currentGuest = (Guest) session.getAttribute("userGuest");
+                if (currentGuest != null) { 
+            %>
+            <span style="color: white; margin-right: 15px;">Xin chào, <%= currentGuest.getFullName() %>!</span>
+            <form action="<%= IConstant.viewBookingServlet %>" method="post" style="display: inline;">
+                <input type="hidden" name="guestId" value="<%= currentGuest.getGuestId() %>">
+                <button type="submit" class="btn btn-info">Phòng đã đặt</button>
+            </form>
+            <form action="logout" method="get" style="display: inline;">
+                <button type="submit" class="btn btn-secondary">Đăng xuất</button>
+            </form>
+            <% } %>
+        </nav>
+    </div>
+</header>
+
+<div class="container" style="margin-top: 100px;">
     <span>
         <i class="fa-solid fa-arrow-left back-link" style="display: inline"></i>
         <form style="display: inline" action="<%=request.getContextPath()%>/viewBooking" method="post">

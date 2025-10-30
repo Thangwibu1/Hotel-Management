@@ -53,8 +53,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --gold: #D4AF37;
-            --gold-dark: #B8941F;
+            --gold: #c9ab81;
+            --gold-dark: #b8941f;
             --black: #000000;
             --white: #FFFFFF;
             --off-white: #FAFAFA;
@@ -124,6 +124,7 @@
             display: inline-block;
             padding: 0.75rem 2rem;
             border: 2px solid;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 0.85rem;
             font-weight: 500;
@@ -154,6 +155,28 @@
         .btn-book:hover { 
             background: transparent;
             color: var(--gold);
+        }
+        
+        .btn-info { 
+            background: transparent;
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        
+        .btn-info:hover { 
+            background: var(--gold);
+            color: var(--black);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: transparent;
+            color: #6c757d;
         }
         
         /* === FOOTER === */
@@ -215,6 +238,8 @@
             background: var(--white);
             padding: 3rem; 
             border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         
         .booking-form-section h2 { 
@@ -266,6 +291,7 @@
             width: 100%; 
             padding: 0.75rem 1rem; 
             border: 1px solid var(--border);
+            border-radius: 6px;
             box-sizing: border-box; 
             font-size: 1rem;
             background: var(--white);
@@ -314,6 +340,7 @@
             padding: 2rem;
             margin: 2rem 0;
             border: 1px solid var(--border);
+            border-radius: 8px;
         }
         
         .credit-card-section h3 {
@@ -336,6 +363,7 @@
             position: relative;
             min-height: 200px;
             border: 2px solid var(--gold);
+            border-radius: 12px;
         }
         
         .card-chip {
@@ -409,6 +437,7 @@
             width: 100%;
             padding: 0.75rem 1rem;
             border: 1px solid var(--border);
+            border-radius: 6px;
             background: var(--white);
             color: var(--black);
             font-size: 0.95rem;
@@ -441,7 +470,7 @@
             background: #4CAF50;
             color: white; 
             border: none; 
-            border-radius: 4px; 
+            border-radius: 6px; 
             cursor: pointer; 
             font-size: 1.1rem; 
             line-height: 1;
@@ -461,6 +490,7 @@
             background: var(--white);
             padding: 1rem; 
             border: 1px solid var(--border);
+            border-radius: 6px;
             margin-bottom: 1rem;
             transition: all 0.3s ease;
         }
@@ -478,7 +508,7 @@
         .service-quantity, .service-date { 
             padding: 8px; 
             border: 1px solid var(--border);
-            border-radius: 4px; 
+            border-radius: 6px; 
             width: 80px; 
             font-size: 0.95rem;
             transition: border-color 0.2s ease;
@@ -512,6 +542,7 @@
         .info-box {
             background: var(--gray-light);
             border: 1px solid var(--border);
+            border-radius: 8px;
             padding: 1.5rem;
             margin: 1.5rem 0;
         }
@@ -536,21 +567,17 @@
         <div class="logo">
             <a href="<%= IConstant.homeServlet %>">LUXURY <span>HOTEL</span></a>
         </div>
-        <%
-            String username = "";
-            if (session.getAttribute("userStaff") != null) {
-                username = ((Staff) session.getAttribute("userStaff")).getFullName();
-            } else if (session.getAttribute("userGuest") != null) {
-                username = ((Guest) session.getAttribute("userGuest")).getFullName();
-            }
-        %>
         <nav class="main-nav">
-            <span>Xin chào, <%= username %></span>
-            <form style="display: inline;">
-                <button class="btn btn-logout">
-                    <a href="logout" style="text-decoration: none; color: inherit;">Đăng xuất</a>
-                </button>
+            <% if (guest != null) { %>
+            <span style="color: white; margin-right: 15px;">Xin chào, <%= guest.getFullName() %>!</span>
+            <form action="<%= IConstant.viewBookingServlet %>" method="post" style="display: inline;">
+                <input type="hidden" name="guestId" value="<%= guest.getGuestId() %>">
+                <button type="submit" class="btn btn-info">Phòng đã đặt</button>
             </form>
+            <form action="logout" method="get" style="display: inline;">
+                <button type="submit" class="btn btn-secondary">Đăng xuất</button>
+            </form>
+            <% } %>
         </nav>
     </div>
 </header>
