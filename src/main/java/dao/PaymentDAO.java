@@ -63,4 +63,23 @@ public class PaymentDAO {
         return result;
     }
 
+    /**
+     * Thêm payment mới với transaction (nhận Connection từ bên ngoài)
+     * @param payment Đối tượng payment cần thêm
+     * @param conn Connection đã được quản lý transaction
+     * @return true nếu thành công, false nếu thất bại
+     * @throws SQLException Nếu có lỗi database
+     */
+    public boolean addPaymentWithTransaction(Payment payment, Connection conn) throws SQLException {
+        String sql = "INSERT INTO [HotelManagement].[dbo].[PAYMENT] ([BookingID], [PaymentDate], [Amount], [PaymentMethod], [Status]) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, payment.getBookingId());
+            ps.setObject(2, payment.getPaymentDate());
+            ps.setDouble(3, payment.getAmount());
+            ps.setString(4, payment.getPaymentMethod());
+            ps.setString(5, payment.getStatus());
+            return ps.executeUpdate() > 0;
+        }
+    }
+
 }

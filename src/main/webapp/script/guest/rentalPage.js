@@ -138,3 +138,73 @@ if (checkInInput.value) {
 }
 updateAllServiceDatePickers();
 calculateTotal();
+
+// === XỬ LÝ CREDIT CARD ANIMATION ===
+const cardHolderInput = document.getElementById('card-holder');
+const cardNumberInput = document.getElementById('card-number');
+const cardMonthInput = document.getElementById('card-month');
+const cardYearInput = document.getElementById('card-year');
+const cardCvvInput = document.getElementById('card-cvv');
+
+const cardHolderDisplay = document.getElementById('card-holder-display');
+const cardNumberDisplay = document.getElementById('card-number-display');
+const cardExpiryDisplay = document.getElementById('card-expiry-display');
+
+// Format và hiển thị tên chủ thẻ
+if (cardHolderInput) {
+    cardHolderInput.addEventListener('input', function(e) {
+        let value = e.target.value.toUpperCase();
+        cardHolderDisplay.textContent = value || 'YOUR NAME';
+    });
+}
+
+// Format và hiển thị số thẻ (thêm khoảng trắng sau mỗi 4 số)
+if (cardNumberInput) {
+    cardNumberInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
+        let formattedValue = value.match(/.{1,4}/g)?.join(' ') || '';
+        e.target.value = formattedValue;
+        
+        // Hiển thị với bullet points
+        if (value.length > 0) {
+            let displayValue = value.split('').map((digit, index) => {
+                if (index < value.length - 4) {
+                    return '•';
+                }
+                return digit;
+            }).join('');
+            cardNumberDisplay.textContent = displayValue.match(/.{1,4}/g)?.join(' ') || '•••• •••• •••• ••••';
+        } else {
+            cardNumberDisplay.textContent = '•••• •••• •••• ••••';
+        }
+    });
+}
+
+// Chỉ cho phép nhập số cho tháng
+if (cardMonthInput) {
+    cardMonthInput.addEventListener('input', function(e) {
+        e.target.value = e.target.value.replace(/\D/g, '').substring(0, 2);
+        updateExpiryDisplay();
+    });
+}
+
+// Chỉ cho phép nhập số cho năm
+if (cardYearInput) {
+    cardYearInput.addEventListener('input', function(e) {
+        e.target.value = e.target.value.replace(/\D/g, '').substring(0, 2);
+        updateExpiryDisplay();
+    });
+}
+
+// Chỉ cho phép nhập số cho CVV
+if (cardCvvInput) {
+    cardCvvInput.addEventListener('input', function(e) {
+        e.target.value = e.target.value.replace(/\D/g, '');
+    });
+}
+
+function updateExpiryDisplay() {
+    const month = cardMonthInput.value || 'MM';
+    const year = cardYearInput.value || 'YY';
+    cardExpiryDisplay.textContent = `${month}/${year}`;
+}

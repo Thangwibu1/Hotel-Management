@@ -212,6 +212,103 @@
             color: var(--color-grey);
             font-size: 0.9em;
         }
+        
+        /* === ERROR POPUP STYLES === */
+        .error-popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        .error-popup-overlay.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .error-popup {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            animation: slideDown 0.4s ease-out;
+            position: relative;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .error-popup-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .error-popup-icon i {
+            font-size: 3em;
+            color: white;
+        }
+        
+        .error-popup h2 {
+            font-family: var(--font-heading);
+            font-size: 2em;
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+        
+        .error-popup p {
+            font-size: 1.1em;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .error-popup-close {
+            background: linear-gradient(135deg, var(--color-gold), #f4e4a6);
+            color: #fff;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(201, 171, 129, 0.3);
+        }
+        
+        .error-popup-close:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(201, 171, 129, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -431,7 +528,49 @@
     </div>
 </div>
 
+<!-- ERROR POPUP -->
+<div id="errorPopupOverlay" class="error-popup-overlay">
+    <div class="error-popup">
+        <div class="error-popup-icon">
+            <i class="fa-solid fa-exclamation-triangle"></i>
+        </div>
+        <h2>Đặt Phòng Thất Bại!</h2>
+        <p id="errorMessage">Đã có lỗi xảy ra trong quá trình đặt phòng. Vui lòng thử lại sau hoặc liên hệ với chúng tôi để được hỗ trợ.</p>
+        <button class="error-popup-close" onclick="closeErrorPopup()">Đã hiểu</button>
+    </div>
+</div>
+
 <script>
+    // === ERROR POPUP LOGIC ===
+    function closeErrorPopup() {
+        const overlay = document.getElementById('errorPopupOverlay');
+        overlay.classList.remove('show');
+        // Xóa param error khỏi URL
+        const url = new URL(window.location);
+        url.searchParams.delete('error');
+        window.history.replaceState({}, '', url);
+    }
+    
+    // Kiểm tra param error khi trang load
+    const urlParams = new URLSearchParams(window.location.search);
+    const errorParam = urlParams.get('error');
+    
+    if (errorParam) {
+        const overlay = document.getElementById('errorPopupOverlay');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        // Tùy chỉnh message dựa trên error type
+        if (errorParam === 'booking_failed') {
+            errorMessage.textContent = 'Giao dịch đặt phòng không thành công. Hệ thống đã hoàn tác tất cả thay đổi. Vui lòng thử lại sau.';
+        } else {
+            errorMessage.textContent = 'Đã có lỗi xảy ra. Vui lòng thử lại sau hoặc liên hệ với chúng tôi để được hỗ trợ.';
+        }
+        
+        // Hiển thị popup
+        overlay.classList.add('show');
+    }
+    
+    // === EXISTING SCRIPTS ===
     document.addEventListener("DOMContentLoaded", function() {
         // --- LOGIC CHO HERO SLIDESHOW ---
         const slides = document.querySelectorAll('.hero-slide');
