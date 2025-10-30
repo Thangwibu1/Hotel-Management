@@ -61,7 +61,7 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                 System.out.println("Note: " + deviceBroken);
                 System.out.println("Status: " + statusWantUpdate);
                 int staffID = staff.getStaffId();
-                rowAffected = d.updateStatusRoomTask(staffID,roomTaskID, deviceBroken, statusWantUpdate);
+                rowAffected = d.updateStatusRoomTask(roomTaskID, "Cleaned");
             }else if(request.getParameter("DONE_TASK") != null){
                 roomTaskID = Integer.parseInt(request.getParameter("room_Task_ID").trim());
                 statusWantUpdate = request.getParameter("status_want_update");

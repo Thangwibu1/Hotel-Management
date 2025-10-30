@@ -11,7 +11,7 @@ public interface IConstant {
     public static final String housekeepingFilter = "housekeepingstaff";
     public static final String serviceFilter = "service-staff";
     
-    public static final String receptionistRole = "receptionist";
+//    public static final String receptionistRole = "receptionist";
 
     public static final String receptionistRole = "./receptionist/receptionist";
     public static final String managerRole = "manager";

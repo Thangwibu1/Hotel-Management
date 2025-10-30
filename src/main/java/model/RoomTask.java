@@ -35,7 +35,7 @@ public class RoomTask {
        
     }
 
-    public RoomTask(int roomTaskID, int roomID, Integer staffID, LocalDateTime startTime, LocalDateTime endTime, String statusClean, String notes, int isSystemTask) {
+    public RoomTask(int roomTaskID, int roomID, int staffID, LocalDateTime startTime, LocalDateTime endTime, String statusClean, String notes, int isSystemTask) {
         this.roomTaskID = roomTaskID;
         this.roomID = roomID;
         this.staffID = staffID;
@@ -133,16 +133,5 @@ public class RoomTask {
         return "RoomTask{" + "roomTaskID=" + roomTaskID + ", roomID=" + roomID + ", staffID=" + staffID + ", startTime=" + startTime + ", endTime=" + endTime + ", statusClean=" + statusClean + ", notes=" + notes + ", isSystemTask=" + isSystemTask + '}';
     }
     
-    @Override
-    public String toString() {
-        return "RoomTask{" +
-                "roomTaskID=" + roomTaskID +
-                ", roomID=" + roomID +
-                ", staffID=" + staffID +
-                ", startTime='" + startTime + '\'' +
-                ", endTime='" + endTime + '\'' +
-                ", statusClean='" + statusClean + '\'' +
-                ", notes='" + notes + '\'' +
-                '}';
-    }
+
 }

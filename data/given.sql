@@ -204,11 +204,11 @@ CREATE TABLE ASSIGN_TASK (
     LastTimeAssign DATETIME NOT NULL
 );
 
--- ALTER TABLE ROOM_TASK
+ALTER TABLE ROOM_TASK
 ADD isSystemTask INT NOT NULL;
 
 
-===================================================================
+-- ===================================================================
 -- PHẦN 2: CHÈN DỮ LIỆU MẪU
 -- ===================================================================
 
@@ -283,7 +283,7 @@ GO
 INSERT INTO ASSIGN_TASK (ID, LastTimeAssign)
 VALUES ('ASS01', GETDATE());
 
-INSERT INTO [HotelManagement].[dbo].[STAFF] 
+INSERT INTO [STAFF]
     (FullName, Role, Username, PasswordHash, Phone, Email)
 VALUES 
     (N'Mai Thanh', 'ServiceStaff', 'mai', '1', '0901234567', 'maithanh@hotel.com');
