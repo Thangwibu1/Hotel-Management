@@ -138,5 +138,35 @@ public class RoomDAO {
         }
         return result;
     }
+    public int countAvailableRoom(String status) {
+        int result = 0;
+        String sql = "SELECT COUNT([RoomID]) as total\n"
+                + "  FROM [HotelManagement].[dbo].[ROOM]\n"
+                + "  WHERE [Status] = ?";
+        try ( Connection conn = DBConnection.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                result = rs.getInt("total");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
+    public int countRoom() {
+        int result = 0;
+        String sql = "SELECT COUNT([RoomID]) as total\n"
+                + "  FROM [HotelManagement].[dbo].[ROOM]\n";
+        try ( Connection conn = DBConnection.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                result = rs.getInt("total");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

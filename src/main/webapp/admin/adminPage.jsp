@@ -62,6 +62,7 @@
     </div>
     <div class="header-actions">
         <a href="./system">Change System Info</a>
+        <a href="./housekeeping-statistic">Housekeeping Statistic</a>
         <a href="<%= request.getContextPath() %>/logout">Logout</a>
     </div>
 </div>
@@ -229,7 +230,7 @@
     document.querySelectorAll('.edit-link').forEach(function(button) {
         button.onclick = function() {
             staffForm.reset();
-            staffForm.action = 'UpdateStaffController';
+            staffForm.action = './update-staff';
             modalTitle.textContent = "Update Staff";
             
             // Populate form

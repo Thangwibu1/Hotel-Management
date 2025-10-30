@@ -60,7 +60,7 @@
         <% } %>
     </div>
     <div class="header-actions">
-        <a href="<%= request.getContextPath() %>/admin">Staff Management</a>
+        <a href="<%= request.getContextPath() %>/admin/admin">Staff Management</a>
         <a href="<%= request.getContextPath() %>/logout">Logout</a>
     </div>
 </div>

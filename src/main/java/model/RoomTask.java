@@ -133,4 +133,16 @@ public class RoomTask {
         return "RoomTask{" + "roomTaskID=" + roomTaskID + ", roomID=" + roomID + ", staffID=" + staffID + ", startTime=" + startTime + ", endTime=" + endTime + ", statusClean=" + statusClean + ", notes=" + notes + ", isSystemTask=" + isSystemTask + '}';
     }
     
+    @Override
+    public String toString() {
+        return "RoomTask{" +
+                "roomTaskID=" + roomTaskID +
+                ", roomID=" + roomID +
+                ", staffID=" + staffID +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", statusClean='" + statusClean + '\'' +
+                ", notes='" + notes + '\'' +
+                '}';
+    }
 }

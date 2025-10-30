@@ -6,6 +6,7 @@ import utils.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class StaffDAO {
@@ -182,6 +183,52 @@ public class StaffDAO {
             con.close();
         } catch (Exception e) {
             // TODO: handle exception
+        }
+
+        return result;
+    }
+
+    public ArrayList<Staff> getStaffsByRole(String role) {
+        ArrayList<Staff> result = new ArrayList<>();
+        
+        String sql = "SELECT [StaffID] ,[FullName] ,[Role] ,[Username] ,[PasswordHash] ,[Phone] ,[Email] FROM [HotelManagement].[dbo].[STAFF] where [Role] = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, role);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("StaffID");
+                String fullName = rs.getString("FullName");
+                String role1 = rs.getString("Role");
+                String username = rs.getString("Username");
+                String passwordHash = rs.getString("PasswordHash");
+                String phone = rs.getString("Phone");
+                String email = rs.getString("Email");
+                Staff staff = new Staff(id, fullName, role1, username, passwordHash, phone, email);
+                result.add(staff);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
         }
 
         return result;
