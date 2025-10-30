@@ -44,141 +44,181 @@
     <meta charset="UTF-8">
     <title>Chi Tiết Đặt Phòng - Luxury Hotel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* === BASIC LUXURY WHITE THEME === */
         :root { 
-            --gold: #d4af37;
-            --black: #1a1a1a;
-            --gray: #666;
-            --light-gray: #f8f8f8;
-            --border: #e0e0e0;
+            --gold: #D4AF37;
+            --gold-dark: #B8941F;
+            --black: #000000;
+            --white: #FFFFFF;
+            --off-white: #FAFAFA;
+            --gray-light: #F5F5F5;
+            --gray: #666666;
+            --border: #E0E0E0;
+            
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Montserrat', sans-serif;
         }
         
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
         
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #fafafa;
+            font-family: var(--font-sans);
+            background: var(--white);
             color: var(--black);
-            min-height: 100vh;
-            padding: 40px 20px;
+            line-height: 1.6;
+            padding: 4rem 2rem;
         }
         
-        .container { max-width: 1000px; margin: auto; }
+        .container { max-width: 1200px; margin: 0 auto; }
         a { text-decoration: none; color: inherit; }
         
         .btn { 
             display: inline-block;
-            padding: 10px 24px;
-            border-radius: 4px;
-            border: none;
+            padding: 0.75rem 2rem;
+            border: 2px solid;
             cursor: pointer;
-            font-size: 0.95rem;
-            text-align: center;
-            transition: all 0.2s ease;
+            font-size: 0.85rem;
             font-weight: 500;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: var(--font-sans);
+            background: transparent;
         }
-        
-        .btn:hover { opacity: 0.9; }
         
         .btn-primary { 
             background: var(--gold);
             color: var(--black);
+            border-color: var(--gold);
+        }
+        
+        .btn-primary:hover { 
+            background: transparent;
+            color: var(--gold);
         }
         
         .btn-secondary { 
             background: var(--black);
-            color: #ffffff;
+            color: var(--white);
+            border-color: var(--black);
+        }
+        
+        .btn-secondary:hover { 
+            background: transparent;
+            color: var(--black);
         }
         
         .card { 
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
+            background: var(--white);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3rem;
             border: 1px solid var(--border);
-            overflow: hidden;
         }
         
         .card-header { 
-            background: var(--black);
-            color: #ffffff;
-            padding: 30px;
+            background: var(--white);
+            color: var(--black);
+            padding: 3rem;
             text-align: center;
-            border-bottom: 3px solid var(--gold);
+            border-bottom: 1px solid var(--border);
         }
         
         .card-header h1 { 
+            font-family: var(--font-serif);
             margin: 0;
-            font-size: 1.8em;
-            font-weight: 600;
+            font-size: 3rem;
+            font-weight: 700;
         }
         
-        .card-body { padding: 35px; }
+        .card-header h1 span {
+            color: var(--gold);
+        }
+        
+        .card-body { padding: 3rem; }
         
         .detail-section { 
-            margin-bottom: 35px;
-            padding: 25px;
-            background: var(--light-gray);
-            border-radius: 6px;
-            border-left: 3px solid var(--gold);
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--gray-light);
+            border: 1px solid var(--border);
         }
         
         .detail-section h2 { 
-            font-size: 1.3em;
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
             color: var(--black);
-            border-bottom: 2px solid var(--gold);
-            padding-bottom: 12px;
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
             font-weight: 600;
         }
         
-        .detail-section h2 i { color: var(--gold); }
+        .detail-section h2 span { 
+            color: var(--gold); 
+        }
         
         .detail-item { 
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
+            padding: 0.75rem 0;
             border-bottom: 1px solid var(--border);
         }
         
         .detail-item:last-child { border-bottom: none; }
-        .detail-item strong { color: var(--gray); font-weight: 500; }
-        .detail-item span { color: var(--black); font-weight: 500; }
+        .detail-item strong { 
+            color: var(--gray); 
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .detail-item span { 
+            color: var(--black); 
+            font-weight: 400;
+        }
         
         .services-table, .history-table { 
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
-            font-size: 0.95rem;
-            background: #ffffff;
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            background: var(--white);
         }
         
         .services-table th, .services-table td, .history-table th, .history-table td { 
             text-align: left;
-            padding: 12px;
+            padding: 1rem 1.5rem;
             border-bottom: 1px solid var(--border);
             vertical-align: middle;
         }
         
         .services-table th, .history-table th { 
-            background: var(--light-gray);
-            color: var(--black);
-            font-weight: 600;
+            background: linear-gradient(135deg, var(--black) 0%, #2c2c2c 100%);
+            color: var(--white);
+            font-weight: 700;
             text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 0.5px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-bottom: none;
         }
         
         .services-table tbody tr, .history-table tbody tr { 
-            transition: background 0.2s ease;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
         }
         
         .services-table tbody tr:hover, .history-table tbody tr:hover { 
-            background: var(--light-gray);
+            background: var(--off-white);
+            transform: scale(1.002);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         
         .text-right { text-align: right !important; }
@@ -254,17 +294,17 @@
     <div class="card">
         <% if (booking != null) { %>
         <div class="card-header">
-            <h1>Chi Tiết Đặt Phòng #<%= booking.getBookingId() %></h1>
+            <h1>Chi Tiết Đặt Phòng <span>#<%= booking.getBookingId() %></span></h1>
         </div>
         <div class="card-body">
             <div class="detail-section">
-                <h2><i class="fa-solid fa-user"></i> Thông tin khách hàng</h2>
+                <h2>Thông Tin <span>Khách Hàng</span></h2>
                 <div class="detail-item"><strong>Họ và tên:</strong> <span><%= guest.getFullName() %></span></div>
                 <div class="detail-item"><strong>Email:</strong> <span><%= guest.getEmail() %></span></div>
             </div>
 
             <div class="detail-section">
-                <h2><i class="fa-solid fa-suitcase-rolling"></i> Chi tiết lưu trú</h2>
+                <h2>Chi Tiết <span>Lưu Trú</span></h2>
                 <div class="detail-item"><strong>Phòng:</strong> <span><%= room.getRoomNumber() %> (<%= roomType.getTypeName() %>)</span></div>
                 <div class="detail-item"><strong>Ngày nhận phòng:</strong> <span><%= IConstant.localDateFormat.format(booking.getCheckInDate()) %></span></div>
                 <div class="detail-item"><strong>Ngày trả phòng:</strong> <span><%= IConstant.localDateFormat.format(booking.getCheckOutDate()) %></span></div>
@@ -273,7 +313,7 @@
             </div>
 
             <div class="detail-section">
-                <h2><i class="fa-solid fa-concierge-bell"></i> Dịch vụ đã sử dụng</h2>
+                <h2>Dịch Vụ <span>Đã Sử Dụng</span></h2>
                 <% if (bookingServices != null && !bookingServices.isEmpty()) { %>
                 <table class="services-table">
                     <thead><tr><th>Tên dịch vụ</th><th class="text-right">Số lượng</th><th>Ngày sử dụng</th><th>Trạng thái</th><th class="text-right">Thành tiền</th></tr></thead>
@@ -316,7 +356,7 @@
     <div class="card">
         <div class="card-body">
             <div class="detail-section">
-                <h2><i class="fa-solid fa-history"></i> Các Lần Đặt Phòng Khác</h2>
+                <h2>Các Lần Đặt Phòng <span>Khác</span></h2>
                 <% if (otherBookings != null && otherBookings.size() > 1) { %>
                 <table class="history-table">
                     <thead>

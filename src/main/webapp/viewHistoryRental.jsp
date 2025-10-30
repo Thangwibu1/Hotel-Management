@@ -41,336 +41,433 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* === LUXURY ELEGANT THEME === */
         :root { 
-            --font-heading: 'Playfair Display', serif;
-            --font-body: 'Lato', sans-serif;
-            --color-gold: #c9ab81;
-            --color-charcoal: #1a1a1a;
-            --color-offwhite: #f8f7f5;
-            --color-grey: #666;
-            --color-light: #999;
-            --border-color: #e5e5e5;
+            --gold: #D4AF37;
+            --gold-dark: #B8941F;
+            --black: #000000;
+            --white: #FFFFFF;
+            --off-white: #FAFAFA;
+            --gray-light: #F5F5F5;
+            --gray: #666666;
+            --border: #E0E0E0;
+            
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Montserrat', sans-serif;
         }
         
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
         
         body { 
-            font-family: var(--font-body);
-            line-height: 1.8;
-            color: var(--color-charcoal);
-            background: var(--color-offwhite);
-            min-height: 100vh;
+            font-family: var(--font-sans);
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
         }
-        
-        .container { 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            padding: 0 20px; 
-        }
-        
-        a { text-decoration: none; color: inherit; }
         
         /* === HEADER === */
         .header { 
-            background: rgba(26, 26, 26, 0.95);
-            backdrop-filter: blur(10px);
-            color: #fff;
-            padding: 1rem 0;
+            background: var(--black);
+            border-bottom: 2px solid var(--gold);
+            padding: 1.5rem 0;
             position: sticky;
             top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
         }
         
         .header .container { 
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
         }
         
         .logo a { 
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
+            font-family: var(--font-serif);
+            font-size: 2rem;
             font-weight: 700;
-            color: #fff;
-            letter-spacing: 1px;
+            color: var(--white);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .logo a span {
+            color: var(--gold);
         }
         
         .main-nav { 
             display: flex; 
             align-items: center; 
-            gap: 15px; 
+            gap: 2rem; 
         }
         
         .main-nav span { 
-            color: #fff; 
-            font-size: 0.95rem;
+            color: var(--white); 
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
         }
-        
-        .main-nav form { margin: 0; }
         
         .btn { 
             display: inline-block;
-            padding: 10px 24px;
-            border-radius: 5px;
-            border: 1px solid transparent;
+            padding: 0.75rem 2rem;
+            border: 2px solid;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            font-weight: 500;
             text-align: center;
             transition: all 0.3s ease;
-            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: var(--font-sans);
         }
         
-        .btn:hover { opacity: 0.9; }
+        .btn-logout { 
+            background: transparent;
+            color: var(--gold);
+            border-color: var(--gold);
+        }
         
-        .btn-secondary { 
-            background: #6c757d;
-            color: #fff;
-            border-color: #6c757d;
+        .btn-logout:hover { 
+            background: var(--gold);
+            color: var(--black);
         }
         
         .btn-primary { 
-            background: var(--color-gold);
-            color: #fff;
-            border-color: var(--color-gold);
+            background: var(--gold);
+            color: var(--black);
+            border-color: var(--gold);
         }
         
         .btn-primary:hover { 
             background: transparent;
-            color: var(--color-gold);
+            color: var(--gold);
         }
         
-        .btn-warning { 
-            background: #ffa500;
-            color: #fff;
-            border-color: #ffa500;
-        }
-        
-        .btn-warning:hover {
+        .btn-edit { 
             background: transparent;
-            color: #ffa500;
+            color: var(--black);
+            border-color: var(--black);
         }
         
-        /* === FOOTER === */
-        .footer { 
-            background: var(--color-charcoal);
-            color: #ccc;
-            padding: 3rem 0 0;
-            margin-top: 100px;
-        }
-        
-        .footer-grid { 
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            padding-bottom: 2rem;
-        }
-        
-        .footer-col h3 { 
-            font-family: var(--font-heading);
-            margin-bottom: 1.2rem;
-            color: #fff;
-            font-size: 1.3rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-        
-        .footer-col p, 
-        .footer-col li { 
-            margin-bottom: 0.7rem;
-        }
-        
-        .footer-col ul { list-style: none; }
-        .footer-col a { transition: all 0.3s ease; }
-        .footer-col a:hover { 
-            color: var(--color-gold);
-            padding-left: 5px;
-        }
-        .footer-col i { color: var(--color-gold); margin-right: 10px; }
-        
-        .footer-bottom { 
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: 2rem;
-            border-top: 1px solid #444;
-            font-size: 0.9rem;
-            color: var(--color-grey);
+        .btn-edit:hover {
+            background: var(--black);
+            color: var(--white);
         }
         
         /* === MAIN CONTENT === */
         .main-content { 
-            padding: 60px 0; 
-            min-height: 70vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem 6rem;
+            min-height: calc(100vh - 400px);
         }
         
         .page-header {
-            margin-bottom: 40px;
             text-align: center;
+            margin-bottom: 4rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
         }
         
         .page-title { 
-            font-family: var(--font-heading);
-            font-size: 3em;
-            color: var(--color-charcoal);
-            margin-bottom: 15px;
+            font-family: var(--font-serif);
+            font-size: 3.5rem;
             font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
+            color: var(--black);
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
         }
         
-        .page-title i {
-            color: var(--color-gold);
-            font-size: 0.8em;
+        .page-title span {
+            color: var(--gold);
         }
         
         .page-subtitle {
-            color: var(--color-grey);
-            font-size: 1.2em;
+            color: var(--gray);
+            font-size: 1rem;
             font-weight: 300;
+            letter-spacing: 0.5px;
         }
         
-        .history-container { 
-            background: #fff;
-            padding: 0;
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            border: 1px solid var(--border-color);
+        /* === BOOKING CARDS === */
+        .bookings-grid {
+            display: grid;
+            gap: 2rem;
+        }
+        
+        .booking-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
             overflow: hidden;
         }
         
-        .history-table { 
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 1rem;
+        .booking-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gold);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
         }
         
-        .history-table th, 
-        .history-table td { 
-            padding: 20px 24px;
-            text-align: left;
-            vertical-align: middle;
+        .booking-card:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
         }
         
-        .history-table thead {
-            background: linear-gradient(135deg, var(--color-charcoal) 0%, #2c2c2c 100%);
+        .booking-card:hover::before {
+            transform: scaleY(1);
         }
         
-        .history-table th { 
-            color: #fff;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            border-bottom: none;
-        }
-        
-        .history-table tbody tr { 
-            border-bottom: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-        
-        .history-table tbody tr:last-child {
-            border-bottom: none;
-        }
-        
-        .history-table tbody tr:hover { 
-            background: var(--color-offwhite);
-            transform: scale(1.005);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        
-        .history-table tbody td {
-            color: var(--color-charcoal);
-            font-weight: 400;
-        }
-        
-        .history-table tbody td:first-child {
-            font-weight: 700;
-            color: var(--color-gold);
-        }
-        
-        /* === ACTION BUTTONS COLUMN === */
-        .history-table tbody td:last-child {
+        .booking-header {
             display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
         }
         
-        .history-table tbody td:last-child form {
-            margin: 0 !important;
+        .booking-number {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--black);
         }
         
-        .history-table .btn {
-            padding: 10px 20px;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .history-table .btn i {
-            font-size: 0.9em;
-        }
-        
-        .no-booking { 
-            text-align: center;
-            padding: 100px 40px;
-            color: var(--color-grey);
-        }
-        
-        .no-booking i { 
-            font-size: 5rem;
-            color: var(--color-gold);
-            margin-bottom: 30px;
-            display: block;
-            opacity: 0.3;
-        }
-        
-        .no-booking p {
-            font-size: 1.3rem;
-            font-weight: 300;
-            margin-top: 15px;
+        .booking-number span {
+            color: var(--gold);
+            font-size: 2.2rem;
         }
         
         .status { 
-            padding: 8px 16px;
-            border-radius: 5px;
-            font-size: 0.8rem;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.75rem;
             font-weight: 600;
-            text-align: center;
-            display: inline-block;
-            min-width: 110px;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 1px;
             border: 2px solid;
+            background: var(--white);
         }
         
         .status.reserved { 
-            background: #e3f2fd;
-            color: #1976d2;
-            border-color: #1976d2;
+            color: #1565C0;
+            border-color: #1565C0;
         }
+        
         .status.checkedin { 
-            background: #e8f5e9;
-            color: #2e7d32;
-            border-color: #2e7d32;
+            color: #2E7D32;
+            border-color: #2E7D32;
         }
+        
         .status.checkedout { 
-            background: #f5f5f5;
-            color: #616161;
-            border-color: #9e9e9e;
+            color: var(--gray);
+            border-color: var(--gray);
         }
+        
         .status.canceled { 
-            background: #ffebee;
-            color: #c62828;
-            border-color: #c62828;
+            color: #C62828;
+            border-color: #C62828;
+        }
+        
+        .booking-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .detail-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray);
+            font-weight: 600;
+        }
+        
+        .detail-value {
+            font-size: 1.1rem;
+            color: var(--black);
+            font-weight: 400;
+        }
+        
+        .detail-value.highlight {
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--gold);
+        }
+        
+        .booking-actions {
+            display: flex;
+            gap: 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--gray-light);
+        }
+        
+        .booking-actions form {
+            margin: 0;
+        }
+        
+        .booking-card .btn {
+            padding: 0.7rem 1.8rem;
+            font-size: 0.8rem;
+        }
+        
+        .booking-card .btn i {
+            margin-right: 0.5rem;
+        }
+        
+        /* === EMPTY STATE === */
+        .no-booking { 
+            text-align: center;
+            padding: 6rem 2rem;
+        }
+        
+        .no-booking-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            border: 3px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .no-booking i { 
+            font-size: 3.5rem;
+            color: var(--gold);
+        }
+        
+        .no-booking h3 {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--black);
+        }
+        
+        .no-booking p {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 300;
+        }
+        
+        /* === FOOTER === */
+        .footer { 
+            background: var(--black);
+            color: var(--white);
+            padding: 4rem 0 0;
+            border-top: 2px solid var(--gold);
+        }
+        
+        .footer .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .footer-grid { 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            padding-bottom: 3rem;
+        }
+        
+        .footer-col h3 { 
+            font-family: var(--font-serif);
+            margin-bottom: 1.5rem;
+            color: var(--gold);
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .footer-col p { 
+            margin-bottom: 1rem;
+            color: #CCCCCC;
+            font-weight: 300;
+            line-height: 1.8;
+        }
+        
+        .footer-col ul { 
+            list-style: none; 
+        }
+        
+        .footer-col li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-col a { 
+            color: #CCCCCC;
+            transition: all 0.3s ease;
+            font-weight: 300;
+        }
+        
+        .footer-col a:hover { 
+            color: var(--gold);
+            padding-left: 5px;
+        }
+        
+        .footer-col i { 
+            color: var(--gold); 
+            margin-right: 0.8rem;
+            width: 20px;
+        }
+        
+        .footer-bottom { 
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid #333;
+            font-size: 0.85rem;
+            color: #999;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+        
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .header .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .page-title {
+                font-size: 2.5rem;
+            }
+            
+            .booking-details {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .booking-actions {
+                flex-direction: column;
+            }
+            
+            .booking-actions .btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -379,117 +476,125 @@
 <header class="header">
     <div class="container">
         <div class="logo">
-            <a href="<%= IConstant.homeServlet %>">Luxury Hotel</a>
+            <a href="<%= IConstant.homeServlet %>">LUXURY <span>HOTEL</span></a>
         </div>
         <nav class="main-nav">
             <% if (guest != null) { %>
-            <span style="color: white; margin-right: 15px;">Xin chào, <%= guest.getFullName() %>!</span>
+            <span>Xin chào, <%= guest.getFullName() %></span>
             <% } %>
-            <form style="display: inline;"><button class="btn btn-secondary"><a href="logout">Đăng xuất</a></button></form>
+            <form style="display: inline;">
+                <button class="btn btn-logout">
+                    <a href="logout" style="text-decoration: none; color: inherit;">Đăng xuất</a>
+                </button>
+            </form>
         </nav>
     </div>
 </header>
 
 <main class="main-content">
-    <div class="container">
-        <div class="page-header">
-            <h1 class="page-title">
-                <i class="fas fa-history"></i>
-                Lịch Sử Đặt Phòng
-            </h1>
-            <p class="page-subtitle">Quản lý và xem chi tiết các lần đặt phòng của bạn</p>
-        </div>
-        
-        <div class="history-container">
-            <% if (bookings != null && !bookings.isEmpty()) { %>
-            <table class="history-table">
-                <thead>
-                <tr>
-                    <th>STT</th>
-                    <th>Số Phòng</th>
-                    <th>Loại Phòng</th>
-                    <th>Ngày Nhận Phòng</th>
-                    <th>Ngày Trả Phòng</th>
-                    <th>Trạng Thái</th>
-                    <th>Hành động</th>
-                </tr>
-                </thead>
-                <tbody>
-                <% for (int i = 0; i < bookings.size(); i++) {
-                    Booking booking = bookings.get(i);
-                    Room room = rooms.get(i);
-                    String roomTypeName = getRoomTypeNameById(room.getRoomTypeId(), roomTypes);
-                %>
-                <tr>
-                    <td><%= i + 1 %></td>
-                    <td><%= room.getRoomNumber() %></td>
-                    <td><%= roomTypeName %></td>
-                    <td><%= IConstant.localDateFormat.format(booking.getCheckInDate()) %></td>
-                    <td><%= IConstant.localDateFormat.format(booking.getCheckOutDate()) %></td>
-                    <td>
-                        <span class="status <%= booking.getStatus().toLowerCase().replace("-", "") %>">
-                            <%= booking.getStatus() %>
-                        </span>
-                    </td>
-                    <td>
-                        <form action="./detailBooking" method="post">
-                            <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>">
-                            <input type="hidden" name="guestId" value="<%= guest.getGuestId() %>">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-eye"></i> Chi tiết
-                            </button>
-                        </form>
-
-                        <%-- NÚT CHỈNH SỬA DỊCH VỤ - CHỈ CHO PHÉP KHI TRẠNG THÁI LÀ "Reserved" --%>
-                        <% if ("Reserved".equalsIgnoreCase(booking.getStatus())) { %>
-                            <form action="<%=IConstant.getBookingInfoServlet%>" method="post">
-                                <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>">
-                                <input type="hidden" name="guestId" value="<%= guest.getGuestId() %>">
-                                <button type="submit" class="btn btn-warning">
-                                    <i class="fas fa-edit"></i> Chỉnh sửa
-                                </button>
-                            </form>
-                        <% } %>
-
-                    </td>
-                </tr>
-                <% } %>
-                </tbody>
-            </table>
-            <% } else { %>
-            <div class="no-booking">
-                <i class="fas fa-calendar-times"></i>
-                <p>Bạn chưa có lịch sử đặt phòng nào.</p>
-            </div>
-            <% } %>
-        </div>
+    <div class="page-header">
+        <h1 class="page-title">Lịch Sử <span>Đặt Phòng</span></h1>
+        <p class="page-subtitle">Quản lý và theo dõi các đặt phòng của bạn</p>
     </div>
+    
+    <% if (bookings != null && !bookings.isEmpty()) { %>
+    <div class="bookings-grid">
+        <% for (int i = 0; i < bookings.size(); i++) {
+            Booking booking = bookings.get(i);
+            Room room = rooms.get(i);
+            String roomTypeName = getRoomTypeNameById(room.getRoomTypeId(), roomTypes);
+        %>
+        <div class="booking-card">
+            <div class="booking-header">
+                <div class="booking-number">
+                    <span>#<%= String.format("%03d", i + 1) %></span>
+                </div>
+                <span class="status <%= booking.getStatus().toLowerCase().replace("-", "") %>">
+                    <%= booking.getStatus() %>
+                </span>
+            </div>
+            
+            <div class="booking-details">
+                <div class="detail-item">
+                    <span class="detail-label">Số Phòng</span>
+                    <span class="detail-value highlight"><%= room.getRoomNumber() %></span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Loại Phòng</span>
+                    <span class="detail-value"><%= roomTypeName %></span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Ngày Nhận Phòng</span>
+                    <span class="detail-value"><%= IConstant.localDateFormat.format(booking.getCheckInDate()) %></span>
+                </div>
+                
+                <div class="detail-item">
+                    <span class="detail-label">Ngày Trả Phòng</span>
+                    <span class="detail-value"><%= IConstant.localDateFormat.format(booking.getCheckOutDate()) %></span>
+                </div>
+            </div>
+            
+            <div class="booking-actions">
+                <form action="./detailBooking" method="post">
+                    <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>">
+                    <input type="hidden" name="guestId" value="<%= guest.getGuestId() %>">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-eye"></i> Chi tiết
+                    </button>
+                </form>
+
+                <% if ("Reserved".equalsIgnoreCase(booking.getStatus())) { %>
+                <form action="<%=IConstant.getBookingInfoServlet%>" method="post">
+                    <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>">
+                    <input type="hidden" name="guestId" value="<%= guest.getGuestId() %>">
+                    <button type="submit" class="btn btn-edit">
+                        <i class="fas fa-edit"></i> Chỉnh sửa
+                    </button>
+                </form>
+                <% } %>
+            </div>
+        </div>
+        <% } %>
+    </div>
+    <% } else { %>
+    <div class="no-booking">
+        <div class="no-booking-icon">
+            <i class="fas fa-calendar-times"></i>
+        </div>
+        <h3>Chưa có đặt phòng</h3>
+        <p>Bạn chưa có lịch sử đặt phòng nào trong hệ thống</p>
+    </div>
+    <% } %>
 </main>
 
 <footer class="footer">
-    <div class="container footer-grid">
-        <div class="footer-col">
-            <h3>Luxury Hotel</h3>
-            <p>Chất lượng sang trọng hàng đầu với dịch vụ chất lượng cao và các tiện ích tốt.</p>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h3>Luxury Hotel</h3>
+                <p>Nơi sang trọng và đẳng cấp, mang đến trải nghiệm nghỉ dưỡng hoàn hảo với dịch vụ chuyên nghiệp.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Liên hệ</h3>
+                <p><i class="fa-solid fa-location-dot"></i> 123 Đường ABC, Quận 1, TP.HCM</p>
+                <p><i class="fa-solid fa-phone"></i> (028) 1234-5678</p>
+                <p><i class="fa-solid fa-envelope"></i> info@luxuryhotel.com</p>
+            </div>
+            <div class="footer-col">
+                <h3>Dịch vụ</h3>
+                <ul>
+                    <li><a href="#">Nhà hàng & Bar</a></li>
+                    <li><a href="#">Spa & Trị liệu</a></li>
+                    <li><a href="#">Bể bơi Rooftop</a></li>
+                    <li><a href="#">Phòng gym hiện đại</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="footer-col">
-            <h3>Liên hệ</h3>
-            <p><i class="fa-solid fa-location-dot"></i> 123 Đường ABC, Quận 1, TP.HCM</p>
-            <p><i class="fa-solid fa-phone"></i> (028) 1234-5678</p>
-            <p><i class="fa-solid fa-envelope"></i> info@luxuryhotel.com</p>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Luxury Hotel. Bảo lưu mọi quyền.</p>
         </div>
-        <div class="footer-col">
-            <h3>Dịch vụ</h3>
-            <ul>
-                <li><a href="#">Nhà hàng & Bar</a></li>
-                <li><a href="#">Spa & Trị liệu</a></li>
-                <li><a href="#">Bể bơi Rooftop</a></li>
-                <li><a href="#">Phòng gym hiện đại</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <p>&copy; 2024 Luxury Hotel. Bảo lưu mọi quyền.</p>
     </div>
 </footer>
 

@@ -48,151 +48,240 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đặt phòng - <%= roomType.getTypeName() %> - Luxury Hotel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* --- BASIC LUXURY WHITE THEME --- */
         :root { 
-            --gold: #d4af37;
-            --black: #1a1a1a;
-            --gray: #666;
-            --light-gray: #f8f8f8;
-            --border: #e0e0e0;
+            --gold: #D4AF37;
+            --gold-dark: #B8941F;
+            --black: #000000;
+            --white: #FFFFFF;
+            --off-white: #FAFAFA;
+            --gray-light: #F5F5F5;
+            --gray: #666666;
+            --border: #E0E0E0;
+            
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Montserrat', sans-serif;
         }
         
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
         
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            line-height: 1.6; 
+            font-family: var(--font-sans);
+            background: var(--white);
             color: var(--black);
-            background: #fafafa;
-            min-height: 100vh;
+            line-height: 1.6;
         }
         
-        .container { max-width: 1000px; margin: auto; padding: 0 20px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
         a { text-decoration: none; color: inherit; }
         
+        /* === HEADER === */
         .header { 
             background: var(--black);
-            color: #ffffff;
+            border-bottom: 2px solid var(--gold);
             padding: 1.5rem 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
         
         .header .container { display: flex; justify-content: space-between; align-items: center; }
         
         .logo a { 
-            font-size: 1.8em; 
-            font-weight: 600; 
-            color: var(--gold);
-            letter-spacing: 1px;
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
         
-        .main-nav { display: flex; align-items: center; gap: 15px; }
-        .main-nav span { color: #ffffff; font-weight: 400; }
+        .logo a span {
+            color: var(--gold);
+        }
+        
+        .main-nav { 
+            display: flex; 
+            align-items: center; 
+            gap: 2rem; 
+        }
+        
+        .main-nav span { 
+            color: var(--white); 
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
         
         .btn { 
-            display: inline-block; 
-            padding: 10px 24px; 
-            border-radius: 4px; 
-            border: none; 
-            cursor: pointer; 
-            font-size: 0.95rem; 
-            text-align: center;
-            transition: all 0.2s ease;
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            border: 2px solid;
+            cursor: pointer;
+            font-size: 0.85rem;
             font-weight: 500;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: var(--font-sans);
+            background: transparent;
         }
         
-        .btn:hover { opacity: 0.9; }
-        .btn-secondary { background-color: var(--black); color: white; }
+        .btn-logout { 
+            color: var(--gold);
+            border-color: var(--gold);
+        }
+        
+        .btn-logout:hover { 
+            background: var(--gold);
+            color: var(--black);
+        }
+        
         .btn-book { 
             background: var(--gold);
             color: var(--black);
-            font-weight: 600;
+            border-color: var(--gold);
         }
         
+        .btn-book:hover { 
+            background: transparent;
+            color: var(--gold);
+        }
+        
+        /* === FOOTER === */
         .footer { 
             background: var(--black);
-            color: #999;
-            padding: 2rem 0; 
-            margin-top: 60px; 
-            text-align: center;
-            border-top: 3px solid var(--gold);
+            color: var(--white);
+            padding: 4rem 0 0;
+            border-top: 2px solid var(--gold);
+            margin-top: 80px;
         }
 
-        /* --- CSS CHO TRANG ĐẶT PHÒNG --- */
-        .main-content { padding: 40px 0; }
+        .footer .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .footer-grid { 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            padding-bottom: 3rem;
+        }
+        
+        .footer-col h3 { 
+            font-family: var(--font-serif);
+            margin-bottom: 1.5rem;
+            color: var(--gold);
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .footer-col p { 
+            margin-bottom: 1rem;
+            color: #CCCCCC;
+            font-weight: 300;
+            line-height: 1.8;
+        }
+        
+        .footer-bottom { 
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid #333;
+            font-size: 0.85rem;
+            color: #999;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+        
+        /* === MAIN CONTENT === */
+        .main-content { 
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem 6rem;
+        }
         
         .booking-form-section { 
-            background: #ffffff;
-            padding: 45px; 
-            border-radius: 8px; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            background: var(--white);
+            padding: 3rem; 
             border: 1px solid var(--border);
         }
         
         .booking-form-section h2 { 
-            margin-top: 0; 
-            margin-bottom: 25px; 
-            border-bottom: 2px solid var(--gold);
-            padding-bottom: 15px; 
-            font-size: 1.8em;
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            font-weight: 700;
             color: var(--black);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-        }
-        
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 30px 0 20px 0;
-            padding-bottom: 12px;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
             border-bottom: 1px solid var(--border);
+            text-align: center;
         }
         
-        .section-header i {
-            font-size: 1.3em;
+        .booking-form-section h2 span {
             color: var(--gold);
         }
         
+        .section-header {
+            margin: 3rem 0 2rem 0;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
         .section-header h3 {
+            font-family: var(--font-serif);
             color: var(--black);
-            font-size: 1.3em;
+            font-size: 1.8rem;
             margin: 0;
             font-weight: 600;
+        }
+        
+        .section-header h3 span {
+            color: var(--gold);
         }
         
         .form-group-rental { margin-bottom: 25px; }
         
         .form-group-rental label { 
             display: block; 
-            margin-bottom: 8px; 
-            font-weight: 500; 
-            color: var(--black);
-            font-size: 0.95rem;
+            margin-bottom: 0.5rem; 
+            font-weight: 600; 
+            color: var(--gray);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         
         .form-group-rental input, .form-group-rental select { 
             width: 100%; 
-            padding: 12px; 
+            padding: 0.75rem 1rem; 
             border: 1px solid var(--border);
-            border-radius: 4px; 
             box-sizing: border-box; 
-            font-size: 0.95rem;
-            background: #ffffff;
+            font-size: 1rem;
+            background: var(--white);
             color: var(--black);
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            font-family: var(--font-sans);
         }
         
         .form-group-rental input:focus, .form-group-rental select:focus {
             border-color: var(--gold);
             outline: none;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
         }
         
         .form-group-rental input:read-only { 
-            background-color: var(--light-gray);
+            background-color: var(--gray-light);
             cursor: not-allowed;
             color: var(--gray);
         }
@@ -204,40 +293,49 @@
         }
         
         .total-price { 
-            margin-top: 30px; 
-            padding: 20px;
-            background: var(--light-gray);
-            border-radius: 6px;
-            border-left: 3px solid var(--gold);
-            font-size: 1.5em; 
-            font-weight: 600; 
+            margin-top: 2rem; 
+            padding: 2rem;
+            background: var(--gray-light);
+            border: 1px solid var(--border);
+            font-family: var(--font-serif);
+            font-size: 2rem; 
+            font-weight: 700; 
             text-align: right;
             color: var(--black);
+        }
+        
+        .total-price span {
+            color: var(--gold);
         }
 
         /* === CSS CHO CREDIT CARD === */
         .credit-card-section {
-            background: var(--light-gray);
-            padding: 25px;
-            border-radius: 6px;
-            margin: 25px 0;
-            border-left: 3px solid var(--gold);
+            background: var(--gray-light);
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border);
         }
         
         .credit-card-section h3 {
+            font-family: var(--font-serif);
             color: var(--black);
-            margin: 0 0 18px 0;
+            margin: 0 0 1.5rem 0;
             font-weight: 600;
+            font-size: 1.5rem;
+        }
+        
+        .credit-card-section h3 span {
+            color: var(--gold);
         }
         
         .card-visual {
-            background: linear-gradient(135deg, #d4af37 0%, #f4e4a6 100%);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            background: linear-gradient(135deg, var(--black) 0%, #2c2c2c 100%);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             position: relative;
             min-height: 200px;
+            border: 2px solid var(--gold);
         }
         
         .card-chip {
@@ -264,7 +362,7 @@
         .card-number-display {
             font-size: 1.5em;
             letter-spacing: 3px;
-            color: var(--dark-bg);
+            color: var(--white);
             font-weight: 600;
             margin: 20px 0;
             font-family: 'Courier New', monospace;
@@ -277,7 +375,7 @@
         }
         
         .card-holder-display, .card-expiry-display {
-            color: var(--dark-bg);
+            color: var(--white);
         }
         
         .card-holder-display label, .card-expiry-display label {
@@ -285,7 +383,9 @@
             text-transform: uppercase;
             display: block;
             margin-bottom: 5px;
-            opacity: 0.7;
+            color: var(--gold);
+            font-weight: 600;
+            letter-spacing: 1px;
         }
         
         .card-holder-display span, .card-expiry-display span {
@@ -307,13 +407,13 @@
         
         .card-form-group input {
             width: 100%;
-            padding: 10px;
+            padding: 0.75rem 1rem;
             border: 1px solid var(--border);
-            border-radius: 4px;
-            background: #ffffff;
+            background: var(--white);
             color: var(--black);
             font-size: 0.95rem;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            font-family: var(--font-sans);
         }
         
         .card-form-group input::placeholder {
@@ -323,6 +423,7 @@
         .card-form-group input:focus {
             border-color: var(--gold);
             outline: none;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
         }
         
         .card-row {
@@ -356,16 +457,23 @@
         .selected-service-item { 
             display: flex; 
             align-items: center; 
-            gap: 12px; 
-            background: var(--light-gray);
-            padding: 14px; 
+            gap: 1rem; 
+            background: var(--white);
+            padding: 1rem; 
             border: 1px solid var(--border);
-            border-left: 3px solid var(--gold);
-            border-radius: 6px; 
-            margin-bottom: 12px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
         }
         
-        .selected-service-item span { flex-grow: 1; font-weight: 500; color: var(--black); }
+        .selected-service-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .selected-service-item span { 
+            flex-grow: 1; 
+            font-weight: 500; 
+            color: var(--black); 
+        }
         
         .service-quantity, .service-date { 
             padding: 8px; 
@@ -402,22 +510,22 @@
         }
         
         .info-box {
-            background: #e8f5e9;
-            border-left: 3px solid #4CAF50;
-            padding: 18px;
-            border-radius: 6px;
-            margin: 20px 0;
+            background: var(--gray-light);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
         }
         
         .info-box i {
-            color: #4CAF50;
-            margin-right: 8px;
+            color: var(--gold);
+            margin-right: 0.5rem;
         }
         
         .info-box p {
             margin: 0;
-            color: var(--black);
+            color: var(--gray);
             line-height: 1.6;
+            font-size: 0.95rem;
         }
     </style>
 </head>
@@ -426,7 +534,7 @@
 <header class="header">
     <div class="container">
         <div class="logo">
-            <a href="<%= IConstant.homeServlet %>">Luxury Hotel</a>
+            <a href="<%= IConstant.homeServlet %>">LUXURY <span>HOTEL</span></a>
         </div>
         <%
             String username = "";
@@ -437,8 +545,12 @@
             }
         %>
         <nav class="main-nav">
-            <span style="color: white; margin-right: 15px;">Xin chào, <%= username %>!</span>
-            <form style="display: inline;"><button class="btn btn-secondary"><a href="logout">Đăng xuất</a></button></form>
+            <span>Xin chào, <%= username %></span>
+            <form style="display: inline;">
+                <button class="btn btn-logout">
+                    <a href="logout" style="text-decoration: none; color: inherit;">Đăng xuất</a>
+                </button>
+            </form>
         </nav>
     </div>
 </header>
@@ -446,7 +558,8 @@
 <main class="main-content">
     <div class="container">
         <div class="booking-form-section">
-            <h2><i class="fas fa-hotel"></i> Thông tin đặt phòng cho phòng <%= room.getRoomNumber() %> (<%= roomType.getTypeName() %>)</h2>
+            <h2>Đặt Phòng <span>#<%= room.getRoomNumber() %></span></h2>
+            <p style="text-align: center; color: var(--gray); margin-bottom: 2rem; font-size: 1.1rem;"><%= roomType.getTypeName() %></p>
             
             <form id="bookingForm" action="<%= IConstant.bookingServlet %>" method="get">
                 <input type="hidden" name="roomId" value="<%= room.getRoomId() %>">
@@ -456,8 +569,7 @@
 
                 <!-- Thông tin khách hàng -->
                 <div class="section-header">
-                    <i class="fas fa-user-circle"></i>
-                    <h3>Thông tin khách hàng</h3>
+                    <h3>Thông Tin <span>Khách Hàng</span></h3>
                 </div>
                 
                 <div class="form-row">
@@ -473,8 +585,7 @@
 
                 <!-- Thời gian lưu trú -->
                 <div class="section-header">
-                    <i class="fas fa-calendar-alt"></i>
-                    <h3>Thời gian lưu trú</h3>
+                    <h3>Thời Gian <span>Lưu Trú</span></h3>
                 </div>
                 
                 <div class="form-row">
@@ -490,8 +601,7 @@
 
                 <!-- Dịch vụ đi kèm -->
                 <div class="section-header">
-                    <i class="fas fa-concierge-bell"></i>
-                    <h3>Dịch vụ đi kèm</h3>
+                    <h3>Dịch Vụ <span>Đi Kèm</span></h3>
                 </div>
                 
                 <div class="form-group-rental">
@@ -521,8 +631,7 @@
 
                 <!-- Thông tin thanh toán -->
                 <div class="section-header">
-                    <i class="fas fa-credit-card"></i>
-                    <h3>Thông tin thanh toán</h3>
+                    <h3>Thông Tin <span>Thanh Toán</span></h3>
                 </div>
                 
                 <div class="info-box">
@@ -530,7 +639,7 @@
                 </div>
                 
                 <div class="credit-card-section">
-                    <h3><i class="fas fa-credit-card"></i> Thông tin thẻ thanh toán</h3>
+                    <h3>Thông Tin <span>Thẻ Thanh Toán</span></h3>
                     
                     <!-- Card Visual Display -->
                     <div class="card-visual">
@@ -579,11 +688,11 @@
 
                 <!-- Tổng tiền -->
                 <div class="total-price">
-                    <i class="fas fa-money-bill-wave"></i> Tổng cộng: <span id="total-price-value">0 VNĐ</span>
+                    Tổng cộng: <span id="total-price-value">0 VNĐ</span>
                 </div>
                 
-                <button type="submit" class="btn btn-book" style="width: 100%; margin-top: 20px; font-size: 1.2rem; padding: 15px;">
-                    <i class="fas fa-check-circle"></i> Xác nhận đặt phòng
+                <button type="submit" class="btn btn-book" style="width: 100%; margin-top: 2rem; font-size: 1rem; padding: 1rem;">
+                    Xác nhận đặt phòng
                 </button>
                 <input type="hidden" id="totalAmount" name="totalAmount" value="">
             </form>
@@ -592,7 +701,23 @@
 </main>
 
 <footer class="footer">
-    <p>&copy; 2025 Luxury Hotel. Bảo lưu mọi quyền.</p>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h3>Luxury Hotel</h3>
+                <p>Nơi sang trọng và đẳng cấp, mang đến trải nghiệm nghỉ dưỡng hoàn hảo với dịch vụ chuyên nghiệp.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Liên hệ</h3>
+                <p><i class="fa-solid fa-location-dot"></i> 123 Đường ABC, Quận 1, TP.HCM</p>
+                <p><i class="fa-solid fa-phone"></i> (028) 1234-5678</p>
+                <p><i class="fa-solid fa-envelope"></i> info@luxuryhotel.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Luxury Hotel. Bảo lưu mọi quyền.</p>
+        </div>
+    </div>
 </footer>
 <script src="script/guest/rentalPage.js"></script>
 </body>

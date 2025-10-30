@@ -15,11 +15,20 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        /* (Toàn bộ CSS của bạn được giữ nguyên, không thay đổi) */
-        :root { --font-heading: 'Playfair Display', serif; --font-body: 'Lato', sans-serif; --color-gold: #c9ab81; --color-charcoal: #1a1a1a; --color-offwhite: #f8f7f5; --color-grey: #666; --primary-color: #007bff; --secondary-color: #6c757d; --info-color: #17a2b8; }
+        :root { 
+            --font-heading: 'Cormorant Garamond', serif; 
+            --font-body: 'Montserrat', sans-serif; 
+            --color-gold: #D4AF37; 
+            --color-charcoal: #000000; 
+            --color-offwhite: #FAFAFA; 
+            --color-grey: #666666; 
+            --primary-color: #D4AF37; 
+            --secondary-color: #6c757d; 
+            --info-color: #D4AF37; 
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
         body { font-family: var(--font-body); line-height: 1.8; color: var(--dark-text); background-color: #fff; }
@@ -28,16 +37,18 @@
         .section { padding: 100px 0; }
         .section-title { font-family: var(--font-heading); font-size: 3em; color: var(--color-charcoal); text-align: center; margin-bottom: 20px; }
         .section-subtitle { text-align: center; font-size: 1.2em; color: var(--color-grey); margin-bottom: 60px; max-width: 600px; margin-left: auto; margin-right: auto; }
-        .header { background-color: rgba(26, 26, 26, 0.85); backdrop-filter: blur(10px); color: #fff; padding: 1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; }
+        .header { background-color: var(--color-charcoal); border-bottom: 2px solid var(--color-gold); color: #fff; padding: 1.5rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; }
         .header .container { display: flex; justify-content: space-between; align-items: center; }
-        .logo a { font-family: var(--font-heading); font-size: 1.5em; letter-spacing: 1px; }
+        .logo a { font-family: var(--font-heading); font-size: 2rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+        .logo a span { color: var(--color-gold); }
         .main-nav { display: flex; align-items: center; gap: 10px; }
-        .btn { display: inline-block; padding: 10px 20px; border-radius: 5px; border: 1px solid transparent; cursor: pointer; font-size: 0.9rem; text-align: center; font-weight: 700; transition: all 0.3s ease; }
-        .btn-primary { background-color: var(--color-gold); color: #fff; border-color: var(--color-gold); }
+        .btn { display: inline-block; padding: 0.75rem 2rem; border: 2px solid; cursor: pointer; font-size: 0.85rem; text-align: center; font-weight: 500; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; font-family: var(--font-body); background: transparent; }
+        .btn-primary { background-color: var(--color-gold); color: var(--color-charcoal); border-color: var(--color-gold); }
         .btn-primary:hover { background-color: transparent; color: var(--color-gold); }
         .btn-secondary { background-color: var(--secondary-color); color: white; border-color: var(--secondary-color);}
+        .btn-secondary:hover { background-color: transparent; color: var(--secondary-color); }
         .btn-info { background-color: transparent; border-color: var(--color-gold); color: var(--color-gold); }
-        .btn-info:hover { background-color: var(--color-gold); color: #fff; }
+        .btn-info:hover { background-color: var(--color-gold); color: var(--color-charcoal); }
         #headerSearchIcon { background: transparent; border: 1px solid #fff; padding: 8px 15px; }
         #headerSearchIcon:hover { background: var(--color-gold); border-color: var(--color-gold); }
         .hero { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; overflow: hidden; }
@@ -171,7 +182,8 @@
         .footer {
             background: var(--color-charcoal);
             color: #ccc;
-            padding: 80px 0 0;
+            padding: 4rem 0 0;
+            border-top: 2px solid var(--color-gold);
         }
         .footer-grid {
             display: grid;
@@ -181,14 +193,18 @@
         }
         .footer-col h3 {
             font-family: var(--font-heading);
-            font-size: 1.4em;
-            color: #fff;
-            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: var(--color-gold);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
             letter-spacing: 1px;
         }
         .footer-col p,
         .footer-col li {
-            margin-bottom: 10px;
+            margin-bottom: 1rem;
+            color: #CCCCCC;
+            font-weight: 300;
+            line-height: 1.8;
         }
         .footer-col ul {
             list-style: none;
@@ -206,11 +222,13 @@
         }
         .footer-bottom {
             text-align: center;
-            padding: 30px 0;
-            margin-top: 40px;
-            border-top: 1px solid #444;
-            color: var(--color-grey);
-            font-size: 0.9em;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid #333;
+            color: #999;
+            font-size: 0.85rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
         }
         
         /* === ERROR POPUP STYLES === */
@@ -333,7 +351,7 @@
 
 <header class="header">
     <div class="container">
-        <div class="logo"><a href="#">LUXURY HOTEL</a></div>
+        <div class="logo"><a href="#">LUXURY <span>HOTEL</span></a></div>
         <nav class="main-nav">
             <% if (isLogin) { %>
             <span style="color: white; margin-right: 15px;">Xin chào, <%= username %>!</span>
