@@ -3,6 +3,7 @@ package controller;
 import controller.feature.EmailSender;
 import dao.*;
 import model.*;
+import utils.DBConnection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -302,7 +305,8 @@ public class BookingController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         /*
-         * http://localhost:8080/PRJ_Assignment/booking?roomId=1&bookingDate=2025-09-28&guestId=1&fullName=Nguy%3Fn+Van+An&email=nguyenvanan%40email.com&checkInDate=2025-09-27&checkOutDate=2025-09-30&
+         * http://localhost:8080/PRJ_Assignment/booking?
+         * roomId=1&bookingDate=2025-09-28&guestId=1&fullName=Nguy%3Fn+Van+An&email=nguyenvanan%40email.com&checkInDate=2025-09-27&checkOutDate=2025-09-30&
          * serviceId=1&serviceQuantity=1&serviceDate=2025-09-27&
          * serviceId=1&serviceQuantity=1&serviceDate=2025-09-28&
          * serviceId=3&serviceQuantity=1&serviceDate=2025-09-27
@@ -334,35 +338,100 @@ public class BookingController extends HttpServlet {
                 services.add(tmpService);
             }
         }
+        // Transaction start
         int newBookingId = 0;
-        // add new booking
-        try {
-            newBookingId = bookingHandle(Integer.parseInt(roomId), Integer.parseInt(guestId), inDateTime, outDateTime, bookDate);
-            if (newBookingId > 0) {
-                roomDAO.updateRoomStatus(Integer.parseInt(roomId), "Available");
-                bookingServiceHandle(services, newBookingId);
-                // make new payment
-                Payment newPayment = new Payment(newBookingId, bookDate, (double) (Integer.parseInt(totalAmount)) / 2.0, "cash", "Pending");
-                PaymentDAO paymentDAO = new PaymentDAO();
-                boolean newPaymentId = paymentDAO.addPayment(newPayment);
-                System.out.println("New payment id: " + newPaymentId);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Guest viewGuest = guestDAO.getGuestById(Integer.parseInt(guestId));
-
-//        req.setAttribute("booking", bookingDAO.getBookingById(newBookingId));
-//
-//        req.setAttribute("chosenServices", services);
-//        req.setAttribute("roomType", roomTypeDAO.getRoomTypeById(viewRoom.getRoomTypeId()));
-//        req.setAttribute("room", viewRoom);
-//        req.setAttribute("guest", viewGuest);
-//        req.setAttribute("services", servicesList);
+        Connection conn = null;
         
-        // Gửi email xác nhận booking nếu booking thành công
+        try {
+            
+            // Bước 1: Lấy connection và tắt auto-commit
+            //Tắt auto-commit: để tránh trường hợp nó sẽ tự commit khi mà những cái ở dưới có lỗi
+            conn = DBConnection.getConnection();
+            conn.setAutoCommit(false);
+            
+            System.out.println("=== BẮT ĐẦU TRANSACTION ===");
+            
+            // Bước 2: Tạo booking
+            Booking newBooking = new Booking(Integer.parseInt(guestId), Integer.parseInt(roomId), inDateTime, outDateTime, bookDate, "Reserved");
+            newBookingId = bookingDAO.addBookingWithTransaction(newBooking, conn);
+            
+            if (newBookingId <= 0) {
+                throw new SQLException("Không thể tạo booking");
+            }
+            System.out.println("✓ Đã tạo booking ID: " + newBookingId);
+            
+            // Bước 3: Thêm các dịch vụ
+            if (!services.isEmpty()) {
+                for (ChoosenService service : services) {
+                    BookingService newBookingService = new BookingService(
+                        newBookingId, 
+                        service.getServiceId(), 
+                        service.getQuantity(), 
+                        service.getServiceDate(), 
+                        0
+                    );
+                    boolean serviceAdded = bookingServiceDAO.addBookingServiceWithTransaction(newBookingService, conn);
+                    if (!serviceAdded) {
+                        throw new SQLException("Không thể thêm dịch vụ ID: " + service.getServiceId());
+                    }
+                }
+                System.out.println("✓ Đã thêm " + services.size() + " dịch vụ");
+            }
+            
+            // Bước 4: Tạo payment (cọc 50%)
+            Payment newPayment = new Payment(
+                newBookingId, 
+                bookDate, 
+                (double) (Integer.parseInt(totalAmount)) / 2.0, 
+                "Credit Card",
+                "Pending"
+            );
+            PaymentDAO paymentDAO = new PaymentDAO();
+            boolean paymentAdded = paymentDAO.addPaymentWithTransaction(newPayment, conn);
+            
+            if (!paymentAdded) {
+                throw new SQLException("Không thể tạo payment");
+            }
+            System.out.println("✓ Đã tạo payment với số tiền: " + newPayment.getAmount() + " VNĐ");
+            
+            // Bước 5: COMMIT - Tất cả thành công
+            conn.commit();
+            System.out.println("✓✓✓ COMMIT THÀNH CÔNG - Booking ID: " + newBookingId + " ✓✓✓");
+            
+        } catch (Exception e) {
+            // Bước 6: ROLLBACK nếu có lỗi
+            System.err.println("✗✗✗ LỖI XẢY RA - BẮT ĐẦU ROLLBACK ✗✗✗");
+            e.printStackTrace();
+            
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                    System.err.println("✗ ROLLBACK HOÀN TẤT - Tất cả thay đổi đã được hoàn tác");
+                } catch (SQLException rollbackEx) {
+                    System.err.println("✗✗ LỖI KHI ROLLBACK");
+                    rollbackEx.printStackTrace();
+                }
+            }
+            newBookingId = 0; // Reset về 0 để báo lỗi
+        } finally {
+            // Bước 7: Đóng connection và restore auto-commit
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException closeEx) {
+                    closeEx.printStackTrace();
+                }
+            }
+        }
+        // Transaction end
+
+        // Kiểm tra kết quả và redirect
         if (newBookingId > 0) {
+            // ✓ THÀNH CÔNG: Gửi email và chuyển đến trang xác nhận
+            Guest viewGuest = guestDAO.getGuestById(Integer.parseInt(guestId));
             String recipientEmail = viewGuest.getEmail();
+            
             if (recipientEmail != null && !recipientEmail.trim().isEmpty()) {
                 // Gửi email trong thread riêng để không block response
                 final int finalBookingId = newBookingId;
@@ -371,9 +440,15 @@ public class BookingController extends HttpServlet {
                     sendBookingConfirmationEmail(finalEmail, finalBookingId);
                 }).start();
             }
+            
+            // Redirect đến trang xác nhận booking
+            resp.sendRedirect("./viewBookingAfter?bookingId=" + newBookingId);
+            
+        } else {
+            // ✗ THẤT BẠI: Redirect về trang chủ với thông báo lỗi
+            System.err.println("✗ Booking thất bại, redirect về trang chủ với thông báo lỗi");
+            resp.sendRedirect("./home?error=booking_failed");
         }
-
-        resp.sendRedirect("./viewBookingAfter?" + "bookingId=" + newBookingId);
     }
 
     @Override

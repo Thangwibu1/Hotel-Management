@@ -6,6 +6,7 @@ import utils.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class BookingServiceDAO {
@@ -82,6 +83,28 @@ public class BookingServiceDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /**
+     * Thêm booking service mới với transaction (nhận Connection từ bên ngoài)
+     * Hàm này không tự tạo Connection, phải nhận từ ngoài để đảm bảo transaction
+     * @param bookingService Đối tượng booking service cần thêm
+     * @param conn Connection được quản lý từ bên ngoài
+     * @return true nếu thành công, false nếu thất bại
+     * @throws SQLException Nếu có lỗi database
+     */
+    public boolean addBookingServiceWithTransaction(BookingService bookingService, Connection conn) throws SQLException {
+        String sql = "INSERT INTO [dbo].[BOOKING_SERVICE] (BookingID, ServiceID, Quantity, ServiceDate, Status) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, bookingService.getBookingId());
+            ps.setInt(2, bookingService.getServiceId());
+            ps.setInt(3, bookingService.getQuantity());
+            ps.setObject(4, bookingService.getServiceDate());
+            ps.setInt(5, bookingService.getStatus());
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        }
     }
 
     public boolean updateBookingServiceStatus(int bookingServiceId, int status) {
