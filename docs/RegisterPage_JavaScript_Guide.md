@@ -19,19 +19,19 @@ File `registerPage.jsp` chứa JavaScript với **2 hệ thống chính**:
 │   JavaScript Architecture           │
 ├─────────────────────────────────────┤
 │                                     │
-│  ┌──────────────────────────────┐  │
-│  │  1. Error Popup System       │  │
-│  │     - Hiển thị lỗi server    │  │
-│  │     - Quản lý URL params     │  │
-│  │     - Event handlers         │  │
-│  └──────────────────────────────┘  │
+│  ┌──────────────────────────────┐   │
+│  │  1. Error Popup System       │   │
+│  │     - Hiển thị lỗi server    │   │
+│  │     - Quản lý URL params     │   │
+│  │     - Event handlers         │   │
+│  └──────────────────────────────┘   │
 │                                     │
-│  ┌──────────────────────────────┐  │
-│  │  2. Form Validation System   │  │
-│  │     - Real-time validation   │  │
-│  │     - Field-level checks     │  │
-│  │     - Submit validation      │  │
-│  └──────────────────────────────┘  │
+│  ┌──────────────────────────────┐   │
+│  │  2. Form Validation System   │   │
+│  │     - Real-time validation   │   │
+│  │     - Field-level checks     │   │
+│  │     - Submit validation      │   │
+│  └──────────────────────────────┘   │
 │                                     │
 └─────────────────────────────────────┘
 ```
