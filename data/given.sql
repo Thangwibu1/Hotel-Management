@@ -199,8 +199,16 @@ CREATE TABLE SYSTEM_CONFIG
     ConfigValue NVARCHAR(50) NOT NULL
 );
 GO
+CREATE TABLE ASSIGN_TASK (
+    ID VARCHAR(10) PRIMARY KEY, 
+    LastTimeAssign DATETIME NOT NULL
+);
 
--- ===================================================================
+-- ALTER TABLE ROOM_TASK
+ADD isSystemTask INT NOT NULL;
+
+
+===================================================================
 -- PHẦN 2: CHÈN DỮ LIỆU MẪU
 -- ===================================================================
 
@@ -272,7 +280,14 @@ VALUES ('Phạm Minh Quân', 'Manager', 'manager01', 'hash_placeholder_staff_1',
        ('Trần Văn Bình', 'Receptionist', 'receptionist02', 'hash_placeholder_staff_3', '0333334445',
         'binh.tv@hotel.com');
 GO
+INSERT INTO ASSIGN_TASK (ID, LastTimeAssign)
+VALUES ('ASS01', GETDATE());
 
+INSERT INTO [HotelManagement].[dbo].[STAFF] 
+    (FullName, Role, Username, PasswordHash, Phone, Email)
+VALUES 
+    (N'Mai Thanh', 'ServiceStaff', 'mai', '1', '0901234567', 'maithanh@hotel.com');
+select [TypeName], [Capacity], [PricePerNight] from ROOM_TYPE;
 -- Dọn dẹp bảng trước khi chèn (tùy chọn)
 -- DELETE FROM dbo.ROOM_TASK;
 
@@ -306,8 +321,8 @@ GO
 
 -- Thêm nhân viên Housekeeping mới vào bảng STAFF
 INSERT INTO STAFF (FullName, Role, Username, PasswordHash, Phone, Email)
-VALUES (N'Nguyễn Thị Lan', 'Housekeeping', 'lan.nt', 'hashed_password_1', '0901234567', 'lan.nt@hotel.com'),
-       (N'Trần Văn An', 'Housekeeping', 'an.tv', 'hashed_password_2', '0907654321', 'an.tv@hotel.com');
+VALUES (N'Nguyễn Thị Lan', 'Housekeeping', 'lan.nt', '1', '0901234567', 'lan.nt@hotel.com'),
+       (N'Trần Văn An', 'Housekeeping', 'an.tv', '1', '0907654321', 'an.tv@hotel.com');
 GO
 
 ALTER TABLE BOOKING_SERVICE

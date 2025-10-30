@@ -7,15 +7,19 @@ public interface IConstant {
     public static final DateTimeFormatter localDateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    // Name for refactor
     public static final String adminFilter = "admin";
     public static final String housekeepingFilter = "housekeepingstaff";
+    public static final String serviceFilter = "service-staff";
+    
+    public static final String receptionistRole = "receptionist";
 
     public static final String receptionistRole = "./receptionist/receptionist";
     public static final String managerRole = "manager";
     public static final String adminRole =  "./" + adminFilter + "/admin";
     public static final String housekeeping = "/" + housekeepingFilter + "/homeHouseKeeping.jsp";
-    public static final String serviceStaff = "service-staff";
+    public static final String serviceRole = "./" + serviceFilter + "/homeServicePage.jsp";
+  
+
 
     public static final String systemConfigServlet = "SystemController";
     public static final String systemConfigController = "./" + adminFilter + "/system";
@@ -33,14 +37,23 @@ public interface IConstant {
     public static final String viewBookingServlet = "viewBooking";
     public static final String detailBooking = "./detailBooking";
     public static final String searchController = "search";
+    
     //    --------------------receptionist servlet------------------------
     public static final String dashboardReceptionistController = "./Dashboard";
     public static final String bookingController = "./BookingsController";
     public static final String getPendingCheckinController = "./GetPendingCheckinController";
     public static final String roomsStatusReceptionistController = "./RoomsStatusBoard";
 
-    public static final String takeRoomForCleanController = "takeRoomForCleanController";
-
+    
+    public static final String takeRoomForCleanController = "./takeRoomForCleanController";
+    public static final String makeNewRoomTaskController = "./makeNewRoomTaskController";
+    public static final String updateStatusCleanRoomController = "./UpdateStatusCleanRoomController";
+    public static final String detailProfileStaffController = "./detailProfileStaffController";
+    public static final String completeIngroressTask = "./completeIngroressTask.jsp";
+    public static final String detailProfileStaffPage = "./detailProfileStaffPage.jsp";
+    public static final String completeMaintain = "./completeMaintain.jsp";
+    public static final String takeDeviceForNoteMaintenanceController = "./takeDeviceForNoteMaintenanceController";
+    public static final String updateMaintain = "./updateMaintain.jsp";
     public static final String systemConfigPage = "/" + adminFilter + "/systemConfig.jsp";
     public static final String adminPage = "/" + adminFilter + "/adminPage.jsp";
     public static final String editServicePage = "editService.jsp";

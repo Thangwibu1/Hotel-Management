@@ -9,6 +9,7 @@ package controller.housekeepingstaff;
 import dao.RoomDAO;
 import dao.RoomTaskDAO;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -33,30 +34,35 @@ public class TakeRoomForCleanController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         try {
+            System.out.println("DAY LA TAKEROOMCLEAN");  
             RoomTaskDAO d = new RoomTaskDAO();
-            ArrayList<RoomTask> listTask = d.getAllRoom();
-            ArrayList<RoomTask> listPending = d.getRoomBaseStatus("Pending");
-            ArrayList<RoomTask> listMaintenance = d.getRoomBaseStatus("Maintenance");
-            ArrayList<RoomTask> listCleaned = d.getRoomBaseStatus("Cleaned");
-            ArrayList<RoomTask> listInProgress = d.getRoomBaseStatus("In Progress");
-
-            RoomDAO rd = new RoomDAO();
-            ArrayList<Room> listR = rd.getAllRoom();
-
-            String active = request.getParameter("active");
-            request.setAttribute("ROOM_TASK", listTask);
-            request.setAttribute("ROOM_CLEANED", listCleaned);
-            request.setAttribute("ROOM_PENDING", listPending);
-            request.setAttribute("ROOM_IN_PROGRESS", listInProgress);
-            request.setAttribute("ROOM_MATAINTENANCE", listMaintenance);
-            request.setAttribute("ROOM_LIST", listR);
-
-
-            if(active == null){
-                request.setAttribute("LIST_DISPLAY_HOME", listTask);
-                request.getRequestDispatcher("homeHouseKeeping.jsp").forward(request, response);
+            ArrayList<RoomTask> listTask = d.getAllRoomTaskBaseDate(LocalDateTime.now());
+            
+            if (listTask == null || listTask.isEmpty()) {
+//                System.out.println("check xem co lay dc roomTask cua hom nay ko ne . VO DAY LA KO LAY DC");
+                request.getRequestDispatcher(IConstant.makeNewRoomTaskController).forward(request, response);
             } else {
-                if (listTask != null) {
+                ArrayList<RoomTask> listPending = d.getRoomBaseStatus("Pending", LocalDateTime.now());
+                ArrayList<RoomTask> listMaintenance = d.getRoomBaseStatus("Maintenance", LocalDateTime.now());
+                ArrayList<RoomTask> listCleaned = d.getRoomBaseStatus("Cleaned", LocalDateTime.now());
+                ArrayList<RoomTask> listInProgress = d.getRoomBaseStatus("In Progress", LocalDateTime.now());
+
+                RoomDAO rd = new RoomDAO();
+                ArrayList<Room> listR = rd.getAllRoom();
+
+                String active = request.getParameter("active");
+                request.setAttribute("LIST_ALL_TASKS_SUMMARY", listTask);
+                request.setAttribute("LIST_DISPLAY_HOME", listTask);
+                request.setAttribute("ROOM_CLEANED", listCleaned);
+                request.setAttribute("ROOM_PENDING", listPending);
+                request.setAttribute("ROOM_IN_PROGRESS", listInProgress);
+                request.setAttribute("ROOM_MATAINTENANCE", listMaintenance);
+                request.setAttribute("ROOM_LIST", listR);
+
+                if (active == null ) {
+                    request.getRequestDispatcher("homeHouseKeeping.jsp").forward(request, response);
+                } else {
+
                     request.setAttribute("ACTIVE", active);
 
                     if (active.equalsIgnoreCase("pending")) {
@@ -73,19 +79,13 @@ public class TakeRoomForCleanController extends HttpServlet {
                     }
 
                     request.getRequestDispatcher("homeHouseKeeping.jsp").forward(request, response);
-                } else {
-                    //list null th� l�m g�
-                    request.getRequestDispatcher("homeHouseKeeping.jsp").forward(request, response);
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        } 
 
-    }
-
-    @Override
+    } 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
