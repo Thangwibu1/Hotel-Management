@@ -22,6 +22,44 @@ import utils.DBConnection;
  */
 public class RoomTaskDAO {
 
+
+    public RoomTask getRoomTaskById(int roomTaskId) {
+        RoomTask roomTask = null;
+        String sql = "SELECT [RoomTaskID] ,[RoomID],[StaffID],[StartTime],[EndTime],[StatusClean],[Notes],[isSystemTask] FROM [HotelManagement].[dbo].[ROOM_TASK] WHERE [RoomTaskID] = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, roomTaskId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int roomId = rs.getInt("RoomID");
+                int staffId = rs.getInt("StaffID");
+                LocalDateTime startTime = rs.getObject("StartTime", LocalDateTime.class);
+                LocalDateTime endTime = rs.getObject("EndTime", LocalDateTime.class);
+                String statusClean = rs.getString("StatusClean");
+                String notes = rs.getString("Notes");
+                int isSystemTask = rs.getInt("isSystemTask");
+                roomTask = new RoomTask(roomTaskId, roomId, staffId, startTime, endTime, statusClean, notes, isSystemTask);
+            }
+        } catch ( Exception e) {
+            System.err.println("General error in getRoomTaskById: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+        return roomTask;
+    }
+    
     public ArrayList<RoomTask> getAllRoom() {
         ArrayList<RoomTask> result = new ArrayList<RoomTask>();
         String sql = "SELECT [RoomTaskID] ,[RoomID],[StaffID],[StartTime],[EndTime],[StatusClean],[Notes],[isSystemTask] FROM [HotelManagement].[dbo].[ROOM_TASK]";
@@ -282,6 +320,45 @@ public class RoomTaskDAO {
 
             ps.setString(1, statusCleanUpdate);
             ps.setInt(2, roomTaskID);
+
+            rowsAffected = ps.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("Database error  " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+
+            System.err.println("General error " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+
+        return rowsAffected;
+    }
+
+    public int updateStatusRoomTask(int staffId ,int roomTaskID, String statusCleanUpdate) {
+        String sql = "UPDATE [HotelManagement].[dbo].[ROOM_TASK] SET [StatusClean] = ?, staffId = ? WHERE [RoomTaskID] = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        int rowsAffected = 0;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+
+            ps.setString(1, statusCleanUpdate);
+            ps.setInt(2, staffId);
+            ps.setInt(3, roomTaskID);
 
             rowsAffected = ps.executeUpdate();
 

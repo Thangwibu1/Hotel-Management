@@ -10,6 +10,43 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class StaffDAO {
+
+    public Staff getStaffById(int staffId) {
+        Staff staff = null;
+        String sql = "SELECT [StaffID] ,[FullName] ,[Role] ,[Username] ,[PasswordHash] ,[Phone] ,[Email] FROM [HotelManagement].[dbo].[STAFF] where [StaffID] = ?";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = DBConnection.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, staffId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                String fullName = rs.getString("FullName");
+                String role = rs.getString("Role");
+                String username = rs.getString("Username");
+                String passwordHash = rs.getString("PasswordHash");
+                String phone = rs.getString("Phone");
+                String email = rs.getString("Email");
+
+                staff = new Staff(staffId, fullName, role, username, passwordHash, phone, email);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return staff;
+    }
+
     public ArrayList<Staff> getAllStaff() {
         ArrayList<Staff> result = new ArrayList<>();
         String sql = "SELECT [StaffID] ,[FullName] ,[Role] ,[Username] ,[PasswordHash] ,[Phone] ,[Email] FROM [HotelManagement].[dbo].[STAFF]";
