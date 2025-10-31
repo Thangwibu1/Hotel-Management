@@ -374,6 +374,15 @@ public class BookingController extends HttpServlet {
                     if (!serviceAdded) {
                         throw new SQLException("Không thể thêm dịch vụ ID: " + service.getServiceId());
                     }
+
+                    if (service.getServiceId() == 3) {
+                        RoomTask roomTask = new RoomTask(newBookingId, null, newBookingService.getServiceDate().atStartOfDay(), newBookingService.getServiceDate().atTime(23, 59, 59), "Pending", null, 0);
+                        RoomTaskDAO roomTaskDAO = new RoomTaskDAO();
+                        boolean roomTaskAdded = roomTaskDAO.insertRoomTaskForServiceForTransaction(roomTask, conn);
+                        if (!roomTaskAdded) {
+                            throw new SQLException("Không thể thêm task phòng");
+                        }
+                    }
                 }
                 System.out.println("✓ Đã thêm " + services.size() + " dịch vụ");
             }
