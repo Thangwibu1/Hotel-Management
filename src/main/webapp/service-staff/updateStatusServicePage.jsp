@@ -24,9 +24,6 @@
 
         <jsp:include page="headerService.jsp"/>
         <div class="container">
-            <div class="search-box">
-                <input type="text" placeholder="Search customer, room, or service...">
-            </div>
 
             <div class="tabs d-flex flex-column flex-md-row gap-2">
 

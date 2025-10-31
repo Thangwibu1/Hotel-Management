@@ -135,6 +135,15 @@
             .stat-card:hover {
                 box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             }
+            .null-infor {
+                position: relative;
+                padding: 1rem 1rem; 
+                border: 1px solid #555555; 
+                border-radius: 0.25rem;
+                background-color: #f0f0f0;
+                color: #555555;
+                font-weight: 600;
+            }
         </style>
     </head>
     <body>
@@ -183,9 +192,12 @@
                                 style="cursor: pointer; background-color: white;"> 
 
                             <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#007bff" class="bi bi-list-ul mb-3" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 0 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm0-4a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm0-4a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                                </svg>
                                 <h4 class="card-title fw-bold text-dark">Today's Services</h4>
                                 <p class="card-text text-muted mb-4">List of all services provided today</p>
-                                
+
                             </div>
 
                         </button>
@@ -248,8 +260,8 @@
             %>
             <div class="row mt-4">
                 <div class="col-12">
-                    <div class="alert alert-info text-center" role="alert">
-                        Không có booking service nào trong hôm nay.
+                    <div class=" null-infor text-center" role="alert">
+                      No booking services today.
                     </div>
                 </div>
             </div>
