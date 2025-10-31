@@ -22,6 +22,23 @@ import utils.DBConnection;
  */
 public class RoomTaskDAO {
 
+    // public boolean deleteRoomTaskForServiceByRoomId(int roomTaskId) {
+    //     String sql = "DELETE FROM [HotelManagement].[dbo].[ROOM_TASK] WHERE [RoomTaskID] = ?";
+    //     Connection con = null;
+    //     PreparedStatement ps = null;
+    //     int rowsAffected = 0;
+    //     try {
+    //         con = DBConnection.getConnection();
+    //         ps = con.prepareStatement(sql);
+    //         ps.setInt(1, roomTaskId);
+    //         rowsAffected = ps.executeUpdate();
+    //     } catch (Exception e) {
+    //         System.err.println("General error in deleteRoomTaskForService: " + e.getMessage());
+    //         e.printStackTrace();
+    //     }
+    //     return rowsAffected > 0;
+    // }
+
     public boolean insertRoomTaskForServiceForTransaction(RoomTask roomTask, Connection conn) {
         String sql = "INSERT INTO [HotelManagement].[dbo].[ROOM_TASK] ([RoomID], [StartTime], [EndTime], [StatusClean], [Notes], [isSystemTask]) VALUES (?, ?, ?, ?, ?, ?)";
 

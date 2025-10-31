@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import dao.BookingDAO;
 import dao.BookingServiceDAO;
 import dao.RoomTaskDAO;
+import model.Booking;
 import model.BookingService;
 import model.ChoosenService;
 import model.RoomTask;
@@ -77,10 +78,14 @@ public class BookingChangeController extends HttpServlet {
                 }
             }
         }
+        // Booking booking = bookingDAO.getBookingById(Integer.parseInt(bookingId));
         if (cancelService != null) {
             for (String id : cancelService) {
                 updateBookingServiceStatus(Integer.parseInt(id), -1);
-            }   
+                // if (Integer.parseInt(id) == 3) {
+                    
+                // }
+            }
         }
         resp.sendRedirect(IConstant.homeServlet);
     }
