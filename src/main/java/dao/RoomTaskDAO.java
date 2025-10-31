@@ -41,6 +41,28 @@ public class RoomTaskDAO {
         return rowsAffected > 0;
     }
 
+    public boolean insertRoomTaskForService(RoomTask roomTask) {
+        String sql = "INSERT INTO [HotelManagement].[dbo].[ROOM_TASK] ([RoomID], [StartTime], [EndTime], [StatusClean], [Notes], [isSystemTask]) VALUES (?, ?, ?, ?, ?, ?)";
+        Connection con = null;
+        PreparedStatement ps = null;
+        int rowsAffected = 0;
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, roomTask.getRoomID());
+            ps.setObject(2, roomTask.getStartTime());
+            ps.setObject(3, roomTask.getEndTime());
+            ps.setString(4, roomTask.getStatusClean());
+            ps.setString(5, null);
+            ps.setInt(6, 0);
+            rowsAffected = ps.executeUpdate();
+        } catch (Exception e) {
+            System.err.println("General error in insertRoomTaskForService: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return rowsAffected > 0;
+    }
+
     public RoomTask getRoomTaskById(int roomTaskId) {
         RoomTask roomTask = null;
         String sql = "SELECT [RoomTaskID] ,[RoomID],[StaffID],[StartTime],[EndTime],[StatusClean],[Notes],[isSystemTask] FROM [HotelManagement].[dbo].[ROOM_TASK] WHERE [RoomTaskID] = ?";
