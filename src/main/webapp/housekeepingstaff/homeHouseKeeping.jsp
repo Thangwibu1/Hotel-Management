@@ -13,6 +13,8 @@
 <%@page import="java.util.ArrayList" %>
 <%@page import="model.Staff" %>
 <%@page import="utils.IConstant" %>
+<%@ page import="dao.GuestDAO" %>
+<%@ page import="dao.StaffDAO" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -50,7 +52,7 @@
 <%
 
     Staff staff = (Staff) session.getAttribute("userStaff");
-    
+
     ArrayList<RoomTask> list_Display_Home = (ArrayList) request.getAttribute("LIST_DISPLAY_HOME");
     ArrayList<RoomTask> listCleaned = (ArrayList) request.getAttribute("ROOM_CLEANED");
     ArrayList<RoomTask> listPending = (ArrayList) request.getAttribute("ROOM_PENDING");
@@ -63,11 +65,11 @@
     String cleanedForPress = "Cleaned";
     String inProgressForPress = "In Progress Clean";
     String maintainForPress = "In Progress Maintain";
-    
-    
+
+
     if (list_Display_Home == null || listR == null) {
         request.getRequestDispatcher(IConstant.takeRoomForCleanController).forward(request, response);
-        
+
     } else {
         String active = (String) request.getAttribute("ACTIVE");
 
@@ -79,11 +81,12 @@
 
         <div class="status-filters">
 
-            <form action= <%= IConstant.takeRoomForCleanController %> method="POST" class="filter-form-inline">
+            <form action=<%= IConstant.takeRoomForCleanController %> method="POST" class="filter-form-inline">
                 <input type="hidden" name="active" value="all">
                 <button type="submit"
                         class="filter-btn <%= (active == null || "all".equals(active)) ? "active" : "" %>  ">All Tasks
-                    <span class="count"> <%= (list_all_tasks_sumary != null) ? list_all_tasks_sumary.size() : 0 %> </span></button>
+                    <span class="count"> <%= (list_all_tasks_sumary != null) ? list_all_tasks_sumary.size() : 0 %> </span>
+                </button>
             </form>
 
             <form action="<%= IConstant.takeRoomForCleanController %>" method="POST" class="filter-form-inline">
@@ -141,14 +144,15 @@
         </div>
     </div>
     <%
-    if(request.getAttribute("THONGBAO") != null){
-    String msgUpdate = (String)request.getAttribute("THONGBAO");
+        if (request.getAttribute("THONGBAO") != null) {
+            String msgUpdate = (String) request.getAttribute("THONGBAO");
     %>
-    <h4 class="text-success pt-3 pb-3"> <%= msgUpdate %> </h4>
+    <h4 class="text-success pt-3 pb-3"><%= msgUpdate %>
+    </h4>
     <%
-    }
-    
-    
+        }
+
+
     %>
 
     <h3 class="status-title"> Tasks Detail <span
@@ -183,49 +187,49 @@
                 </div>
             </div>
             <div class="room-details">
-                <div>Staff:</div>
+                <div>Staff: <%=r.getStaffID() != null ? (new StaffDAO()).getStaffById(r.getStaffID()).getFullName() : ""%></div>
                 <div>
                     <%
-                    if ("Pending".equals(r.getStatusClean())) {
+                        if ("Pending".equals(r.getStatusClean())) {
                     %>
-                        <span class="time-badge">Priority</span>
+                    <span class="time-badge">Priority</span>
                     <%
-                    }
+                        }
                     %>
                 </div>
             </div>
             <div class="room-actions">
                 <%
-                if (r.getStatusClean().equalsIgnoreCase("Cleaned")) {
+                    if (r.getStatusClean().equalsIgnoreCase("Cleaned")) {
                 %>
-                    <div style="width: 100%">
-                        <button style="width: 100%" class="btn btn-primary">
-                            <%= cleanedForPress%>
-                        </button>
-                    </div>
+                <div style="width: 100%">
+                    <button style="width: 100%" class="btn btn-primary">
+                        <%= cleanedForPress%>
+                    </button>
+                </div>
                 <%
                 } else if (r.getStatusClean().equalsIgnoreCase("In Progress")) {
-                   String roomNumber = rl.getRoomNumber();
-                   int roomTaskID = r.getRoomTaskID();
-                   String targetStatus = "Cleaned";
+                    String roomNumber = rl.getRoomNumber();
+                    int roomTaskID = r.getRoomTaskID();
+                    String targetStatus = "Cleaned";
 
                 %>
                 <form action="<%= IConstant.completeIngroressTask %>" method="POST">
                     <input type="hidden" name="room" value="<%= roomNumber%>">
                     <input type="hidden" name="status_want_update" value="<%= targetStatus%>">
                     <input type="hidden" name="room_Task_ID" value="<%= roomTaskID%>">
-                    <% System.out.println("status in home khi nhan INPROGRESS" + targetStatus );%>
+                    <% System.out.println("status in home khi nhan INPROGRESS" + targetStatus);%>
                     <div style="width: 100%">
                         <button style="width: 100%" type="submit" class="btn btn-primary">
-                        <%= inProgressForPress%>
+                            <%= inProgressForPress%>
                         </button>
                     </div>
                 </form>
-                
+
                 <%
                 } else if (r.getStatusClean().equalsIgnoreCase("Pending")) {
                 %>
-                <form action= "<%= IConstant.updateStatusCleanRoomController %>" method="POST">
+                <form action="<%= IConstant.updateStatusCleanRoomController %>" method="POST">
                     <input type="hidden" name="room" value="<%= r.getRoomID()%>">
 
                     <input type="hidden" name="status_want_update" value="In Progress">
@@ -241,7 +245,7 @@
                 <%
                 } else if (r.getStatusClean().equalsIgnoreCase("Maintenance")) {
                 %>
-                <form action="" method="POST" >
+                <form action="" method="POST">
                     <input type="hidden" name="room" value="<%= r.getRoomID()%>">
 
                     <input type="hidden" name="status_want_update" value="Cleaned">
@@ -249,7 +253,7 @@
                     <input type="hidden" name="room_Task_ID" value="<%= r.getRoomTaskID() %>">
 
                     <div style="width: 100%">
-                        <button style="width: 100%" type="submit" class="btn btn-primary" >
+                        <button style="width: 100%" type="submit" class="btn btn-primary">
                             <%= maintainForPress%>
                         </button>
                     </div>
@@ -260,7 +264,7 @@
                 %>
             </div>
         </div>
-            
+
         <%
                     }
                 }
@@ -278,6 +282,6 @@
 
 <% }
 %>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
