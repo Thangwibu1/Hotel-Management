@@ -4,6 +4,7 @@
     Author     : TranHongGam
 --%>
 
+<%@page import="model.Service"%>
 <%@page import="utils.IConstant"%>
 <%@page import="model.BookingService"%>
 <%@page import="java.util.ArrayList"%>
@@ -148,6 +149,7 @@
                 border-radius: 12px;
                 transition: all 0.3s;
                 background: white;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); 
             }
 
             .service-card:hover {
@@ -212,17 +214,21 @@
                 font-size: 14px;
                 line-height: 1.6;
             }
+            .null-infor {
+                position: relative;
+                padding: 1rem 1rem; 
+                border: 1px solid #555555; 
+                border-radius: 0.25rem;
+                background-color: #f0f0f0;
+                color: #555555;
+                font-weight: 600;
+            }
         </style>
     </head>
     <body>
         <%
-            ArrayList<BookingService> bookingServiceList = (ArrayList<BookingService>) request.getAttribute("LIST_PERFORMANCE_BOOKING_SERVICE");
-            if (bookingServiceList == null || bookingServiceList.isEmpty()) {
-                System.out.println("Da vo thanh cong");
-            }
-            for (BookingService bs : bookingServiceList) {
-                System.out.println(bs.toString());
-            }
+            String start_date = (String) request.getAttribute("start_date");
+            String end_date = (String) request.getAttribute("end_date");
 
         %>
 
@@ -326,8 +332,6 @@
                         </div>
                 </div>
 
-
-
             <div class="container-fluid px-4 mt-3 mb-4">
                 <div class="card shadow-sm">
                     <div class="card-body p-4">
@@ -336,187 +340,99 @@
                             <h2 class="mb-0">Employee Performance Statistics</h2>
                         </div>
 
+                        <!--form-->
+<!--===================================================================================================================-->
                         <!-- Filter Section -->
                         <div class="filter-section p-3 mb-4 ">
-                            <div class="row g-3 align-items-end">
-                                <div class="col-md-3">
-                                    <label class="form-label small fw-bold text-secondary">STATUS</label>
-                                    <select class="form-select" id="statusFilter">
-                                        <option value="all">All Status</option>
-                                        <option value="1">Completed</option>
-                                        <option value="0">Pending</option>
-                                        <option value="-1">Cancelled</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label small fw-bold text-secondary">FROM DATE</label>
-                                    <input type="date" class="form-control" id="fromDate">
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label small fw-bold text-secondary">TO DATE</label>
-                                    <input type="date" class="form-control" id="toDate">
-                                </div>
-                                <div class="col-md-3">
-                                    <button class="btn btn-filter text-white w-100 fw-bold" onclick="applyFilter()">
-                                        <i class="fas fa-filter me-2"></i>Apply Filter
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                            <form method="POST" action="<%= IConstant.searchBookingByTimeController %>">
+                                <div class="row g-3 align-items-end">
+                                    <input type="hidden" name="report_type" value="searchBookingByTime">
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold text-secondary">FROM DATE</label>
+                                        <input type="date" class="form-control" name="startDate" value="<%= start_date != null? start_date: "" %>" required>
+                                    </div>
 
-                        <!-- Services Grid -->
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold text-secondary">TO DATE</label>
+                                        <input type="date" class="form-control" name="endDate" value="<%= end_date != null? end_date: "" %>" required>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <button type="submit" class="btn btn-filter text-white w-100 fw-bold">
+                                            <i class="fas fa-filter me-2"></i>Apply Filter
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+<!--===================================================================================================================-->
+                 <!-- Services Grid -->
                         <div class="row g-3" id="servicesContainer">
                             <!-- Service Card 1 -->
-                            <div class="col-12">
-                                <div class="service-card p-4">
-                                    <div class="d-flex justify-content-between align-items-start mb-3">
-                                        <span class="service-id-badge">BS-001</span>
-                                        <span class="badge badge-completed px-3 py-2">COMPLETED</span>
-                                    </div>
-                                    <div class="row g-3 mb-3">
-                                        <div class="col-md-2">
-                                            <div class="detail-label">Booking ID</div>
-                                            <div class="detail-value">#BK-12345</div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="detail-label">Service ID</div>
-                                            <div class="detail-value">#SV-789</div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="detail-label">Quantity</div>
-                                            <div class="detail-value">2</div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="detail-label">Service Date</div>
-                                            <div class="detail-value">2024-10-25</div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="detail-label">Staff ID</div>
-                                            <div class="detail-value">#STAFF-007</div>
-                                        </div>
-                                    </div>
-                                    <div class="service-note p-3 rounded">
-                                        <div class="note-label mb-1">NOTE</div>
-                                        <div class="note-text">Customer requested premium haircut with styling. Service completed with high satisfaction.</div>
-                                    </div>
-                                </div>
-                            </div>
+                           <%
+                              
+                               String flag = (String) request.getAttribute("CHECK");
+                               if(flag != null && flag.equals("true")){
+                               ArrayList<Service> listService = (ArrayList) request.getAttribute("LIST_SERVICE");
+                               ArrayList<BookingService> listShow = (ArrayList) request.getAttribute("LIST_SEARCH_BOOKING_SERVICE");
+                                    if(listShow != null && !listShow.isEmpty()){
+                                        for (BookingService b : listShow) {
+                                            for (Service service : listService) {
+                                                if(b.getServiceId() == service.getServiceId()){
+                                    %>
+                                            <div class="col-12">
+                                                     <div class="service-card p-4">
+                                                         <div class="d-flex justify-content-between align-items-start mb-3">
+                                                             <span class="service-id-badge">Booking Service Task</span>
+                                                             <span class="badge badge-completed px-3 py-2"><%= b.getStatus() == 1 ? "Complete" : "Canceled" %></span>
+                                                         </div>
+                                                         <div class="row g-3 mb-3">
+                                                             <div class="col-md-2">
+                                                                 <div class="detail-label">Booking ID</div>
+                                                                 <div class="detail-value"><%= b.getBookingServiceId() %></div>
+                                                             </div>
+                                                             <div class="col-md-2">
+                                                                 <div class="detail-label">Service </div>
+                                                                 <div class="detail-value"><%= service.getServiceName() %></div>
+                                                             </div>
+                                                             <div class="col-md-2">
+                                                                 <div class="detail-label">Quantity</div>
+                                                                 <div class="detail-value"><%= b.getQuantity() %></div>
+                                                             </div>
+                                                             <div class="col-md-3">
+                                                                 <div class="detail-label">Service Date</div>
+                                                                 <div class="detail-value"><%= b.getServiceDate() %></div>
+                                                             </div>
+                                                             <div class="col-md-3">
+                                                                 <div class="detail-label">Staff ID</div>
+                                                                 <div class="detail-value"><%= b.getStaffID() %></div>
+                                                             </div>
+                                                         </div>
+                                                         <div class="service-note p-3 rounded">
+                                                             <div class="note-label mb-1">NOTE</div>
+                                                             <div class="note-text"><%= b.getNote() != null ? b.getNote() : ""%></div>
+                                                         </div>
+                                                     </div>
+                                                 </div>
+                                            <%
+                                                }
+                                            }
+                                        }
+                                    }else{
+                                        %>
+                                        <div class="null-infor text-center">No bookings completed during this period</div>
+                                        <%
+                                    }
+                               }
+                           %>
 
-                            <!-- Service Card 2 -->
-                            <div class="col-12">
-                                <div class="service-card p-4">
-                                    <div class="d-flex justify-content-between align-items-start mb-3">
-                                        <span class="service-id-badge">BS-002</span>
-                                        <span class="badge badge-pending px-3 py-2">PENDING</span>
-                                    </div>
-                                    <div class="row g-3 mb-3">
-                                        <div class="col-md-2">
-                                            <div class="detail-label">Booking ID</div>
-                                            <div class="detail-value">#BK-12346</div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="detail-label">Service ID</div>
-                                            <div class="detail-value">#SV-790</div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="detail-label">Quantity</div>
-                                            <div class="detail-value">1</div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="detail-label">Service Date</div>
-                                            <div class="detail-value">2024-10-28</div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="detail-label">Staff ID</div>
-                                            <div class="detail-value">#STAFF-007</div>
-                                        </div>
-                                    </div>
-                                    <div class="service-note p-3 rounded">
-                                        <div class="note-label mb-1">NOTE</div>
-                                        <div class="note-text">Hair coloring service scheduled for this afternoon. Customer prefers natural brown tone.</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Service Card 3 -->
-                            <div class="col-12">
-                                <div class="service-card p-4">
-                                    <div class="d-flex justify-content-between align-items-start mb-3">
-                                        <span class="service-id-badge">BS-003</span>
-                                        <span class="badge badge-completed px-3 py-2">COMPLETED</span>
-                                    </div>
-                                    <div class="row g-3 mb-3">
-                                        <div class="col-md-2">
-                                            <div class="detail-label">Booking ID</div>
-                                            <div class="detail-value">#BK-12347</div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="detail-label">Service ID</div>
-                                            <div class="detail-value">#SV-791</div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="detail-label">Quantity</div>
-                                            <div class="detail-value">3</div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="detail-label">Service Date</div>
-                                            <div class="detail-value">2024-10-24</div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="detail-label">Staff ID</div>
-                                            <div class="detail-value">#STAFF-007</div>
-                                        </div>
-                                    </div>
-                                    <div class="service-note p-3 rounded">
-                                        <div class="note-label mb-1">NOTE</div>
-                                        <div class="note-text">Full spa treatment package for family. All services completed successfully with positive feedback.</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Service Card 4 -->
-                            <div class="col-12">
-                                <div class="service-card p-4">
-                                    <div class="d-flex justify-content-between align-items-start mb-3">
-                                        <span class="service-id-badge">BS-004</span>
-                                        <span class="badge badge-cancelled px-3 py-2">CANCELLED</span>
-                                    </div>
-                                    <div class="row g-3 mb-3">
-                                        <div class="col-md-2">
-                                            <div class="detail-label">Booking ID</div>
-                                            <div class="detail-value">#BK-12348</div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="detail-label">Service ID</div>
-                                            <div class="detail-value">#SV-792</div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="detail-label">Quantity</div>
-                                            <div class="detail-value">1</div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="detail-label">Service Date</div>
-                                            <div class="detail-value">2024-10-26</div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="detail-label">Staff ID</div>
-                                            <div class="detail-value">#STAFF-007</div>
-                                        </div>
-                                    </div>
-                                    <div class="service-note p-3 rounded">
-                                        <div class="note-label mb-1">NOTE</div>
-                                        <div class="note-text">Customer cancelled due to emergency. Rescheduled to next week.</div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
+<!--===================================================================================================================-->                
                     </div>
                 </div>
             </div>
-
-
-
-        </div>
+    </div>
 
 
 

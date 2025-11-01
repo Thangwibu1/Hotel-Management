@@ -5,13 +5,13 @@
             <div class="footer-section col-12 col-md-4 text-start">
                 <h4 class="fs-6 mb-3 text-dark border-bottom pb-1">Hotel Service Management System</h4>
                 <p class="text-muted small">Optimize workflows with a user-friendly and efficient interface.</p>
-                <p class="text-muted small mb-0 mt-3">© 2024 Hotel Service Management</p>
+                <p class="text-muted small mb-0 mt-3">© 2025 Hotel Service Management</p>
             </div>
 
             <div class="footer-section col-12 col-md-4 text-start border-start border-end px-md-4">
                 <h4 class="fs-6  mb-3 text-dark border-bottom pb-1">Technical Support</h4>
                 <ul class="list-unstyled small mb-0">
-                    <li>Hotline: 1900-xxxx</li>
+                    <li>Hotline: 1900-0000</li>
                     <li>Email: support@hotel.com</li>
                     <li>24/7 Support</li>
                 </ul>

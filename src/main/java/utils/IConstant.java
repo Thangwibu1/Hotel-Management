@@ -76,4 +76,5 @@ public interface IConstant {
     public static final String employeePerformanceController = "./employeePerformanceController";
     public static final String serviceRevenueController = "./serviceRevenueController";
     public static final String takeIncomeByTimeController = "./takeIncomeByTimeController";
+    public static final String searchBookingByTimeController = "./searchBookingByTimeController";
 }

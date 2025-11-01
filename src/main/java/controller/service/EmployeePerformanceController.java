@@ -34,10 +34,11 @@ public class EmployeePerformanceController extends HttpServlet {
             Staff staff = (Staff)ss.getAttribute("userStaff");
             String report_type =(String) request.getParameter("report_type");
             if(report_type.equals("employee_performance")){
-                System.out.println("VO Employee nhe");
+                System.out.println("Vo Employee PerformanceController ne");
                 BookingServiceDAO bookingServiceDAO = new BookingServiceDAO();
                 ArrayList<BookingService> bookingServiceList = bookingServiceDAO.getAllBookingService(staff.getStaffId());
                 request.setAttribute("LIST_PERFORMANCE_BOOKING_SERVICE", bookingServiceList);
+                request.setAttribute("FLAG", "true");
                 request.getRequestDispatcher(IConstant.employeePerformancePage).forward(request, response);
              }
         } catch (Exception e) {
