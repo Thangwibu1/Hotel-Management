@@ -266,10 +266,8 @@ GO
 -- 4. Dữ liệu bảng SERVICE
 INSERT INTO SERVICE (ServiceName, ServiceType, Price)
 VALUES ('Breakfast Buffet', 'Food', 15.00),
-       ('Set Menu Lunch', 'Food', 25.00),
        ('Laundry Service (per kg)', 'Laundry', 5.00),
-       ('Spa Massage (60 mins)', 'Spa', 40.00),
-       ('Room Keeping', 'HouseKeeping', 30.00)
+       ('Room Keeping', 'HouseKeeping', 5.00)
 GO
 
 -- 5. Dữ liệu bảng STAFF
