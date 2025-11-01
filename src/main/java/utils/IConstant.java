@@ -76,6 +76,7 @@ public interface IConstant {
     public static final String listServiceTodayPage = "./listServiceTodayPage.jsp";
     public static final String employeePerformancePage = "./employeePerformancePage.jsp";
     public static final String serviceRevenuePage = "./serviceRevenuePage.jsp";
+    public static final String viewBookingServiceCardPage = "./viewBookingServiceCardPage.jsp";
     //---service servlet------------------
     public static final String registerServiceController = "./registerServiceController";
     public static final String reportServiceController = "./reportServiceController";
@@ -86,5 +87,5 @@ public interface IConstant {
     public static final String serviceRevenueController = "./serviceRevenueController";
     public static final String takeIncomeByTimeController = "./takeIncomeByTimeController";
     public static final String searchBookingByTimeController = "./searchBookingByTimeController";
-    public static final String viewBooingServiceCardController = "./viewBooingServiceCardController";
+    public static final String viewBookingServiceCardController = "./viewBookingServiceCardController";
 }

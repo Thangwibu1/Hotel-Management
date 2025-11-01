@@ -142,7 +142,7 @@
                                                 </span>
                                             </td>
                                             <td style="text-align: start ">
-                                                <form action="<%=IConstant.viewBooingServiceCardController %>" method="POST">
+                                                <form action="<%=IConstant.viewBookingServiceCardController %>" method="POST">
                                                     <input type="hidden" name="bookingServiceId" value="<%= serviceTask.getBookingServiceId() %>">
                                                     <input type="hidden" name="staffId" value="<%= staff.getStaffId() %>">
                                                     <input type="hidden" name="status_Current" value="<%= serviceTask.getStatus() %>">

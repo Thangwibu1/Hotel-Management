@@ -21,8 +21,8 @@ import utils.IConstant;
  *
  * @author TranHongGam
  */
-@WebServlet(name = "ViewBooingServiceCardController", urlPatterns = {"/service-staff/viewBooingServiceCardController"})
-public class ViewBooingServiceCardController extends HttpServlet {
+@WebServlet(name = "ViewBookingServiceCardController", urlPatterns = {"/service-staff/viewBookingServiceCardController"})
+public class ViewBookingServiceCardController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
@@ -37,7 +37,7 @@ public class ViewBooingServiceCardController extends HttpServlet {
                     String staffPress = request.getParameter("staffId");
                     BookingServiceDAO d = new BookingServiceDAO();
                     BookingService resultBooking = d.getBookingServiceByBookingServiceId(Integer.parseInt(bookingServiceId));
-//                    request.getRequestDispatcher()
+                    request.getRequestDispatcher(IConstant.viewBookingServiceCardPage).forward(request, response);
                 }
                 
                 
