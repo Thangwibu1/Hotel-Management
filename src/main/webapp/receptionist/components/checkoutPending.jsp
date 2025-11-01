@@ -25,24 +25,21 @@
                     if (bookings != null && !bookings.isEmpty()) {
                         for (BookingActionRow row : bookings) {
                 %>
-                <form action="./checkOutController" method="get">
-                    <input type="hidden" name="bookingId" value="<%= row.getBooking().getBookingId()%>">
-                    <tr>
-                        <td>
-                            <div><%= row.getGuest().getFullName()%></div>
-                            <div class="muted" style="font-size:14px"><%= row.getGuest().getEmail()%></div>
-                            <div class="muted" style="font-size:14px"><%= row.getGuest().getPhone()%></div>
-                        </td>
-                        <td>
-                            <div><%= row.getRoom().getRoomNumber()%></div>
-                            <div class="muted" style="font-size:14px"><%= row.getRoomType().getTypeName()%></div>
-                        </td>
-                        <td><%= row.getBooking().getCheckOutDate().format(IConstant.dateFormat)%></td>
-                        <td>
-                            <button type="submit" class="btn primary btnGenerateBill">Generate Bill & Check Out</button>
-                        </td>
-                    </tr>
-                </form>
+                <tr>
+                    <td>
+                        <div><%= row.getGuest().getFullName()%></div>
+                        <div class="muted" style="font-size:14px"><%= row.getGuest().getEmail()%></div>
+                        <div class="muted" style="font-size:14px"><%= row.getGuest().getPhone()%></div>
+                    </td>
+                    <td>
+                        <div><%= row.getRoom().getRoomNumber()%></div>
+                        <div class="muted" style="font-size:14px"><%= row.getRoomType().getTypeName()%></div>
+                    </td>
+                    <td><%= row.getBooking().getCheckOutDate().format(IConstant.dateFormat)%></td>
+                    <td>
+                        <button class="btn primary btnGenerateBill">Generate Bill & Check Out</button>
+                    </td>
+                </tr>
                 <%
                         }
                     }
