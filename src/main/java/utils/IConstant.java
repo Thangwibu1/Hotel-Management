@@ -1,12 +1,20 @@
 package utils;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public interface IConstant {
 
     public static final DateTimeFormatter localDateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
+    // ham format date
+    public static String formatDate(LocalDate dateToFormat) {
+        if (dateToFormat == null) {
+            return "";
+        }
+        return dateToFormat.format(dateFormat);
+    }
+    
     // Name for refactor
     public static final String adminFilter = "admin";
     public static final String housekeepingFilter = "housekeepingstaff";
@@ -61,6 +69,7 @@ public interface IConstant {
 
     // -------------------------service constant-----------------------
     //---service page---------------------
+    
     public static final String registerServicePage = "./registerServicePage.jsp";
     public static final String updateStatusServicePage = "./updateStatusServicePage.jsp";
     public static final String reportServicePage = "./reportServicePage.jsp";
@@ -77,4 +86,5 @@ public interface IConstant {
     public static final String serviceRevenueController = "./serviceRevenueController";
     public static final String takeIncomeByTimeController = "./takeIncomeByTimeController";
     public static final String searchBookingByTimeController = "./searchBookingByTimeController";
+    public static final String viewBooingServiceCardController = "./viewBooingServiceCardController";
 }

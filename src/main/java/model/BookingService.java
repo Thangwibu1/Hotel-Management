@@ -1,9 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate; // THAY �?ỔI: Thêm import cho LocalDate
 
 
-public class BookingService {
+public class BookingService implements Serializable{
     private int bookingServiceId;
     private int bookingId;
     private int serviceId;

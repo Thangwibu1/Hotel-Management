@@ -201,6 +201,34 @@ public ArrayList<BookingService> getAllBookingService(int staffID)  {
         }
         return result;
     }
+    public BookingService getBookingServiceByBookingServiceId(int bookingServiceId) {
+
+        BookingService result = null;
+        String sql = "SELECT  [Booking_Service_ID],[BookingID],[ServiceID],[Quantity] ,[ServiceDate], [Status], [StaffID] FROM [HotelManagement].[dbo].[BOOKING_SERVICE] where [Booking_Service_ID] = ?";
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, bookingServiceId);
+            ResultSet rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+                    int bookingServiceID = rs.getInt("Booking_Service_ID");
+                    int bookingID = rs.getInt("BookingID");
+                    int serviceId = rs.getInt("ServiceID");
+                    int quantity = rs.getInt("Quantity");
+                    java.time.LocalDate serviceDate = rs.getObject("ServiceDate", java.time.LocalDate.class); // THAY ?ỔI
+                    int status = rs.getInt("Status");
+
+                    result = new BookingService(bookingServiceID, bookingID, serviceId, quantity, serviceDate, status); // THAY ?ỔI
+                    result.setStaffID(rs.getInt("StaffID"));
+                   
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
     public boolean addBookingService(BookingService bookingService) {
     String sql = "INSERT INTO [dbo].[BOOKING_SERVICE] "

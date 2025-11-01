@@ -368,7 +368,7 @@
                             </div>
                             <div class="info-row">
                                 <span class="info-label">Day:</span>
-                                <span class="info-value ms-2"> <%= bs.getServiceDate()%> </span>
+                                <span class="info-value ms-2"> <%= IConstant.formatDate(bs.getServiceDate()) %> </span>
                             </div>
                             <div class="note-box">
                                 <%= bs.getNote() == null ? "" : bs.getNote()%>

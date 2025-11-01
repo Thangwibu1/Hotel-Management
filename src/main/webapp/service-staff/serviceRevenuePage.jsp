@@ -307,7 +307,7 @@
                     <div class="summary-card">
                         <div class="row align-items-center">
                             <div class="col-md-8">
-                                <h6 class="mb-0">Total Revenue (<%= startDate %> - <%=endDate %>)</h6>
+                                <h6 class="mb-0">Total Revenue (<%= startDate %> - <%= endDate %>)</h6>
                                 <div class="summary-value" id="totalRevenue"><%= totalRevenueDouble %> VND</div>
                                 <p class="mb-0"><i class="fas fa-check-circle me-2"></i><span id="totalServices"><%= listB == null ? 0 : listB.size() %></span> completed services</p>
                             </div>

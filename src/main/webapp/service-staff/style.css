@@ -387,32 +387,7 @@ body {
     }
 }
 
-/*Update*/
-/* CSS cho Nút Quay L?i ? update
-.btn-comeback {
-     Thi?t l?p màu n?n và ch? m?c ??nh 
-    background-color: #6c757d;
-    color: #ffffff;
-    border-radius: 5px;
-    font-weight: 400;
-    text-decoration: none;
-    padding: 6px 12px;
-    display: inline-block;
-    transition: background-color 0.3s ease, transform 0.1s ease;  Thêm hi?u ?ng chuy?n ??i 
-}
 
-
-.btn-comeback:hover {
-    background-color: #5a6268;  Màu xám t?i h?n khi hover 
-    color: #ffffff;
-    text-decoration: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);  Thêm bóng nh? 
-}
-
-.btn-comeback:active {
-    background-color: #494e52;  Màu t?i h?n n?a khi nh?n 
-    transform: translateY(1px);  Nút lún xu?ng m?t chút 
-}*/
 
 .section-header .btn-comeback {
     margin-left: -10px;
@@ -474,17 +449,16 @@ body {
     display: inline-flex;
     align-items: center;
     padding: 5px 10px;
-    border-radius: 50px; /* Bo tròn nh? hình */
+    border-radius: 50px; /* Bo tròn nho hình */
     font-size: 0.9rem;
     font-weight: 500;
 }
 
 .status-complete {
-    background-color: #e6f7ee; /* N?n xanh nh?t */
-    color: #28a745; /* Ch? xanh ??m */
-    border: 1px solid #c8e6c9; /* Vi?n nh? */
+    background-color: #e6f7ee; 
+    color: #28a745; 
+    border: 1px solid #c8e6c9; 
 }
-
 .status-complete .dot {
     height: 8px;
     width: 8px;
@@ -493,6 +467,30 @@ body {
     margin-right: 5px;
     display: inline-block;
 }
+.dot {
+    /* Cung c?p kích th??c ?? ch?m tròn hi?n th? */
+    height: 8px; 
+    width: 8px; 
+    
+    /* Các thu?c tính ??nh hình khác */
+    border-radius: 50%; 
+    margin-right: 5px; 
+    display: inline-block;
+}
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+.status-pending .dot {
+    height: 8px;
+    width: 8px;
+    background-color: #856404;
+    border-radius: 50%;
+    margin-right: 5px;
+    display: inline-block;
+}
+
 
 /* Nút Thao tác */
 .action-link {

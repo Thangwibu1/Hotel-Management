@@ -6,10 +6,7 @@
 package controller.service;
 
 import dao.BookingServiceDAO;
-import dao.ServiceDAO;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.BookingService;
-import model.Service;
 import model.Staff;
 import utils.IConstant;
 
@@ -25,8 +21,8 @@ import utils.IConstant;
  *
  * @author TranHongGam
  */
-@WebServlet(name = "UpdateStatusServiceController", urlPatterns = {"/service-staff/updateStatusServiceController"})
-public class UpdateStatusServiceController extends HttpServlet {
+@WebServlet(name = "ViewBooingServiceCardController", urlPatterns = {"/service-staff/viewBooingServiceCardController"})
+public class ViewBooingServiceCardController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
@@ -35,17 +31,21 @@ public class UpdateStatusServiceController extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             Staff staff = (Staff) session.getAttribute("userStaff");
-            //lay du lieu de tai len trang tiep theo 
-            BookingServiceDAO d = new BookingServiceDAO();
-            ArrayList<BookingService> listTask = d.getAllBookingService(LocalDate.now());
-            ServiceDAO sd = new ServiceDAO();
-            ArrayList<Service> listService = sd.getAllService();
-            request.setAttribute("LIST_SERVICE_TASK", listTask);
-            request.setAttribute("LIST_SERVICE", listService);
-            request.getRequestDispatcher(IConstant.updateStatusServicePage).forward(request, response);
+            if(staff != null){
+                String bookingServiceId = request.getParameter("bookingServiceId");
+                if(bookingServiceId != null){
+                    String staffPress = request.getParameter("staffId");
+                    BookingServiceDAO d = new BookingServiceDAO();
+                    BookingService resultBooking = d.getBookingServiceByBookingServiceId(Integer.parseInt(bookingServiceId));
+//                    request.getRequestDispatcher()
+                }
+                
+                
+            }else{
+                response.sendRedirect(IConstant.loginPage);
+            }
         } catch (Exception e) {
-            System.out.println("BUG IN UpdateStatusServiceController ");
-            e.printStackTrace();
+
         } finally {
 
         }
