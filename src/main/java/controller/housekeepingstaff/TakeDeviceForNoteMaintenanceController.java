@@ -30,6 +30,7 @@ public class TakeDeviceForNoteMaintenanceController extends HttpServlet {
             String room = (String) request.getParameter("room");
             int roomTaskID = Integer.parseInt(request.getParameter("room_Task_ID"));
             String status_want_update = (String) request.getParameter("status_want_update");
+            status_want_update = "Maintenance";
             Staff staff = (Staff) request.getAttribute("userStaff");
             
             //bo data vao request de lam tiep theo

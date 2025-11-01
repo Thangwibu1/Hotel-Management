@@ -64,7 +64,7 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                 System.out.println("Status: " + statusWantUpdate);
                 int staffID = staff.getStaffId();
 
-                rowAffected = d.updateStatusRoomTask(roomTaskID, "Cleaned");
+                rowAffected = d.updateStatusRoomTask(roomTaskID, statusWantUpdate);
             }else if(request.getParameter("DONE_TASK") != null){
                 roomTaskID = Integer.parseInt(request.getParameter("room_Task_ID").trim());
                 statusWantUpdate = request.getParameter("status_want_update");
@@ -81,9 +81,9 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                 statusWantUpdate = request.getParameter("status_want_update");
                 rowAffected = d.updateStatusRoomTask(staff.getStaffId(), roomTaskID, statusWantUpdate);
                 HashMap<Integer, Integer> roomIdAndGuestId = d.getRoomIdAndGuestIdByRoomTaskId(roomTaskID);
-                int roomId = roomIdAndGuestId.keySet().iterator().next();
-                int guestId = roomIdAndGuestId.values().iterator().next();
-                System.out.println(roomId + guestId + "DUng roi djt me may");
+//                int roomId = roomIdAndGuestId.keySet().iterator().next();
+//                int guestId = roomIdAndGuestId.values().iterator().next();
+//                System.out.println(roomId + guestId + "DUng roi djt me may");
             }
 
 
