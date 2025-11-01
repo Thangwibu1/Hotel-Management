@@ -13,7 +13,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-        <title>JSP Page</title>
+        <title>Personal Performance Page</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="./style.css"/>
         <style>
@@ -223,6 +223,16 @@
                 color: #555555;
                 font-weight: 600;
             }
+            .msg_element{
+                padding: 1rem 1.25rem;
+                margin: 15px 0;
+                border-radius: 0.375rem;
+                background-color: #fcebeb;
+                border: 1px solid #f5c6cb;
+                color: #721c24;
+                font-weight: 500;
+                font-size: 1rem;
+            }
         </style>
     </head>
     <body>
@@ -331,7 +341,14 @@
                             </form>
                         </div>
                 </div>
-
+                    <%
+                    if(request.getAttribute("ERROR_INPUT") != null){
+                    String msg = (String) request.getAttribute("ERROR_INPUT");
+                    %>
+                    <div class="msg_element"><%= msg %></div>
+                    <%
+                    }
+                    %>        
             <div class="container-fluid px-4 mt-3 mb-4">
                 <div class="card shadow-sm">
                     <div class="card-body p-4">

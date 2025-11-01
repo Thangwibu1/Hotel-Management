@@ -50,13 +50,17 @@ public class TakeIncomeByTimeController extends HttpServlet {
                 }else{
                     startDateReport = LocalDate.parse(start_date_str, DateTimeFormatter.ISO_LOCAL_DATE);
                     endDateReport = LocalDate.parse(end_date_str, DateTimeFormatter.ISO_LOCAL_DATE);
-
+                    if(endDateReport.isBefore(startDateReport) || endDateReport.isAfter(LocalDate.now())){
+                        System.out.println("ngay nhap vao sai r be oi");
+                        request.setAttribute("ERROR_INPUT_REVENUE", "The end date must be greater than or equal to the start date and cannot exceed the current date.");
+                        request.getRequestDispatcher(IConstant.serviceRevenuePage).forward(request, response);
+                        return;
+                    }
                     BookingServiceDAO d = new BookingServiceDAO();
                     ServiceDAO sd = new ServiceDAO();
                     ArrayList<Service> listService = sd.getAllService();
                     ArrayList<BookingService> listTakeByTime = d.getAllBookingServiceBaseStartEndDate(startDateReport, endDateReport, staff.getStaffId());
 
-                    
                     if(listTakeByTime != null){
                         for (BookingService bookingService : listTakeByTime) {
                             for (Service service : listService) {

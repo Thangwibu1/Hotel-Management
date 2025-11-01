@@ -155,6 +155,16 @@
                 border-color: #7c3aed;
                 box-shadow: 0 0 0 0.2rem rgba(124,58,237,0.25);
             }
+            .msg_element {
+                padding: 1rem 1.25rem;
+                margin: 15px 0;
+                border-radius: 0.375rem;
+                background-color: #fcebeb;
+                border: 1px solid #f5c6cb;
+                color: #721c24;
+                font-weight: 500;
+                font-size: 1rem;
+            }
         </style>
     </head>
     <body>
@@ -250,6 +260,14 @@
                     </form>
                 </div>
             </div>
+              <%
+                    if(request.getAttribute("ERROR_INPUT_REVENUE") != null){
+                    String msg = (String) request.getAttribute("ERROR_INPUT_REVENUE");
+                    %>
+                    <div class="msg_element"><%= msg %></div>
+                    <%
+                    }
+                    %>      
             <!-- Date Range Filter -->
             <div class="date-range-section mt-4">
                 <form action=" <%= IConstant.takeIncomeByTimeController%>" method="POST">

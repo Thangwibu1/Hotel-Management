@@ -47,6 +47,12 @@ public class SearchBookingByTimeController extends HttpServlet {
                 } else {
                     startDateReport = LocalDate.parse(start_date_str, DateTimeFormatter.ISO_LOCAL_DATE);
                     endDateReport = LocalDate.parse(end_date_str, DateTimeFormatter.ISO_LOCAL_DATE);
+                    if(endDateReport.isBefore(startDateReport) || endDateReport.isAfter(LocalDate.now())){
+                        System.out.println("ngay nhap vp sai r be oi");
+                        request.setAttribute("ERROR_INPUT", "The end date must be greater than or equal to the start date and cannot exceed the current date.");
+                        request.getRequestDispatcher(IConstant.employeePerformancePage).forward(request, response);
+                        return;
+                    }
                     ServiceDAO sd = new ServiceDAO();
                     ArrayList<Service> listService = sd.getAllService();
                     BookingServiceDAO d = new BookingServiceDAO();
