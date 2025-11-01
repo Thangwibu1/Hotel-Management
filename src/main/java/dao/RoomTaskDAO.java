@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import model.RoomTask;
 import utils.DBConnection;
@@ -21,6 +22,38 @@ import utils.DBConnection;
  * @author TranHongGam
  */
 public class RoomTaskDAO {
+
+    public HashMap<Integer, Integer> getRoomIdAndGuestIdByRoomTaskId(int roomTaskId) {
+        HashMap<Integer, Integer> result = new HashMap<>();
+
+        String sql = "select r.RoomID, b.GuestID from ROOM_TASK r join BOOKING b on r.RoomID = b.RoomID where r.RoomTaskID = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, roomTaskId);
+            rs = ps.executeQuery();
+            if (rs != null && rs.next()) {
+                int roomId = rs.getInt("RoomID");
+                int guestId = rs.getInt("GuestID");
+                result.put(roomId, guestId);
+            }
+        } catch (Exception e) {
+            System.err.println("General error in getRoomIdAndGuestIdByRoomTaskId: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+        return result;
+    }
 
     // public boolean deleteRoomTaskForServiceByRoomId(int roomTaskId) {
     //     String sql = "DELETE FROM [HotelManagement].[dbo].[ROOM_TASK] WHERE [RoomTaskID] = ?";
@@ -310,7 +343,65 @@ public class RoomTaskDAO {
     public ArrayList<RoomTask> getAllRoomTaskBaseDate(LocalDateTime dayToGetTask) {
         ArrayList<RoomTask> result = new ArrayList<RoomTask>();
         String sql = "SELECT [RoomTaskID],[RoomID],[StatusClean],[StaffID],[StartTime],[EndTime],[Notes],[isSystemTask] FROM [HotelManagement].[dbo].[ROOM_TASK] "
-                + "WHERE CAST([StartTime] AS DATE) = CAST(? AS DATE) ";
+                + "WHERE CAST([StartTime] AS DATE) = CAST(? AS DATE)";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setObject(1, dayToGetTask.toLocalDate());
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+//                System.out.println("VO VO");
+                RoomTask room = new RoomTask();
+                room.setRoomTaskID(rs.getInt("RoomTaskID"));
+                room.setRoomID(rs.getInt("RoomID"));
+                room.setStatusClean(rs.getString("StatusClean"));
+                room.setStaffID(rs.getObject("StaffID", Integer.class));
+                room.setStartTime(rs.getObject("StartTime", LocalDateTime.class));
+                room.setEndTime(rs.getObject("EndTime", LocalDateTime.class));
+                room.setNotes(rs.getString("Notes"));
+                room.setIsSystemTask(rs.getInt("isSystemTask"));
+                result.add(room);
+            }
+        } catch (SQLException e) {
+            System.err.println("Database error in getRoomBaseStatus: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("General error in getRoomBaseStatus: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+        if (result.isEmpty()) {
+            System.out.println("Ko lay duoc phong");
+            result = null;
+
+        } else {
+            System.out.println("Lay duoc nha");
+        }
+        return result;
+    }
+
+    public ArrayList<RoomTask> getAllRoomTaskBaseDate(LocalDateTime dayToGetTask, int status) {
+        ArrayList<RoomTask> result = new ArrayList<RoomTask>();
+        String sql = "SELECT [RoomTaskID],[RoomID],[StatusClean],[StaffID],[StartTime],[EndTime],[Notes],[isSystemTask] FROM [HotelManagement].[dbo].[ROOM_TASK] "
+                + "WHERE CAST([StartTime] AS DATE) = CAST(? AS DATE) and isSystemTask = 1";
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;

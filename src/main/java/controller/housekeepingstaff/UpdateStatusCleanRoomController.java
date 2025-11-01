@@ -7,6 +7,8 @@ package controller.housekeepingstaff;
 
 import dao.RoomTaskDAO;
 import java.io.IOException;
+import java.util.HashMap;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -78,6 +80,10 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                 roomTaskID = Integer.parseInt(request.getParameter("room_Task_ID").trim());
                 statusWantUpdate = request.getParameter("status_want_update");
                 rowAffected = d.updateStatusRoomTask(staff.getStaffId(), roomTaskID, statusWantUpdate);
+                HashMap<Integer, Integer> roomIdAndGuestId = d.getRoomIdAndGuestIdByRoomTaskId(roomTaskID);
+                int roomId = roomIdAndGuestId.keySet().iterator().next();
+                int guestId = roomIdAndGuestId.values().iterator().next();
+                System.out.println(roomId + guestId + "DUng roi djt me may");
             }
 
 
