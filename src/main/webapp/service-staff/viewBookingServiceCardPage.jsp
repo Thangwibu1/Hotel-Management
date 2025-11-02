@@ -101,8 +101,13 @@
                 border-radius: 12px;
                 margin-bottom: 20px;
                 border-left: 4px solid #764ba2;
+                transition: all 0.3s ease-in-out;
             }
-
+            .section-group:hover {
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+                transform: translateY(-3px);
+                transition: all 0.3s ease-in-out;
+            }
             .section-title {
                 font-size: 15px;
                 color: #764ba2;
@@ -396,7 +401,7 @@
                                 <% 
                                   Integer staffId = bookingService.getStaffID();
                                   if (staffId == null || staffId.intValue() == 0) {
-                                    out.print("Not Assign");
+                                    out.print("No one has done it yet.");
                                   } else {
                                     out.print(staffId);
                                   }
