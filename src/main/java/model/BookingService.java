@@ -1,7 +1,7 @@
 package model;
 
 import java.io.Serializable;
-import java.time.LocalDate; // THAY �?ỔI: Thêm import cho LocalDate
+import java.time.LocalDate; 
 
 
 public class BookingService implements Serializable{
@@ -63,6 +63,7 @@ public class BookingService implements Serializable{
         this.serviceDate = serviceDate;
         this.status = status;
         this.note = note;
+        this.staffID = 0;
     }
     
     

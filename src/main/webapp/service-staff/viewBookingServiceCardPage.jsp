@@ -414,7 +414,16 @@
                     <div class="section-group">
                         <h3 class="section-title">Notes</h3>
                         <div class="note-content">
-                            <%= bookingService.getNote() == null ? "" : bookingService.getNote() %>
+                            <%
+                                String noteContent = bookingService.getNote();
+                                if(noteContent == null || noteContent.trim().isEmpty() || noteContent.trim().equalsIgnoreCase("NULL")){
+                                %> N/A <%
+                                }else{
+                                    %>
+                                    <%= noteContent %>
+                                    <%
+                                }
+                            %>
                         </div>
                     </div>
                 </div>

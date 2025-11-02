@@ -269,7 +269,7 @@ public ArrayList<BookingService> getAllBookingService(int staffID)  {
     public ArrayList<BookingService> getBookingServiceByBookingId(int bookingId) {
 
         ArrayList<BookingService> result = new ArrayList<>();
-        String sql = "SELECT  [Booking_Service_ID],[BookingID],[ServiceID],[Quantity] ,[ServiceDate], [Status], [StaffID] FROM [HotelManagement].[dbo].[BOOKING_SERVICE] where BookingID = ?";
+        String sql = "SELECT  [Booking_Service_ID],[BookingID],[ServiceID],[Quantity] ,[ServiceDate], [Status], [StaffID],[Note] FROM [HotelManagement].[dbo].[BOOKING_SERVICE] where BookingID = ?";
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -282,8 +282,8 @@ public ArrayList<BookingService> getAllBookingService(int staffID)  {
                     int quantity = rs.getInt("Quantity");
                     java.time.LocalDate serviceDate = rs.getObject("ServiceDate", java.time.LocalDate.class); // THAY ?ỔI
                     int status = rs.getInt("Status");
-
-                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, status); // THAY ?ỔI
+                    String note = rs.getString("Note");
+                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, status,note); // THAY ?ỔI
                     bookingService.setStaffID(rs.getInt("StaffID"));
                     result.add(bookingService);
                 }
@@ -296,7 +296,7 @@ public ArrayList<BookingService> getAllBookingService(int staffID)  {
     public BookingService getBookingServiceByBookingServiceId(int bookingServiceId) {
 
         BookingService result = null;
-        String sql = "SELECT  [Booking_Service_ID],[BookingID],[ServiceID],[Quantity] ,[ServiceDate], [Status], [StaffID] FROM [HotelManagement].[dbo].[BOOKING_SERVICE] where [Booking_Service_ID] = ?";
+        String sql = "SELECT  [Booking_Service_ID],[BookingID],[ServiceID],[Quantity] ,[ServiceDate], [Status], [StaffID],[Note] FROM [HotelManagement].[dbo].[BOOKING_SERVICE] where [Booking_Service_ID] = ?";
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -310,8 +310,8 @@ public ArrayList<BookingService> getAllBookingService(int staffID)  {
                     int quantity = rs.getInt("Quantity");
                     java.time.LocalDate serviceDate = rs.getObject("ServiceDate", java.time.LocalDate.class); // THAY ?ỔI
                     int status = rs.getInt("Status");
-
-                    result = new BookingService(bookingServiceID, bookingID, serviceId, quantity, serviceDate, status); // THAY ?ỔI
+                    String note = rs.getString("Note");
+                    result = new BookingService(bookingServiceID, bookingID, serviceId, quantity, serviceDate, status,note); // THAY ?ỔI
                     result.setStaffID(rs.getInt("StaffID"));
                    
                 }
@@ -324,8 +324,8 @@ public ArrayList<BookingService> getAllBookingService(int staffID)  {
 
     public boolean addBookingService(BookingService bookingService) {
     String sql = "INSERT INTO [dbo].[BOOKING_SERVICE] "
-               + "(BookingID, ServiceID, Quantity, ServiceDate, Status, Note) "
-               + "VALUES (?, ?, ?, ?, ?, ?)";
+               + "(BookingID, ServiceID, Quantity, ServiceDate, Status, Note, StaffID) "
+               + "VALUES (?, ?, ?, ?, ?, ?,?)";
     
     try (Connection conn = DBConnection.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -339,7 +339,7 @@ public ArrayList<BookingService> getAllBookingService(int staffID)  {
         ps.setInt(5, 0);
         
         ps.setString(6, bookingService.getNote()); 
-
+        ps.setInt(7, bookingService.getStaffID());
         int rowsAffected = ps.executeUpdate();
         return rowsAffected > 0;
         

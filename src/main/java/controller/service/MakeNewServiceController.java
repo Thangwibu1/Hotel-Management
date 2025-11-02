@@ -53,7 +53,7 @@ public class MakeNewServiceController extends HttpServlet {
             //process
             
             
-            //Lay roomId d?a vào s? phòng
+            //Lay roomId 
             RoomDAO roomD = new RoomDAO();
             Room roomID = roomD.getRoomByRoomNumber(roomNumber);
             BookingDAO bookingD = new BookingDAO();
@@ -61,9 +61,7 @@ public class MakeNewServiceController extends HttpServlet {
             //check phòng ?ó có ?ang ?c book ko 
             Booking booking = bookingD.getBookingByRoomID(roomID.getRoomId(), LocalDate.now());
             if(booking != null){
-                //check registerDate < checkoutDate
                 LocalDateTime checkoutDate = booking.getCheckOutDate();
-                //doi sang LocalDate de check cho de
                 LocalDate checkoutLocalDate = checkoutDate.toLocalDate();
                 LocalDate registerLocalDate = LocalDate.parse(registerDate);
                 
@@ -78,6 +76,9 @@ public class MakeNewServiceController extends HttpServlet {
                         return; 
                     }else{
                         BookingServiceDAO bSD = new BookingServiceDAO();
+                        
+                        note = "Start at: " + startTimeStr + "." + note;
+                        System.out.println(note);
                         BookingService bookingService = new BookingService(booking.getBookingId(), serviceId, quantity, registerLocalDate, 0, note);
                         if(bSD.addBookingService(bookingService)){
                             request.setAttribute("MSG", "Booking Service Succesfullly");
@@ -106,7 +107,7 @@ public class MakeNewServiceController extends HttpServlet {
             System.out.println("Notes: " + note);
             
         } catch (Exception e) {
-            System.out.println("L?i ? MakeNewSerrviceController");
+            System.out.println("Loi o MakeNewSerrviceController");
             e.printStackTrace();
         } 
     } 
