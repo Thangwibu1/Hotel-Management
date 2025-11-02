@@ -38,7 +38,7 @@ public class UpdateStatusServiceController extends HttpServlet {
             Staff staff = (Staff) session.getAttribute("userStaff");
             //lay du lieu de tai len trang tiep theo 
             BookingServiceDAO d = new BookingServiceDAO();
-            ArrayList<BookingService> listTask = d.getAllBookingService(LocalDate.now());
+            ArrayList<BookingService> listTask = d.getAllBookingServiceFromToday(LocalDate.now());
             ServiceDAO sd = new ServiceDAO();
             ArrayList<Service> listService = sd.getAllService();
             if(listTask != null && !listTask.isEmpty()){

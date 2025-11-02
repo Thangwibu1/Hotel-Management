@@ -389,7 +389,16 @@
                         <h3 class="section-title">Staff Information</h3>
                         <div class="info-row">
                             <div class="info-label">Staff ID</div>
-                            <div class="info-value">Staff</div>
+                                <div class="info-value">
+                                <% 
+                                  Integer staffId = bookingService.getStaffID();
+                                  if (staffId == null || staffId.intValue() == 0) {
+                                    out.print("Not Assign");
+                                  } else {
+                                    out.print(staffId);
+                                  }
+                                %>
+                            </div>
                         </div>
                     </div>
 
