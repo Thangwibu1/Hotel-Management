@@ -9,6 +9,7 @@ import dao.BookingServiceDAO;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -34,6 +35,31 @@ public class ListServiceTodayController extends HttpServlet {
             if(report_type.equals("today_services")){
                 BookingServiceDAO bookingDAO = new BookingServiceDAO();
                 ArrayList<BookingService> listBookingToday = bookingDAO.getAllBookingService(today);
+                if(listBookingToday != null && !listBookingToday.isEmpty()){
+                    listBookingToday.sort(new Comparator<model.BookingService>() {
+                        @Override
+                        public int compare(model.BookingService b1, model.BookingService b2) {
+                            int status1 = b1.getStatus();
+                            int status2 = b2.getStatus();
+
+                            if (status1 == status2) {
+                                return 0;
+                            }
+                            if (status1 == 0) return -1;
+                            if (status2 == 0) return 1;
+
+                            if (status1 == 1) return -1;
+                            if (status2 == 1) return 1;
+
+                            if (status1 == 2) return -1;
+                            if (status2 == 2) return 1;
+
+                            return 0;
+                        }
+                    });
+                }
+                
+                
                 request.setAttribute("LIST_BOOKING_SERVICE", listBookingToday);
                 request.getRequestDispatcher(IConstant.listServiceTodayPage).forward(request, response);
             }

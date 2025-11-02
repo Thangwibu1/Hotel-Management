@@ -44,8 +44,12 @@ public class MakeNewServiceController extends HttpServlet {
             String note = request.getParameter("note");
             
             LocalTime startTime = LocalTime.parse(startTimeStr);
-            
-            
+            LocalDate registerLocal = LocalDate.parse(registerDate);
+            if(registerLocal.isBefore(LocalDate.now())){
+                request.setAttribute("MSG", "The date must not be in the past.");
+                request.setAttribute("color", "red");
+                request.getRequestDispatcher(IConstant.registerServiceController).forward(request, response);
+            }
             //process
             
             

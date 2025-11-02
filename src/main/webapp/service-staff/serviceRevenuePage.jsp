@@ -4,6 +4,7 @@
     Author     : TranHongGam
 --%>
 
+<%@page import="model.Service"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="model.BookingService"%>
 <%@page import="utils.IConstant"%>
@@ -296,6 +297,7 @@
                 String flag = (String) request.getAttribute("FLAG");
                 if (flag != null && flag.equals("true")) {
                     ArrayList<BookingService> listB = (ArrayList) request.getAttribute("LIST_PERFORMANCE_BOOKING_SERVICE");
+                    ArrayList<Service> listService = (ArrayList) request.getAttribute("LIST_SERVICE");
                     java.math.BigDecimal totalRevenueBD = (java.math.BigDecimal) request.getAttribute("TOTAL_REVENUE");
                    
                     double totalRevenueDouble = 0.0;
@@ -321,31 +323,42 @@
                         <%
                             if(listB != null && !listB.isEmpty()){
                                 for (BookingService bookingservice : listB) {
+                                    for (Service s : listService) {
+                                       if(s.getServiceId() == bookingservice.getServiceId()){
+                                       
                                 %>
                                 <div class="booking-card">
                                     <div class="row align-items-center">
+
                                         <div class="col-md-2">
-                                            <strong>#BK001</strong>
+                                            <strong>Booking Service <%= bookingservice.getBookingServiceId() %></strong>
                                             <div class="text-muted small"><%= bookingservice.getServiceDate() %></div>
                                         </div>
-<!--                                        <div class="col-md-3">
-                                            <div><i class="fas fa-user me-2 text-primary"></i>Nguy?n V?n A</div>
-                                            <div class="text-muted small">Customer</div>
-                                        </div>-->
+
                                         <div class="col-md-3">
-                                            <div><i class="fas fa-cut me-2 text-success"></i><%= bookingservice.getServiceId() %></div>
+                                            <div><i class="fas fa-star me-2 text-success"></i><%= s.getServiceName() %>  </div>
                                             <div class="text-muted small">Service</div>
                                         </div>
+
                                         <div class="col-md-2">
-                                            <span class="status-badge status-completed"> <%= bookingservice.getStatus() %></span>
+                                            <span class="status-badge status-completed"> <%= bookingservice.getStatus() != 2 ? "" : "Completed" %> </span>
                                         </div>
+
                                         <div class="col-md-2 text-end">
-                                            <strong class="text-success" style="font-size: 18px;">350,000 </strong>
+                                            <strong class="text-success" style="font-size: 18px;"> <%= s.getPrice().multiply(java.math.BigDecimal.valueOf(bookingservice.getQuantity())) %> </strong>
                                         </div>
+
+                                        <div class="col-md-3 text-end">
+                                            <div class="text-muted small">Quantity:</div>
+                                            <strong><%= bookingservice.getQuantity() %></strong>
+                                        </div>
+
                                     </div>
                                 </div>
                         
                                 <%
+                                        }
+                                     }
                                 }
                             }
                         %>

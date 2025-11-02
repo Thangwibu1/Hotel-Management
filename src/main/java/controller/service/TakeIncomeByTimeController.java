@@ -80,6 +80,7 @@ public class TakeIncomeByTimeController extends HttpServlet {
                     request.setAttribute("FLAG", "true");
                     request.setAttribute("TOTAL_REVENUE", total);
                     request.setAttribute("LIST_PERFORMANCE_BOOKING_SERVICE", listTakeByTime);
+                    request.setAttribute("LIST_SERVICE", listService);
                     
                     if(listTakeByTime != null){
                         System.out.println("in list");

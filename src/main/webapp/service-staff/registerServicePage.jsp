@@ -15,6 +15,26 @@
     <title>Booking Service - Hotel Service Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./style.css"/>
+    <style>
+        .text-dangerRed {
+            background-color: #f8d7da;
+            color: #842029;
+            border: 1px solid #f5c2c7;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            font-weight: 700;
+        }
+
+        .text-successGreen {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            border: 1px solid #badbcc;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            font-weight: 700;
+        }
+
+    </style>
 </head>
 <body>
     <%
@@ -28,9 +48,9 @@
             if(MSG != null){
             String color = (String) request.getAttribute("color");
             if(color.equalsIgnoreCase("red")){
-              color = "text-danger";
+              color = "text-dangerRed";
             }else{
-              color = "text-success";
+              color = "text-successGreen";
             }
             %>
             <div class="search-box">
