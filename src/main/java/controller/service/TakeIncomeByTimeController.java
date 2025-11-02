@@ -59,7 +59,7 @@ public class TakeIncomeByTimeController extends HttpServlet {
                     BookingServiceDAO d = new BookingServiceDAO();
                     ServiceDAO sd = new ServiceDAO();
                     ArrayList<Service> listService = sd.getAllService();
-                    ArrayList<BookingService> listTakeByTime = d.getAllBookingServiceBaseStartEndDate(startDateReport, endDateReport, staff.getStaffId());
+                    ArrayList<BookingService> listTakeByTime = d.getAllBookingServiceBaseStartEndDate(startDateReport, endDateReport, staff.getStaffId(), 2 );
 
                     if(listTakeByTime != null){
                         for (BookingService bookingService : listTakeByTime) {
@@ -84,10 +84,11 @@ public class TakeIncomeByTimeController extends HttpServlet {
                     if(listTakeByTime != null){
                         System.out.println("in list");
                         for (BookingService bookingService : listTakeByTime) {
-                            System.out.println(bookingService.getStatus());;
+                            System.out.println(bookingService.getStatus());
+                            System.out.println(bookingService.toString());
                         }
                     }else{
-                        System.out.println("NULL R?I");
+                        System.out.println("NULL NULL");
                     }
                     System.out.println("DEBUG TAKEINCOME");
                     System.out.println(total.toString());
@@ -101,9 +102,8 @@ public class TakeIncomeByTimeController extends HttpServlet {
             }
 
         } catch (Exception e) {
-
-        } finally {
-
+            System.out.println("Loi o TakeInCome");
+            e.printStackTrace();
         }
     } 
 

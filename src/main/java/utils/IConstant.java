@@ -94,4 +94,5 @@ public interface IConstant {
     public static final String takeIncomeByTimeController = "./takeIncomeByTimeController";
     public static final String searchBookingByTimeController = "./searchBookingByTimeController";
     public static final String viewBookingServiceCardController = "./viewBookingServiceCardController";
+    public static final String editStatusServiceController = "./editStatusServiceController";
 }

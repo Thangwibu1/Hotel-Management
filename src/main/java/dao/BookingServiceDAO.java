@@ -108,12 +108,12 @@ public ArrayList<BookingService> getAllBookingService(int staffID)  {
     public ArrayList<BookingService> getAllBookingServiceBaseStartEndDate(LocalDate startDateReport, LocalDate endDateReport, int staffID, int status) {
         ArrayList<BookingService> result = new ArrayList<>();
 
-        String sql = "SELECT  [Booking_Service_ID],[BookingID],[ServiceID],[Quantity] ,[ServiceDate], [Status], [StaffID] FROM [HotelManagement].[dbo].[BOOKING_SERVICE] WHERE CONVERT(DATE, ServiceDate) BETWEEN ? AND ? and  [StaffID]  = ? AND  [Status] = ? ";
+        String sql = "SELECT  [Booking_Service_ID],[BookingID],[ServiceID],[Quantity] ,[ServiceDate], [Status], [StaffID] FROM [HotelManagement].[dbo].[BOOKING_SERVICE] WHERE ServiceDate >= ? AND ServiceDate <= ? and  [StaffID]  = ? AND  [Status] = ? ";
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setObject(1, startDateReport);
-            ps.setObject(2, endDateReport);
+            ps.setDate(1, java.sql.Date.valueOf(startDateReport));
+            ps.setDate(2, java.sql.Date.valueOf(endDateReport));
             ps.setInt(3, staffID);
             ps.setInt(4, status);
             ResultSet rs = ps.executeQuery();
@@ -263,6 +263,21 @@ public ArrayList<BookingService> getAllBookingService(int staffID)  {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, status);
             ps.setInt(2, bookingServiceId);
+            int rowsAffected = ps.executeUpdate();
+            System.out.println("Vo update DAO ne");;
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean updateBookingServiceStatus(int bookingServiceId, int status, int staffID) {
+        String sql = "UPDATE [dbo].[BOOKING_SERVICE] SET Status = ?, StaffID = ? WHERE Booking_Service_ID = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, status);
+            ps.setInt(2, staffID);
+            ps.setInt(3, bookingServiceId);
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
         } catch (Exception e) {

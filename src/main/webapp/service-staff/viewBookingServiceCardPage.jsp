@@ -133,8 +133,22 @@
                 letter-spacing: 0.5px;
                 font-weight: 600;
             }
-
+            .info-label-form{
+                width: 30%;
+                font-size: 13px;
+                color: #666;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                font-weight: 600;
+            }
             .info-value {
+                font-size: 15px;
+                color: #2c3e50;
+                font-weight: 600;
+                text-align: right;
+            }
+            .info-value-form {
+                width: 70%;
                 font-size: 15px;
                 color: #2c3e50;
                 font-weight: 600;
@@ -151,6 +165,7 @@
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
             }
+            
 
             .status-0 {
                 background: #f39c12;
@@ -195,20 +210,64 @@
             .btn-submit {
                 transition: all 0.3s ease;
             }
+            .class-form{
+                display: flex;
+                justify-content: space-around;
+                flex-wrap: nowrap;  /* ĐỔI từ wrap thành nowrap */
+                align-items: center; 
+            }
+            .btn-submit.status-badge .status-form{
+                padding: 4px 12px;  /* Chỉ áp dụng cho nút có cả 2 class */
+                font-size: 12px;
+                
+            }
+            .btn-back {
+                background: rgba(255, 255, 255, 0.2);
+                color: white;
+                padding: 8px 15px;
+                border-radius: 20px;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 14px;
+                letter-spacing: 0.5px;
+                transition: all 0.3s ease;
+                display: inline-block;
+                margin-left: 15px;
+                border: 1px solid rgba(255, 255, 255, 0.4);
+            }
 
+            .btn-back:hover {
+                background: rgba(255, 255, 255, 0.4);
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                transform: translateY(-1px);
+            }
         </style>
     </head>
     <body>
         <jsp:include page="headerService.jsp"/>
-        
+        <%
+            String thongBao = (String) request.getAttribute("THONGBAO");
+            if (thongBao != null && !thongBao.isEmpty()) {
+            String color_Text = (String) request.getAttribute("COLOR_TEXT");
+            
+            
+        %>
+        <div style="max-width: 800px; margin: 20px auto; padding: 0 10px;">
+            <div class="alert <%= color_Text %> alert-dismissible fade show" role="alert">
+                <strong>✓</strong> <%= thongBao%>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+        <% } %>
+
         <%
         Staff staff =(Staff) session.getAttribute("userStaff");
-        String staffPressID = (String) request.getAttribute("STAFF_IMPLEMENT");
-        String status_Current = (String) request.getAttribute("STATUS_CURRENT");
         BookingService bookingService = (BookingService) request.getAttribute("BOOKING_SERVICE_DETAIL");
         Service service = (Service) request.getAttribute("SERVICE_IMPLEMENT");
         Booking booking = (Booking) request.getAttribute("BOOKING_IMPLEMENT");
         Room room_implement = (Room) request.getAttribute("ROOM_REGISTER");
+        int staffPressID = staff.getStaffId();
+        int status_Current = bookingService.getStatus();
         Guest guest =(Guest) request.getAttribute("GUEST_REGISTER");
         %>
         <!--//main-->
@@ -217,50 +276,87 @@
                 <!-- Card Header -->
                 <div class="card-header-custom">
                     <h2>Booking Service Details</h2>
-                    <button class="close-btn" onclick="closeModal()">×</button>
+                    <a class="btn-back" href="<%= IConstant.updateStatusServiceController %>">Go Back</a>
                 </div>
 
                 <!-- Card Body -->
                 <div class="card-body-custom">
+<!--//================================================================================================-->
                     <!-- Booking Information Section -->
                     <div class="section-group">
                         <h3 class="section-title">Booking Information</h3>
                         <div class="info-row">
                             <div class="info-label">Booking Service ID</div>
-                            <div class="info-value"><%= bookingService.getBookingServiceId() %></div>
+                            <div class="info-value"><%= bookingService.getBookingServiceId()%></div>
                         </div>
-                        
+
                         <div class="info-row">
                             <div class="info-label">Service Date</div>
-                            <div class="info-value"><%= IConstant.formatDate(bookingService.getServiceDate()) %></div>
+                            <div class="info-value"><%= IConstant.formatDate(bookingService.getServiceDate())%></div>
                         </div>
                         <div class="info-row">
-                            <div class="info-label">Status</div>
-                            <div class="info-value">
-                                <form action="#" method="POST" id="statusForm">
-                                <%
-                                   
-                                    int status = Integer.parseInt(status_Current);
-                                    String statusText;
+                            <div class="info-label-form">Status</div>
+                            <div class="info-value-form ">
+                                <form action="<%= IConstant.editStatusServiceController%>" method="POST" id="statusForm">
 
-                                    if (status == -1) {
-                                        statusText = "Cancel";
-                                    } else if (status == 0) {
-                                        statusText = "Pending";
-                                    } else if (status == 1) {
-                                        statusText = "In Progress";
-                                    } else {
-                                        statusText = "Completed";
-                                    }
-                                %>
-                                <button type="submit" class="btn-submit status-badge status-<%=bookingService.getStatus()%>">
-                                    <%= statusText %>
-                                </button>
+                                    <div class="class-form">
+                                        <%
+                                        String statusText = "";
+                                        if(bookingService.getStatus() == 0){
+                                            statusText = IConstant.pendingText;
+                                        }else if(bookingService.getStatus() == 1){
+                                            statusText = IConstant.inProgressText;
+                                        }else if(bookingService.getStatus() == 2){
+                                            statusText = IConstant.completedText;
+                                        }else {
+                                            statusText = IConstant.canceledText;
+                                        }
+
+                                        %>
+
+                                        <span class="btn-submit status-badge status-form status-<%=bookingService.getStatus()%>">
+                                            <%= statusText %>
+                                        </span>
+
+                                        <input type="hidden"  name="booking_Service_ID" value="<%= bookingService.getBookingServiceId()%>" />
+                                        <input type="hidden"  name="status_Curent" value="<%= bookingService.getStatus()%>" />
+                                        <input type="hidden"  name="staff_implement" value="<%= staff.getStaffId()%>" />
+
+                                        <%
+                                            if( bookingService.getStatus() == 1 || bookingService.getStatus() == 0 ){
+                                            %>
+                                        <div>
+                                            <div>
+                                                <select name="status_Update" class="form-select form-select-sm" style="width: 180px; margin-right: 6px; margin: 10px 0;" required>
+                                                    <option value="" selected disabled>Choose Status </option>
+                                                    <% if(bookingService.getStatus() == 0 ){
+                                                        %>
+                                                     <option value="1" >In Progress </option>
+                                                     <option value="-1" >Canceled </option>
+                                                        <%
+                                                    }else{
+                                                        %>
+                                                        <option value="2" >Completed </option>
+                                                        <%
+                                                    }%>
+  
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <button type="submit" class="btn-submit status-badge">
+                                                    <- Edit Status 
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <%
+                                            }
+                                        %>   
+                                    </div>
                                 </form>
                             </div>
                         </div>
                     </div>
-
+<!--=================================================================================================================-->
                     <!-- Guest Information Section -->
                     <div class="section-group">
                         <h3 class="section-title">Guest Information</h3>
@@ -293,7 +389,7 @@
                         <h3 class="section-title">Staff Information</h3>
                         <div class="info-row">
                             <div class="info-label">Staff ID</div>
-                            <div class="info-value"><%= staffPressID %></div>
+                            <div class="info-value">Staff</div>
                         </div>
                     </div>
 
@@ -308,11 +404,6 @@
             </div>
         </div>
         <jsp:include page="footerService.jsp"/>
-        <script>
-        function closeModal() {
-            window.history.back();
-        }
-        </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

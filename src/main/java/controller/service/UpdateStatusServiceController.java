@@ -10,6 +10,7 @@ import dao.ServiceDAO;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -40,6 +41,31 @@ public class UpdateStatusServiceController extends HttpServlet {
             ArrayList<BookingService> listTask = d.getAllBookingService(LocalDate.now());
             ServiceDAO sd = new ServiceDAO();
             ArrayList<Service> listService = sd.getAllService();
+            if(listTask != null && !listTask.isEmpty()){
+                listTask.sort(new Comparator<model.BookingService>() {
+                    @Override
+                    public int compare(model.BookingService b1, model.BookingService b2) {
+                        int status1 = b1.getStatus();
+                        int status2 = b2.getStatus();
+                        
+                        if (status1 == status2) {
+                            return 0;
+                        }
+                        if (status1 == 0) return -1;
+                        if (status2 == 0) return 1;
+                        
+                        if (status1 == 1) return -1;
+                        if (status2 == 1) return 1;
+                        
+                        if (status1 == 2) return -1;
+                        if (status2 == 2) return 1;
+                        
+                        return 0;
+                    }
+                });
+            }
+            
+            
             request.setAttribute("LIST_SERVICE_TASK", listTask);
             request.setAttribute("LIST_SERVICE", listService);
             request.getRequestDispatcher(IConstant.updateStatusServicePage).forward(request, response);
