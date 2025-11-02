@@ -67,15 +67,13 @@ public interface IConstant {
     public static final String receptionistPage = "/receptionist/receptionistPage.jsp";
 
 
-    // -------------------------service constant-----------------------
-    //---service page---------------------
-    
+    // -------------------------service constant--------------------------------
     public static final String pendingText = "Pending";
     public static final String inProgressText = "In Progress";
     public static final String completedText = "Completed";
     public static final String canceledText = "Canceled";
     
-    
+    //---service page-----------------------------------------------------------
     public static final String registerServicePage = "./registerServicePage.jsp";
     public static final String updateStatusServicePage = "./updateStatusServicePage.jsp";
     public static final String reportServicePage = "./reportServicePage.jsp";
@@ -83,7 +81,7 @@ public interface IConstant {
     public static final String employeePerformancePage = "./employeePerformancePage.jsp";
     public static final String serviceRevenuePage = "./serviceRevenuePage.jsp";
     public static final String viewBookingServiceCardPage = "./viewBookingServiceCardPage.jsp";
-    //---service servlet------------------
+    //---service servlet--------------------------------------------------------
     public static final String registerServiceController = "./registerServiceController";
     public static final String reportServiceController = "./reportServiceController";
     public static final String updateStatusServiceController = "./updateStatusServiceController";

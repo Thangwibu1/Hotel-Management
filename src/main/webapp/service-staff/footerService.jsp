@@ -23,7 +23,7 @@
                 <h4 class="fs-6  mb-3 text-dark border-bottom pb-1">Version Information</h4>
                 <ul class="list-unstyled small mb-0">
                     <li>Version 3.0.0 - Workshop Edition</li>
-                    <li>Start at:<%= IConstant.formatDate(LocalDate.now()) %></li>
+                    <li>Start at :<%= IConstant.formatDate(LocalDate.now()) %></li>
                 </ul>
             </div>
 

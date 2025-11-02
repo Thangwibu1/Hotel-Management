@@ -254,7 +254,7 @@
         %>
         <div style="max-width: 800px; margin: 20px auto; padding: 0 10px;">
             <div class="alert <%= color_Text %> alert-dismissible fade show" role="alert">
-                <strong>✓</strong> <%= thongBao%>
+                <strong>Notification:</strong> <%= thongBao%>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         </div>
