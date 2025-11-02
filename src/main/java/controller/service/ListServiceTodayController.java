@@ -35,6 +35,10 @@ public class ListServiceTodayController extends HttpServlet {
             if(report_type.equals("today_services")){
                 BookingServiceDAO bookingDAO = new BookingServiceDAO();
                 ArrayList<BookingService> listBookingToday = bookingDAO.getAllBookingService(today);
+                ArrayList<BookingService> listPendingToday = bookingDAO.getAllBookingService(today,0);
+                ArrayList<BookingService> listInProgressToday = bookingDAO.getAllBookingService(today,1);
+                ArrayList<BookingService> listCompletedToday = bookingDAO.getAllBookingService(today,2);
+                ArrayList<BookingService> listCanceledToday = bookingDAO.getAllBookingService(today,-1);
                 if(listBookingToday != null && !listBookingToday.isEmpty()){
                     listBookingToday.sort(new Comparator<model.BookingService>() {
                         @Override
@@ -58,8 +62,25 @@ public class ListServiceTodayController extends HttpServlet {
                         }
                     });
                 }
-                
-                
+                request.setAttribute(
+                    "LIST_COMPLETED_SIZE",
+                    (listCompletedToday == null) ? 0 : listCompletedToday.size()
+                );
+
+                request.setAttribute(
+                    "LIST_CANCELED_SIZE",
+                    (listCanceledToday == null) ? 0 : listCanceledToday.size()
+                );
+
+                request.setAttribute(
+                    "LIST_INPROGRESS_SIZE",
+                    (listInProgressToday == null) ? 0 : listInProgressToday.size()
+                );
+
+                request.setAttribute(
+                    "LIST_PENDING_SIZE",
+                    (listPendingToday == null) ? 0 : listPendingToday.size()
+                );
                 request.setAttribute("LIST_BOOKING_SERVICE", listBookingToday);
                 request.getRequestDispatcher(IConstant.listServiceTodayPage).forward(request, response);
             }

@@ -157,6 +157,18 @@
             ArrayList<Booking> bookingList = bookingDAO.getAllBookings();
             RoomDAO roomDAO = new RoomDAO();
             ArrayList<Room> roomList = roomDAO.getAllRoom();
+           
+            Integer pendingObj = (Integer) request.getAttribute("LIST_PENDING_SIZE");
+            Integer completedObj = (Integer) request.getAttribute("LIST_COMPLETED_SIZE");
+            Integer inprogressObj = (Integer) request.getAttribute("LIST_INPROGRESS_SIZE");
+            Integer canceledObj = (Integer) request.getAttribute("LIST_CANCELED_SIZE");
+
+           
+
+            int pendingSize = (pendingObj == null) ? 0 : pendingObj;
+            int completedSize = (completedObj == null) ? 0 : completedObj;
+            int inprogressSize = (inprogressObj == null) ? 0 : inprogressObj;
+            int canceledSize = (canceledObj == null) ? 0 : canceledObj;
         %>
         
         <div class="container">
@@ -273,7 +285,7 @@
                 <div class="col-md-12">
                     <div class="card stat-card text-center border-0 shadow-sm">
                         <div class="card-body">
-                            <h3 class="text-secondary">6</h3>
+                            <h3 class="text-secondary"><%= listBookingService.size() %></h3>
                             <p class="mb-0 text-muted">Total Service</p>
                         </div>
                     </div>
@@ -281,7 +293,7 @@
                 <div class="col-md-3">
                     <div class="card stat-card text-center border-0 shadow-sm">
                         <div class="card-body">
-                            <h3 class="text-warning">2</h3>
+                            <h3 class="text-warning"><%= pendingSize %></h3>
                             <p class="mb-0 text-muted">Pending</p>
                         </div>
                     </div>
@@ -289,7 +301,7 @@
                 <div class="col-md-3">
                     <div class="card stat-card text-center border-0 shadow-sm">
                         <div class="card-body">
-                            <h3 class="text-success">3</h3>
+                            <h3 class="text-success"><%= inprogressSize %></h3>
                             <p class="mb-0 text-muted">In Progress</p>
                         </div>
                     </div>
@@ -297,7 +309,7 @@
                 <div class="col-md-3">
                     <div class="card stat-card text-center border-0 shadow-sm">
                         <div class="card-body">
-                            <h3 class="text-info">1</h3>
+                            <h3 class="text-info"><%= completedSize %></h3>
                             <p class="mb-0 text-muted">Completed</p>
                         </div>
                     </div>
@@ -305,7 +317,7 @@
                 <div class="col-md-3"> 
                     <div class="card stat-card text-center border-0 shadow-sm">
                         <div class="card-body">
-                            <h3 class="text-danger">0</h3> 
+                            <h3 class="text-danger"><%= canceledSize %></h3> 
                             <p class="mb-0 text-muted">Canceled</p>
                         </div>
                     </div>
@@ -325,7 +337,7 @@
                 %>
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card booking-card h-100">
-                        <div class="card-header-custom d-flex justify-content-between align-items-center">
+                        <div class="card-header-custom d-flex justify-content-between align-items-center" style="border-radius: 10px; ">
                             <span><%= service.getServiceName()%></span>
                             <span class="badge status-badge
                                 <%

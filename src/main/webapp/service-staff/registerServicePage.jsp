@@ -127,10 +127,10 @@
                             <div class="form-group">
                                 <label for="serviceId">Service Type *</label>
                                 <select id="serviceId" name="service_Id" required>
-                                    <option value="">Select service type</option> <option value="Massage">Massage</option>
+                                    <option value="">Select service type</option> 
                                     <option value="1">Breakfast</option>
-                                    <option value="3">Laundry</option>
-                                    <option value="5">Housekeeping</option>
+                                    <option value="2">Laundry</option>
+                                    <option value="3">Housekeeping</option>
                                 </select>
                             </div>
                         </div>

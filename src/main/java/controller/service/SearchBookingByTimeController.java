@@ -56,7 +56,7 @@ public class SearchBookingByTimeController extends HttpServlet {
                     ServiceDAO sd = new ServiceDAO();
                     ArrayList<Service> listService = sd.getAllService();
                     BookingServiceDAO d = new BookingServiceDAO();
-                    ArrayList<BookingService> listTakeByTime = d.getAllBookingServiceBaseStartEndDate(startDateReport, endDateReport, staff.getStaffId(),1);
+                    ArrayList<BookingService> listTakeByTime = d.getAllBookingServiceBaseStartEndDate(startDateReport, endDateReport, staff.getStaffId(),2);
                     request.setAttribute("LIST_SEARCH_BOOKING_SERVICE", listTakeByTime);
                     request.setAttribute("report_type", "searchBookingByTime");
                     request.setAttribute("start_date", start_date_str); 
@@ -71,7 +71,7 @@ public class SearchBookingByTimeController extends HttpServlet {
 
 
         } catch (Exception e) {
-            System.out.println("Loi o trông SearchBookingByTimeController");
+            System.out.println("Loi o trong SearchBookingByTimeController");
           e.printStackTrace();
         } 
     } 
