@@ -41,30 +41,43 @@ public class UpdateStatusServiceController extends HttpServlet {
             ArrayList<BookingService> listTask = d.getAllBookingServiceFromToday(LocalDate.now());
             ServiceDAO sd = new ServiceDAO();
             ArrayList<Service> listService = sd.getAllService();
-            if(listTask != null && !listTask.isEmpty()){
+            if (listTask != null && !listTask.isEmpty()) {
                 listTask.sort(new Comparator<model.BookingService>() {
                     @Override
                     public int compare(model.BookingService b1, model.BookingService b2) {
+
+                        int dateComparison = b1.getServiceDate().compareTo(b2.getServiceDate());
+
+                        if (dateComparison != 0) {
+                            return dateComparison;
+                        }
+
                         int status1 = b1.getStatus();
                         int status2 = b2.getStatus();
-                        
-                        if (status1 == status2) {
-                            return 0;
+
+                        int order1 = getStatusOrder(status1);
+                        int order2 = getStatusOrder(status2);
+
+                        return Integer.compare(order1, order2);
+                    }
+
+                    private int getStatusOrder(int status) {
+                        switch (status) {
+                            case 0:
+                                return 1;
+                            case 1:
+                                return 2;
+                            case 2:
+                                return 3;
+                            case -1:
+                                return 4;
+                            default:
+                                return 5;
                         }
-                        if (status1 == 0) return -1;
-                        if (status2 == 0) return 1;
-                        
-                        if (status1 == 1) return -1;
-                        if (status2 == 1) return 1;
-                        
-                        if (status1 == 2) return -1;
-                        if (status2 == 2) return 1;
-                        
-                        return 0;
                     }
                 });
             }
-            
+
             
             request.setAttribute("LIST_SERVICE_TASK", listTask);
             request.setAttribute("LIST_SERVICE", listService);

@@ -4,6 +4,7 @@
     Author     : TranHongGam
 --%>
 
+<%@page import="java.time.LocalDate"%>
 <%@page import="utils.IConstant"%>
 <%@page import="model.Guest"%>
 <%@page import="model.Room"%>
@@ -323,6 +324,7 @@
                                         <input type="hidden"  name="staff_implement" value="<%= staff.getStaffId()%>" />
 
                                         <%
+                                        if(!bookingService.getServiceDate().isAfter(LocalDate.now())){
                                             if( bookingService.getStatus() == 1 || bookingService.getStatus() == 0 ){
                                             %>
                                         <div>
@@ -350,6 +352,7 @@
                                         </div>
                                         <%
                                             }
+                                        }
                                         %>   
                                     </div>
                                 </form>
