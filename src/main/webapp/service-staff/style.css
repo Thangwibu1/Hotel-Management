@@ -468,11 +468,9 @@ body {
     display: inline-block;
 }
 .dot {
-    /* Cung c?p kích th??c ?? ch?m tròn hi?n th? */
+
     height: 8px; 
     width: 8px; 
-    
-    /* Các thu?c tính ??nh hình khác */
     border-radius: 50%; 
     margin-right: 5px; 
     display: inline-block;

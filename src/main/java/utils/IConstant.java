@@ -70,6 +70,12 @@ public interface IConstant {
     // -------------------------service constant-----------------------
     //---service page---------------------
     
+    public static final String pendingText = "Pending";
+    public static final String inProgressText = "In Progress";
+    public static final String completedText = "Completed";
+    public static final String canceledText = "Canceled";
+    
+    
     public static final String registerServicePage = "./registerServicePage.jsp";
     public static final String updateStatusServicePage = "./updateStatusServicePage.jsp";
     public static final String reportServicePage = "./reportServicePage.jsp";

@@ -16,7 +16,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Booking Service Details - Hotel Service Management </title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="./style.css"/>
@@ -183,8 +185,16 @@
                 background: white;
                 border-radius: 8px;
             }
+            .btn-submit:hover {
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+                transform: translateY(-2px) scale(1.02);
+                filter: brightness(110%);
+                transition: all 0.3s ease;
+            }
 
-          
+            .btn-submit {
+                transition: all 0.3s ease;
+            }
 
         </style>
     </head>
@@ -243,9 +253,8 @@
                                         statusText = "Completed";
                                     }
                                 %>
-                                    <!--<span class="status-badge status-0"><%=statusText %></span>-->
-                                <button type="submit" class="status-badge status-<%=bookingService.getStatus()%>">
-                                    <%= statusText%>
+                                <button type="submit" class="btn-submit status-badge status-<%=bookingService.getStatus()%>">
+                                    <%= statusText %>
                                 </button>
                                 </form>
                             </div>

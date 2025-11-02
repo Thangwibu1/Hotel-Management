@@ -70,7 +70,34 @@
                 outline: none;
                 box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
             }
-            
+            .status-complete-update{
+                background-color: #f3e5f5;
+                color: #8e24aa;
+                border: 2px solid #e1bee7;
+                 transition: all 0.3s ease-out;
+            }
+            .status-complete-update .dot {
+                height: 8px;
+                width: 8px;
+                background-color: #8e24aa;
+                border-radius: 50%;
+                margin-right: 5px;
+                display: inline-block;
+            }
+
+            .dot {
+
+                height: 8px;
+                width: 8px;
+                border-radius: 50%;
+                margin-right: 5px;
+                display: inline-block;
+            }
+            .status-complete-update:hover {
+                box-shadow: 0 6px 12px rgba(142, 36, 170, 0.4);
+                transform: translateY(-2px);
+                filter: brightness(105%) saturate(110%);
+            }
         </style>
     </head>
     <body>
@@ -136,9 +163,22 @@
                                             <td>101</td>
                                             <td><%= s.getServiceName() %></td>
                                             <td>
+                                               <%
+                                               int statusTmp = serviceTask.getStatus();
+                                               String statusDisplay = "";
+                                               if(statusTmp == 0){
+                                                    statusDisplay = IConstant.pendingText;
+                                               }else if(statusTmp == 1){
+                                                    statusDisplay = IConstant.inProgressText;
+                                               }else if(statusTmp == 2){
+                                                    statusDisplay = IConstant.completedText;
+                                               }else{
+                                                    statusDisplay = IConstant.canceledText;
+                                                }
                                                
-                                                <span class="status-badge status-complete">
-                                                    <span class="dot"></span> <%= serviceTask.getStatus() %>
+                                               %>
+                                                <span class="status-badge status-complete-update">
+                                                    <span class="dot"></span> <%= statusDisplay %>
                                                 </span>
                                             </td>
                                             <td style="text-align: start ">
