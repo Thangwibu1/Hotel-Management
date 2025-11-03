@@ -101,6 +101,10 @@
         %>
         <jsp:include page="../components/detailBookingPage.jsp"/>
         <%
+            }else if ("edit".equalsIgnoreCase(step)) {
+        %>
+        <jsp:include page="../components/editBookingPage.jsp"/>
+        <%
             }
         %>
     </body>
