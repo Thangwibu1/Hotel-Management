@@ -338,7 +338,7 @@ public class BookingDAO {
                 + "    b.BookingID,\n"
                 + "     g.FullName,g.Email,g.Phone,"
                 + "    r.RoomNumber,\n"
-                + "    rt.TypeName,\n"
+                + "    rt.TypeName,rt.PricePerNight,\n"
                 + "    b.CheckInDate,\n"
                 + "    b.CheckOutDate,\n"
                 + "    b.Status\n"
@@ -363,6 +363,7 @@ public class BookingDAO {
                     String phone = rs.getString("Phone");
                     String roomNum = rs.getString("RoomNumber");
                     String roomType = rs.getString("TypeName");
+                    BigDecimal pricePerNight = rs.getBigDecimal("PricePerNight");
                     LocalDateTime checkInDate = rs.getObject("CheckInDate", LocalDateTime.class);
                     LocalDateTime checkOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
                     String status = rs.getString("Status");
@@ -370,7 +371,7 @@ public class BookingDAO {
                     Room r = new Room(roomNum);
                     Booking b = new Booking(bookingId, checkInDate, checkOutDate, status);
                     Guest g = new Guest(fullname, phone, email);
-                    RoomType t = new RoomType(roomType);
+                    RoomType t = new RoomType(roomType, pricePerNight);
 
                     BookingActionRow booking = new BookingActionRow(b, r, g, t);
                     result.add(booking);
@@ -407,11 +408,10 @@ public class BookingDAO {
 
     public ArrayList<RoomInformation> getBookingByCheckInCheckOutDateV2(LocalDateTime checkInDate, LocalDateTime checkOutDate) {
         ArrayList<RoomInformation> result = new ArrayList<>();
-        
+
         String sql = "SELECT \n"
                 + "    r.RoomID,\n"
                 + "    r.RoomNumber,\n"
-                
                 + "    rt.TypeName,\n"
                 + "    rt.PricePerNight \n"
                 + "FROM ROOM r\n"
@@ -453,4 +453,5 @@ public class BookingDAO {
         }
         return result;
     }
+
 }

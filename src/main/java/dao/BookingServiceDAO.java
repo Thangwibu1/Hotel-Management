@@ -6,7 +6,9 @@ import utils.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import model.ServiceDetail;
 
 public class BookingServiceDAO {
     public ArrayList<BookingService> getAllBookingService() {
@@ -24,10 +26,10 @@ public class BookingServiceDAO {
                     int bookingId = rs.getInt("BookingID");
                     int serviceId = rs.getInt("ServiceID");
                     int quantity = rs.getInt("Quantity");
-                    java.time.LocalDate serviceDate = rs.getObject("ServiceDate", java.time.LocalDate.class); // THAY ĐỔI
+                    java.time.LocalDate serviceDate = rs.getObject("ServiceDate", java.time.LocalDate.class); // THAY �?ỔI
                     int status = rs.getInt("Status");
 
-                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, status); // THAY ĐỔI
+                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, status); // THAY �?ỔI
                     result.add(bookingService);
                 }
             }
@@ -52,10 +54,10 @@ public class BookingServiceDAO {
                     int bookingServiceId = rs.getInt("Booking_Service_ID");
                     int serviceId = rs.getInt("ServiceID");
                     int quantity = rs.getInt("Quantity");
-                    java.time.LocalDate serviceDate = rs.getObject("ServiceDate", java.time.LocalDate.class); // THAY ĐỔI
+                    java.time.LocalDate serviceDate = rs.getObject("ServiceDate", java.time.LocalDate.class); // THAY �?ỔI
                     int status = rs.getInt("Status");
 
-                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, status); // THAY ĐỔI
+                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, status); // THAY �?ỔI
                     result.add(bookingService);
                 }
             }
@@ -73,7 +75,7 @@ public class BookingServiceDAO {
             ps.setInt(1, bookingService.getBookingId());
             ps.setInt(2, bookingService.getServiceId());
             ps.setInt(3, bookingService.getQuantity());
-            ps.setObject(4, bookingService.getServiceDate()); // THAY ĐỔI
+            ps.setObject(4, bookingService.getServiceDate()); // THAY �?ỔI
             ps.setInt(5, bookingService.getStatus());
 
             int rowsAffected = ps.executeUpdate();
@@ -96,5 +98,30 @@ public class BookingServiceDAO {
             e.printStackTrace();
         }
         return false;
+    }
+    
+    public ArrayList<ServiceDetail> getServiceDetailsByBookingId(int bookingId) {
+        ArrayList<ServiceDetail> list = new ArrayList<>();
+        String sql = "SELECT s.ServiceID, s.ServiceName, s.Price, bs.Quantity, bs.ServiceDate\n"
+                + "FROM BOOKING_SERVICE bs\n"
+                + "JOIN SERVICE s ON s.ServiceID = bs.ServiceID\n"
+                + "WHERE bs.BookingID = ?";
+        try ( Connection conn = DBConnection.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, bookingId);
+            try ( ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new ServiceDetail(
+                            rs.getInt("ServiceID"),
+                            rs.getString("ServiceName"),
+                            rs.getBigDecimal("Price"),
+                            rs.getInt("Quantity"),
+                            rs.getObject("ServiceDate", LocalDate.class)
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

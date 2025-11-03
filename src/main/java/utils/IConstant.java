@@ -38,6 +38,9 @@ public interface IConstant {
     public static final String bookingController = "./BookingsController";
     public static final String getPendingCheckinController = "./GetPendingCheckinController";
     public static final String roomsStatusReceptionistController = "./RoomsStatusBoard";
+    public static final String bookingViewController = "./ViewBookingController";
+    public static final String bookingEditController = "./EditBookingController";
+    public static final String bookingDeleteController = "./DeleteBookingController";
 
     public static final String takeRoomForCleanController = "takeRoomForCleanController";
 
