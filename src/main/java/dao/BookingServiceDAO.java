@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class BookingServiceDAO {
@@ -45,7 +46,7 @@ public class BookingServiceDAO {
 public ArrayList<BookingService> getAllBookingService(int staffID)  {
     ArrayList<BookingService> result = new ArrayList<>();
 
-    // T?i ?u SELECT: B? [StaffID] vì ?ã có trong tham s?.
+    // T?i ?u SELECT: B? [StaffID] vï¿½ ?ï¿½ cï¿½ trong tham s?.
     String sql = "SELECT [Booking_Service_ID],[BookingID],[ServiceID],[Quantity],[ServiceDate],[Status] FROM [HotelManagement].[dbo].[BOOKING_SERVICE] WHERE [StaffID] = ?";
 
     try (Connection conn = DBConnection.getConnection();
@@ -54,7 +55,7 @@ public ArrayList<BookingService> getAllBookingService(int staffID)  {
         ps.setInt(1, staffID);
 
         try (ResultSet rs = ps.executeQuery()) {
-            // Không c?n ki?m tra if (rs != null)
+            // Khï¿½ng c?n ki?m tra if (rs != null)
             while (rs.next()) {
                 int bookingServiceId = rs.getInt("Booking_Service_ID");
                 int bookingId = rs.getInt("BookingID");
@@ -232,7 +233,7 @@ public ArrayList<BookingService> getAllBookingService(int staffID)  {
     }
 
     
-    //dùng cho lay list bao 
+    //dï¿½ng cho lay list bao 
     public ArrayList<BookingService> getAllBookingServiceBaseStartEndDate(LocalDate startDateReport, LocalDate endDateReport, int staffID) {
         ArrayList<BookingService> result = new ArrayList<>();
 

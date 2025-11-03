@@ -5,8 +5,13 @@
 package controller.receptionist;
 
 import dao.BookingDAO;
+import dao.PaymentDAO;
+import model.Payment;
+
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,10 +40,17 @@ public class CheckInController extends HttpServlet {
         try {
             int bookingId = Integer.parseInt(request.getParameter("bookingId"));
             BookingDAO bookingDao = new BookingDAO();
-            boolean checkedIn = bookingDao.updateBookingStatus(bookingId, "Checked-in");
+            boolean checkedIn = false;
+            ArrayList<Payment> checkPayment = (new PaymentDAO()).getPaymentByBookingId(bookingId);
+            if (checkPayment != null && checkPayment.get(0).getStatus().equals("Completed")) {
+                checkedIn = bookingDao.updateBookingStatus(bookingId, "Checked-in");
+            }
             if (checkedIn) {
+                // bookingDao.updateBookingStatus(bookingId, "Checked-in");
                 response.sendRedirect("GetPendingCheckinController");
-            } 
+            } else {
+                response.sendRedirect("GetPendingCheckinController");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -24,6 +24,7 @@
             <jsp:include page="../receptionist/components/checkManage.jsp"/>
 
             <!-- ====== JavaScript (inline) ====== -->
+        </div>
             <script src="../receptionist/style.js"></script>
     </body>
 </html>

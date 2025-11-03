@@ -25,6 +25,7 @@
                     if (bookings != null && !bookings.isEmpty()) {
                         for (BookingActionRow row : bookings) {
                 %>
+                
                 <tr>
                     <td>
                         <div><%= row.getGuest().getFullName()%></div>
@@ -37,7 +38,10 @@
                     </td>
                     <td><%= row.getBooking().getCheckOutDate().format(IConstant.dateFormat)%></td>
                     <td>
-                        <button class="btn primary btnGenerateBill">Generate Bill & Check Out</button>
+                        <button class="btn primary btnGenerateBill" 
+                                onclick="showBillPopup('<%= row.getBooking().getBookingId()%>')">
+                            Generate Bill & Check Out
+                        </button>
                     </td>
                 </tr>
                 <%
@@ -48,5 +52,43 @@
             </tbody>
         </table>
         <jsp:include page="../components/guestBill.jsp" />
+        
+        <script>
+            let currentBookingId = null;
+            
+            function showBillPopup(bookingId) {
+                currentBookingId = bookingId;
+                // Show popup
+                document.getElementById('billPopup').style.display = 'flex';
+            }
+            
+            function closeBillPopup() {
+                document.getElementById('billPopup').style.display = 'none';
+                currentBookingId = null;
+            }
+            
+            let selectedPaymentMethod = null;
+            
+            function selectPayment(method) {
+                selectedPaymentMethod = method;
+                
+                // Remove active class from all buttons
+                document.getElementById('cardPaymentBtn').classList.remove('active');
+                document.getElementById('cashPaymentBtn').classList.remove('active');
+                
+                // Add active class to selected button
+                if (method === 'card') {
+                    document.getElementById('cardPaymentBtn').classList.add('active');
+                } else if (method === 'cash') {
+                    document.getElementById('cashPaymentBtn').classList.add('active');
+                }
+            }
+            
+            function completeCheckout() {
+                if (currentBookingId) {
+                    window.location.href = './checkOutController?bookingId=' + currentBookingId;
+                }
+            }
+        </script>
     </body>
 </html>

@@ -4,13 +4,16 @@
  */
 package controller.receptionist;
 
+import dao.BookingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.BookingActionRow;
 
 /**
  *
@@ -32,8 +35,12 @@ public class BookingsController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
-            System.out.println("DEBUG: BookingsController");
-           request.getRequestDispatcher("./bookingPage.jsp").forward(request, response);
+            
+            BookingDAO bookingDao = new BookingDAO();
+            ArrayList<BookingActionRow> result = bookingDao.getInforBooking();
+            
+            request.setAttribute("RESULT", result);
+            request.getRequestDispatcher("/receptionist/bookingPage.jsp").forward(request, response);
         }catch(Exception e){
             e.printStackTrace();
         }

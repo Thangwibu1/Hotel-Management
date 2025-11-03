@@ -36,56 +36,122 @@ if (searchInput) {
     });
 }
 
-document.querySelectorAll('.status .badge').forEach(badge=>{
-  const s = badge.textContent.trim().toLowerCase();
-  badge.classList.remove('green','gray','yellow','red');
-  if (s === 'available')      badge.classList.add('green');
-  else if (s === 'occupied')  badge.classList.add('gray');
-  else if (s === 'dirty')     badge.classList.add('yellow');
-  else if (s === 'maintenance') badge.classList.add('red'); // ho?c gray
-  else                        badge.classList.add('gray');
+document.querySelectorAll('.status .badge').forEach(badge => {
+    const s = badge.textContent.trim().toLowerCase();
+    badge.classList.remove('green', 'gray', 'yellow', 'red');
+    if (s === 'available')
+        badge.classList.add('green');
+    else if (s === 'occupied')
+        badge.classList.add('gray');
+    else if (s === 'dirty')
+        badge.classList.add('yellow');
+    else if (s === 'maintenance')
+        badge.classList.add('red');
+    else
+        badge.classList.add('gray');
 });
 
-// ====== M? POPUP ======
-document.addEventListener('DOMContentLoaded', function() {
-  const popup = document.getElementById('billPopup');
-  if (!popup) return; // N?u popup ch?a t?n t?i, d?ng luôn (tránh l?i)
+document.querySelectorAll('.booking-status .badge').forEach(badge => {
+    const s = badge.textContent.trim().toLowerCase();
+    badge.classList.remove('green', 'gray', 'yellow', 'red');
 
-  const modal = popup.querySelector('.bill-modal');
-  const openButtons = document.querySelectorAll('.btnGenerateBill');
-  const closeBtn = popup.querySelector('.bill-close');
-
-  function openBillPopup(e) {
-    e.preventDefault();
-    popup.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeBillPopup(e) {
-    e.preventDefault();
-    popup.style.display = 'none';
-    document.body.style.overflow = 'auto';
-  }
-
-  // G?n cho t?t c? nút m? popup
-  openButtons.forEach(btn => {
-    btn.addEventListener('click', openBillPopup);
-  });
-
-  // G?n nút ?óng n?u có
-  if (closeBtn) closeBtn.addEventListener('click', closeBillPopup);
-
-  // ?óng khi click n?n
-  popup.addEventListener('click', function(e) {
-    if (e.target === popup) closeBillPopup(e);
-  });
-
-  // Ch?n click trong modal
-  if (modal) modal.addEventListener('click', e => e.stopPropagation());
-
-  // ?óng b?ng ESC
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeBillPopup(e);
-  });
+    if (s === 'reserved')
+        badge.classList.add('yellow');
+    else if (s === 'checked-in')
+        badge.classList.add('green');
+    else if (s === 'checked-out')
+        badge.classList.add('gray');
+    else if (s === 'canceled')
+        badge.classList.add('red');
+    else
+        badge.classList.add('gray');
 });
 
+function initPopup(popupId, openButtonClass = null, onCloseCallback = null) {
+    const popup = document.getElementById(popupId);
+    if (!popup) 
+        return;
+        
+    const modal = popup.querySelector('.bill-modal');
+    const closeBtn = popup.querySelector('.bill-close');
+
+    function openPopup(e) {
+        if (e)
+            e.preventDefault();
+        popup.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closePopup(e) {
+        if (e)
+            e.preventDefault();
+        popup.style.display = 'none';
+        document.body.style.overflow = 'auto';
+
+        // Gui callback neu có (VD: reload trang)
+        if (onCloseCallback && typeof onCloseCallback === 'function') {
+            onCloseCallback();
+        }
+    }
+
+    // Gan cho tat ca nút mo popup
+    if (openButtonClass) {
+        const openButtons = document.querySelectorAll('.' + openButtonClass);
+        openButtons.forEach(btn => {
+            btn.addEventListener('click', openPopup);
+        });
+    }
+
+    // G?n nút ?óng
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closePopup);
+    }
+
+    // ?óng khi click n?n
+    popup.addEventListener('click', function (e) {
+        if (e.target === popup)
+            closePopup(e);
+    });
+
+    // Ch?n click trong modal
+    if (modal) {
+        modal.addEventListener('click', e => e.stopPropagation());
+    }
+
+    // ?óng b?ng ESC
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && popup.style.display === 'flex') {
+            closePopup(e);
+        }
+    });
+
+    // Expose open/close functions globally
+    window['open' + capitalizeFirstLetter(popupId)] = openPopup;
+    window['close' + capitalizeFirstLetter(popupId)] = closePopup;
+}
+
+// Helper function ?? vi?t hoa ch? cái ??u
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+// Khoi tao tat ca popups khi DOM loaded
+document.addEventListener('DOMContentLoaded', function () {
+    // Khoi tao Bill Popup
+    initPopup('billPopup', 'btnGenerateBill');
+
+    // Khoi tao Verify Guest Popup
+    initPopup('verifyGuestPopup', 'btnNewBooking');
+
+    // Khoi taoo Booking Popup v?i reload khi ?óng
+    initPopup('bookingPopup', null, function () {
+        // Reload trang ?? xóa flash session
+        window.location.href = window.location.pathname + '?tab=bookings';
+    });
+
+    // Khoi tao Create Guest Popup v?i reload khi ?óng (n?u có)
+    initPopup('guestPopup', null, function () {
+        // chi reload neu popup thuc su duocc dóng (không back)
+        window.location.href = window.location.pathname + '?tab=bookings';
+    });
+});

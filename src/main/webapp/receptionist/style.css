@@ -189,8 +189,8 @@ th{
 }
 
 .badge.red{
-    background:#fee2e2;  /*?? nh?t */
-    color:#991b1b; /*ch? ?? ??m */
+    background:#fee2e2;
+    color:#991b1b;
 }
 
 .btn{
@@ -209,7 +209,7 @@ th{
 .btn.icon{
     width:38px;
     height:38px;
-    display:grid;
+    display:flex;
     place-items:center
 }
 .actions{
@@ -278,6 +278,7 @@ th{
 .spacer{
     height:12px
 }
+/* CSS c?a b?n - gi? nguyên */
 .bill-overlay {
     position: fixed;
     top: 0;
@@ -334,7 +335,7 @@ th{
 .bill-icon {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .bill-icon svg {
@@ -370,70 +371,16 @@ th{
     padding: 24px;
 }
 
-.hotel-info {
-    text-align: left;
-    margin-bottom: 20px;
-}
-
-.hotel-info h3 {
-    margin: 0 0 4px 0;
-    font-size: 20px;
-    font-weight: 600;
-    color: #1f2937;
-}
-
-.hotel-info p {
-    margin: 0;
-    font-size: 14px;
-    color: #6b7280;
-    line-height: 1.6;
-}
-
 .bill-divider {
     height: 1px;
     background-color: #e5e7eb;
     margin: 20px 0;
 }
 
-.bill-items {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.bill-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 15px;
-    color: #374151;
-}
-
-.bill-amount {
-    font-weight: 500;
-    color: #1f2937;
-}
-
-.bill-total {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: #1f2937;
-}
-
-.bill-total-amount {
-    font-size: 24px;
-    color: #1f2937;
-}
-
 .payment-methods {
     display: grid;
-    grid-template-columns: 1fr 1fr;
     gap: 12px;
-    margin: 24px 0;
+    margin: 5px 0;
 }
 
 .payment-btn {
@@ -457,59 +404,186 @@ th{
     background-color: #f9fafb;
 }
 
-.payment-btn.active {
-    border-color: #1f2937;
-    background-color: #f9fafb;
-    color: #1f2937;
-}
-
-.payment-btn svg {
-    stroke: currentColor;
-}
-
 .complete-checkout-btn {
     width: 100%;
-    padding: 16px;
-    background-color: #1f2937;
-    color: white;
+    background-color: #111827; /* ho?c #1f2937 tùy tone */
+    color: #fff;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
+    padding: 14px 16px;
+    font-size: 15px;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.25s ease;
 }
 
 .complete-checkout-btn:hover {
-    background-color: #111827;
+    background-color: #0f172a; /* h?i sáng h?n khi hover */
 }
 
-.complete-checkout-btn:active {
-    transform: scale(0.98);
+.complete-checkout-btn svg {
+    stroke: currentColor;
 }
 
-.bill-overlay {
-    display: none;
-}
 .bill-overlay.is-open {
     display: flex;
-} /* gi? nguyên flex layout c?a b?n */
+}
 
 @media (max-width: 640px) {
     .bill-modal {
         width: 95%;
         margin: 10px;
     }
-
     .bill-header {
         padding: 20px;
     }
-
     .bill-content {
         padding: 20px;
     }
-
     .payment-methods {
+        grid-template-columns: 1fr;
+    }
+}
+
+.subtitle {
+    color: #6b7280;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.alert-box {
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 12px;
+}
+
+.alert-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    color: #3b82f6;
+}
+
+.alert-text {
+    color: #374151;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.alert-text strong {
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1f2937;
+    background-color: #f9fafb;
+    transition: all 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.create-btn {
+    border-color: #1f2937;
+    background-color: #f9fafb;
+    font-weight: 600;
+}
+
+/* CSS b? sung cho booking popup */
+.bill-icon-vertical {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.verified-box {
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.verified-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    color: #16a34a;
+}
+
+.verified-text {
+    color: #374151;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.form-input:disabled {
+    background-color: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.form-select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1f2937;
+    background-color: #f9fafb;
+    cursor: pointer;
+    transition: all 0.2s;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+@media (max-width: 640px) {
+    .form-row {
         grid-template-columns: 1fr;
     }
 }
