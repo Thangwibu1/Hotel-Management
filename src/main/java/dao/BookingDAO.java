@@ -1,5 +1,6 @@
 package dao;
 
+import java.math.BigDecimal;
 import model.*;
 import utils.DBConnection;
 // Không cần import IConstant chứa formatter nữa (trừ khi dùng ở nơi khác)
@@ -401,6 +402,55 @@ public class BookingDAO {
             throw new RuntimeException(e);
         }
 
+        return result;
+    }
+
+    public ArrayList<RoomInformation> getBookingByCheckInCheckOutDateV2(LocalDateTime checkInDate, LocalDateTime checkOutDate) {
+        ArrayList<RoomInformation> result = new ArrayList<>();
+        
+        String sql = "SELECT \n"
+                + "    r.RoomID,\n"
+                + "    r.RoomNumber,\n"
+                
+                + "    rt.TypeName,\n"
+                + "    rt.PricePerNight \n"
+                + "FROM ROOM r\n"
+                + "JOIN ROOM_TYPE rt ON r.RoomTypeID = rt.RoomTypeID\n"
+                + "WHERE r.Status = 'Available' \n"
+                + "  AND NOT EXISTS (\n"
+                + "        SELECT 1\n"
+                + "        FROM BOOKING b\n"
+                + "        WHERE b.RoomID = r.RoomID\n"
+                + "          AND b.Status IN ('Reserved', 'Checked-in') \n"
+                + "          AND ?  < b.CheckOutDate   \n"
+                + "          AND ? > b.CheckInDate\n"
+                + "    )\n"
+                + "ORDER BY rt.TypeName, r.RoomNumber;";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setTimestamp(1, Timestamp.valueOf(checkInDate));
+            ps.setTimestamp(2, Timestamp.valueOf(checkOutDate));
+            rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+                    int roomId = rs.getInt("RoomID");
+                    String roomNum = rs.getString("RoomNumber");
+                    String typeName = rs.getString("TypeName");
+                    BigDecimal price = rs.getBigDecimal("PricePerNight");
+                    RoomInformation room = new RoomInformation(new Room(roomNum, roomId), new RoomType(typeName, price));
+                    result.add(room);
+                }
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return result;
     }
 }

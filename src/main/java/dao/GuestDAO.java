@@ -214,10 +214,14 @@ public class GuestDAO {
             ResultSet rs = ps.executeQuery();
             if (rs != null) {
                 while (rs.next()) {
-                    String fullName = rs.getString("FullName");
+                    int guestId = rs.getInt("GuestID");
+                     String fullName = rs.getString("FullName");
                     String phone = rs.getString("Phone");
                     String email = rs.getString("Email");
-                    guest = new Guest(fullName, phone, email);
+                    String address = rs.getString("Address");
+//                    String idNumber = rs.getString("IDNumber");
+                    String dateOfBirth = rs.getString("DateOfBirth");
+                    guest = new Guest(guestId, fullName, phone, email, address, idNumber, dateOfBirth, "null");
                 }
             }
         } catch (Exception e) {

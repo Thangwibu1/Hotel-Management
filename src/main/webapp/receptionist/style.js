@@ -1,4 +1,5 @@
-
+const bookingForm = document.getElementById('bookingForm');
+const bookingDateInput = document.getElementById('bookingDate');
 // Show today's date
 const fmt = new Intl.DateTimeFormat(undefined, {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
 document.getElementById('today').textContent = fmt.format(new Date());
@@ -67,95 +68,34 @@ document.querySelectorAll('.booking-status .badge').forEach(badge => {
         badge.classList.add('gray');
 });
 
-function initPopup(popupId, openButtonClass = null, onCloseCallback = null) {
-    const popup = document.getElementById(popupId);
-    if (!popup) 
-        return;
-        
-    const modal = popup.querySelector('.bill-modal');
-    const closeBtn = popup.querySelector('.bill-close');
+document.addEventListener("DOMContentLoaded", () => {
+    const roomCards = document.querySelectorAll(".room-card");
+    const continueBtn = document.getElementById("continueBtn");
+    const roomIdField = document.getElementById("selectedRoomId");
 
-    function openPopup(e) {
-        if (e)
-            e.preventDefault();
-        popup.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    }
-    
-    function closePopup(e) {
-        if (e)
-            e.preventDefault();
-        popup.style.display = 'none';
-        document.body.style.overflow = 'auto';
+    roomCards.forEach(card => {
+        card.addEventListener("click", () => {
+            // B? ch?n các phòng khác
+            roomCards.forEach(c => c.classList.remove("selected"));
+            // Ch?n phòng này
+            card.classList.add("selected");
 
-        // Gui callback neu có (VD: reload trang)
-        if (onCloseCallback && typeof onCloseCallback === 'function') {
-            onCloseCallback();
-        }
-    }
+            // L?y d? li?u t? data attributes
+            const roomId = card.dataset.roomId;
+//            const roomTypeId = card.dataset.roomTypeId;
+            console.log( "roomiD: " +  roomId);
+            // Gán vào hidden inputs
+            roomIdField.value = roomId;
 
-    // Gan cho tat ca nút mo popup
-    if (openButtonClass) {
-        const openButtons = document.querySelectorAll('.' + openButtonClass);
-        openButtons.forEach(btn => {
-            btn.addEventListener('click', openPopup);
+            continueBtn.disabled = false;
         });
-    }
-
-    // G?n nút ?óng
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closePopup);
-    }
-
-    // ?óng khi click n?n
-    popup.addEventListener('click', function (e) {
-        if (e.target === popup)
-            closePopup(e);
     });
+});
 
-    // Ch?n click trong modal
-    if (modal) {
-        modal.addEventListener('click', e => e.stopPropagation());
-    }
-
-    // ?óng b?ng ESC
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && popup.style.display === 'flex') {
-            closePopup(e);
-        }
-    });
-
-    // Expose open/close functions globally
-    window['open' + capitalizeFirstLetter(popupId)] = openPopup;
-    window['close' + capitalizeFirstLetter(popupId)] = closePopup;
-}
-
-// Helper function ?? vi?t hoa ch? cái ??u
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-// Khoi tao tat ca popups khi DOM loaded
-document.addEventListener('DOMContentLoaded', function () {
-    // Khoi tao Bill Popup
-    initPopup('billPopup', 'btnGenerateBill');
-
-    // Khoi tao Verify Guest Popup
-    initPopup('verifyGuestPopup', 'btnNewBooking');
-    
-    // Khoi taoo Booking Popup v?i reload khi ?óng
-    initPopup('bookingPopup', null, function () {
-        // Reload trang ?? xóa flash session
-        window.location.href = window.location.pathname + '?tab=bookings';
-    });
-    
-    initPopup('bookingPopup', 'create-guest-account', function () {
-        window.location.href = window.location.pathname + '?tab=bookings';
-    });
-
-    // Khoi tao Create Guest Popup v?i reload khi ?óng (n?u có)
-    initPopup('guestPopup', null, function () {
-        // chi reload neu popup thuc su duocc dóng (không back)
-        window.location.href = window.location.pathname + '?tab=bookings';
-    });
+bookingForm.addEventListener('submit', function (event) {
+    const todaySubmit = new Date();
+    const year = todaySubmit.getFullYear();
+    const month = String(todaySubmit.getMonth() + 1).padStart(2, '0');
+    const day = String(todaySubmit.getDate()).padStart(2, '0');
+    bookingDateInput.value = `${year}-${month}-${day}`;
 });

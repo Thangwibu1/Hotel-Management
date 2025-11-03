@@ -59,12 +59,11 @@ public class CreateAccountController extends HttpServlet {
             String phone = request.getParameter("phone");
 
             if (!validate(email, idNumber)) {
-                System.out.println("hahahahahha");
                 addGuest(fullName, phone, email, password, idNumber);
                 Guest newGuest = new GuestDAO().getGuestByIdNumber(idNumber);
                 request.setAttribute("FLASH_ID_NUM", idNumber);
                 request.setAttribute("GUEST", newGuest);
-                request.setAttribute("STATUS", "true");
+                request.setAttribute("CURRENT_STEP", "checkGuest");
                 request.setAttribute("CURRENT_TAB", "bookings");
                 request.getRequestDispatcher("/receptionist/bookingPage.jsp?tab=bookings").forward(request, response);
             } else {

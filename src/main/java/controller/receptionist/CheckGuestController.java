@@ -35,13 +35,14 @@ public class CheckGuestController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
+           
             String guestId = request.getParameter("guestId");
             GuestDAO guestDao = new GuestDAO();
             boolean checkExist = guestDao.checkDuplicateIdNumber(guestId);
 
             request.setAttribute("FLASH_ID_NUM", guestId);
             request.setAttribute("CURRENT_TAB", "bookings");
-            request.setAttribute("STATUS", "true");
+            request.setAttribute("CURRENT_STEP", "checkGuest");
             if (checkExist) {
                 request.setAttribute("GUEST", guestDao.getGuestByIdNumber(guestId));
             }

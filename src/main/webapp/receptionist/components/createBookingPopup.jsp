@@ -19,6 +19,7 @@
             if (guest != null) {
 
         %>
+        
         <div class="dates-container">
             <div class="card dates-card">
                 <h1 class="page-title">Select Stay Dates</h1>
@@ -26,16 +27,18 @@
                 <!-- Verified Box -->
                 <div class="verified-box">
                     <svg class="verified-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
                     </svg>
                     <p class="verified-text">
-                        Guest account verified: <strong id="verifiedName"><%= guest.getFullName() %></strong>
+                        Guest account verified: <strong id="verifiedName"><%= guest.getFullName()%></strong>
                     </p>
                 </div>
 
                 <!-- Form -->
-                <form id="datesForm" action="CheckAvailabilityServlet" method="POST">
+                <form id="datesForm" action="CheckAvailabilityRoomController" method="POST">
+                    <input type="hidden" name="guestId" value="<%= guest.getGuestId()%>">
+                    <h1><%= guest.getGuestId()%></h1>
                     <!-- Guest Info Row -->
                     <div class="form-row">
                         <div class="form-group">
@@ -45,9 +48,9 @@
                                 id="guestName" 
                                 name="guestName" 
                                 class="form-input" 
-                                value="<%= guest.getFullName() %>"
+                                value="<%= guest.getFullName()%>"
                                 readonly
-                            >
+                                >
                         </div>
 
                         <div class="form-group">
@@ -57,7 +60,7 @@
                                 name="numberOfGuests" 
                                 class="form-select"
                                 required
-                            >
+                                >
                                 <option value="1">1 Guest</option>
                                 <option value="2">2 Guests</option>
                                 <option value="3">3 Guests</option>
@@ -79,7 +82,7 @@
                             value="<%= guest.getEmail()%>"
                             readonly
                             disabled
-                        >
+                            >
                     </div>
 
                     <!-- Phone -->
@@ -93,7 +96,7 @@
                             value="<%= guest.getPhone()%>"
                             readonly
                             disabled
-                        >
+                            >
                     </div>
 
                     <!-- Dates Row -->
@@ -106,7 +109,7 @@
                                 name="checkinDate" 
                                 class="form-input"
                                 required
-                            >
+                                >
                         </div>
 
                         <div class="form-group">
@@ -117,30 +120,25 @@
                                 name="checkoutDate" 
                                 class="form-input"
                                 required
-                            >
+                                >
                         </div>
                     </div>
-
+                    <p style="color: red"><%
+                        if (request.getAttribute("ERROR") != null) {
+                            out.print(request.getAttribute("ERROR"));
+                        }
+                        %>
+                    </p>
                     <!-- Hidden fields for guest info -->
-                    <input type="hidden" name="guestId" id="guestId" value="">
-                    <input type="hidden" name="guestNameValue" id="guestNameValue" value="Sarah Johnson">
-                    <input type="hidden" name="emailValue" id="emailValue" value="sarah.j@email.com">
-                    <input type="hidden" name="phoneValue" id="phoneValue" value="+1 (555) 987-6543">
+                    <input type="hidden" name="guestId" id="guestId" value="<%= guest.getGuestId()%>">
 
                     <!-- Buttons -->
                     <div class="button-group">
-                        <button type="button" class="btn-secondary" onclick="window.location.href='booking-step1.jsp'">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="19" y1="12" x2="5" y2="12"></line>
-                                <polyline points="12 19 5 12 12 5"></polyline>
-                            </svg>
-                            Change Guest
-                        </button>
                         <button type="submit" class="btn-primary">
                             Check Availability
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                <polyline points="12 5 19 12 12 19"></polyline>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
                             </svg>
                         </button>
                     </div>

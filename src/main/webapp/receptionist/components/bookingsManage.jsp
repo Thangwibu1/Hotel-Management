@@ -18,16 +18,18 @@
     <body>
         <!-- BOOKINGS -->
         <%
-            String status = (String) request.getAttribute("STATUS");
-            if(status == null) status = "false";
-            if ("false".equalsIgnoreCase(status)) {
+            String step = (String) request.getAttribute("CURRENT_STEP");
+            if (step == null) {
+                step = "manage";
+            }
+            if ("manage".equalsIgnoreCase(step)) {
         %>
         <section id="bookings" class="screen">
             <div class="card" style="padding:16px">
                 <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
                     <h2 class="panel-title">Booking Management</h2>
                     <form action="NewBookingController">
-                        <button class="btn primary btnNewBooking" type="submit" name="newBooking" value="true">New Booking</button>
+                        <button class="btn primary btnNewBooking" type="submit">New Booking</button>
                     </form>
                 </div>
                 <div class="spacer"></div>
@@ -77,12 +79,15 @@
 
         </section>
         <%
-        } else {
+        } else if ("checkGuest".equalsIgnoreCase(step)) {
         %>
         <jsp:include page="../components/checkExistGuest.jsp"/>
         <%
+        } else if ("selectRoom".equalsIgnoreCase(step)) {
+        %>
+        <jsp:include page="../components/showRooms.jsp"/>
+        <%
             }
-
         %>
     </body>
 </html>

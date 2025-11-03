@@ -4,6 +4,8 @@
     Author     : trinhdtu
 --%>
 
+<%@page import="model.RoomInformation"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="model.Guest"%>
 <%@page contentType="text/html" pageEncoding="windows-1252"%>
 <!DOCTYPE html>
@@ -39,8 +41,8 @@
 
         <!-- Verification Form -->
         <div class="card verification-card">
-                <h2 class="verification-title">Verify Guest Account</h2>
-                <p class="verification-subtitle">Enter guest email to check if account exists</p>
+            <h2 class="verification-title">Verify Guest Account</h2>
+            <p class="verification-subtitle">Enter guest email to check if account exists</p>
             <form id="verificationForm" action="CheckGuestController" method="POST">
                 <div class="verify">
                     <div class="form-group">
@@ -51,7 +53,7 @@
                             class="form-input form-input-large" 
                             placeholder="012345678"
                             required
-                            value="<%= idNum != null ? idNum : "" %>"
+                            value="<%= idNum != null ? idNum : ""%>"
                             >
                     </div>
 
