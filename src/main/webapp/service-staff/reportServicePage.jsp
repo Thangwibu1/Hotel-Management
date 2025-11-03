@@ -51,14 +51,14 @@
             }
         </style>
     </head>
-    <body>
+    <body class="d-flex flex-column min-vh-100">
         <%
             Staff staff = (Staff) session.getAttribute("userStaff");
 
         %>
 
         <jsp:include page="headerService.jsp"/>
-        <div class="container">
+        <div class="container flex-grow-1">
 
 
             <div class="tabs d-flex flex-column flex-md-row gap-2">

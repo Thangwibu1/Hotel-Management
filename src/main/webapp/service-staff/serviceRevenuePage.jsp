@@ -168,7 +168,7 @@
             }
         </style>
     </head>
-    <body>
+    <body class="d-flex flex-column min-vh-100">
         <%
             Staff staff = (Staff) session.getAttribute("userStaff");
             String startDate = (String) request.getAttribute("start_date");
@@ -176,7 +176,7 @@
 
         %>
         <jsp:include page="headerService.jsp"/>
-        <div class="container">
+        <div class="container flex-grow-1">
             <div class="tabs d-flex flex-column flex-md-row gap-2">
 
                 <form action="<%= IConstant.registerServiceController%>" method="get" class="tab-form w-100 w-md-auto">

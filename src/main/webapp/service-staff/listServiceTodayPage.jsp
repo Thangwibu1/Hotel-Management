@@ -144,6 +144,13 @@
                 color: #555555;
                 font-weight: 600;
             }
+            .stat-card-text {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-size: 0.9em;
+                line-height: 1.2;
+            }
         </style>
     </head>
     <body>
@@ -281,50 +288,53 @@
             } else {
             %>
             
-            <div class="row mb-4 mt-4">
-                <div class="col-md-12">
-                    <div class="card stat-card text-center border-0 shadow-sm">
+            <div class="row mb-4 mt-4 g-3 align-items-stretch">
+                <div class="col-12 col-md-4">
+                    <div class="card stat-card text-center border-0 shadow-sm h-100">
                         <div class="card-body">
                             <h3 class="text-secondary"><%= listBookingService.size() %></h3>
-                            <p class="mb-0 text-muted">Total Service</p>
+                            <p class="mb-0 text-muted stat-card-text">Total Service</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="card stat-card text-center border-0 shadow-sm">
-                        <div class="card-body">
-                            <h3 class="text-warning"><%= pendingSize %></h3>
-                            <p class="mb-0 text-muted">Pending</p>
+
+                <div class="col-12 col-md-8">
+                    <div class="row g-3 d-flex flex-wrap align-items-stretch h-100"> 
+                        <div class="col-6 col-md-3">
+                            <div class="card stat-card text-center border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <h3 class="text-warning"><%= pendingSize %></h3>
+                                    <p class="mb-0 text-muted stat-card-text">Pending</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card stat-card text-center border-0 shadow-sm">
-                        <div class="card-body">
-                            <h3 class="text-success"><%= inprogressSize %></h3>
-                            <p class="mb-0 text-muted">In Progress</p>
+                        <div class="col-6 col-md-3">
+                            <div class="card stat-card text-center border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <h3 class="text-success"><%= inprogressSize %></h3>
+                                    <p class="mb-0 text-muted stat-card-text">In Progress</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card stat-card text-center border-0 shadow-sm">
-                        <div class="card-body">
-                            <h3 class="text-info"><%= completedSize %></h3>
-                            <p class="mb-0 text-muted">Completed</p>
+                        <div class="col-6 col-md-3">
+                            <div class="card stat-card text-center border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <h3 class="text-info"><%= completedSize %></h3>
+                                    <p class="mb-0 text-muted stat-card-text">Completed</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-3"> 
-                    <div class="card stat-card text-center border-0 shadow-sm">
-                        <div class="card-body">
-                            <h3 class="text-danger"><%= canceledSize %></h3> 
-                            <p class="mb-0 text-muted">Canceled</p>
+                        <div class="col-6 col-md-3">
+                            <div class="card stat-card text-center border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <h3 class="text-danger"><%= canceledSize %></h3>
+                                    <p class="mb-0 text-muted stat-card-text">Canceled</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
             <div class="row">
                 <%
                     for (BookingService bs : listBookingService) {
