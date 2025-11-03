@@ -71,7 +71,7 @@ public class EmailSender {
         props.put("mail.smtp.timeout", "10000");
         props.put("mail.smtp.writetimeout", "10000");
         
-        // Debug mode (có thể bỏ comment để debug)
+        // Debug mode (có thể b�? comment để debug)
         // props.put("mail.debug", "true");
 
         return Session.getInstance(props, new Authenticator() {
@@ -85,8 +85,8 @@ public class EmailSender {
     /**
      * Gửi email văn bản đơn giản
      *
-     * @param toEmail Email người nhận
-     * @param subject Tiêu đề email
+     * @param toEmail Email ngư�?i nhận
+     * @param subject Tiêu đ�? email
      * @param body    Nội dung email
      * @return true nếu gửi thành công, false nếu thất bại
      */
@@ -112,8 +112,8 @@ public class EmailSender {
     /**
      * Gửi email với nội dung HTML
      *
-     * @param toEmail  Email người nhận
-     * @param subject  Tiêu đề email
+     * @param toEmail  Email ngư�?i nhận
+     * @param subject  Tiêu đ�? email
      * @param htmlBody Nội dung HTML
      * @return true nếu gửi thành công, false nếu thất bại
      */
@@ -139,10 +139,10 @@ public class EmailSender {
     /**
      * Gửi email với file đính kèm
      *
-     * @param toEmail  Email người nhận
-     * @param subject  Tiêu đề email
+     * @param toEmail  Email ngư�?i nhận
+     * @param subject  Tiêu đ�? email
      * @param body     Nội dung email
-     * @param filePath Đường dẫn đến file đính kèm
+     * @param filePath �?ư�?ng dẫn đến file đính kèm
      * @return true nếu gửi thành công, false nếu thất bại
      */
     public boolean sendEmailWithAttachment(String toEmail, String subject, String body, String filePath) {
@@ -184,12 +184,12 @@ public class EmailSender {
     }
 
     /**
-     * Gửi email với nhiều file đính kèm
+     * Gửi email với nhi�?u file đính kèm
      *
-     * @param toEmail   Email người nhận
-     * @param subject   Tiêu đề email
+     * @param toEmail   Email ngư�?i nhận
+     * @param subject   Tiêu đ�? email
      * @param body      Nội dung email
-     * @param filePaths Danh sách đường dẫn các file đính kèm
+     * @param filePaths Danh sách đư�?ng dẫn các file đính kèm
      * @return true nếu gửi thành công, false nếu thất bại
      */
     public boolean sendEmailWithMultipleAttachments(String toEmail, String subject, String body, List<String> filePaths) {
@@ -211,7 +211,7 @@ public class EmailSender {
             for (String filePath : filePaths) {
                 File file = new File(filePath);
                 if (!file.exists()) {
-                    System.err.println("⚠ Cảnh báo: File không tồn tại, bỏ qua: " + filePath);
+                    System.err.println("⚠ Cảnh báo: File không tồn tại, b�? qua: " + filePath);
                     continue;
                 }
                 messageBodyPart = new MimeBodyPart();
@@ -222,21 +222,21 @@ public class EmailSender {
             message.setContent(multipart);
 
             Transport.send(message);
-            System.out.println("✓ Email với nhiều file đính kèm đã được gửi thành công đến: " + toEmail);
+            System.out.println("✓ Email với nhi�?u file đính kèm đã được gửi thành công đến: " + toEmail);
             return true;
 
         } catch (Exception e) {
-            System.err.println("✗ Lỗi khi gửi email với nhiều file đính kèm: " + e.getMessage());
+            System.err.println("✗ Lỗi khi gửi email với nhi�?u file đính kèm: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
 
     /**
-     * Gửi email đến nhiều người nhận
+     * Gửi email đến nhi�?u ngư�?i nhận
      *
-     * @param toEmails Danh sách email người nhận
-     * @param subject  Tiêu đề email
+     * @param toEmails Danh sách email ngư�?i nhận
+     * @param subject  Tiêu đ�? email
      * @param body     Nội dung email
      * @return true nếu gửi thành công, false nếu thất bại
      */
@@ -245,7 +245,7 @@ public class EmailSender {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(fromEmail));
 
-            // Tạo danh sách địa chỉ người nhận
+            // Tạo danh sách địa chỉ ngư�?i nhận
             InternetAddress[] addresses = new InternetAddress[toEmails.size()];
             for (int i = 0; i < toEmails.size(); i++) {
                 addresses[i] = new InternetAddress(toEmails.get(i));
@@ -256,11 +256,11 @@ public class EmailSender {
             message.setText(body);
 
             Transport.send(message);
-            System.out.println("✓ Email đã được gửi thành công đến " + toEmails.size() + " người nhận");
+            System.out.println("✓ Email đã được gửi thành công đến " + toEmails.size() + " ngư�?i nhận");
             return true;
 
         } catch (MessagingException e) {
-            System.err.println("✗ Lỗi khi gửi email đến nhiều người nhận: " + e.getMessage());
+            System.err.println("✗ Lỗi khi gửi email đến nhi�?u ngư�?i nhận: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -269,10 +269,10 @@ public class EmailSender {
     /**
      * Gửi email với CC và BCC
      *
-     * @param toEmail   Email người nhận chính
+     * @param toEmail   Email ngư�?i nhận chính
      * @param ccEmails  Danh sách email CC (có thể null)
      * @param bccEmails Danh sách email BCC (có thể null)
-     * @param subject   Tiêu đề email
+     * @param subject   Tiêu đ�? email
      * @param body      Nội dung email
      * @return true nếu gửi thành công, false nếu thất bại
      */
