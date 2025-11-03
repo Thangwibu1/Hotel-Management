@@ -153,7 +153,7 @@
             }
         </style>
     </head>
-    <body>
+    <body style="padding-top: 100px">
         <jsp:include page="headerService.jsp"/>
 
         <%

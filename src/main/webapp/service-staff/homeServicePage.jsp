@@ -377,22 +377,22 @@
         }
     </style>
 </head>
-<body>
+<body style="padding-top: 100px">
     <!-- Header -->
     <jsp:include page="headerService.jsp"/>
 
     <!-- Main Container -->
-    <div class="main-container">
+    <div class="main-container" style="padding-top: 1rem">
         <!-- Search Box -->
         <div class="search-box">
-            <input type="text" placeholder="? Tìm ki?m khách hàng, phòng ho?c d?ch v?...">
+            <input type="text" placeholder="? Tï¿½m ki?m khï¿½ch hï¿½ng, phï¿½ng ho?c d?ch v?...">
         </div>
 
         <!-- Tabs -->
         <div class="tabs">
             <button class="tab active">+ Ghi nh?n d?ch v?</button>
-            <button class="tab ">? C?p nh?t tr?ng thái</button>
-            <button class="tab">? Báo cáo</button>
+            <button class="tab ">? C?p nh?t tr?ng thï¿½i</button>
+            <button class="tab">? Bï¿½o cï¿½o</button>
         </div>
 
         <!-- Form Card -->
@@ -402,14 +402,14 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>Tên khách hàng *</label>
-                        <input type="text" placeholder="Nh?p tên khách hàng">
+                        <label>Tï¿½n khï¿½ch hï¿½ng *</label>
+                        <input type="text" placeholder="Nh?p tï¿½n khï¿½ch hï¿½ng">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>S? phòng *</label>
-                        <input type="text" placeholder="Ví d?: 101, 205A">
+                        <label>S? phï¿½ng *</label>
+                        <input type="text" placeholder="Vï¿½ d?: 101, 205A">
                     </div>
                 </div>
             </div>
@@ -421,7 +421,7 @@
                         <select>
                             <option>Ch?n lo?i d?ch v?</option>
                             <option>Massage</option>
-                            <option>B?a sáng</option>
+                            <option>B?a sï¿½ng</option>
                             <option>Gi?t ?i</option>
                             <option>??a r??c</option>
                         </select>
@@ -429,8 +429,8 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>Tên d?ch v? c? th? *</label>
-                        <input type="text" placeholder="Ví d?: Massage th? giãn, B?a sáng set">
+                        <label>Tï¿½n d?ch v? c? th? *</label>
+                        <input type="text" placeholder="Vï¿½ d?: Massage th? giï¿½n, B?a sï¿½ng set">
                     </div>
                 </div>
             </div>
@@ -445,8 +445,8 @@
             </div>
 
             <div class="form-group">
-                <label>Ghi chú thêm</label>
-                <textarea placeholder="Yêu c?u ??c bi?t, thói quen mong mu?n..."></textarea>
+                <label>Ghi chï¿½ thï¿½m</label>
+                <textarea placeholder="Yï¿½u c?u ??c bi?t, thï¿½i quen mong mu?n..."></textarea>
             </div>
 
             <button class="btn-add-service">+ Ghi nh?n d?ch v?</button>
@@ -454,18 +454,18 @@
 
         <!-- Services List Card -->
         <div class="card">
-            <div class="section-title">D?ch v? ?ã ghi nh?n g?n ?ây</div>
+            <div class="section-title">D?ch v? ?ï¿½ ghi nh?n g?n ?ï¿½y</div>
             
             <div class="services-list">
                 <div class="service-item">
                     <div class="service-icon" style="background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);">?</div>
                     <div class="service-content">
-                        <div class="service-name">B?a sáng buffet</div>
-                        <div class="service-details">Nguy?n V?n A • Phòng 101</div>
+                        <div class="service-name">B?a sï¿½ng buffet</div>
+                        <div class="service-details">Nguy?n V?n A ï¿½ Phï¿½ng 101</div>
                     </div>
                     <span class="service-status status-completed">
                         <span class="status-dot"></span>
-                        Hoàn thành
+                        Hoï¿½n thï¿½nh
                     </span>
                     <span class="service-time">08:30</span>
                 </div>
@@ -473,12 +473,12 @@
                 <div class="service-item">
                     <div class="service-icon" style="background: linear-gradient(135deg, #fab1a0 0%, #ff7675 100%);">?</div>
                     <div class="service-content">
-                        <div class="service-name">Massage toàn thân</div>
-                        <div class="service-details">Tr?n Th? B • Phòng 205</div>
+                        <div class="service-name">Massage toï¿½n thï¿½n</div>
+                        <div class="service-details">Tr?n Th? B ï¿½ Phï¿½ng 205</div>
                     </div>
                     <span class="service-status status-waiting">
                         <span class="status-dot"></span>
-                        Ch? x? lý
+                        Ch? x? lï¿½
                     </span>
                     <span class="service-time">09:15</span>
                 </div>
@@ -486,8 +486,8 @@
                 <div class="service-item">
                     <div class="service-icon" style="background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);">?</div>
                     <div class="service-content">
-                        <div class="service-name">Gi?t ?i qu?n áo</div>
-                        <div class="service-details">Lê V?n C • Phòng 312</div>
+                        <div class="service-name">Gi?t ?i qu?n ï¿½o</div>
+                        <div class="service-details">Lï¿½ V?n C ï¿½ Phï¿½ng 312</div>
                     </div>
                     <span class="service-status status-processing">
                         <span class="status-dot"></span>
@@ -500,11 +500,11 @@
                     <div class="service-icon" style="background: linear-gradient(135deg, #55efc4 0%, #00b894 100%);">?</div>
                     <div class="service-content">
                         <div class="service-name">D?ch v? ??c bi?t</div>
-                        <div class="service-details">Ph?m Th? D • Phòng 108</div>
+                        <div class="service-details">Ph?m Th? D ï¿½ Phï¿½ng 108</div>
                     </div>
                     <span class="service-status status-completed">
                         <span class="status-dot"></span>
-                        Hoàn thành
+                        Hoï¿½n thï¿½nh
                     </span>
                     <span class="service-time">11:20</span>
                 </div>
@@ -512,12 +512,12 @@
                 <div class="service-item">
                     <div class="service-icon" style="background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);">?</div>
                     <div class="service-content">
-                        <div class="service-name">??a ra sân bay</div>
-                        <div class="service-details">Hoàng V?n E • Phòng 407</div>
+                        <div class="service-name">??a ra sï¿½n bay</div>
+                        <div class="service-details">Hoï¿½ng V?n E ï¿½ Phï¿½ng 407</div>
                     </div>
                     <span class="service-status status-waiting">
                         <span class="status-dot"></span>
-                        Ch? x? lý
+                        Ch? x? lï¿½
                     </span>
                     <span class="service-time">14:30</span>
                 </div>
@@ -530,8 +530,8 @@
         <div class="footer-content">
             <div class="row">
                 <div class="col-md-4 footer-section">
-                    <h4>H? th?ng qu?n lý d?ch v? khách s?n</h4>
-                    <p>T?i ?u hóa quy trình làm vi?c v?i giao di?n thân thi?n và hi?u qu?.</p>
+                    <h4>H? th?ng qu?n lï¿½ d?ch v? khï¿½ch s?n</h4>
+                    <p>T?i ?u hï¿½a quy trï¿½nh lï¿½m vi?c v?i giao di?n thï¿½n thi?n vï¿½ hi?u qu?.</p>
                 </div>
                 <div class="col-md-4 footer-section">
                     <h4>H? tr? k? thu?t</h4>
@@ -542,11 +542,11 @@
                     </ul>
                 </div>
                 <div class="col-md-4 footer-section">
-                    <h4>Thông tin phiên b?n</h4>
+                    <h4>Thï¿½ng tin phiï¿½n b?n</h4>
                     <ul>
                         <li>Version 3.0.0 - Workshop Edition</li>
                         <li>C?p nh?t: 12/10/2025</li>
-                        <li>© 2024 Hotel Service Management</li>
+                        <li>ï¿½ 2024 Hotel Service Management</li>
                     </ul>
                 </div>
             </div>

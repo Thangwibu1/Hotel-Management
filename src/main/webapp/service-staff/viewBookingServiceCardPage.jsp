@@ -249,7 +249,7 @@
             }
         </style>
     </head>
-    <body>
+    <body style="padding-top: 100px">
         <jsp:include page="headerService.jsp"/>
         <%
             String thongBao = (String) request.getAttribute("THONGBAO");

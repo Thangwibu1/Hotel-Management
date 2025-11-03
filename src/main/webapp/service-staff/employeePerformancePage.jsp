@@ -235,7 +235,7 @@
             }
         </style>
     </head>
-    <body>
+    <body style="padding-top: 100px">
         <%
             String start_date = (String) request.getAttribute("start_date");
             String end_date = (String) request.getAttribute("end_date");
@@ -243,7 +243,7 @@
         %>
 
         <jsp:include page="headerService.jsp"/>
-        <div class="container">
+        <div class="container" style="padding-top: 2rem">
             <div class="tabs d-flex flex-column flex-md-row gap-2">
 
                 <form action="<%= IConstant.registerServiceController%>" method="get" class="tab-form w-100 w-md-auto">
