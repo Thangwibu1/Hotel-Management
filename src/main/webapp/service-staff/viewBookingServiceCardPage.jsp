@@ -357,6 +357,27 @@
                                         </div>
                                         <%
                                             }
+                                        }else{
+                                            if(bookingService.getStatus() ==  0){
+                                                %>
+                                        <!--=====================-->
+                                        <div>
+                                            <div>
+                                                <select name="status_Update" class="form-select form-select-sm" style="width: 180px; margin-right: 6px; margin: 10px 0;" required>
+                                                    <option value="" selected disabled>Choose Status </option> 
+                                                    <option value="-1"> Canceled </option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <button type="submit" class="btn-submit status-badge">
+                                                    <- Edit Status 
+                                                </button>
+                                            </div>
+                                        </div>
+        
+                                        <!--====================-->
+                                                <%
+                                            }
                                         }
                                         %>   
                                     </div>
