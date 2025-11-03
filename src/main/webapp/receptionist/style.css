@@ -1171,3 +1171,268 @@ th{
         width: 100%;
     }
 }
+
+/* Container */
+.services-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.services-card {
+    padding: 40px;
+}
+
+.intro-text {
+    color: var(--muted);
+    font-size: 16px;
+    margin-bottom: 32px;
+}
+
+/* Booking Summary */
+.booking-summary {
+    background-color: var(--bg);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 32px;
+}
+
+.summary-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 20px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.summary-row:last-child {
+    border-bottom: none;
+}
+
+.summary-label {
+    font-size: 15px;
+    color: var(--ink);
+}
+
+.summary-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.services-list {
+    margin-top: 8px;
+    padding-left: 16px;
+}
+
+.service-item {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 4px 0;
+}
+
+.total-row {
+    padding-top: 16px;
+    margin-top: 8px;
+    border-top: 2px solid var(--line);
+}
+
+.total-row .summary-label,
+.total-row .summary-value {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* Selected Services Section */
+.services-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0;
+}
+
+.add-service-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.add-service-btn:hover {
+    background: var(--bg);
+    border-color: var(--brand);
+}
+
+/* Service Row */
+.service-row {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.service-row-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr auto;
+    gap: 16px;
+    align-items: start;
+    margin-bottom: 12px;
+}
+
+.service-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.field-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.service-description {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-style: italic;
+}
+
+.remove-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #dc2626;
+    transition: all 0.2s;
+    margin-top: 24px;
+}
+
+.remove-btn:hover {
+    background: #fee2e2;
+}
+
+.service-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    margin-top: 12px;
+}
+
+.service-total-label {
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.service-total-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+/* Button Group */
+.button-group {
+    display: flex;
+    gap: 16px;
+    margin-top: 32px;
+}
+
+.btn-back {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 24px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.btn-back:hover {
+    background: var(--bg);
+    border-color: var(--muted);
+}
+
+.btn-complete {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 24px;
+    background: #000;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-complete:hover {
+    background: #1f2937;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .services-card {
+        padding: 24px;
+    }
+
+    .service-row-header {
+        grid-template-columns: 1fr;
+    }
+
+    .remove-btn {
+        margin-top: 8px;
+    }
+
+    .button-group {
+        flex-direction: column-reverse;
+    }
+
+    .btn-back,
+    .btn-complete {
+        flex: 1;
+        width: 100%;
+    }
+}

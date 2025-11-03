@@ -87,6 +87,10 @@
         %>
         <jsp:include page="../components/showRooms.jsp"/>
         <%
+        } else if ("addServices".equalsIgnoreCase(step)) {
+        %>
+        <jsp:include page="../components/addServicePage.jsp"/>
+        <%
             }
         %>
     </body>

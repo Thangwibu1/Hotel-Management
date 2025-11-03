@@ -55,12 +55,13 @@
 
                 <!-- Rooms Grid -->
 
-                <form id="bookingForm" action="BookRoomController" method="POST">
+                <form id="bookingForm" action="AddServiceController" method="POST">
                     <input type="hidden" name="selectedRoomId" id="selectedRoomId">
                     <input type="hidden" name="guestId" value="<%=guest.getGuestId()%>">
                     <input type="hidden" name="checkInTime" value="<%=ciDate%>">
                     <input type="hidden" name="checkOutTime" value="<%= coDate%>">
                     <input type="hidden" name="bookingDate" id="bookingDate">
+                    <input type="hidden" name="night" value="<%= nights %>">
                     <div class="rooms-grid">
                         <%
                             if (result != null && !result.isEmpty()) {

@@ -15,20 +15,24 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Booking;
+import model.BookingService;
+import model.ChoosenService;
 import model.Payment;
 
 /**
  *
  * @author trinhdtu
  */
-@WebServlet(name = "BookRoomController", urlPatterns = {"/receptionist/BookRoomController"})
-public class BookRoomController extends HttpServlet {
+@WebServlet(name = "CompleteBookingController", urlPatterns = {"/receptionist/CompleteBookingController"})
+public class CompleteBookingController extends HttpServlet {
 
     private BookingDAO bookingDAO;
     private RoomDAO roomDAO;
@@ -69,12 +73,30 @@ public class BookRoomController extends HttpServlet {
         return returnValue;
     }
 
+    protected boolean bookingServiceHandle(List<ChoosenService> services, int bookingId) {
+        boolean resutlt = false;
+
+        for (ChoosenService service : services) {
+            try {
+                BookingService newBookingService = new BookingService(bookingId, service.getServiceId(), service.getQuantity(), service.getServiceDate(), 0);
+                resutlt = bookingServiceDAO.addBookingService(newBookingService);
+                resutlt = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                resutlt = false;
+                break;
+            }
+
+        }
+
+        return resutlt;
+    }
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
             String roomId = request.getParameter("selectedRoomId");
-            System.out.println(roomId + "roomid ne");
             String guestId = request.getParameter("guestId");
             String checkInTime = request.getParameter("checkInTime");
             String checkOutTime = request.getParameter("checkOutTime");
@@ -86,21 +108,30 @@ public class BookRoomController extends HttpServlet {
 
             LocalDateTime checkInDateTime = inDate.atTime(14, 0);  // 14:00 check-in
             LocalDateTime checkOutDateTime = outDate.atTime(12, 0);  // 12:00 check-out
+
+            ArrayList<ChoosenService> services = new ArrayList<>();
+            String[] serviceId = request.getParameterValues("serviceId[]");
+            String[] serviceQuantity = request.getParameterValues("qty[]");
+            String[] serviceDate = request.getParameterValues("date[]");
+            if (serviceId != null && serviceQuantity != null && serviceDate != null) {
+                for (int i = 0; i < serviceId.length; i++) {
+                    ChoosenService tmpService = new ChoosenService(Integer.parseInt(serviceId[i]), Integer.parseInt(serviceQuantity[i]), LocalDate.parse(serviceDate[i]));
+                    services.add(tmpService);
+                }
+            }
             int newBookingId = 0;
             // add new booking
             try {
                 newBookingId = bookingHandle(Integer.parseInt(roomId), Integer.parseInt(guestId), checkInDateTime, checkOutDateTime, bookDate);
                 if (newBookingId > 0) {
-//                boolean bookingServiceResult = bookingServiceHandle(services, newBookingId);
+                boolean bookingServiceResult = bookingServiceHandle(services, newBookingId);
                     // make new payment
 //                Payment newPayment = new Payment(newBookingId, bookDate, (double) (Integer.parseInt(totalAmount)) / 2.0, "cash", "Pending");
 //                PaymentDAO paymentDAO = new PaymentDAO();
 //                boolean newPaymentId = paymentDAO.addPayment(newPayment);
-                    System.out.println("Bookeddd: " + newBookingId);
-                    request.setAttribute("CURRENT_TAB", "bookings"); 
-            request.getRequestDispatcher("/receptionist/bookingPage.jsp").forward(request, response);
+                    request.getRequestDispatcher("/receptionist/BookingsController").forward(request, response);
                 }
-                
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

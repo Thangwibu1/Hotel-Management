@@ -69,14 +69,12 @@ public class CheckAvailabilityRoomController extends HttpServlet {
             result = bookingDao.getBookingByCheckInCheckOutDateV2(checkInDateTime, checkOutDateTime);
             long nights = ChronoUnit.DAYS.between(ciDate, coDate);
             request.setAttribute("NIGHT", nights);
-            System.out.println(result.size() + " size ne");
             request.setAttribute("AVAIL_LIST", result);
             request.setAttribute("CHECKIN", ciDate);
             request.setAttribute("CHECKOUT", coDate);
             request.setAttribute("CURRENT_STEP", "selectRoom");
             request.setAttribute("CURRENT_TAB", "bookings");
             request.setAttribute("GUEST", guest);
-            System.out.println(guest);
             request.getRequestDispatcher("/receptionist/bookingPage.jsp?tab=bookings").forward(request, response);
 
         } catch (Exception e) {
