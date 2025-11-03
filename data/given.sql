@@ -135,6 +135,8 @@ CREATE TABLE SERVICE
     Price       DECIMAL(10, 2) NOT NULL CHECK (Price >= 0)
 );
 GO
+ALTER TABLE BOOKING_SERVICE
+ADD Note nvarchar(MAX) NULL;
 
 -- 6. Bảng Chi tiết Dịch vụ của Đặt phòng (BOOKING_SERVICE)
 CREATE TABLE BOOKING_SERVICE
@@ -208,6 +210,8 @@ ALTER TABLE ROOM_TASK
 ADD isSystemTask INT NOT NULL;
 
 
+ALTER TABLE BOOKING_SERVICE
+ADD StaffID INT NULL;
 -- ===================================================================
 -- PHẦN 2: CHÈN DỮ LIỆU MẪU
 -- ===================================================================

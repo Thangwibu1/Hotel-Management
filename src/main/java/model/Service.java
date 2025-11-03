@@ -3,7 +3,7 @@ package model;
 import java.math.BigDecimal;
 
 /**
- * Model cho bảng SERVICE
+ * 
  */
 public class Service {
     private int serviceId;

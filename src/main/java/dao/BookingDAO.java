@@ -106,6 +106,7 @@ public class BookingDAO {
         return generatedBookingId;
     }
 
+
     /**
      * Thêm booking mới với transaction (nhận Connection từ bên ngoài)
      * Hàm này không tự tạo Connection, phải nhận từ ngoài để đảm bảo transaction
@@ -159,6 +160,37 @@ public class BookingDAO {
                     String status = rs.getString("Status");
 
                     // Lấy thẳng đối tượng ngày gi�?
+                    LocalDateTime checkInDate = rs.getObject("CheckInDate", LocalDateTime.class);
+                    LocalDateTime checkOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
+                    LocalDate bookingDate = rs.getObject("BookingDate", LocalDate.class);
+
+                    result = new Booking(bookingId, guestId, roomId, checkInDate, checkOutDate, bookingDate, status);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+    public Booking getBookingByRoomID(int roomID,LocalDate dateNow) {
+        Booking result = null;
+        String sql = "SELECT [BookingID], [GuestID], [RoomID], [CheckInDate], [CheckOutDate], [BookingDate], [Status] FROM [HotelManagement].[dbo].[BOOKING] where [RoomID] = ? and CheckInDate <= ?  AND Status Like N'Checked-in'; ";
+
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, roomID);
+            ps.setObject(2, dateNow);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                while (rs.next()) {
+                    
+                    int bookingId = rs.getInt("BookingID");
+                    int guestId = rs.getInt("GuestID");
+                    int roomId = rs.getInt("RoomID");
+                    String status = rs.getString("Status");
                     LocalDateTime checkInDate = rs.getObject("CheckInDate", LocalDateTime.class);
                     LocalDateTime checkOutDate = rs.getObject("CheckOutDate", LocalDateTime.class);
                     LocalDate bookingDate = rs.getObject("BookingDate", LocalDate.class);
