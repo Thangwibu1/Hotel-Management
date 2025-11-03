@@ -43,6 +43,7 @@ public interface IConstant {
     public static final String viewBookingServlet = "viewBooking";
     public static final String detailBooking = "./detailBooking";
     public static final String searchController = "search";
+    public static final String cancelBookingServlet = "cancelBooking";
     
     //    --------------------receptionist servlet------------------------
     public static final String dashboardReceptionistController = "./Dashboard";

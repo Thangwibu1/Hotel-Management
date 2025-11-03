@@ -305,6 +305,7 @@ public class BookingDAO {
             LocalDate bookingCheckInDate = booking.getCheckInDate().toLocalDate();
             LocalDate bookingCheckOutDate = booking.getCheckOutDate().toLocalDate();
 
+            if (!booking.getStatus().equals("Canceled")) {
             for (LocalDate date : datesInRange) {
                 if ((date.isEqual(bookingCheckInDate) || date.isAfter(bookingCheckInDate))
                         && (date.isEqual(bookingCheckOutDate) || date.isBefore(bookingCheckOutDate))) {
@@ -312,7 +313,9 @@ public class BookingDAO {
                     break; // Không cần kiểm tra các ngày còn lại, đã tìm thấy ngày phù hợp
                 }
             }
-
+        } else {
+            continue;
+            }
         }
         return result2;
     }

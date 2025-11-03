@@ -135,8 +135,7 @@ CREATE TABLE SERVICE
     Price       DECIMAL(10, 2) NOT NULL CHECK (Price >= 0)
 );
 GO
-ALTER TABLE BOOKING_SERVICE
-ADD Note nvarchar(MAX) NULL;
+
 
 -- 6. Bảng Chi tiết Dịch vụ của Đặt phòng (BOOKING_SERVICE)
 CREATE TABLE BOOKING_SERVICE
@@ -150,6 +149,10 @@ CREATE TABLE BOOKING_SERVICE
     FOREIGN KEY (BookingID) REFERENCES BOOKING (BookingID),
     FOREIGN KEY (ServiceID) REFERENCES SERVICE (ServiceID)
 );
+GO
+
+ALTER TABLE BOOKING_SERVICE
+ADD Note nvarchar(MAX) NULL;
 GO
 
 -- 7. Bảng Hóa đơn (INVOICE)
@@ -218,7 +221,7 @@ ADD StaffID INT NULL;
 
 -- 1. Dữ liệu bảng GUEST
 INSERT INTO GUEST (FullName, Phone, Email, PasswordHash, Address, IDNumber, DateOfBirth)
-VALUES ('Nguyễn Văn An', '0901234567', 'nguyenvanan@email.com', 'hashed_password_1', '123 Lê Lợi, Q1, TPHCM',
+VALUES ('Nguyễn Văn An', '0901234567', 'nguyenvanan@email.com', '123', '123 Lê Lợi, Q1, TPHCM',
         '012345678', '1990-05-15'),
        ('Trần Thị Bình', '0912345678', 'tranthibinh@email.com', 'hashed_password_2', '456 Hai Bà Trưng, Đà Nẵng',
         '087654321', '1988-11-22'),
