@@ -350,6 +350,20 @@ public ArrayList<BookingService> getAllBookingService(int staffID)  {
     return false;
 }
 
+public boolean addBookingServiceWithTransaction(BookingService bookingService, Connection conn) throws SQLException {
+    String sql = "INSERT INTO [dbo].[BOOKING_SERVICE] (BookingID, ServiceID, Quantity, ServiceDate, Status) VALUES (?, ?, ?, ?, ?)";
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, bookingService.getBookingId());
+        ps.setInt(2, bookingService.getServiceId());
+        ps.setInt(3, bookingService.getQuantity());
+        ps.setObject(4, bookingService.getServiceDate());
+        ps.setInt(5, bookingService.getStatus());
+
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+    }
+}
+
     public boolean updateBookingServiceStatus(int bookingServiceId, int status) {
         String sql = "UPDATE [dbo].[BOOKING_SERVICE] SET Status = ? WHERE Booking_Service_ID = ?";
         try (Connection conn = DBConnection.getConnection();
