@@ -132,15 +132,15 @@ public class PaymentRemainController extends HttpServlet {
             Room room = roomDAO.getRoomById(booking.getRoomId());
             RoomType roomType = roomTypeDAO.getRoomTypeById(room.getRoomTypeId());
             
-            // Tính số đêm
+            // count days
             long numberOfNights = ChronoUnit.DAYS.between(
                 booking.getCheckInDate().toLocalDate(), 
                 booking.getCheckOutDate().toLocalDate()
             );
             
             // Tính tiền phòng
-            double pricePerNight = roomType.getPricePerNight().doubleValue();
-            double roomTotal = pricePerNight * numberOfNights;
+            double pricePerNight = roomType.getPricePerNight().doubleValue(); //convert BigDecimal to double
+            double roomTotal = pricePerNight * numberOfNights; //calculate room total
             
             // Lấy danh sách dịch vụ đã sử dụng
             ArrayList<BookingService> bookingServices = bookingServiceDAO.getBookingServiceByBookingId(bookingId);
