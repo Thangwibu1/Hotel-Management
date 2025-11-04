@@ -4,6 +4,11 @@
     Author     : trinhdtu
 --%>
 
+<%@page import="model.ServiceDetail"%>
+<%@page import="java.math.BigDecimal"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="model.Booking"%>
+<%@page import="model.BookingActionRow"%>
 <%@page contentType="text/html" pageEncoding="windows-1252"%>
 <!DOCTYPE html>
 <html>
@@ -12,12 +17,22 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <%
+            BookingActionRow row = (BookingActionRow) request.getAttribute("DETAIL_ROW");
+            Booking booking = (Booking) request.getAttribute("BOOKING");
+            ArrayList<ServiceDetail> services = (ArrayList<ServiceDetail>) request.getAttribute("SERVICE_DETAILS");
+            BigDecimal roomTotal = (BigDecimal) request.getAttribute("ROOM_TOTAL");
+            BigDecimal serviceTotal = (BigDecimal) request.getAttribute("SERVICE_TOTAL");
+            BigDecimal grandTotal = (BigDecimal) request.getAttribute("GRAND_TOTAL");
+            Long nightsObj = (Long) request.getAttribute("nights");
+            long nights = nightsObj != null ? nightsObj.longValue() : 0L;
+        %>
         <div class="edit-booking container">
             <div class="page-header">
                 <div class="title-wrap">
                     <div class="title">Edit Booking</div>
-                    <div class="sub-id">ID: 1</div>
-                    <span class="status">CONFIRMED</span>
+                    <div class="sub-id">ID: <%= booking.getBookingId()%></div>
+                    <span class="status"> <%= booking.getStatus()%></span>
                 </div>
                 <div class="actions">
                     <button class="btn">Cancel</button>
@@ -32,7 +47,7 @@
                     <h3>Guest Information</h3>
                     <div class="field">
                         <label>Full Name</label>
-                        <input class="control" value="John Smith"/>
+                        <input class="control" value="<%= row.getGuest().getFullName()%>"/>
                     </div>
                     <div class="row">
                         <div class="field">
@@ -41,12 +56,12 @@
                         </div>
                         <div class="field">
                             <label>Email Address</label>
-                            <input class="control" value="john.smith@email.com"/>
+                            <input class="control" value="<%= row.getGuest().getEmail()%>"/>
                         </div>
                     </div>
                     <div class="field">
                         <label>Phone Number</label>
-                        <input class="control" value="+1 (555) 123-4567"/>
+                        <input class="control" value="<%= row.getGuest().getPhone()%>"/>
                     </div>
                 </section>
 
@@ -55,16 +70,12 @@
                     <div class="row">
                         <div class="field">
                             <label>Check-in Date</label>
-                            <input type="date" class="control" value="2024-01-15"/>
+                            <input type="date" class="control" value="<%= row.getBooking().getCheckInDate()%>"/>
                         </div>
                         <div class="field">
                             <label>Check-out Date</label>
-                            <input type="date" class="control" value="2024-01-18"/>
+                            <input type="date" class="control" value="<%= row.getBooking().getCheckOutDate()%>"/>
                         </div>
-                    </div>
-                    <div class="field">
-                        <label>Total Duration</label>
-                        <input class="control" value="3 nights"/>
                     </div>
                     <div class="field">
                         <label>Room</label>

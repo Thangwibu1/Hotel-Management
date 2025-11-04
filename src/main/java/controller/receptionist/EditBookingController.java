@@ -78,34 +78,8 @@ public class EditBookingController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        String idRaw = req.getParameter("id");
-        if (idRaw == null) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing booking id");
-            return;
-        }
+        processRequest(req, resp);
 
-        try {
-            int bookingId = Integer.parseInt(idRaw);
-            Booking bk = bookingDAO.getBookingById(bookingId);
-            if (bk == null) {
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Booking not found");
-                return;
-            }
-
-            ArrayList<RoomInformation> availableRooms = bookingDAO.getBookingByCheckInCheckOutDateV2(bk.getCheckInDate(), bk.getCheckOutDate());
-
-            ArrayList<BookingService> lines = bookingServiceDAO.getBookingServiceByBookingId(bookingId);
-
-            req.setAttribute("booking", bk);
-            req.setAttribute("availableRooms", availableRooms);
-            req.setAttribute("serviceLines", lines);
-            req.getRequestDispatcher("/receptionist/editBooking.jsp").forward(req, resp);
-
-        } catch (NumberFormatException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid booking id");
-        } catch (Exception e) {
-            throw new ServletException(e);
-        }
     }
 
     /**
@@ -120,55 +94,7 @@ public class EditBookingController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        int bookingId = Integer.parseInt(req.getParameter("bookingId"));
-        int roomId = Integer.parseInt(req.getParameter("roomId"));
-        String fullName = req.getParameter("fullName");
-        String email = req.getParameter("email");
-        String phone = req.getParameter("phone");
-        int numGuests = Integer.parseInt(req.getParameter("numGuests"));
-
-        LocalDate ci = LocalDate.parse(req.getParameter("checkInDate"), IConstant.dateFormat);
-        LocalDate co = LocalDate.parse(req.getParameter("checkOutDate"), IConstant.dateFormat);
-
-//        BigDecimal deposit = BigDecimal.valueOf(req.getParameter("deposit"));
-        String specialReq = req.getParameter("specialRequests");
-        String internalNotes = req.getParameter("internalNotes");
-
-        // Service lines (name/id tùy form c?a b?n). ? ?ây nh?n theo id có s?n:
-        String[] bsIds = req.getParameterValues("bsId");       // id dòng (n?u update)
-        String[] serviceId = req.getParameterValues("serviceId");  // ServiceID
-        String[] qty = req.getParameterValues("quantity");
-        String[] sDate = req.getParameterValues("serviceDate");
-        String[] sStatus = req.getParameterValues("serviceStatus"); // 1:active, 0:canceled
-
-        // ---- validate c? b?n
-        ArrayList<String> errors = new ArrayList<>();
-        if (bookingId <= 0) {
-            errors.add("Invalid booking id.");
-        }
-        if (ci == null || co == null || !co.isAfter(ci)) {
-            errors.add("Check-out must be after check-in.");
-        }
-        if (numGuests <= 0) {
-            errors.add("Number of guests must be > 0.");
-        }
-
-        // L?y b?n ghi c? ?? so sánh
-        Booking old = bookingDAO.getBookingById(bookingId);
-        if (old == null) {
-            errors.add("Booking not found.");
-        }
-
-        if (!errors.isEmpty()) {
-            req.setAttribute("errors", errors);
-            doGet(req, resp); // n?p l?i form
-            return;
-        }
-
-        
-            // Redirect v? trang chi ti?t ho?c danh sách
-            resp.sendRedirect(req.getContextPath() + "/receptionist/BookingDetail?id=" + bookingId + "&updated=1");
-
+        processRequest(req, resp);
     }
 
     /**
