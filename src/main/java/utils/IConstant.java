@@ -12,7 +12,7 @@ public interface IConstant {
     public static final String housekeepingFilter = "housekeepingstaff";
 
     public static final String receptionistRole = "./receptionist/receptionist";
-    public static final String managerRole = "manager";
+    public static final String managerRole = "./manager/dashboard";
     public static final String adminRole =  "./" + adminFilter + "/admin";
     public static final String housekeeping = "/" + housekeepingFilter + "/homeHouseKeeping.jsp";
     public static final String serviceStaff = "service-staff";
