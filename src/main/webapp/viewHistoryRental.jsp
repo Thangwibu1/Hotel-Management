@@ -750,12 +750,14 @@
                 </form>
                 <% } %>
                 
+                <% if (!"Canceled".equalsIgnoreCase(booking.getStatus()) && !"Checked-out".equalsIgnoreCase(booking.getStatus())) { %>
                 <form action="./paymentRemain" method="post">
                     <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>">
                     <button type="submit" class="btn btn-info">
                         <i class="fas fa-credit-card"></i> Thanh toán
                     </button>
                 </form>
+                <% } %>
             </div>
         </div>
         <% } %>
