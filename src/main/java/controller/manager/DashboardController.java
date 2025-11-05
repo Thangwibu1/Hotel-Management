@@ -43,9 +43,29 @@ public class DashboardController extends HttpServlet {
                     System.out.println(request.getContextPath());
                     request.getRequestDispatcher("./dashboard.jsp").forward(request, response);
                     break;
-                
+                case "guests":
+                    request.setAttribute("CURRENT_TAB", "guests");
+                    System.out.println(request.getContextPath());
+                    request.getRequestDispatcher("./guest.jsp").forward(request, response);
+                    break;
+                case "services":
+                    request.setAttribute("CURRENT_TAB", "services");
+                    System.out.println(request.getContextPath());
+                    request.getRequestDispatcher("./services.jsp").forward(request, response);
+                    break;
+                case "occupancy":
+                    request.setAttribute("CURRENT_TAB", "occupancy");
+                    System.out.println(request.getContextPath());
+                    request.getRequestDispatcher("./occupancy.jsp").forward(request, response);
+                    break;
+                case "cancellations":
+                    request.setAttribute("CURRENT_TAB", "cancellations");
+                    System.out.println(request.getContextPath());
+                    request.getRequestDispatcher("./cancel.jsp").forward(request, response);
+                    break;
+
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

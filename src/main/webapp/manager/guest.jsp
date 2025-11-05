@@ -1,6 +1,6 @@
 <%-- 
-    Document   : dashboard
-    Created on : Nov 5, 2025, 12:23:24 AM
+    Document   : guest
+    Created on : Nov 5, 2025, 10:48:53 PM
     Author     : trinhdtu
 --%>
 
@@ -14,16 +14,13 @@
     </head>
     <body>
         <div class="dashboard-container">
-            <!-- Header -->
             <jsp:include page="components/header.jsp" />
 
             <jsp:include page="components/navbar.jsp" />
 
-            <!-- Tab Contents -->
-            <div id="revenue-tab" class="tab-content active">
-                <jsp:include page="components/revenueReportTab.jsp" />
-            </div>
-        </div>
+            <div id="guests-tab" class="tab-content">
+                <jsp:include page="components/topGuestTab.jsp" />
+            </div></div>
         <script src="./style.js"></script>
     </body>
 </html>
