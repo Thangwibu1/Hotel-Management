@@ -57,8 +57,8 @@ public class MakeNewServiceController extends HttpServlet {
             RoomDAO roomD = new RoomDAO();
             Room roomID = roomD.getRoomByRoomNumber(roomNumber);
             BookingDAO bookingD = new BookingDAO();
-            //truyen vao 1 roomnumber && ngày hi?n t?i nhan lai 1 booking ?ã checkin != null thì m?i làm ti?p 
-            //check phòng ?ó có ?ang ?c book ko 
+            //truyen vao 1 roomnumber && ngï¿½y hi?n t?i nhan lai 1 booking ?ï¿½ checkin != null thï¿½ m?i lï¿½m ti?p 
+            //check phï¿½ng ?ï¿½ cï¿½ ?ang ?c book ko 
             Booking booking = bookingD.getBookingByRoomID(roomID.getRoomId(), LocalDate.now());
             if(booking != null){
                 LocalDateTime checkoutDate = booking.getCheckOutDate();
@@ -75,7 +75,7 @@ public class MakeNewServiceController extends HttpServlet {
                         request.getRequestDispatcher(IConstant.registerServicePage).forward(request, response);
                         return; 
                     }else{
-                        BookingServiceDAO bSD = new BookingServiceDAO();
+                        BookingServiceDAO bSD = new @BookingServiceDAO();
                         
                         note = "Start at: " + startTimeStr + "." + note;
                         System.out.println(note);

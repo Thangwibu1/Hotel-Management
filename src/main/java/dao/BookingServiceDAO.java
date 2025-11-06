@@ -192,4 +192,178 @@ public boolean addBookingServiceWithTransaction(BookingService bookingService, C
         }
         return list;
     }
+
+    /**
+     * Lấy tất cả BookingService theo ngày cụ thể
+     * @param date Ngày cần lọc
+     * @return Danh sách BookingService trong ngày đó
+     */
+    public ArrayList<BookingService> getAllBookingService(LocalDate date) {
+        ArrayList<BookingService> result = new ArrayList<>();
+        String sql = "SELECT [Booking_Service_ID],[BookingID],[ServiceID],[Quantity],[ServiceDate],[Status],[StaffID],[Note] " +
+                     "FROM [HotelManagement].[dbo].[BOOKING_SERVICE] WHERE [ServiceDate] = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setObject(1, date);
+            ResultSet rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+                    int bookingServiceId = rs.getInt("Booking_Service_ID");
+                    int bookingId = rs.getInt("BookingID");
+                    int serviceId = rs.getInt("ServiceID");
+                    int quantity = rs.getInt("Quantity");
+                    LocalDate serviceDate = rs.getObject("ServiceDate", LocalDate.class);
+                    int status = rs.getInt("Status");
+                    String note = rs.getString("Note");
+                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, status, note);
+                    bookingService.setStaffID(rs.getInt("StaffID"));
+                    result.add(bookingService);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * Lấy tất cả BookingService theo ngày và status
+     * @param date Ngày cần lọc
+     * @param status Trạng thái cần lọc
+     * @return Danh sách BookingService phù hợp
+     */
+    public ArrayList<BookingService> getAllBookingService(LocalDate date, int status) {
+        ArrayList<BookingService> result = new ArrayList<>();
+        String sql = "SELECT [Booking_Service_ID],[BookingID],[ServiceID],[Quantity],[ServiceDate],[Status],[StaffID],[Note] " +
+                     "FROM [HotelManagement].[dbo].[BOOKING_SERVICE] WHERE [ServiceDate] = ? AND [Status] = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setObject(1, date);
+            ps.setInt(2, status);
+            ResultSet rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+                    int bookingServiceId = rs.getInt("Booking_Service_ID");
+                    int bookingId = rs.getInt("BookingID");
+                    int serviceId = rs.getInt("ServiceID");
+                    int quantity = rs.getInt("Quantity");
+                    LocalDate serviceDate = rs.getObject("ServiceDate", LocalDate.class);
+                    int stat = rs.getInt("Status");
+                    String note = rs.getString("Note");
+                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, stat, note);
+                    bookingService.setStaffID(rs.getInt("StaffID"));
+                    result.add(bookingService);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * Lấy BookingService từ startDate đến endDate theo staffId và status
+     * @param startDate Ngày bắt đầu
+     * @param endDate Ngày kết thúc
+     * @param staffId ID của nhân viên
+     * @param status Trạng thái
+     * @return Danh sách BookingService phù hợp
+     */
+    public ArrayList<BookingService> getAllBookingServiceBaseStartEndDate(LocalDate startDate, LocalDate endDate, int staffId, int status) {
+        ArrayList<BookingService> result = new ArrayList<>();
+        String sql = "SELECT [Booking_Service_ID],[BookingID],[ServiceID],[Quantity],[ServiceDate],[Status],[StaffID],[Note] " +
+                     "FROM [HotelManagement].[dbo].[BOOKING_SERVICE] " +
+                     "WHERE [ServiceDate] >= ? AND [ServiceDate] <= ? AND [StaffID] = ? AND [Status] = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setObject(1, startDate);
+            ps.setObject(2, endDate);
+            ps.setInt(3, staffId);
+            ps.setInt(4, status);
+            ResultSet rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+                    int bookingServiceId = rs.getInt("Booking_Service_ID");
+                    int bookingId = rs.getInt("BookingID");
+                    int serviceId = rs.getInt("ServiceID");
+                    int quantity = rs.getInt("Quantity");
+                    LocalDate serviceDate = rs.getObject("ServiceDate", LocalDate.class);
+                    int stat = rs.getInt("Status");
+                    String note = rs.getString("Note");
+                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, stat, note);
+                    bookingService.setStaffID(rs.getInt("StaffID"));
+                    result.add(bookingService);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * Lấy tất cả BookingService từ ngày hiện tại trở đi
+     * @param fromDate Ngày bắt đầu
+     * @return Danh sách BookingService từ ngày đó trở đi
+     */
+    public ArrayList<BookingService> getAllBookingServiceFromToday(LocalDate fromDate) {
+        ArrayList<BookingService> result = new ArrayList<>();
+        String sql = "SELECT [Booking_Service_ID],[BookingID],[ServiceID],[Quantity],[ServiceDate],[Status],[StaffID],[Note] " +
+                     "FROM [HotelManagement].[dbo].[BOOKING_SERVICE] WHERE [ServiceDate] >= ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setObject(1, fromDate);
+            ResultSet rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+                    int bookingServiceId = rs.getInt("Booking_Service_ID");
+                    int bookingId = rs.getInt("BookingID");
+                    int serviceId = rs.getInt("ServiceID");
+                    int quantity = rs.getInt("Quantity");
+                    LocalDate serviceDate = rs.getObject("ServiceDate", LocalDate.class);
+                    int status = rs.getInt("Status");
+                    String note = rs.getString("Note");
+                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, status, note);
+                    bookingService.setStaffID(rs.getInt("StaffID"));
+                    result.add(bookingService);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * Lấy tất cả BookingService theo StaffID
+     * @param staffId ID của nhân viên
+     * @return Danh sách BookingService của nhân viên đó
+     */
+    public ArrayList<BookingService> getAllBookingService(int staffId) {
+        ArrayList<BookingService> result = new ArrayList<>();
+        String sql = "SELECT [Booking_Service_ID],[BookingID],[ServiceID],[Quantity],[ServiceDate],[Status],[StaffID],[Note] " +
+                     "FROM [HotelManagement].[dbo].[BOOKING_SERVICE] WHERE [StaffID] = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, staffId);
+            ResultSet rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+                    int bookingServiceId = rs.getInt("Booking_Service_ID");
+                    int bookingId = rs.getInt("BookingID");
+                    int serviceId = rs.getInt("ServiceID");
+                    int quantity = rs.getInt("Quantity");
+                    LocalDate serviceDate = rs.getObject("ServiceDate", LocalDate.class);
+                    int status = rs.getInt("Status");
+                    String note = rs.getString("Note");
+                    BookingService bookingService = new BookingService(bookingServiceId, bookingId, serviceId, quantity, serviceDate, status, note);
+                    bookingService.setStaffID(rs.getInt("StaffID"));
+                    result.add(bookingService);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
