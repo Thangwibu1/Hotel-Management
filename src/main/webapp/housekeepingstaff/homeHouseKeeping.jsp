@@ -266,7 +266,7 @@
         }else{
             %>
             <div class="alert alert-secondary" role="alert">
-                <h4 class="mb-0">No tasks at the moment.</h4>
+                <h4 class="mb-0">No tasks matching the current filter.</h4>
             </div>
             <%
         }

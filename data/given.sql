@@ -388,7 +388,10 @@ BEGIN
     WHERE d.DeviceName IN (N'TV', N'Điều hòa', N'Tủ lạnh', N'Ga giường');
 END;
 GO
-
+INSERT INTO dbo.STAFF ( FullName, Role, Username, [PasswordHash], Phone, Email)
+VALUES 
+( N'Himawari Mai Anh', N'Housekeeping', 'maianh', '1', '0912345678', 'huong.lt@example.com'),
+( N'Tuyen Quang Loi', N'Housekeeping', 'loi', '1', '0987654321', 'loi.pv@example.com');
 -- Thêm thiết bị cho các phòng đã tồn tại
 -- Lặp qua tất cả các phòng hiện có và thêm 4 thiết bị cơ bản
 INSERT INTO ROOM_DEVICE (RoomID, DeviceID, Quantity)

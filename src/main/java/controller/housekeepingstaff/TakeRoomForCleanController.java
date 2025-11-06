@@ -46,7 +46,7 @@ public class TakeRoomForCleanController extends HttpServlet {
                 ArrayList<RoomTask> listMaintenance = d.getRoomBaseStatus("Maintenance", LocalDateTime.now());
                 ArrayList<RoomTask> listCleaned = d.getRoomBaseStatus("Cleaned", LocalDateTime.now());
                 ArrayList<RoomTask> listInProgress = d.getRoomBaseStatus("In Progress", LocalDateTime.now());
-
+               
                 RoomDAO rd = new RoomDAO();
                 ArrayList<Room> listR = rd.getAllRoom();
 
