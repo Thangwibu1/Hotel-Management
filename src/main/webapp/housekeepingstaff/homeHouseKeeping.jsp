@@ -75,15 +75,8 @@
 
 %>
 <jsp:include page="header.jsp"/>
-<div class="container main-content">
+<div class="container main-content" >
     <div class="status-section">
-        <div class="room-image-preview p-0 mb-3" style="display: flex; justify-content: center;">
-            <div style="width:70%; border-radius: 20px; overflow: hidden;">
-                <img src="https://ezcloud.vn/wp-content/uploads/2019/07/1533966485504_8785368-1.jpg" 
-                     alt="keshiki picture" 
-                     style=" display:block ; width: 100%;">
-            </div>
-        </div> 
         <h2 class="status-title"> Room Status</h2>
 
         <div class="status-filters">
@@ -154,8 +147,9 @@
         if (request.getAttribute("THONGBAO") != null) {
             String msgUpdate = (String) request.getAttribute("THONGBAO");
     %>
-    <h4 class="text-success pt-3 pb-3"><%= msgUpdate %>
-    </h4>
+            <div class="alert alert-success border border-success" role="alert" style="display: flex;justify-content: center;">
+                <h4 class="mb-0"><%= msgUpdate%></h4>
+            </div>
     <%
         }
 
@@ -194,17 +188,29 @@
                 <div class="room-status <%= statusClass%>"><%= r.getStatusClean()%>
                 </div>
             </div>
+            <div class="room-image-preview p-0 mb-3" style="display: flex; justify-content: center;">
+                <div style="width:90%; border-radius: 8px; overflow: hidden;">
+                    <img src="https://vinapad.com/wp-content/uploads/2019/01/Phong-ngu-khach-san-mini.jpg"
+                         alt="keshiki picture" 
+                         style=" display:block ; width: 100%;">
+                </div>
+            </div> 
             <div class="room-details">
-                <div>Staff: <%=r.getStaffID() != null ? (new StaffDAO()).getStaffById(r.getStaffID()).getFullName() : ""%></div>
                 <div>
                     <%
                         if ("Pending".equals(r.getStatusClean())) {
                     %>
-                    <span class="time-badge">Priority</span>
+                    <span class="time-badge"><strong>Priority</strong></span>
+                    <%
+                        }else{
+                        %>
+                    <span class=" bg-secondary text-white" style="font-size: 1.1rem;padding: 0.2rem 1rem;margin-left: 0.8rem;border-radius: 0.4rem;display: inline-block;">
+                        <strong>Low Priority</strong></span>
                     <%
                         }
                     %>
                 </div>
+                <div class="ps-3">Cleaned by: <%=r.getStaffID() != null ? (new StaffDAO()).getStaffById(r.getStaffID()).getFullName() : ""%></div>
             </div>
             <div class="room-actions">
                 <%

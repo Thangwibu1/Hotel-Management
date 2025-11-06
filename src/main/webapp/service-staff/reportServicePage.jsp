@@ -51,7 +51,7 @@
             }
         </style>
     </head>
-    <body class="d-flex flex-column min-vh-100" style="padding-top: 100px">
+    <body class="d-flex flex-column min-vh-100" >
         <%
             Staff staff = (Staff) session.getAttribute("userStaff");
 

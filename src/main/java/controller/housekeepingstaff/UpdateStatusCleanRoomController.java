@@ -80,17 +80,13 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                 roomTaskID = Integer.parseInt(request.getParameter("room_Task_ID").trim());
                 statusWantUpdate = request.getParameter("status_want_update");
                 rowAffected = d.updateStatusRoomTask(staff.getStaffId(), roomTaskID, statusWantUpdate);
-                // HashMap<Integer, Integer> roomIdAndGuestId = d.getRoomIdAndGuestIdByRoomTaskId(roomTaskID);
-//                int roomId = roomIdAndGuestId.keySet().iterator().next();
-//                int guestId = roomIdAndGuestId.values().iterator().next();
-//                System.out.println(roomId + guestId + "DUng roi djt me may");
             }
 
 
 
-            //?a chay xong update
+            //qa chay xong update
             if(rowAffected > 0){
-                request.setAttribute("THONGBAO", "Update successfully!!");
+                request.setAttribute("THONGBAO", "Status updated successfully!");
                 request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
             }else{
                 System.out.println("SAI ROI NHA");

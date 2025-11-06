@@ -80,7 +80,7 @@
             width: 30%;
             flex-shrink: 0;
 			text-align: end;"> 
-            <form action="<%= request.getContextPath() %>/logout"  method="get">
+            <form action="<%= request.getContextPath() %>/logout"  method="get"onsubmit="return confirm('Are you sure you want to log out of your account?');" >
                 <button type="submit" class="export-btn" 
                         style="
                             background: #374151; 
