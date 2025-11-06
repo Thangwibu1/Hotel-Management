@@ -37,6 +37,7 @@ public class TakeRoomForCleanController extends HttpServlet {
         try {
             System.out.println("DAY LA TAKEROOMCLEAN");  
             RoomTaskDAO d = new RoomTaskDAO();
+            ArrayList<RoomTask> listTask = d.getAllRoomTaskBaseDate(LocalDateTime.now(),1);
             ArrayList<RoomTask> listTask = d.getAllRoomTaskBaseDate(LocalDateTime.now(), 1);
             ArrayList<RoomTask> listTask2 = d.getAllRoomTaskBaseDate(LocalDateTime.now(), 0);
             
@@ -44,6 +45,8 @@ public class TakeRoomForCleanController extends HttpServlet {
 //                System.out.println("check xem co lay dc roomTask cua hom nay ko ne . VO DAY LA KO LAY DC");
                 request.getRequestDispatcher(IConstant.makeNewRoomTaskController).forward(request, response);
             } else {
+                //sort  
+
                 if (listTask2 != null && !listTask2.isEmpty()) {
                     for (RoomTask roomTask : listTask2) {
                         if (roomTask.getIsSystemTask() == 0) {
@@ -75,6 +78,7 @@ public class TakeRoomForCleanController extends HttpServlet {
                 ArrayList<RoomTask> listMaintenance = d.getRoomBaseStatus("Maintenance", LocalDateTime.now());
                 ArrayList<RoomTask> listCleaned = d.getRoomBaseStatus("Cleaned", LocalDateTime.now());
                 ArrayList<RoomTask> listInProgress = d.getRoomBaseStatus("In Progress", LocalDateTime.now());
+               
                 RoomDAO rd = new RoomDAO();
                 ArrayList<Room> listR = rd.getAllRoom();
 
@@ -114,6 +118,7 @@ public class TakeRoomForCleanController extends HttpServlet {
         } 
 
     } 
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);

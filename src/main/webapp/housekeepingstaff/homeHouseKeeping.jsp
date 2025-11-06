@@ -77,6 +77,13 @@
 <jsp:include page="header.jsp"/>
 <div class="container main-content">
     <div class="status-section">
+        <div class="room-image-preview p-0 mb-3" style="display: flex; justify-content: center;">
+            <div style="width:70%; border-radius: 20px; overflow: hidden;">
+                <img src="https://ezcloud.vn/wp-content/uploads/2019/07/1533966485504_8785368-1.jpg" 
+                     alt="keshiki picture" 
+                     style=" display:block ; width: 100%;">
+            </div>
+        </div> 
         <h2 class="status-title"> Room Status</h2>
 
         <div class="status-filters">
@@ -266,7 +273,7 @@
         }else{
             %>
             <div class="alert alert-secondary" role="alert">
-                <h4 class="mb-0">No tasks at the moment.</h4>
+                <h4 class="mb-0">No tasks matching the current filter.</h4>
             </div>
             <%
         }

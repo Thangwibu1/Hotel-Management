@@ -19,6 +19,25 @@
             integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
             crossorigin="anonymous"
             />
+        <style>
+            .room-image-preview {
+                padding: 0 15px 15px 15px;
+            }
+
+            .room-image-preview img {
+                width: 100%;
+                height: auto;
+                display: block;
+                border-radius: 8px;
+            }
+            .modal-title-custom {
+                font-family: sans-serif;
+                background-color: #343a40;
+                color: white !important;
+                padding: 10px 15px;
+                border-radius: 5px;
+            }
+        </style>
     </head>
     <body>
         
@@ -30,8 +49,7 @@
         System.out.println("STATUS updtae trong completeIngroressTask " + status_want_update);
         Staff staff =(Staff) session.getAttribute("userStaff");
         if(staff == null || roomTaskID == 0 || status_want_update == null || room == null ){
-            %>
-            <h4>Ko co data</h4> <%
+           request.getRequestDispatcher(IConstant.takeRoomForCleanController).forward(request, response);
         } else{
         
         %>
@@ -41,7 +59,7 @@
             <div class="modal-content shadow-lg rounded-3">
 
                 <div class="d-flex align-items-center justify-content-between p-4 border-bottom">
-                    <h5 class="modal-title h4 fw-bold text-dark ps-2" id="roomModalLabel"> Room <%= room%></h5>
+                    <h5 class="modal-title h4 fw-bold text-dark ps-2 modal-title-custom" id="roomModalLabel"> Room <%= room%></h5>
 
                     <div class="d-flex align-items-center gap-3">
                         <span class="d-flex align-items-center gap-2 p-2 rounded-3 fw-medium" style="background: #fef3c7; color: #92400e;">
@@ -57,21 +75,29 @@
 
                     </div>
                 </div>
-
+                <div class="room-image-preview p-0" style="display: flex;justify-content: center;">
+                    <div style="width:80%; padding: 15px;">
+                        <img src="https://dyf.vn/wp-content/uploads/2021/01/thiet-ke-phong-ngu-khach-san-mini-2-giuong-don.jpg"
+                             alt="Luxury Hotel Room" 
+                             class="img-fluid w-100" 
+                             style="display: block;width: 100%;">
+                    </div>
+                </div>    
+                            <hr>
                 <div class="p-4">
 
                     <div class="p-3 mb-4 rounded-3 border bg-light border-secondary">
-                        <p class="text-dark fw-bold mb-0"> Staff: <%= staff.getFullName() %></p>
+                        <p class="text-dark fw-bold mb-0"> Staff: <%= staff.getFullName()%></p>
                     </div>
 
                     <div class="mb-4 text-secondary">
-                        <p class="mb-2"><strong>Check-in/Start Time:</strong> 16:09:14 4/10/2025</p>
-                        <p class="mb-0"><strong>Last Cleaned:</strong> 25/09/2024 14:30</p>
+                        <p class="mb-2">Always ensure rooms are thoroughly cleaned and quality-checked before 
+                            changing the status to 'Ready for Check-in'</p>
                     </div>
 
                     <div class="mb-4">
-                        <label for="statusSelect" class="form-label text-dark fw-medium"> Update Status</label>
-                        <select class="form-select" id="statusSelect">
+                        <label for="statusSelect" class="form-label text-dark fw-medium"><strong> Update Status </strong></label>
+                        <select class="form-select" id="statusSelect" required>
                             <option value="inprogress" selected>Cleaned</option>
                             <option value="cleaned">In Progress</option>
                         </select>
