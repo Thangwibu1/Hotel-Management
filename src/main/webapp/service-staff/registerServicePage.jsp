@@ -1,7 +1,11 @@
 <%-- Document : homeService Created on : Oct 16, 2025, 8:56:17 AM Author :
-TranHongGam --%> <%@page import="utils.IConstant"%> <%@page
-import="model.Staff"%> <%@page contentType="text/html"
-pageEncoding="windows-1252"%>
+TranHongGam --%> 
+<%@page import="utils.IConstant"%> 
+<%@page import="model.Staff"%> 
+<%@page import="model.Room"%> 
+<%@page import="model.Service"%> 
+<%@page import="java.util.ArrayList"%> 
+<%@page contentType="text/html" pageEncoding="windows-1252"%>
 <!DOCTYPE html>
 <html lang="vi">
   <head>
@@ -34,7 +38,11 @@ pageEncoding="windows-1252"%>
     </style>
   </head>
   <body style="padding-top: 100px">
-    <% Staff staff = (Staff) session.getAttribute("userStaff"); %>
+    <% 
+        Staff staff = (Staff) session.getAttribute("userStaff"); 
+        ArrayList<Room> rooms = (ArrayList<Room>) request.getAttribute("rooms");
+        ArrayList<Service> services = (ArrayList<Service>) request.getAttribute("services");
+    %>
 
     <jsp:include page="headerService.jsp" />
     <div
@@ -86,20 +94,22 @@ pageEncoding="windows-1252"%>
               <label for="roomNumber">Room Number *</label>
 
               <select id="roomNumber" name="room_number" required>
-                <option value="" disabled selected>E.g., 101, 205</option>
-
-                <option value="101">101</option>
-                <option value="102">102</option>
-                <option value="103">103</option>
-                <option value="201">201</option>
-                <option value="202">202</option>
-                <option value="203">203</option>
-                <option value="301">301</option>
-                <option value="302">302</option>
-                <option value="303">303</option>
-                <option value="401">401</option>
-                <option value="402">402</option>
-                <option value="501">501</option>
+                <option value="" disabled selected>Select room number</option>
+                <% 
+                  if (rooms != null && !rooms.isEmpty()) {
+                    for (Room room : rooms) {
+                %>
+                  <option value="<%= room.getRoomNumber() %>">
+                    <%= room.getRoomNumber() %> - <%= room.getStatus() %>
+                  </option>
+                <% 
+                    }
+                  } else {
+                %>
+                  <option value="" disabled>No rooms available</option>
+                <% 
+                  }
+                %>
               </select>
             </div>
           </div>
@@ -137,9 +147,21 @@ pageEncoding="windows-1252"%>
               <label for="serviceId">Service Type *</label>
               <select id="serviceId" name="service_Id" required>
                 <option value="">Select service type</option>
-                <option value="1">Breakfast</option>
-                <option value="2">Laundry</option>
-                <option value="3">Housekeeping</option>
+                <% 
+                  if (services != null && !services.isEmpty()) {
+                    for (Service service : services) {
+                %>
+                  <option value="<%= service.getServiceId() %>">
+                    <%= service.getServiceName() %> - $<%= service.getPrice() %>
+                  </option>
+                <% 
+                    }
+                  } else {
+                %>
+                  <option value="" disabled>No services available</option>
+                <% 
+                  }
+                %>
               </select>
             </div>
           </div>

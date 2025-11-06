@@ -5,13 +5,18 @@
 
 package controller.service;
 
+import dao.RoomDAO;
+import dao.ServiceDAO;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.Room;
+import model.Service;
 import model.Staff;
 import utils.IConstant;
 
@@ -30,12 +35,23 @@ public class RegisterServiceController extends HttpServlet {
             HttpSession session = request.getSession();
             Staff staff = (Staff) session.getAttribute("userStaff");
             
+            // Lấy danh sách tất cả các phòng từ database
+            RoomDAO roomDAO = new RoomDAO();
+            ArrayList<Room> rooms = roomDAO.getAllRoom();
+            request.setAttribute("rooms", rooms);
+            
+            // Lấy danh sách tất cả các dịch vụ từ database
+            ServiceDAO serviceDAO = new ServiceDAO();
+            ArrayList<Service> services = serviceDAO.getAllService();
+            request.setAttribute("services", services);
+            
+            System.out.println("✓ Loaded " + rooms.size() + " rooms and " + services.size() + " services");
+            
             request.getRequestDispatcher(IConstant.registerServicePage).forward(request, response);
             
         } catch (Exception e) {
-
-        } finally {
-
+            System.err.println("✗ Error in RegisterServiceController: " + e.getMessage());
+            e.printStackTrace();
         }
     } 
 
