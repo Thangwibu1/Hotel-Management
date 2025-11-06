@@ -117,7 +117,7 @@
 
             </div>
         </div>
-        <div class="container main-content">
+        <div class="container main-content" style="margin-top: 6.5rem;">
             <main class="container-fluid py-4">
                 <div class="card shadow-sm mb-4">
                     <div class="card-body" >
@@ -131,14 +131,15 @@
                                 </div>
                             </div>
                             <div class="col-10 col-md text-center text-md-start ">
-                                <h4 class="mb-1"><%= staff.getFullName()%></h4>
+                                <h4 class="mb-1"><i class="fas fa-user-tie me-3"></i><%= staff.getFullName()%></h4>
+                                <hr>
                                 <p class="text-muted mb-0">Housekeeping Staff - Morning Shift</p>
                             </div>
                         </div>
                         <div style="padding-left: 85px;">
-                            <p>Phone: <%= staff.getPhone() %></p>    
-                            <p>Role: <%= staff.getRole() %></p>    
-                            <p>Email: <%= staff.getEmail() %></p>    
+                            <p><i class="fas fa-phone me-3"></i> Phone: <%= staff.getPhone() %></p>    
+                            <p><i class="fas fa-user-tag me-3"></i>Role: <%= staff.getRole() %></p>    
+                            <p><i class="fas fa-envelope me-4"></i>Email: <%= staff.getEmail() %></p>    
                         </div>
                     </div>
                 </div>
@@ -148,12 +149,13 @@
                             <i class="fas fa-calendar-alt text-dark me-2"></i>
                             Select Report Time Period
                         </h5>
+                        <hr>
                         <form action="<%= IConstant.reportByTimeHKController%>" method="POST">
                             <div class="row g-3">
 
                                 <div class="col-12 col-md-4" style="padding: 5px;">
                                     <label class="form-label">Start Date</label>
-                                    <input type="date" class="form-control form-control-lg" value="<%= startDate == null ? "" : startDate%>" id="startDate" name="start_date" required>
+                                    <input type="date" class="form-control form-control-lg " value="<%= startDate == null ? "" : startDate%>" id="startDate" name="start_date" required>
                                 </div>
                                 <div class="col-12 col-md-4" style="padding: 5px;">
                                     <label class="form-label">End Date</label>
@@ -206,14 +208,24 @@
                                                
                                     %>
                                     <tr>
-                                        <td><strong><%= IConstant.formatDate(roomTask.getEndTime().toLocalDate()) %></strong></td>
+                                        <td><strong><%= IConstant.formatDate(roomTask.getStartTime().toLocalDate()) %></strong></td>
                                         <td>
                                             <span class="badge bg-success fs-6"><%= room.getRoomNumber() %></span>
                                         </td>
                                         <td class="d-none d-md-table-cell">Basic Shift</td>
                                         <td class="d-none d-lg-table-cell"><%= roomTask.getStaffID() %></td>
                                         <td class="d-none d-lg-table-cell">
-                                            <span class="badge bg-success"><%= roomTask.getStatusClean() %></span>
+                                            <%if(roomTask.getStatusClean().equalsIgnoreCase("Cleaned")){
+                                                %>
+                                                <span class="badge bg-success"><%= roomTask.getStatusClean() %></span>
+                                                <%
+                                            }else{
+                                                %>
+                                                <span class="badge bg-secondary"><%= roomTask.getStatusClean() %></span>
+                                                <%
+                                            }
+                                            %>
+                                            
                                         </td>
                                     </tr>
                                     <%          }
@@ -248,8 +260,12 @@
 
                 <!---------------------------------------------------------------------------------------------------->
             </main>
+                
         </div>
 
         <jsp:include page="footer.jsp"/>
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+        </script>
     </body>
 </html>
