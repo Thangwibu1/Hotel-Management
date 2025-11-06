@@ -161,6 +161,7 @@
 
     <div class="rooms-grid">
         <%
+            if(list_Display_Home != null && !list_Display_Home.isEmpty()){
             for (RoomTask r : list_Display_Home) {
                 for (Room rl : listR) {
                     if (r.getRoomID() == rl.getRoomId()) {
@@ -229,7 +230,8 @@
                 <%
                 } else if (r.getStatusClean().equalsIgnoreCase("Pending")) {
                 %>
-                <form action="<%= IConstant.updateStatusCleanRoomController %>" method="POST">
+                <form action="<%= IConstant.updateStatusCleanRoomController %>" method="POST" onsubmit="return confirm('Do you want to start cleaning this room?');" >
+                    
                     <input type="hidden" name="room" value="<%= r.getRoomID()%>">
 
                     <input type="hidden" name="status_want_update" value="In Progress">
@@ -261,7 +263,13 @@
                 }
 
             }
-
+        }else{
+            %>
+            <div class="alert alert-secondary" role="alert">
+                <h4 class="mb-0">No tasks at the moment.</h4>
+            </div>
+            <%
+        }
 
         %>
 

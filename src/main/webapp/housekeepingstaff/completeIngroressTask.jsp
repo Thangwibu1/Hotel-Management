@@ -96,11 +96,10 @@
 
                 <div class="p-4 border-top">
                     <div class="d-flex w-100 gap-2">
-                        <form action="<%= IConstant.updateStatusCleanRoomController %>" method="POST" class="d-flex flex-fill" style="padding: 0; margin: 0;">
+                        <form action="<%= IConstant.updateStatusCleanRoomController %>" method="POST" class="d-flex flex-fill" style="padding: 0; margin: 0;" onsubmit="return confirm('Do you want to completd cleaning this room?');">
                             <input type="hidden" name="action" value="complete">
                             <input type="hidden" name="room_Task_ID" value="<%= roomTaskID%>">
                             <input type="hidden" name="room" value="<%= room %>">
-                            <!--done task nen can update data vao db-->
                             <input type="hidden" name="DONE_TASK" value="done">
                             <input type="hidden" name="status_want_update" value="<%= status_want_update %>">
                             <input type="submit" 
@@ -110,7 +109,7 @@
                                    id="completeBtn">
                         </form>
 
-                        <form action="<%= IConstant.completeMaintain %>" method="POST" class="d-flex flex-fill" style="padding: 0; margin: 0;">
+                        <form action="<%= IConstant.completeMaintain %>" method="POST" class="d-flex flex-fill" style="padding: 0; margin: 0;" onsubmit="return confirm('Do you want to start maintaining this room?');">
                             <input type="hidden" name="action" value="report">
                             <input type="hidden" name="room_Task_ID" value="<%= roomTaskID%>">
                             <input type="hidden" name="room" value="<%= room %>">
