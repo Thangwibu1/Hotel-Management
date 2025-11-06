@@ -231,6 +231,55 @@ public class GuestDAO {
         return guest;
     }
 
+    /**
+     * Lấy thông tin Guest theo email
+     * @param email Email của Guest cần tìm
+     * @return Đối tượng Guest nếu tìm thấy, null nếu không tìm thấy
+     */
+    public Guest getGuestByEmail(String email) {
+        Guest guest = null;
+
+        String sql = "SELECT * FROM [HotelManagement].[dbo].[GUEST] WHERE [Email] = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            if (rs != null && rs.next()) {
+                int guestId = rs.getInt("GuestID");
+                String fullName = rs.getString("FullName");
+                String phone = rs.getString("Phone");
+                String emailResult = rs.getString("Email");
+                String passwordHash = rs.getString("PasswordHash");
+                String address = rs.getString("Address");
+                String idNumber = rs.getString("IDNumber");
+                String dateOfBirth = rs.getString("DateOfBirth");
+                guest = new Guest(guestId, fullName, phone, emailResult, address, idNumber, dateOfBirth, passwordHash);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return guest;
+    }
+
     public boolean addGuestForRecep(Guest guest) {
         boolean result = false;
         String sql = "INSERT INTO [HotelManagement].[dbo].[GUEST] ([FullName] ,[Phone] ,[Email] ,[PasswordHash] ,[Address] ,[IDNumber] ,[DateOfBirth]) VALUES (?,?,?,?,?,?,?)";
