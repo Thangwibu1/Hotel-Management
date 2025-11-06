@@ -185,6 +185,166 @@
             color: #6c757d;
         }
         
+        .btn-danger {
+            background: transparent;
+            color: #C62828;
+            border-color: #C62828;
+        }
+        
+        .btn-danger:hover {
+            background: #C62828;
+            color: white;
+        }
+        
+        /* === MODAL POPUP === */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: var(--white);
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            padding: 0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #C62828 0%, #B71C1C 100%);
+            color: var(--white);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .modal-header i {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: shake 0.5s ease;
+        }
+        
+        .modal-header h2 {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        
+        .modal-body {
+            padding: 2.5rem;
+        }
+        
+        .modal-warning {
+            background: #FFF3E0;
+            border-left: 4px solid #F57C00;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 6px;
+        }
+        
+        .modal-warning p {
+            margin: 0.8rem 0;
+            color: var(--black);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .modal-warning p i {
+            color: #F57C00;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        
+        .modal-warning strong {
+            color: #C62828;
+            font-weight: 600;
+        }
+        
+        .modal-question {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--black);
+            font-weight: 500;
+            margin: 1.5rem 0;
+        }
+        
+        .modal-footer {
+            display: flex;
+            gap: 1rem;
+            padding: 0 2.5rem 2.5rem;
+        }
+        
+        .modal-footer .btn {
+            flex: 1;
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .btn-cancel-modal {
+            background: var(--gray-light);
+            color: var(--black);
+            border-color: var(--border);
+        }
+        
+        .btn-cancel-modal:hover {
+            background: var(--gray);
+            color: var(--white);
+            border-color: var(--gray);
+        }
+        
+        .btn-confirm-cancel {
+            background: #C62828;
+            color: var(--white);
+            border-color: #C62828;
+        }
+        
+        .btn-confirm-cancel:hover {
+            background: #B71C1C;
+            border-color: #B71C1C;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+        
         /* === MAIN CONTENT === */
         .main-content { 
             max-width: 1400px;
@@ -580,6 +740,23 @@
                         <i class="fas fa-edit"></i> Chỉnh sửa
                     </button>
                 </form>
+                
+                <form action="./cancelBooking" method="post" class="cancel-booking-form">
+                    <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>">
+                    <input type="hidden" name="guestId" value="<%= guest.getGuestId() %>">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-times-circle"></i> Hủy đặt phòng
+                    </button>
+                </form>
+                <% } %>
+                
+                <% if (!"Canceled".equalsIgnoreCase(booking.getStatus()) && !"Checked-out".equalsIgnoreCase(booking.getStatus())) { %>
+                <form action="./paymentRemain" method="post">
+                    <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>">
+                    <button type="submit" class="btn btn-info">
+                        <i class="fas fa-credit-card"></i> Thanh toán
+                    </button>
+                </form>
                 <% } %>
             </div>
         </div>
@@ -624,6 +801,87 @@
         </div>
     </div>
 </footer>
+
+<!-- Modal Popup -->
+<div class="modal-overlay" id="cancelBookingModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h2>Xác Nhận Hủy Đặt Phòng</h2>
+        </div>
+        <div class="modal-body">
+            <div class="modal-warning">
+                <p>
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span><strong>KHÔNG THỂ khôi phục</strong> lại booking sau khi hủy</span>
+                </p>
+                <p>
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Bạn sẽ <strong>MẤT HOÀN TOÀN</strong> số tiền đặt cọc trước đó</span>
+                </p>
+            </div>
+            <p class="modal-question">Bạn có chắc chắn muốn hủy đặt phòng này không?</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-cancel-modal" onclick="closeModal()">
+                <i class="fas fa-times"></i> Không, giữ lại
+            </button>
+            <button type="button" class="btn btn-confirm-cancel" onclick="confirmCancelBooking()">
+                <i class="fas fa-check"></i> Có, hủy đặt phòng
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentCancelForm = null;
+    const modal = document.getElementById('cancelBookingModal');
+    
+    // Xử lý xác nhận hủy booking
+    document.addEventListener('DOMContentLoaded', function() {
+        const cancelForms = document.querySelectorAll('.cancel-booking-form');
+        
+        cancelForms.forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                currentCancelForm = form;
+                openModal();
+            });
+        });
+        
+        // Đóng modal khi click vào overlay
+        modal.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+        
+        // Đóng modal khi nhấn ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+    });
+    
+    function openModal() {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        currentCancelForm = null;
+    }
+    
+    function confirmCancelBooking() {
+        if (currentCancelForm) {
+            currentCancelForm.submit();
+        }
+        closeModal();
+    }
+</script>
 
 </body>
 </html>

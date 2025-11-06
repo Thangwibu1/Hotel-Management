@@ -7,7 +7,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class GuestDAO {
@@ -107,8 +110,7 @@ public class GuestDAO {
     public boolean checkDuplicateIdNumber(String idNumber) {
         boolean isDuplicate = false;
         String sql = "SELECT COUNT(*) AS count FROM [HotelManagement].[dbo].[GUEST] WHERE [IDNumber] = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( Connection conn = DBConnection.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, idNumber);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -124,8 +126,7 @@ public class GuestDAO {
     public boolean checkDuplicateEmail(String email) {
         boolean isDuplicate = false;
         String sql = "SELECT COUNT(*) AS count FROM [HotelManagement].[dbo].[GUEST] WHERE [Email] = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( Connection conn = DBConnection.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -159,8 +160,12 @@ public class GuestDAO {
             e.printStackTrace();
         } finally {
             try {
-                if (ps != null) ps.close();
-                if (con != null) con.close();
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -183,15 +188,19 @@ public class GuestDAO {
             e.printStackTrace();
         } finally {
             try {
-                if (ps != null) ps.close();
-                if (con != null) con.close();
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
         return result;
     }
-    
+
     public Guest getGuestByIdNumber(String idNumber) {
         Guest guest = null;
 
@@ -205,10 +214,14 @@ public class GuestDAO {
             ResultSet rs = ps.executeQuery();
             if (rs != null) {
                 while (rs.next()) {
-                    String fullName = rs.getString("FullName");
+                    int guestId = rs.getInt("GuestID");
+                     String fullName = rs.getString("FullName");
                     String phone = rs.getString("Phone");
                     String email = rs.getString("Email");
-                    guest = new Guest(fullName, phone, email);
+                    String address = rs.getString("Address");
+//                    String idNumber = rs.getString("IDNumber");
+                    String dateOfBirth = rs.getString("DateOfBirth");
+                    guest = new Guest(guestId, fullName, phone, email, address, idNumber, dateOfBirth, "null");
                 }
             }
         } catch (Exception e) {
@@ -220,48 +233,92 @@ public class GuestDAO {
 
     /**
      * Lấy thông tin Guest theo email
-     * @param email Email của guest
-     * @return Guest object hoặc null nếu không tìm thấy
+     * @param email Email của Guest cần tìm
+     * @return Đối tượng Guest nếu tìm thấy, null nếu không tìm thấy
      */
     public Guest getGuestByEmail(String email) {
         Guest guest = null;
 
-        String sql = "SELECT * FROM [HotelManagement].[dbo].[GUEST] WHERE Email = ?";
+        String sql = "SELECT * FROM [HotelManagement].[dbo].[GUEST] WHERE [Email] = ?";
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
         try {
             con = DBConnection.getConnection();
             ps = con.prepareStatement(sql);
             ps.setString(1, email);
             rs = ps.executeQuery();
-            
             if (rs != null && rs.next()) {
                 int guestId = rs.getInt("GuestID");
                 String fullName = rs.getString("FullName");
                 String phone = rs.getString("Phone");
                 String emailResult = rs.getString("Email");
+                String passwordHash = rs.getString("PasswordHash");
                 String address = rs.getString("Address");
                 String idNumber = rs.getString("IDNumber");
                 String dateOfBirth = rs.getString("DateOfBirth");
-                String passwordHash = rs.getString("PasswordHash");
-                
                 guest = new Guest(guestId, fullName, phone, emailResult, address, idNumber, dateOfBirth, passwordHash);
             }
         } catch (Exception e) {
-            System.err.println("Lỗi khi lấy Guest theo email: " + e.getMessage());
             e.printStackTrace();
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (con != null) con.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
 
         return guest;
+    }
+
+    public boolean addGuestForRecep(Guest guest) {
+        boolean result = false;
+        String sql = "INSERT INTO [HotelManagement].[dbo].[GUEST] ([FullName] ,[Phone] ,[Email] ,[PasswordHash] ,[Address] ,[IDNumber] ,[DateOfBirth]) VALUES (?,?,?,?,?,?,?)";
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, guest.getFullName());
+            ps.setString(2, guest.getPhone());
+            ps.setString(3, guest.getEmail());
+            ps.setString(4, guest.getPasswordHash());
+            ps.setString(5, guest.getAddress());
+            ps.setString(6, guest.getIdNumber());
+            String dobStr = guest.getDateOfBirth();
+            if (dobStr == null || dobStr.isEmpty()) {
+                ps.setNull(7, Types.TIMESTAMP);
+            } else {
+                // N?u ng??i d�ng nh?p d?ng yyyy-MM-dd t? <input type="date">
+                LocalDate dob = LocalDate.parse(dobStr);
+                LocalDateTime dobDT = dob.atStartOfDay(); // 00:00:00
+                ps.setTimestamp(7, Timestamp.valueOf(dobDT));
+            }
+            int rowsAffected = ps.executeUpdate();
+            result = rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 }

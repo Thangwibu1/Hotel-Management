@@ -40,6 +40,7 @@ public class BookingsController extends HttpServlet {
             ArrayList<BookingActionRow> result = bookingDao.getInforBooking();
             
             request.setAttribute("RESULT", result);
+            request.setAttribute("CURRENT_TAB", "bookings"); 
             request.getRequestDispatcher("/receptionist/bookingPage.jsp").forward(request, response);
         }catch(Exception e){
             e.printStackTrace();

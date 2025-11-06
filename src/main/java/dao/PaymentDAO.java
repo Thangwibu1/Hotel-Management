@@ -10,6 +10,65 @@ import utils.DBConnection;
 
 public class PaymentDAO {
 
+    public Payment getPaymentById(int paymentId) {
+        Payment result = null;
+        String sql = "SELECT * FROM PAYMENT WHERE PaymentID = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, paymentId);
+            ResultSet rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+
+                    int bookingId = rs.getInt("BookingID");
+                    LocalDate paymentDate = rs.getObject("PaymentDate", LocalDate.class);
+                    double amount = rs.getDouble("Amount");
+                    String paymentMethod = rs.getString("PaymentMethod");
+                    String status = rs.getString("Status");
+                    result = new Payment(paymentId, bookingId, paymentDate, amount, paymentMethod, status);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    
+
+    public ArrayList<Payment> getPaymentByBookingId(int bookingId) {
+        ArrayList<Payment> result = new ArrayList<>();
+        String sql = "SELECT * FROM PAYMENT WHERE BookingID = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, bookingId);
+            ResultSet rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+                    int paymentId = rs.getInt("PaymentID");
+                    LocalDate paymentDate = rs.getObject("PaymentDate", LocalDate.class);
+                    double amount = rs.getDouble("Amount");
+                    String paymentMethod = rs.getString("PaymentMethod");
+                    String status = rs.getString("Status");
+                    result.add(new Payment(paymentId, bookingId, paymentDate, amount, paymentMethod, status));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public boolean updatePaymentStatus(int paymentId, String status) {
+        String sql = "UPDATE PAYMENT SET Status = ? WHERE PaymentID = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, paymentId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     public ArrayList<Payment> getPaymentList() {
         ArrayList<Payment> result = new ArrayList<>();
 

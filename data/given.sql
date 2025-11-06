@@ -136,6 +136,7 @@ CREATE TABLE SERVICE
 );
 GO
 
+
 -- 6. Bảng Chi tiết Dịch vụ của Đặt phòng (BOOKING_SERVICE)
 CREATE TABLE BOOKING_SERVICE
 (
@@ -148,6 +149,10 @@ CREATE TABLE BOOKING_SERVICE
     FOREIGN KEY (BookingID) REFERENCES BOOKING (BookingID),
     FOREIGN KEY (ServiceID) REFERENCES SERVICE (ServiceID)
 );
+GO
+
+ALTER TABLE BOOKING_SERVICE
+ADD Note nvarchar(MAX) NULL;
 GO
 
 -- 7. Bảng Hóa đơn (INVOICE)
@@ -208,13 +213,15 @@ ALTER TABLE ROOM_TASK
 ADD isSystemTask INT NOT NULL;
 
 
+ALTER TABLE BOOKING_SERVICE
+ADD StaffID INT NULL;
 -- ===================================================================
 -- PHẦN 2: CHÈN DỮ LIỆU MẪU
 -- ===================================================================
 
 -- 1. Dữ liệu bảng GUEST
 INSERT INTO GUEST (FullName, Phone, Email, PasswordHash, Address, IDNumber, DateOfBirth)
-VALUES ('Nguyễn Văn An', '0901234567', 'nguyenvanan@email.com', 'hashed_password_1', '123 Lê Lợi, Q1, TPHCM',
+VALUES ('Nguyễn Văn An', '0901234567', 'nguyenvanan@email.com', '123', '123 Lê Lợi, Q1, TPHCM',
         '012345678', '1990-05-15'),
        ('Trần Thị Bình', '0912345678', 'tranthibinh@email.com', 'hashed_password_2', '456 Hai Bà Trưng, Đà Nẵng',
         '087654321', '1988-11-22'),
@@ -350,3 +357,61 @@ FROM ROOM_TASK;
 
 select [TypeName], [Capacity], [PricePerNight]
 from ROOM_TYPE;
+
+-- ===================================================================
+-- PHẦN 3: DỮ LIỆU VÀ TRIGGER CHO DEVICE VÀ ROOM_DEVICE
+-- ===================================================================
+
+-- Thêm dữ liệu cho bảng DEVICE
+INSERT INTO DEVICE (DeviceName, Description)
+VALUES 
+    (N'TV', N'Tivi màn hình phẳng'),
+    (N'Điều hòa', N'Máy điều hòa nhiệt độ'),
+    (N'Tủ lạnh', N'Tủ lạnh mini'),
+    (N'Ga giường', N'Bộ ga trải giường');
+GO
+
+-- Tạo trigger để tự động thêm 4 thiết bị cơ bản vào mỗi phòng mới
+CREATE TRIGGER trg_AddDevicesToNewRoom
+ON ROOM
+AFTER INSERT
+AS
+BEGIN
+    -- Thêm 4 thiết bị cơ bản cho mỗi phòng mới được tạo
+    INSERT INTO ROOM_DEVICE (RoomID, DeviceID, Quantity)
+    SELECT 
+        i.RoomID,
+        d.DeviceID,
+        1 as Quantity  -- Mỗi thiết bị có số lượng là 1
+    FROM INSERTED i
+    CROSS JOIN DEVICE d
+    WHERE d.DeviceName IN (N'TV', N'Điều hòa', N'Tủ lạnh', N'Ga giường');
+END;
+GO
+
+-- Thêm thiết bị cho các phòng đã tồn tại
+-- Lặp qua tất cả các phòng hiện có và thêm 4 thiết bị cơ bản
+INSERT INTO ROOM_DEVICE (RoomID, DeviceID, Quantity)
+SELECT 
+    r.RoomID,
+    d.DeviceID,
+    1 as Quantity
+FROM ROOM r
+CROSS JOIN DEVICE d
+WHERE d.DeviceName IN (N'TV', N'Điều hòa', N'Tủ lạnh', N'Ga giường');
+GO
+
+-- Kiểm tra dữ liệu đã được thêm
+SELECT * FROM DEVICE;
+GO
+
+SELECT 
+    rd.RoomDeviceID,
+    r.RoomNumber,
+    d.DeviceName,
+    rd.Quantity
+FROM ROOM_DEVICE rd
+JOIN ROOM r ON rd.RoomID = r.RoomID
+JOIN DEVICE d ON rd.DeviceID = d.DeviceID
+ORDER BY r.RoomNumber, d.DeviceName;
+GO
