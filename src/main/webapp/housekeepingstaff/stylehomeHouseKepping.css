@@ -66,7 +66,7 @@ body {
     background-color: #FFFFFF;
 
     box-shadow:
-            0 0 15px 7px rgba(224, 224, 224, 0.5);
+        0 0 15px 7px rgba(224, 224, 224, 0.5);
     transform: translateY(-1px);
 }
 .filter-btn.active {
@@ -137,13 +137,17 @@ body {
 }
 
 .rooms-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding-left: 2rem;
     margin-bottom: 3rem;
 }
 
 .room-card {
+    flex-basis: 30%; 
+    width: 30%;
+    margin: 2rem 1.5rem;
     border: 0.1rem solid #e5e7eb;
     border-radius: 0.8rem;
     padding: 2rem;
@@ -257,7 +261,12 @@ body {
     box-shadow: 0 0 8px 2px rgba(138, 43, 226, 0.9); /* Ph�t s�ng m?nh h?n khi active */
     transform: translateY(0); /* V? v? tr� ban ??u */
 }
-
+.btn-primary:focus {
+    background: #1e293b;
+    outline: none;       /* R?t quan tr?ng ?? lo?i b? vi?n focus xanh m?c ??nh */
+    box-shadow: 0 0 5px 3px rgba(0, 123, 255, 0.8);
+    transform: none;
+}
 .info-section h3 {
     font-size: 1.4rem;
     color: #6b7280;
@@ -285,20 +294,6 @@ body {
     color: #3b82f6;
 }
 
-@media (min-width: 57.6rem) {
-    .rooms-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .status-summary {
-        justify-content: space-between;
-    }
-    .summary-item {
-        flex-basis: 32%;
-    }
-
-
-}
 
 .footer-info {
     background: #f9fafb;

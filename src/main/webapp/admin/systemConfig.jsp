@@ -3,46 +3,476 @@
 <%@ page import="model.SystemConfig" %>
 <%@ page import="model.Staff" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Configuration</title>
+    <title>System Configuration - Luxury Hotel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f4f4; }
-        .header { background-color: #333; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .header .admin-info { font-size: 1.1em; }
-        .header .header-actions a { color: white; text-decoration: none; margin-left: 15px; padding: 8px 12px; border: 1px solid white; border-radius: 5px; }
-        .header .header-actions a:hover { background-color: white; color: #333; }
-        .container { padding: 20px; }
-        .card { background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 20px; }
-        h1, h2 { color: #333; }
-        .add-button { background-color: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; display: inline-block; margin-bottom: 20px; cursor: pointer; }
-        .add-button:hover { background-color: #218838; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
-        th { background-color: #f2f2f2; }
-        tr:nth-child(even) { background-color: #f9f9f9; }
-        tr:hover { background-color: #f1f1f1; }
-        .action-links a { text-decoration: none; margin-right: 10px; padding: 5px 10px; border-radius: 4px; color: white; cursor: pointer; }
-        .edit-link { background-color: #007bff; }
-        .delete-link { background-color: #dc3545; }
+        :root { 
+            --gold: #c9ab81;
+            --gold-dark: #b8941f;
+            --black: #000000;
+            --white: #FFFFFF;
+            --off-white: #FAFAFA;
+            --gray-light: #F5F5F5;
+            --gray: #666666;
+            --border: #E0E0E0;
+            
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Montserrat', sans-serif;
+        }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body { 
+            font-family: var(--font-sans);
+            background: var(--off-white);
+            color: var(--black);
+            line-height: 1.6;
+        }
+        
+        /* === HEADER === */
+        .header { 
+            background: var(--black);
+            border-bottom: 2px solid var(--gold);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header .container { 
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        .admin-info { 
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--white);
+            letter-spacing: 0.5px;
+        }
+        
+        .admin-info strong {
+            color: var(--gold);
+        }
+        
+        .header-actions { 
+            display: flex; 
+            align-items: center; 
+            gap: 1rem; 
+        }
+        
+        .header-actions a { 
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.6rem 1.5rem;
+            border: 2px solid var(--gold);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        
+        .header-actions a:hover { 
+            background: var(--gold);
+            color: var(--black);
+        }
+        
+        /* === MAIN CONTENT === */
+        .main-container { 
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideDown 0.3s ease;
+        }
+        
+        .alert i {
+            font-size: 1.3rem;
+        }
+        
+        .alert-error { 
+            background: #FFF3F3;
+            color: #C62828;
+            border-left: 4px solid #C62828;
+        }
+        
+        .alert-success {
+            background: #F1F8F4;
+            color: #2E7D32;
+            border-left: 4px solid #2E7D32;
+        }
+        
+        .card { 
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card h2 { 
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gold);
+            letter-spacing: 1px;
+        }
+        
+        .card h2 i {
+            color: var(--gold);
+            margin-right: 1rem;
+        }
+        
+        .btn { 
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            border: 2px solid;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: var(--font-sans);
+            text-decoration: none;
+        }
+        
+        .add-button { 
+            background: var(--gold);
+            color: var(--black);
+            border-color: var(--gold);
+            margin-bottom: 2rem;
+        }
+        
+        .add-button:hover { 
+            background: var(--gold-dark);
+            border-color: var(--gold-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(201, 171, 129, 0.3);
+        }
+        
+        .add-button i {
+            margin-right: 0.5rem;
+        }
+        
+        /* === TABLE === */
+        table { 
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+        }
+        
+        th, td { 
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        th { 
+            background: var(--gray-light);
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--black);
+        }
+        
+        td {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        tr:hover { 
+            background: var(--off-white);
+        }
+        
+        .action-links {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .action-links a { 
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            color: var(--white);
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        
+        .edit-link { 
+            background: #1565C0;
+            border: 2px solid #1565C0;
+        }
+        
+        .edit-link:hover {
+            background: transparent;
+            color: #1565C0;
+        }
+        
+        .delete-link { 
+            background: #C62828;
+            border: 2px solid #C62828;
+        }
+        
+        .delete-link:hover {
+            background: transparent;
+            color: #C62828;
+        }
 
-        /* Modal Styles */
-        .modal { display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
-        .modal-content { background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 500px; border-radius: 8px; }
-        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; }
-        .close:hover, .close:focus { color: black; text-decoration: none; cursor: pointer; }
-        .modal-header { padding-bottom: 10px; border-bottom: 1px solid #ddd; }
-        .modal-body { padding-top: 10px; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; }
-        .form-group input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-        .modal-footer { padding-top: 15px; border-top: 1px solid #ddd; text-align: right; }
-        .btn { padding: 10px 15px; border-radius: 5px; text-decoration: none; color: white; cursor: pointer; border: none; }
-        .btn-primary { background-color: #007bff; }
-        .btn-danger { background-color: #dc3545; }
-        .btn-secondary { background-color: #6c757d; }
+        /* === MODAL === */
+        .modal { 
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background: rgba(0, 0, 0, 0.7);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content { 
+            background: var(--white);
+            margin: auto;
+            padding: 0;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .close { 
+            color: var(--gray);
+            float: right;
+            font-size: 2rem;
+            font-weight: 300;
+            line-height: 1;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .close:hover,
+        .close:focus { 
+            color: var(--black);
+        }
+        
+        .modal-header { 
+            padding: 2rem;
+            border-bottom: 2px solid var(--gold);
+            background: var(--off-white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--black);
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        
+        .modal-header h2 i {
+            color: var(--gold);
+            margin-right: 0.8rem;
+        }
+        
+        .modal-body { 
+            padding: 2rem;
+        }
+        
+        .form-group { 
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label { 
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--black);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-group input,
+        .form-group select { 
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: var(--font-sans);
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(201, 171, 129, 0.1);
+        }
+        
+        .form-group input:read-only {
+            background: var(--gray-light);
+            color: var(--gray);
+            cursor: not-allowed;
+        }
+        
+        .modal-footer { 
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border);
+            text-align: right;
+            background: var(--off-white);
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+        
+        .btn-primary { 
+            background: var(--gold);
+            color: var(--black);
+            border-color: var(--gold);
+        }
+        
+        .btn-primary:hover {
+            background: var(--gold-dark);
+            border-color: var(--gold-dark);
+        }
+        
+        .btn-danger { 
+            background: #C62828;
+            color: var(--white);
+            border-color: #C62828;
+        }
+        
+        .btn-danger:hover {
+            background: #B71C1C;
+            border-color: #B71C1C;
+        }
+        
+        .btn-secondary { 
+            background: transparent;
+            color: var(--gray);
+            border-color: var(--gray);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--gray);
+            color: var(--white);
+        }
+        
+        /* === ANIMATIONS === */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .header .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .header-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .header-actions a {
+                width: 100%;
+                text-align: center;
+            }
+            
+            table {
+                font-size: 0.85rem;
+            }
+            
+            th, td {
+                padding: 0.7rem;
+            }
+            
+            .action-links {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
@@ -52,37 +482,44 @@
 %>
 
 <div class="header">
-    <div class="admin-info">
-        <% if (admin != null) { %>
-            Welcome, <strong><%= admin.getFullName() %></strong> (<%= admin.getRole() %>)
-        <% } else { %>
-            Welcome, Admin
-        <% } %>
-    </div>
-    <div class="header-actions">
-        <a href="<%= request.getContextPath() %>/admin/admin">Staff Management</a>
-        <a href="<%= request.getContextPath() %>/logout">Logout</a>
+    <div class="container">
+        <div class="admin-info">
+            <% if (admin != null) { %>
+                Welcome, <strong><%= admin.getFullName() %></strong> (<%= admin.getRole() %>)
+            <% } else { %>
+                Welcome, Admin
+            <% } %>
+        </div>
+        <div class="header-actions">
+            <a href="<%= request.getContextPath() %>/admin/admin"><i class="fas fa-users"></i> Staff Management</a>
+            <a href="<%= request.getContextPath() %>/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
     </div>
 </div>
 
-<div class="container">
+<div class="main-container">
      <%
         String error = (String) request.getAttribute("error");
         String success = (String) request.getAttribute("success");
     %>
     <% if (error != null && !error.isEmpty()) { %>
-        <div style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
-            <strong>Error:</strong> <%= error %>
+        <div class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span><strong>Error:</strong> <%= error %></span>
         </div>
     <% } %>
     <% if (success != null && !success.isEmpty()) { %>
-        <div style="background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
-            <strong>Success:</strong> <%= success %>
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <span><strong>Success:</strong> <%= success %></span>
         </div>
     <% } %>
+    
     <div class="card">
-        <h2>System Configuration</h2>
-        <a class="add-button" id="addConfigBtn">Add New Config</a>
+        <h2><i class="fas fa-cogs"></i> System Configuration</h2>
+        <a class="add-button btn" id="addConfigBtn">
+            <i class="fas fa-plus-circle"></i> Add New Config
+        </a>
         <table>
             <thead>
                 <tr>
@@ -106,8 +543,12 @@
                             <a class="edit-link"
                                data-id="<%= configg.getConfigId() %>"
                                data-name="<%= configg.getConfigName() %>"
-                               data-value="<%= configg.getConfigValue() %>">Edit</a>
-                            <a class="delete-link" data-id="<%= configg.getConfigId() %>" data-name="<%= configg.getConfigName() %>">Delete</a>
+                               data-value="<%= configg.getConfigValue() %>">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a class="delete-link" data-id="<%= configg.getConfigId() %>" data-name="<%= configg.getConfigName() %>">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
                         </td>
                     </tr>
                 <%
@@ -115,7 +556,7 @@
                     } else {
                 %>
                     <tr>
-                        <td colspan="4" style="text-align: center;">No system configurations found.</td>
+                        <td colspan="4" style="text-align: center; color: var(--gray); font-style: italic;">No system configurations found.</td>
                     </tr>
                 <%
                     }
@@ -129,23 +570,25 @@
 <div id="configModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
+            <h2 id="modalTitle"><i class="fas fa-plus-circle"></i> Add Config</h2>
             <span class="close">&times;</span>
-            <h2 id="modalTitle">Add Config</h2>
         </div>
         <form id="configForm" method="POST">
             <div class="modal-body">
                 <input type="hidden" id="configId" name="configId">
                 <div class="form-group">
-                    <label for="configName">Config Name</label>
-                    <input type="text" id="configName" name="configName" required="">
+                    <label for="configName"><i class="fas fa-tag"></i> Config Name</label>
+                    <input type="text" id="configName" name="configName" required>
                 </div>
                 <div class="form-group">
-                    <label for="configValue">Config Value</label>
-                    <input type="number" id="configValue" name="configValue" required="">
+                    <label for="configValue"><i class="fas fa-hashtag"></i> Config Value</label>
+                    <input type="number" id="configValue" name="configValue" required>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
             </div>
         </form>
     </div>
@@ -155,18 +598,27 @@
 <div id="deleteModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
+            <h2><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h2>
             <span class="close">&times;</span>
-            <h2>Confirm Deletion</h2>
         </div>
         <div class="modal-body">
-            <p>Are you sure you want to delete config <strong id="configNameToDelete"></strong>?</p>
+            <p style="font-size: 1.1rem; text-align: center; color: var(--gray);">
+                Are you sure you want to delete config <strong id="configNameToDelete" style="color: var(--gold);"></strong>?
+            </p>
+            <p style="text-align: center; color: #C62828; margin-top: 1rem;">
+                <i class="fas fa-exclamation-circle"></i> This action cannot be undone.
+            </p>
         </div>
         <div class="modal-footer">
+            <a class="btn btn-secondary" id="cancelDelete">
+                <i class="fas fa-times"></i> Cancel
+            </a>
             <form id="deleteForm" action="./remove-system-config" method="POST" style="display: inline;">
                 <input type="hidden" id="deleteConfigId" name="configId">
-                <button type="submit" class="btn btn-danger">Delete</button>
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
             </form>
-            <a class="btn btn-secondary" id="cancelDelete">Cancel</a>
         </div>
     </div>
 </div>
@@ -192,10 +644,10 @@
     document.getElementById("addConfigBtn").onclick = function() {
         configForm.reset();
         configForm.action = './add-system-config';
-        modalTitle.textContent = "Add New Config";
+        modalTitle.innerHTML = '<i class="fas fa-plus-circle"></i> Add New Config';
         configIdInput.value = "";
         configNameInput.readOnly = false;
-        configModal.style.display = "block";
+        configModal.style.display = "flex";
     }
 
     // Open Edit modal
@@ -203,7 +655,7 @@
         button.onclick = function() {
             configForm.reset();
             configForm.action = './edit-system-config';
-            modalTitle.textContent = "Edit Config";
+            modalTitle.innerHTML = '<i class="fas fa-edit"></i> Edit Config';
 
             // Populate form
             configIdInput.value = this.dataset.id;
@@ -213,7 +665,7 @@
             // Config name should not be editable
             configNameInput.readOnly = true;
 
-            configModal.style.display = "block";
+            configModal.style.display = "flex";
         }
     });
 
@@ -224,7 +676,7 @@
             var configName = this.dataset.name;
             document.getElementById('configNameToDelete').textContent = configName;
             document.getElementById('deleteConfigId').value = configId;
-            deleteModal.style.display = "block";
+            deleteModal.style.display = "flex";
         }
     });
 

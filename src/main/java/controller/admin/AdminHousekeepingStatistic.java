@@ -37,6 +37,7 @@ public class AdminHousekeepingStatistic extends HttpServlet {
         req.setAttribute("admin", admin);
 
         ArrayList<RoomTask> roomTasks = roomTaskDAO.getAllRoom();
+        // System.out.println("DEBUG RoomTask:" + roomTasks.size());
         ArrayList<Staff> staffs = staffDAO.getStaffsByRole("housekeeping");
         HashMap<Integer, ArrayList<RoomTask>> roomTaskByStaff = new HashMap<>();
         for (Staff staff : staffs) {

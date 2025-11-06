@@ -50,7 +50,7 @@ public class LoginController extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + IConstant.housekeeping);
                     return;
                 case "servicestaff":
-                    response.sendRedirect(IConstant.serviceStaff);
+                    response.sendRedirect(IConstant.serviceRole);
                     return;
             }
 
@@ -62,7 +62,6 @@ public class LoginController extends HttpServlet {
             return; // Dừng thực thi
         }
 
-// Nếu cả hai đều null
         request.setAttribute("error", "Invalid username or password");
         request.getRequestDispatcher(IConstant.loginPage).forward(request, response);
     }

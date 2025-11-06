@@ -116,7 +116,7 @@ public class RoomTypeDAO {
                 String endTime = rs.getString("EndTime");
                 String statusClean = rs.getString("StatusClean");
                 String notes = rs.getString("Notes");
-                RoomTask roomTask = new RoomTask(id, roomId, staffId, startTime, endTime, statusClean, notes);
+                RoomTask roomTask = new RoomTask(id, roomId, staffId, java.time.LocalDateTime.parse(startTime), endTime != null ? java.time.LocalDateTime.parse(endTime) : null, statusClean, notes, 0);
                 result.add(roomTask);
             }
         } catch (Exception e) {

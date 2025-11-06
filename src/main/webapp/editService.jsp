@@ -27,176 +27,324 @@
 <head>
     <title>Chỉnh sửa Dịch vụ - Luxury Hotel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --color-gold: #c9ab81;
-            --color-charcoal: #1a1a1a;
-            --color-offwhite: #f8f7f5;
-            --color-grey: #666;
-            --primary-color: #007bff;
+            --gold: #c9ab81;
+            --gold-dark: #b8941f;
+            --black: #000000;
+            --white: #FFFFFF;
+            --off-white: #FAFAFA;
+            --gray-light: #F5F5F5;
+            --gray: #666666;
+            --border: #E0E0E0;
+            --secondary-color: #6c757d;
+            
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Montserrat', sans-serif;
         }
 
         body {
-            font-family: "Lato", sans-serif;
-            background-color: var(--color-offwhite);
-            color: var(--color-charcoal);
+            font-family: var(--font-sans);
+            background: var(--white);
+            color: var(--black);
             line-height: 1.6;
-            margin: 0;
-            padding: 20px;
+        }
+        
+        /* === HEADER === */
+        .header { 
+            background: var(--black);
+            border-bottom: 2px solid var(--gold);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container { 
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        .logo a { 
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .logo a span {
+            color: var(--gold);
+        }
+        
+        .main-nav { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
+        
+        .main-nav span { 
+            color: var(--white); 
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
         }
 
         .container {
-            max-width: 900px;
-            margin: 20px auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        h1, h2, h3 {
-            font-family: "Playfair Display", serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 3rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border);
+            border-radius: 8px;
         }
 
         h1 {
+            font-family: var(--font-serif);
             text-align: center;
-            color: var(--color-charcoal);
-            margin-bottom: 10px;
+            color: var(--black);
+            margin-bottom: 2rem;
+            font-size: 3rem;
+            font-weight: 700;
+        }
+        
+        h1 span {
+            color: var(--gold);
         }
 
         .back-link {
             display: inline-block;
-            margin-bottom: 20px;
-            color: var(--color-gold);
-            font-weight: bold;
+            margin-bottom: 2rem;
+            color: var(--gold);
+            font-weight: 500;
+            padding: 0.75rem 2rem;
+            border: 2px solid var(--gold);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
         }
 
         .back-link:hover {
-            text-decoration: underline;
+            background: var(--gold);
+            color: var(--black);
         }
 
         .booking-info {
-            background: #f9f9f9;
-            padding: 20px;
+            background: var(--gray-light);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border);
             border-radius: 8px;
-            margin-bottom: 30px;
-            border-left: 5px solid var(--color-gold);
+        }
+
+        .booking-info h3 {
+            font-family: var(--font-serif);
+            color: var(--black);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            font-size: 1.8rem;
+        }
+        
+        .booking-info h3 span {
+            color: var(--gold);
         }
 
         .booking-info p {
-            margin: 0 0 10px;
+            margin: 0 0 12px;
         }
 
         .booking-info strong {
-            min-width: 120px;
+            min-width: 180px;
             display: inline-block;
+            color: var(--gray);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .section-title {
-            border-bottom: 2px solid var(--color-gold);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            font-family: var(--font-serif);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            color: var(--black);
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .section-title span {
+            color: var(--gold);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
+            background: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
             text-align: left;
         }
 
         th {
-            background-color: #f2f2f2;
-        }
-
-        .service-status {
-            padding: 3px 8px;
-            border-radius: 12px;
-            color: #fff;
-            font-size: 0.8em;
-        }
-
-        .status-0 {
-            background-color: #007bff;
-        }
-
-        /* Chưa làm */
-        .status-1 {
-            background-color: #ffc107;
-            color: #212529;
-        }
-
-        /* Đang làm */
-        .status-2 {
-            background-color: #28a745;
-        }
-
-        /* Đã làm */
-        .status--1 {
-            background-color: #6c757d;
-        }
-
-        /* Đã hủy */
-
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            border-radius: 5px;
-            border: 1px solid transparent;
-            cursor: pointer;
-            font-size: 1rem;
-            text-align: center;
+            background: linear-gradient(135deg, var(--black) 0%, #2c2c2c 100%);
+            color: var(--white);
             font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-bottom: none;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
             transition: all 0.3s ease;
         }
 
-        .btn-primary {
-            background-color: var(--color-gold);
-            color: #fff;
-            border-color: var(--color-gold);
+        tbody tr:hover {
+            background: var(--off-white);
+            transform: scale(1.002);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
+        .service-status {
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            display: inline-block;
+            font-weight: 600;
+            border: 2px solid;
+        }
+
+        .status-0 { 
+            background: #e3f2fd;
+            color: #1976d2;
+            border-color: #1976d2;
+        }
+        .status-1 { 
+            background: #fff3e0;
+            color: #e65100;
+            border-color: #e65100;
+        }
+        .status-2 { 
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-color: #2e7d32;
+        }
+        .status--1 { 
+            background: #f5f5f5;
+            color: #616161;
+            border-color: #9e9e9e;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            border: 2px solid;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: var(--font-sans);
+            background: transparent;
+        }
+        
+        .btn-info { 
+            background: transparent;
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        
+        .btn-info:hover { 
+            background: var(--gold);
+            color: var(--black);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+        
+        .btn-secondary:hover {
+            background: transparent;
+            color: var(--secondary-color);
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: var(--black);
+            border-color: var(--gold);
+        }
+        
         .btn-primary:hover {
-            background-color: transparent;
-            color: var(--color-gold);
+            background: transparent;
+            color: var(--gold);
         }
 
         .no-services {
             text-align: center;
-            color: var(--color-grey);
-            padding: 20px;
-            background: #fafafa;
-            border-radius: 5px;
+            color: var(--gray);
+            padding: 3rem;
+            background: var(--gray-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
         }
 
         .form-actions {
             text-align: right;
-            margin-top: 30px;
+            margin-top: 3rem;
         }
 
-        /* --- CSS CHO TÍNH NĂNG THÊM DỊCH VỤ ĐỘNG (TỪ rentalPage.jsp) --- */
+        /* --- CSS CHO TÍNH NĂNG THÊM DỊCH VỤ ĐỘNG --- */
         .form-group-rental {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .form-group-rental label {
             display: block;
             margin-bottom: 8px;
-            font-weight: bold;
-            color: #555;
+            font-weight: 500;
+            color: var(--black);
         }
 
         .form-group-rental select {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
             font-size: 1rem;
+            background: var(--white);
+            color: var(--black);
+            transition: all 0.3s ease;
+            font-family: var(--font-sans);
+        }
+
+        .form-group-rental select:focus {
+            border-color: var(--gold);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
         }
 
         .service-adder {
@@ -212,17 +360,18 @@
 
         #add-service-btn {
             padding: 12px 20px;
-            background-color: #28a745;
+            background: #4CAF50;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             line-height: 1;
+            transition: all 0.2s ease;
         }
 
         #add-service-btn:hover {
-            background-color: #218838;
+            opacity: 0.9;
         }
 
         #selected-services-list {
@@ -232,24 +381,41 @@
         .selected-service-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            background-color: #f9f9f9;
-            padding: 10px;
-            border: 1px solid #eee;
-            border-radius: 4px;
-            margin-bottom: 10px;
+            gap: 1rem;
+            background: var(--white);
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .selected-service-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .selected-service-item span {
             flex-grow: 1;
+            font-weight: 500;
+            color: var(--black);
         }
 
         .service-quantity, .service-date {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
             width: 80px;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            background: var(--white);
+            color: var(--black);
+            transition: all 0.3s ease;
+            font-family: var(--font-sans);
+        }
+
+        .service-quantity:focus, .service-date:focus {
+            border-color: var(--gold);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
         }
 
         .service-date {
@@ -257,24 +423,50 @@
         }
 
         .remove-service-btn {
-            background: #dc3545;
+            background: #f44336;
             color: white;
             border: none;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             cursor: pointer;
             flex-shrink: 0;
             font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.2s ease;
         }
 
         .remove-service-btn:hover {
-            background: #c82333;
+            opacity: 0.9;
         }
     </style>
 </head>
 <body>
-<div class="container">
+
+<header class="header">
+    <div class="header-container">
+        <div class="logo">
+            <a href="<%= IConstant.homeServlet %>">LUXURY <span>HOTEL</span></a>
+        </div>
+        <nav class="main-nav">
+            <% 
+                Guest currentGuest = (Guest) session.getAttribute("userGuest");
+                if (currentGuest != null) { 
+            %>
+            <span style="color: white; margin-right: 15px;">Xin chào, <%= currentGuest.getFullName() %>!</span>
+            <form action="<%= IConstant.viewBookingServlet %>" method="post" style="display: inline;">
+                <input type="hidden" name="guestId" value="<%= currentGuest.getGuestId() %>">
+                <button type="submit" class="btn btn-info">Phòng đã đặt</button>
+            </form>
+            <form action="logout" method="get" style="display: inline;">
+                <button type="submit" class="btn btn-secondary">Đăng xuất</button>
+            </form>
+            <% } %>
+        </nav>
+    </div>
+</header>
+
+<div class="container" style="margin-top: 100px;">
     <span>
         <i class="fa-solid fa-arrow-left back-link" style="display: inline"></i>
         <form style="display: inline" action="<%=request.getContextPath()%>/viewBooking" method="post">
@@ -282,10 +474,10 @@
             <input type="submit" value="Quay lai danh sach" class="back-link" style="border: none; background: none">
         </form>
     </span>
-    <h1>Chỉnh sửa Dịch vụ</h1>
+    <h1>Chỉnh Sửa <span>Dịch Vụ</span></h1>
 
     <div class="booking-info">
-        <h3>Thông tin Đặt phòng</h3>
+        <h3>Thông Tin <span>Đặt Phòng</span></h3>
         <p><strong>Mã đặt phòng:</strong> #<%= booking.getBookingId() %>
         </p>
         <p><strong>Phòng:</strong> <%= room.getRoomNumber() %> (<%= roomType.getTypeName() %>)</p>
@@ -299,7 +491,7 @@
         <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>"/>
         <input type="hidden" name="action" value="updateServices"/>
 
-        <h2 class="section-title">Các dịch vụ đã chọn</h2>
+        <h2 class="section-title">Các Dịch Vụ <span>Đã Chọn</span></h2>
         <% if (chosenServices != null && !chosenServices.isEmpty()) { %>
         <table>
             <thead>
@@ -359,7 +551,7 @@
 
         <hr style="margin: 30px 0;">
 
-        <h2 class="section-title">Thêm dịch vụ mới</h2>
+        <h2 class="section-title">Thêm <span>Dịch Vụ Mới</span></h2>
         <div class="form-group-rental">
             <div class="service-adder">
                 <div class="form-group-rental">

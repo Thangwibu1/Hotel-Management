@@ -249,7 +249,7 @@ public class GuestDAO {
             if (dobStr == null || dobStr.isEmpty()) {
                 ps.setNull(7, Types.TIMESTAMP);
             } else {
-                // N?u ng??i dùng nh?p d?ng yyyy-MM-dd t? <input type="date">
+                // N?u ng??i dï¿½ng nh?p d?ng yyyy-MM-dd t? <input type="date">
                 LocalDate dob = LocalDate.parse(dobStr);
                 LocalDateTime dobDT = dob.atStartOfDay(); // 00:00:00
                 ps.setTimestamp(7, Timestamp.valueOf(dobDT));
