@@ -10,6 +10,7 @@ import dao.BookingDAO;
 import dao.BookingServiceDAO;
 import dao.GuestDAO;
 import dao.RoomDAO;
+import dao.RoomTaskDAO;
 import dao.ServiceDAO;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ import model.Booking;
 import model.BookingService;
 import model.Guest;
 import model.Room;
+import model.RoomTask;
 import model.Service;
 import utils.IConstant;
 
@@ -87,6 +89,38 @@ public class MakeNewServiceController extends HttpServlet {
                         System.out.println(note);
                         BookingService bookingService = new BookingService(booking.getBookingId(), serviceId, quantity, registerLocalDate, 0, note);
                         if(bSD.addBookingService(bookingService)){
+                            
+                            // Nếu serviceId = 3 (Housekeeping), tự động tạo room task
+                            if (serviceId == 3) {
+                                try {
+                                    RoomTaskDAO roomTaskDAO = new RoomTaskDAO();
+                                    LocalDateTime taskStartTime = registerLocalDate.atTime(startTime);
+                                    
+                                    // Tạo room task với status "Pending"
+                                    RoomTask roomTask = new RoomTask(
+                                        roomID.getRoomId(),     // roomID
+                                        null,                   // staffID (null - chưa assign)
+                                        taskStartTime,          // startTime
+                                        null,                   // endTime (null - chưa hoàn thành)
+                                        "Pending",              // statusClean
+                                        "Service request from guest - Booking #" + booking.getBookingId(), // notes
+                                        0                       // isSystemTask (1 = được tạo tự động từ service)
+                                    );
+                                    
+                                    boolean roomTaskCreated = roomTaskDAO.insertRoomTaskForService(roomTask);
+                                    
+                                    if (roomTaskCreated) {
+                                        System.out.println("✓ Room task đã được tạo tự động cho phòng " + roomNumber);
+                                    } else {
+                                        System.err.println("✗ Không thể tạo room task cho phòng " + roomNumber);
+                                    }
+                                } catch (Exception roomTaskException) {
+                                    System.err.println("✗ Lỗi khi tạo room task: " + roomTaskException.getMessage());
+                                    roomTaskException.printStackTrace();
+                                    // Không throw exception để không ảnh hưởng đến việc đăng ký dịch vụ
+                                }
+                            }
+                            
                             // Gửi email xác nhận đăng ký dịch vụ
                             try {
                                 // Lấy thông tin guest từ booking

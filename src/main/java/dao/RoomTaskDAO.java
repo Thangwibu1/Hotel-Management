@@ -481,7 +481,7 @@ public class RoomTaskDAO {
     public ArrayList<RoomTask> getAllRoomTaskBaseDate(LocalDateTime dayToGetTask, int status) {
         ArrayList<RoomTask> result = new ArrayList<RoomTask>();
         String sql = "SELECT [RoomTaskID],[RoomID],[StatusClean],[StaffID],[StartTime],[EndTime],[Notes],[isSystemTask] FROM [HotelManagement].[dbo].[ROOM_TASK] "
-                + "WHERE CAST([StartTime] AS DATE) = CAST(? AS DATE) and isSystemTask = 1";
+                + "WHERE CAST([StartTime] AS DATE) = CAST(? AS DATE) and isSystemTask = ?";
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -490,6 +490,7 @@ public class RoomTaskDAO {
             con = DBConnection.getConnection();
             ps = con.prepareStatement(sql);
             ps.setObject(1, dayToGetTask.toLocalDate());
+            ps.setInt(2, status);
             rs = ps.executeQuery();
 
             while (rs.next()) {

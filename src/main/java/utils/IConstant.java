@@ -21,8 +21,8 @@ public interface IConstant {
     public static final String serviceFilter = "service-staff";
 
     public static final String receptionistRole = "./receptionist/receptionist";
-    public static final String managerRole = "manager";
-    public static final String adminRole =  "./" + adminFilter + "/admin";
+    public static final String managerRole = "./manager/dashboard";
+    public static final String adminRole = "./" + adminFilter + "/admin";
     public static final String housekeeping = "/" + housekeepingFilter + "/homeHouseKeeping.jsp";
     public static final String serviceStaff = "service-staff"; //folder service
     public static final String serviceRole = "./" + serviceFilter + "/registerServiceController";
@@ -50,6 +50,12 @@ public interface IConstant {
     public static final String bookingController = "./BookingsController";
     public static final String getPendingCheckinController = "./GetPendingCheckinController";
     public static final String roomsStatusReceptionistController = "./RoomsStatusBoard";
+//    --------------------manager servlet------------------------
+    public static final String guestReportController = "GuestReportController";
+    public static final String revenueReportController = "RevenueReportController";
+    public static final String occupancyReportController = "OccupancyReportController";
+    public static final String servicesReportController = "ServicesReportController";
+    public static final String cancellationsReportController = "CancellationsReportController";
     public static final String bookingViewController = "./ViewBookingController";
     public static final String bookingEditController = "./EditBookingController";
     public static final String bookingDeleteController = "./DeleteBookingController";
