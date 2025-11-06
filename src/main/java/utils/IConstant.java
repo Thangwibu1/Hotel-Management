@@ -7,6 +7,7 @@ public interface IConstant {
 
     public static final DateTimeFormatter localDateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
     // ham format date
     public static String formatDate(LocalDate dateToFormat) {
         if (dateToFormat == null) {
@@ -15,7 +16,6 @@ public interface IConstant {
         return dateToFormat.format(dateFormat);
     }
     
-    // Name for refactor
     public static final String adminFilter = "admin";
     public static final String housekeepingFilter = "housekeepingstaff";
     public static final String serviceFilter = "service-staff";
@@ -54,16 +54,20 @@ public interface IConstant {
     public static final String bookingEditController = "./EditBookingController";
     public static final String bookingDeleteController = "./DeleteBookingController";
 
-    
+    //------------------------housekeeping---------------------------------
     public static final String takeRoomForCleanController = "./takeRoomForCleanController";
     public static final String makeNewRoomTaskController = "./makeNewRoomTaskController";
     public static final String updateStatusCleanRoomController = "./UpdateStatusCleanRoomController";
     public static final String detailProfileStaffController = "./detailProfileStaffController";
+    public static final String takeDeviceForNoteMaintenanceController = "./takeDeviceForNoteMaintenanceController";
+    public static final String reportByTimeHKController = "./reportByTimeHKController";
+    
     public static final String completeIngroressTask = "./completeIngroressTask.jsp";
     public static final String detailProfileStaffPage = "./detailProfileStaffPage.jsp";
     public static final String completeMaintain = "./completeMaintain.jsp";
-    public static final String takeDeviceForNoteMaintenanceController = "./takeDeviceForNoteMaintenanceController";
     public static final String updateMaintain = "./updateMaintain.jsp";
+    
+    //----------------------------------------------------------------------
     public static final String systemConfigPage = "/" + adminFilter + "/systemConfig.jsp";
     public static final String adminPage = "/" + adminFilter + "/adminPage.jsp";
     public static final String editServicePage = "editService.jsp";

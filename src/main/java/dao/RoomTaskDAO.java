@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,9 +46,15 @@ public class RoomTaskDAO {
             e.printStackTrace();
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (con != null) con.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 System.err.println("Error closing resources: " + e.getMessage());
             }
@@ -71,12 +78,11 @@ public class RoomTaskDAO {
     //     }
     //     return rowsAffected > 0;
     // }
-
     public boolean insertRoomTaskForServiceForTransaction(RoomTask roomTask, Connection conn) {
         String sql = "INSERT INTO [HotelManagement].[dbo].[ROOM_TASK] ([RoomID], [StartTime], [EndTime], [StatusClean], [Notes], [isSystemTask]) VALUES (?, ?, ?, ?, ?, ?)";
 
         int rowsAffected = 0;
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, roomTask.getRoomID());
             ps.setObject(2, roomTask.getStartTime());
             ps.setObject(3, roomTask.getEndTime());
@@ -119,7 +125,7 @@ public class RoomTaskDAO {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+
         try {
             con = DBConnection.getConnection();
             ps = con.prepareStatement(sql);
@@ -135,21 +141,27 @@ public class RoomTaskDAO {
                 int isSystemTask = rs.getInt("isSystemTask");
                 roomTask = new RoomTask(roomTaskId, roomId, staffId, startTime, endTime, statusClean, notes, isSystemTask);
             }
-        } catch ( Exception e) {
+        } catch (Exception e) {
             System.err.println("General error in getRoomTaskById: " + e.getMessage());
             e.printStackTrace();
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (con != null) con.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 System.err.println("Error closing resources: " + e.getMessage());
             }
         }
         return roomTask;
     }
-    
+
     public ArrayList<RoomTask> getAllRoom() {
         ArrayList<RoomTask> result = new ArrayList<RoomTask>();
         String sql = "SELECT [RoomTaskID] ,[RoomID],[StaffID],[StartTime],[EndTime],[StatusClean],[Notes],[isSystemTask] FROM [HotelManagement].[dbo].[ROOM_TASK]";
@@ -180,9 +192,15 @@ public class RoomTaskDAO {
         } finally {
             // Close resources in reverse order
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (con != null) con.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 System.err.println("Error closing resources: " + e.getMessage());
             }
@@ -224,9 +242,15 @@ public class RoomTaskDAO {
         } finally {
             // Close resources in reverse order
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (con != null) con.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 System.err.println("Error closing resources: " + e.getMessage());
             }
@@ -398,6 +422,62 @@ public class RoomTaskDAO {
         return result;
     }
 
+    public ArrayList<RoomTask> getAllRoomTaskByDateRangeAndStatus(LocalDate startDate, LocalDate endDate, String statusClean) {
+        ArrayList<RoomTask> result = new ArrayList<RoomTask>();
+        String sql = "SELECT [RoomTaskID],[RoomID],[StatusClean],[StaffID],[StartTime],[EndTime],[Notes],[isSystemTask] FROM [HotelManagement].[dbo].[ROOM_TASK] "
+                + "WHERE CAST([EndTime] AS DATE) BETWEEN ? AND ? AND [StatusClean] = ? AND [EndTime] IS NOT NULL";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setObject(1, startDate);
+            ps.setObject(2, endDate);
+            ps.setString(3, statusClean);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                RoomTask room = new RoomTask();
+                room.setRoomTaskID(rs.getInt("RoomTaskID"));
+                room.setRoomID(rs.getInt("RoomID"));
+                room.setStatusClean(rs.getString("StatusClean"));
+                room.setStaffID(rs.getObject("StaffID", Integer.class));
+                room.setStartTime(rs.getObject("StartTime", LocalDateTime.class));
+                room.setEndTime(rs.getObject("EndTime", LocalDateTime.class));
+                room.setNotes(rs.getString("Notes"));
+                room.setIsSystemTask(rs.getInt("isSystemTask"));
+                result.add(room);
+            }
+        } catch (SQLException e) {
+            System.err.println("Database error in getAllRoomTaskByDateRangeAndStatus: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("General error in getAllRoomTaskByDateRangeAndStatus: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+        if (result.isEmpty()) {
+            System.out.println("Ko lay duoc phong");
+            result = null;
+        } else {
+            System.out.println("Lay duoc nha");
+        }
+        return result;
+    }
+
     public ArrayList<RoomTask> getAllRoomTaskBaseDate(LocalDateTime dayToGetTask, int status) {
         ArrayList<RoomTask> result = new ArrayList<RoomTask>();
         String sql = "SELECT [RoomTaskID],[RoomID],[StatusClean],[StaffID],[StartTime],[EndTime],[Notes],[isSystemTask] FROM [HotelManagement].[dbo].[ROOM_TASK] "
@@ -494,7 +574,7 @@ public class RoomTaskDAO {
         return rowsAffected;
     }
 
-    public int updateStatusRoomTask(int staffId ,int roomTaskID, String statusCleanUpdate) {
+    public int updateStatusRoomTask(int staffId, int roomTaskID, String statusCleanUpdate) {
         String sql = "UPDATE [HotelManagement].[dbo].[ROOM_TASK] SET [StatusClean] = ?, staffId = ? WHERE [RoomTaskID] = ?";
         Connection con = null;
         PreparedStatement ps = null;
@@ -602,7 +682,6 @@ public class RoomTaskDAO {
         return result;
     }
 
-
     public int insertRoomTask(RoomTask roomTask, Connection con) throws SQLException {
 
         // Thm 'throws SQLException' ?? ??y l?i ra ngoi
@@ -655,7 +734,5 @@ public class RoomTaskDAO {
 
         return rowsAffected;
     }
-
-
 
 }
