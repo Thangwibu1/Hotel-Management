@@ -7,6 +7,8 @@ package controller.housekeepingstaff;
 
 import dao.RoomTaskDAO;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.ServletException;
@@ -15,6 +17,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import model.RoomTask;
 import model.Staff;
 
 import utils.IConstant;
@@ -79,7 +83,22 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
             }else{
                 roomTaskID = Integer.parseInt(request.getParameter("room_Task_ID").trim());
                 statusWantUpdate = request.getParameter("status_want_update");
-                rowAffected = d.updateStatusRoomTask(staff.getStaffId(), roomTaskID, statusWantUpdate);
+                int staffID = staff.getStaffId();
+                ArrayList<RoomTask> listTask = d.getAllRoomTaskBaseDate(LocalDateTime.now());
+                boolean flag = false;
+                for (RoomTask roomTask : listTask) {
+                    if (roomTask.getStatusClean().equalsIgnoreCase("In Progress") && roomTask.getStaffID() == staffID) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag) {
+                    request.setAttribute("THONGBAO", "Update Fail!!");
+                    request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
+                } else {
+                    rowAffected = d.updateStatusRoomTask(staff.getStaffId(), roomTaskID, statusWantUpdate);
+                }
+                
                 // HashMap<Integer, Integer> roomIdAndGuestId = d.getRoomIdAndGuestIdByRoomTaskId(roomTaskID);
 //                int roomId = roomIdAndGuestId.keySet().iterator().next();
 //                int guestId = roomIdAndGuestId.values().iterator().next();

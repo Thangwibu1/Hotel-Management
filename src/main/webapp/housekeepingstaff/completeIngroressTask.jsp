@@ -135,7 +135,7 @@
                                    id="completeBtn">
                         </form>
 
-                        <form action="<%= IConstant.completeMaintain %>" method="POST" class="d-flex flex-fill" style="padding: 0; margin: 0;" onsubmit="return confirm('Do you want to start maintaining this room?');">
+                        <form action="<%= IConstant.takeDeviceForMaintenance %>" method="POST" class="d-flex flex-fill" style="padding: 0; margin: 0;" onsubmit="return confirm('Do you want to start maintaining this room?');">
                             <input type="hidden" name="action" value="report">
                             <input type="hidden" name="room_Task_ID" value="<%= roomTaskID%>">
                             <input type="hidden" name="room" value="<%= room %>">

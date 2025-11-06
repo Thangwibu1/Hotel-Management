@@ -215,6 +215,9 @@ ADD isSystemTask INT NOT NULL;
 
 ALTER TABLE BOOKING_SERVICE
 ADD StaffID INT NULL;
+
+alter table [dbo].[ROOM_DEVICE]
+add status int default 1
 -- ===================================================================
 -- PHẦN 2: CHÈN DỮ LIỆU MẪU
 -- ===================================================================

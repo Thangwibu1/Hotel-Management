@@ -6,6 +6,7 @@
 
 <%@page import="model.Staff"%>
 <%@page import="utils.IConstant"%>
+<%@page import="java.util.Map"%>
 <%@page contentType="text/html" pageEncoding="windows-1252"%>
 <!DOCTYPE html>
 <html lang="vi">
@@ -72,7 +73,7 @@
                 width: 22px;
                 height: 22px;
                 margin: 0;
-                /* ?i?u ch?nh c?n lùi */
+                /* ?i?u ch?nh c?n lï¿½i */
                 margin-left: 5px;
                 margin-right: 17px;
                 cursor: pointer;
@@ -93,12 +94,12 @@
                 font-size: 20px;
             }
 
-            /* ?Ã XOÁ: .btn-complete, .btn-complete:hover vì ?ã thay b?ng .btn-maintenance */
-            /* ?Ã XOÁ: .btn-close-left và .modal-title-group (các class này không còn trong HTML) */
+            /* ?ï¿½ XOï¿½: .btn-complete, .btn-complete:hover vï¿½ ?ï¿½ thay b?ng .btn-maintenance */
+            /* ?ï¿½ XOï¿½: .btn-close-left vï¿½ .modal-title-group (cï¿½c class nï¿½y khï¿½ng cï¿½n trong HTML) */
 
-            /* CSS ?ANG DÙNG: Nút Completed Maintenance */
+            /* CSS ?ANG Dï¿½NG: Nï¿½t Completed Maintenance */
             .btn-maintenance {
-                background-color: #495057; /* Màu xám ?en */
+                background-color: #495057; /* Mï¿½u xï¿½m ?en */
                 color: white;
                 padding: 12px 30px;
                 font-size: 16px;
@@ -108,7 +109,7 @@
                 margin-right: 10px;
             }
             .btn-maintenance:hover {
-                background-color: #343a40; /* Màu xám ?en ??m h?n khi hover */
+                background-color: #343a40; /* Mï¿½u xï¿½m ?en ??m h?n khi hover */
                 color: white;
                 box-shadow: 0 0 8px 2px rgba(108, 117, 125, 0.5);
             }
@@ -146,6 +147,10 @@
             System.out.println("STATUS IN CompleteMAINTAIN" + status_want_update);
 
             Staff staff = (Staff) session.getAttribute("userStaff");
+            
+            // Láº¥y HashMap chá»©a roomDeviceId -> deviceName tá»« attribute
+            Map<Integer, String> deviceMap = (Map<Integer, String>) request.getAttribute("deviceMap");
+            
             if (staff == null || roomTaskID == 0 || status_want_update == null || room == null) {
                 System.out.println("Do co gi do null nen do ve lai trang login a");
                 response.sendRedirect(IConstant.loginPage);
@@ -206,30 +211,34 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="list-group list-group-flush">
+                                            <%
+                                            if (deviceMap != null && !deviceMap.isEmpty()) {
+                                                for (Map.Entry<Integer, String> entry : deviceMap.entrySet()) {
+                                                    int roomDeviceId = entry.getKey();
+                                                    String deviceName = entry.getValue();
+                                            %>
                                             <div class="list-group-item">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="airConditioner" name="damagedItems" value="air_conditioner">
-                                                    <label class="form-check-label" for="airConditioner">Air Conditioner</label>
+                                                    <input class="form-check-input" 
+                                                           type="checkbox" 
+                                                           id="device_<%= roomDeviceId %>" 
+                                                           name="roomDeviceIds" 
+                                                           value="<%= roomDeviceId %>">
+                                                    <label class="form-check-label" for="device_<%= roomDeviceId %>">
+                                                        <%= deviceName %>
+                                                    </label>
                                                 </div>
                                             </div>
+                                            <%
+                                                }
+                                            } else {
+                                            %>
                                             <div class="list-group-item">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="television" name="damagedItems" value="television">
-                                                    <label class="form-check-label" for="television">Television</label>
-                                                </div>
-                                            </div>                                          
-                                            <div class="list-group-item">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="toilet" name="damagedItems" value="toilet" checked>
-                                                    <label class="form-check-label" for="toilet">Toilet</label>
-                                                </div>
+                                                <p class="text-center text-muted">No devices found in this room.</p>
                                             </div>
-                                            <div class="list-group-item">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="light" name="damagedItems" value="light">
-                                                    <label class="form-check-label" for="light">Light</label>
-                                                </div>
-                                            </div>
+                                            <%
+                                            }
+                                            %>
                                         </div>
                                     </div>
 

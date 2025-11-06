@@ -8,6 +8,7 @@ public class RoomDevice {
     private int roomId;
     private int deviceId;
     private int quantity;
+    private Integer status;
 
     // Constructors
     public RoomDevice() {}
@@ -18,11 +19,26 @@ public class RoomDevice {
         this.quantity = quantity;
     }
 
+    public RoomDevice(int roomId, int deviceId, int quantity, Integer status) {
+        this.roomId = roomId;
+        this.deviceId = deviceId;
+        this.quantity = quantity;
+        this.status = status;
+    }
+
     public RoomDevice(int roomDeviceId, int roomId, int deviceId, int quantity) {
         this.roomDeviceId = roomDeviceId;
         this.roomId = roomId;
         this.deviceId = deviceId;
         this.quantity = quantity;
+    }
+
+    public RoomDevice(int roomDeviceId, int roomId, int deviceId, int quantity, Integer status) {
+        this.roomDeviceId = roomDeviceId;
+        this.roomId = roomId;
+        this.deviceId = deviceId;
+        this.quantity = quantity;
+        this.status = status;
     }
 
     // Getters and Setters
@@ -58,6 +74,14 @@ public class RoomDevice {
         this.quantity = quantity;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "RoomDevice{" +
@@ -65,6 +89,7 @@ public class RoomDevice {
                 ", roomId=" + roomId +
                 ", deviceId=" + deviceId +
                 ", quantity=" + quantity +
+                ", status=" + status +
                 '}';
     }
 }

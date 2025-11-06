@@ -72,6 +72,7 @@ public interface IConstant {
     public static final String detailProfileStaffPage = "./detailProfileStaffPage.jsp";
     public static final String completeMaintain = "./completeMaintain.jsp";
     public static final String updateMaintain = "./updateMaintain.jsp";
+    public static final String takeDeviceForMaintenance = "./takeDeviceForMaintenance";
     
     //----------------------------------------------------------------------
     public static final String systemConfigPage = "/" + adminFilter + "/systemConfig.jsp";
