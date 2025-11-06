@@ -33,7 +33,7 @@ public class DetailProfileStaffController extends HttpServlet {
                 response.sendRedirect(IConstant.loginPage);
                 return;
             } else {
-                //Lay roomTask no da lam
+                
                 System.out.println("hehehe");
                 request.getRequestDispatcher(IConstant.detailProfileStaffPage).forward(request, response);
             }    

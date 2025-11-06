@@ -4,6 +4,12 @@
     Author     : TranHongGam
 --%>
 
+<%@page import="model.Room"%>
+<%@page import="dao.RoomDAO"%>
+<%@page import="java.time.LocalDate"%>
+<%@page import="model.RoomTask"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="utils.IConstant"%>
 <%@page import="model.Staff"%>
 <%@page contentType="text/html" pageEncoding="windows-1252"%>
 <!DOCTYPE html>
@@ -25,14 +31,92 @@
             .btn-outline-secondary {
                 transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
             }
+
         </style>
     </head>
     <body>
-        <jsp:include page="header.jsp"/>
+
         <%
             Staff staff = (Staff) session.getAttribute("userStaff");
-
+            String startDate = (String) request.getAttribute("START");
+            String endDate = (String) request.getAttribute("END");
+            ArrayList<RoomTask> listPerformance = (ArrayList) request.getAttribute("LIST_REPORT");
+            String FLAG = (String) request.getAttribute("FLAG");
+            RoomDAO roomD = new RoomDAO();
+            ArrayList<Room> listRoom = roomD.getAllRoom();
         %>
+        <div class="header" 
+             style="
+             padding:1.5rem 2.5rem;
+             background: white;
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             border-bottom: 0.1rem solid #e5e7eb;
+             position: fixed;
+             top: 0;
+             width: 100%;
+             z-index: 1030;">
+
+            <div class="employee-info" style="width: 70%" >
+                <h2 style="font-size: 3rem; margin-bottom: 0.8rem; color: #1f2937;">Staff: <%= staff.getFullName()%></h2>
+                <p style="color: #6b7280; font-size: 1.4rem; margin-bottom: 0;">
+                    <i class="bi bi-circle-fill text-success" 
+                       style="font-size: 1em; vertical-align: text-top; margin-right: 5px;"></i>
+                    is active 
+                </p>
+            </div>
+
+            <div style="
+                 width: 30%;
+                 display: flex;
+                 justify-content: flex-end;
+                 flex-wrap: wrap;">
+
+                <div style="
+                     width: 70%;
+                     flex-shrink: 0;
+                     padding-right: 2rem;
+                     text-align: end;"> 
+                    <form action="<%= IConstant.takeRoomForCleanController%>"  method="get">
+                        <button type="submit" class="export-btn filter-btn" 
+                                style="
+                                background: white;
+                                color: #374151;
+                                padding: 1rem 2rem;
+                                border: 1px solid #374151 !important;
+                                border-radius: 0.6rem;
+                                cursor: pointer;
+                                font-size: 1.4rem;
+                                font-weight: 600;
+                                width: 60%;">
+                            Back Home
+                        </button>
+                    </form>
+                </div>
+
+                <div style="
+                     width: 30%;
+                     flex-shrink: 0;
+                     text-align: end;"> 
+                    <form action="<%= request.getContextPath()%>/logout"  method="get">
+                        <button type="submit" class="export-btn" 
+                                style="
+                                background: #374151;
+                                color: white;
+                                padding: 1rem 2rem;
+                                border: none;
+                                border-radius: 0.6rem;
+                                cursor: pointer;
+                                font-size: 1.4rem;
+                                width: 100%;">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
         <div class="container main-content">
             <main class="container-fluid py-4">
                 <div class="card shadow-sm mb-4">
@@ -47,15 +131,8 @@
                                 </div>
                             </div>
                             <div class="col-10 col-md text-center text-md-start ">
-                                <h4 class="mb-1">Mai Anh</h4>
+                                <h4 class="mb-1"><%= staff.getFullName()%></h4>
                                 <p class="text-muted mb-0">Housekeeping Staff - Morning Shift</p>
-                            </div>
-                        </div>
-                        <div class="row mb-3 pe-5" >
-                            <div class="col-12">
-                                <button class="btn btn-outline-secondary me-3 ">
-                                    <span class="d-none d-md-inline">Back home </span><i class="bi bi-arrow-right me-2"></i>
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -67,24 +144,37 @@
                             <i class="fas fa-calendar-alt text-primary me-2"></i>
                             Select Report Time Period
                         </h5>
-                        <div class="row g-3">
-                            <div class="col-12 col-md-5"  style="padding: 5px;">
-                                <label class="form-label">Start Date</label>
-                                <input type="date" class="form-control" id="startDate">
+                        <form action="<%= IConstant.reportByTimeHKController%>" method="POST">
+                            <div class="row g-3">
+
+                                <div class="col-12 col-md-4" style="padding: 5px;">
+                                    <label class="form-label">Start Date</label>
+                                    <input type="date" class="form-control form-control-lg" value="<%= startDate == null ? "" : startDate%>" id="startDate" name="start_date" required>
+                                </div>
+                                <div class="col-12 col-md-4" style="padding: 5px;">
+                                    <label class="form-label">End Date</label>
+                                    <input type="date" class="form-control form-control-lg" value="<%= endDate == null ? "" : endDate%>" id="endDate" name="end_date" required>
+                                </div>
+                                <div class="col-12 col-md-2 d-flex align-items-end">
+                                    <button class="btn btn-primary btn-lg w-100" type="submit">
+                                        <i class="fas fa-search me-2"></i>View
+                                    </button>
+                                </div>
                             </div>
-                            <div class="col-12 col-md-5" style="padding: 5px;">
-                                <label class="form-label">End Date</label>
-                                <input type="date" class="form-control" id="endDate">
-                            </div>
-                            <div class="col-12 col-md-2 d-flex align-items-end">
-                                <button class="btn btn-primary w-100">
-                                    <i class="fas fa-search me-2"></i>View
-                                </button>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
-
+                <!---------------------------------------------------------------------------------------------------->
+                <%
+                    if (FLAG != null && FLAG.equals("true")) {
+                        if (listPerformance == null || listPerformance.isEmpty()) {
+                        %>
+                        <div class="alert alert-danger" role="alert">
+                            <h4 class="mb-0">Do not work on this task during <%= IConstant.formatDate(LocalDate.parse(startDate)) %> - <%= IConstant.formatDate(LocalDate.parse(endDate)) %></h4>
+                        </div>
+                        <%
+                        } else {
+                %>
                 <div class="card shadow-sm">
                     <div class="card-header bg-white">
                         <h5 class="mb-0">
@@ -100,93 +190,37 @@
                                         <th>Date</th>
                                         <th>Rooms Cleaned</th>
                                         <th class="d-none d-md-table-cell">Working Shift</th>
-                                        <th class="d-none d-lg-table-cell">Avg. Time</th>
-                                        <th class="d-none d-lg-table-cell">Note</th>
+                                        <th class="d-none d-lg-table-cell">Staff Implement</th>
+                                        <th class="d-none d-lg-table-cell">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <%
+                                        for (RoomTask roomTask : listPerformance) {
+                                            for (Room room : listRoom) {
+                                                if(roomTask.getRoomID() == room.getRoomId()){
+                                               
+                                    %>
                                     <tr>
-                                        <td><strong>05/11/2025</strong></td>
+                                        <td><strong><%= IConstant.formatDate(roomTask.getEndTime().toLocalDate()) %></strong></td>
                                         <td>
-                                            <span class="badge bg-success fs-6">11 rooms</span>
+                                            <span class="badge bg-success fs-6"><%= room.getRoomNumber() %></span>
                                         </td>
-                                        <td class="d-none d-md-table-cell">Morning Shift</td>
-                                        <td class="d-none d-lg-table-cell">25 minutes/room</td>
+                                        <td class="d-none d-md-table-cell">Basic Shift</td>
+                                        <td class="d-none d-lg-table-cell"><%= roomTask.getStaffID() %></td>
                                         <td class="d-none d-lg-table-cell">
-                                            <span class="badge bg-success">Excellent completion</span>
+                                            <span class="badge bg-success"><%= roomTask.getStatusClean() %></span>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td><strong>04/11/2025</strong></td>
-                                        <td>
-                                            <span class="badge bg-success fs-6">9 rooms</span>
-                                        </td>
-                                        <td class="d-none d-md-table-cell">Morning Shift</td>
-                                        <td class="d-none d-lg-table-cell">27 minutes/room</td>
-                                        <td class="d-none d-lg-table-cell">
-                                            <span class="badge bg-warning">1 room incomplete</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>03/11/2025</strong></td>
-                                        <td>
-                                            <span class="badge bg-success fs-6">10 rooms</span>
-                                        </td>
-                                        <td class="d-none d-md-table-cell">Morning Shift</td>
-                                        <td class="d-none d-lg-table-cell">26 minutes/room</td>
-                                        <td class="d-none d-lg-table-cell">
-                                            <span class="badge bg-success">Good completion</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>02/11/2025</strong></td>
-                                        <td>
-                                            <span class="badge bg-success fs-6">12 rooms</span>
-                                        </td>
-                                        <td class="d-none d-md-table-cell">Morning Shift</td>
-                                        <td class="d-none d-lg-table-cell">24 minutes/room</td>
-                                        <td class="d-none d-lg-table-cell">
-                                            <span class="badge bg-success">Fastest this week</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>01/11/2025</strong></td>
-                                        <td>
-                                            <span class="badge bg-success fs-6">8 rooms</span>
-                                        </td>
-                                        <td class="d-none d-md-table-cell">Morning Shift</td>
-                                        <td class="d-none d-lg-table-cell">28 minutes/room</td>
-                                        <td class="d-none d-lg-table-cell">
-                                            <span class="badge bg-info">Normal</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>31/10/2025</strong></td>
-                                        <td>
-                                            <span class="badge bg-success fs-6">11 rooms</span>
-                                        </td>
-                                        <td class="d-none d-md-table-cell">Morning Shift</td>
-                                        <td class="d-none d-lg-table-cell">25 minutes/room</td>
-                                        <td class="d-none d-lg-table-cell">
-                                            <span class="badge bg-success">Good completion</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>30/10/2025</strong></td>
-                                        <td>
-                                            <span class="badge bg-success fs-6">10 rooms</span>
-                                        </td>
-                                        <td class="d-none d-md-table-cell">Morning Shift</td>
-                                        <td class="d-none d-lg-table-cell">26 minutes/room</td>
-                                        <td class="d-none d-lg-table-cell">
-                                            <span class="badge bg-success">Good completion</span>
-                                        </td>
-                                    </tr>
+                                    <%          }
+                                            }
+                                        }
+                                    %>
                                 </tbody>
                                 <tfoot class="table-light">
                                     <tr>
                                         <td><strong>Total</strong></td>
-                                        <td><strong class="text-primary">71 rooms</strong></td>
+                                        <td><strong class="text-primary"><%= listPerformance.size() %> rooms</strong></td>
                                         <td class="d-none d-md-table-cell" colspan="3">
                                             <strong>Avg. Time: 26 minutes/room</strong>
                                         </td>
@@ -196,6 +230,19 @@
                         </div>
                     </div>
                 </div>
+                <%
+                        }
+                    }else if(FLAG != null && !FLAG.equals("true")){
+                         %>
+                         <div class="alert alert-danger" role="alert">
+                             <h4 class="mb-0"><%= FLAG%></h4>
+                         </div>
+                        <%
+                    }
+                %>
+
+
+                <!---------------------------------------------------------------------------------------------------->
             </main>
         </div>
 
