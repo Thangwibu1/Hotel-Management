@@ -4,21 +4,23 @@
  */
 package controller.manager;
 
+import dao.ManageReportDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import utils.IConstant;
+import model.FrequentGuest;
 
 /**
  *
  * @author trinhdtu
  */
-@WebServlet(name = "DashboardController", urlPatterns = {"/manager/dashboard"})
-public class DashboardController extends HttpServlet {
+@WebServlet(name = "GuestReportController", urlPatterns = {"/manager/GuestReportController"})
+public class GuestReportController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,46 +35,16 @@ public class DashboardController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
-            String tab = request.getParameter("tab");
-            if (tab == null) {
-                tab = "dashboard";
+            ManageReportDAO reportDAO = new ManageReportDAO();
+            ArrayList<FrequentGuest> topGuests = reportDAO.getTopFrequentGuests(10);
+            if (topGuests != null && !topGuests.isEmpty()) {
+                request.setAttribute("topGuests", topGuests);
+                request.getRequestDispatcher("./guest.jsp").forward(request, response);
+            }else{
+                request.setAttribute("ERROR", "NO GUEST FREQUENT");
+                request.getRequestDispatcher("./guest.jsp").forward(request, response);
             }
 
-            switch (tab) {
-                case "dashboard":
-                    request.setAttribute("CURRENT_TAB", "dashboard");
-                    System.out.println(request.getContextPath());
-                    request.getRequestDispatcher("./dashboard.jsp").forward(request, response);
-
-//                    request.getRequestDispatcher(IConstant.revenueReportController).forward(request, response);
-                    break;
-                case "guests":
-                    request.setAttribute("CURRENT_TAB", "guests");
-                    System.out.println(request.getContextPath());
-                    request.getRequestDispatcher(IConstant.guestReportController).forward(request, response);
-                    break;
-                case "services":
-                    request.setAttribute("CURRENT_TAB", "services");
-                    System.out.println(request.getContextPath());
-//                    request.getRequestDispatcher("./services.jsp").forward(request, response);
-
-                    request.getRequestDispatcher(IConstant.servicesReportController).forward(request, response);
-                    break;
-                case "occupancy":
-                    request.setAttribute("CURRENT_TAB", "occupancy");
-                    System.out.println(request.getContextPath());
-//                    request.getRequestDispatcher("./occupancy.jsp").forward(request, response);
-
-                    request.getRequestDispatcher(IConstant.occupancyReportController).forward(request, response);
-                    break;
-                case "cancellations":
-                    request.setAttribute("CURRENT_TAB", "cancellations");
-                    System.out.println(request.getContextPath());
-//                    request.getRequestDispatcher("./cancel.jsp").forward(request, response);
-                    request.getRequestDispatcher(IConstant.cancellationsReportController).forward(request, response);
-                    break;
-
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

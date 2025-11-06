@@ -107,8 +107,7 @@ public class GuestDAO {
     public boolean checkDuplicateIdNumber(String idNumber) {
         boolean isDuplicate = false;
         String sql = "SELECT COUNT(*) AS count FROM [HotelManagement].[dbo].[GUEST] WHERE [IDNumber] = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( Connection conn = DBConnection.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, idNumber);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -124,8 +123,7 @@ public class GuestDAO {
     public boolean checkDuplicateEmail(String email) {
         boolean isDuplicate = false;
         String sql = "SELECT COUNT(*) AS count FROM [HotelManagement].[dbo].[GUEST] WHERE [Email] = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try ( Connection conn = DBConnection.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -159,8 +157,12 @@ public class GuestDAO {
             e.printStackTrace();
         } finally {
             try {
-                if (ps != null) ps.close();
-                if (con != null) con.close();
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -183,15 +185,19 @@ public class GuestDAO {
             e.printStackTrace();
         } finally {
             try {
-                if (ps != null) ps.close();
-                if (con != null) con.close();
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
         return result;
     }
-    
+
     public Guest getGuestByIdNumber(String idNumber) {
         Guest guest = null;
 
