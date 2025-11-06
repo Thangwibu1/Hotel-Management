@@ -37,7 +37,7 @@ TranHongGam --%>
       }
     </style>
   </head>
-  <body style="padding-top: 100px">
+  <body >
     <% 
         Staff staff = (Staff) session.getAttribute("userStaff"); 
         ArrayList<Room> rooms = (ArrayList<Room>) request.getAttribute("rooms");
