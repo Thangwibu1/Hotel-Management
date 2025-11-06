@@ -618,119 +618,81 @@
     }
 }
 
-/* Revenue Report Styles */
-.report-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
+.tabs {
+    display:flex;
+    gap:8px;
+    background:#f3f4f6;
+    padding:6px;
+    border-radius:12px
 }
-
+.tab {
+    padding:8px 12px;
+    border:none;
+    border-radius:8px;
+    background:transparent;
+    font-weight:600;
+    cursor:pointer;
+}
+.tab.active {
+    background:#111827;
+    color:#fff
+}
+.card {
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    box-shadow:0 1px 2px rgba(0,0,0,0.05);
+}
 .report-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--ink);
-    margin: 0;
+    font-size:20px;
+    font-weight:700;
+    margin:0;
 }
-
-.time-filters {
-    display: flex;
-    gap: 12px;
-}
-
-.filter-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--ink);
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.filter-btn:hover,
-.filter-btn.active {
-    background: var(--brand);
-    color: white;
-    border-color: var(--brand);
-}
-
-/* Revenue Table */
 .revenue-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 32px;
+    width:100%;
+    border-collapse:collapse;
 }
-
-.revenue-table thead th {
-    text-align: left;
-    padding: 16px;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--muted);
-    border-bottom: 2px solid var(--line);
+.revenue-table th, .revenue-table td {
+    padding:10px 12px;
+    border-bottom:1px solid #e5e7eb;
+    text-align:left;
 }
-
-.revenue-table tbody td {
-    padding: 16px;
-    font-size: 15px;
-    border-bottom: 1px solid var(--line);
-}
-
-.revenue-table tbody tr:hover {
-    background: var(--bg);
-}
-
 .change-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 12px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 700;
-    background: #000;
-    color: white;
+    display:inline-block;
+    font-weight:600;
+    padding:4px 8px;
+    border-radius:8px;
 }
-
-.change-badge svg {
-    width: 14px;
-    height: 14px;
+.change-badge.positive {
+    color:#16a34a;
+    background:#dcfce7;
 }
-
-/* Summary Cards */
-.summary-cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+.change-badge.negative {
+    color:#dc2626;
+    background:#fee2e2;
 }
-
+.summary-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
+    gap:16px;
+}
 .summary-card {
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 24px;
+    background:#f9fafb;
+    border:1px solid #e5e7eb;
+    border-radius:10px;
+    padding:12px;
+    text-align:center;
 }
-
 .summary-label {
-    font-size: 14px;
-    color: var(--muted);
-    margin-bottom: 8px;
+    color:#6b7280;
+    font-size:14px;
+    margin-bottom:4px;
 }
-
 .summary-value {
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--ink);
+    font-size:18px;
+    font-weight:700;
+    color:#111827;
 }
-
-@media (max-width: 1024px) {
-    .summary-cards {
-        grid-template-columns: 1fr;
-    }
+.spacer {
+    height:16px;
 }

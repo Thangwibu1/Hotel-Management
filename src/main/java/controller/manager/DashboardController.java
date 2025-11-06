@@ -42,9 +42,9 @@ public class DashboardController extends HttpServlet {
                 case "dashboard":
                     request.setAttribute("CURRENT_TAB", "dashboard");
                     System.out.println(request.getContextPath());
-                    request.getRequestDispatcher("./dashboard.jsp").forward(request, response);
+//                    request.getRequestDispatcher("./dashboard.jsp").forward(request, response);
 
-//                    request.getRequestDispatcher(IConstant.revenueReportController).forward(request, response);
+                    request.getRequestDispatcher(IConstant.revenueReportController).forward(request, response);
                     break;
                 case "guests":
                     request.setAttribute("CURRENT_TAB", "guests");

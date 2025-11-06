@@ -4,6 +4,7 @@
  */
 package dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import model.CancellationStat;
 import model.FrequentGuest;
 import model.OccupancyRoom;
+import model.RevenueRow;
 import model.ServiceUsage;
 import utils.DBConnection;
 
@@ -168,5 +170,210 @@ public class ManageReportDAO {
             e.printStackTrace();
         }
         return out;
+    }
+
+    private static class GroupConf {
+
+        String groupBy;
+        String selectLabel;
+        String orderBy;
+    }
+
+    private GroupConf conf(String range) {
+        GroupConf c = new GroupConf();
+        String r = range == null ? "daily" : range.toLowerCase();
+        switch (r) {
+            case "monthly":
+                c.groupBy = "YEAR(i.IssueDate), MONTH(i.IssueDate)";
+                c.selectLabel = "CONCAT(CAST(YEAR(i.IssueDate) AS varchar(4)),'-',RIGHT('0'+CAST(MONTH(i.IssueDate) AS varchar(2)),2))";
+                c.orderBy = "YEAR(i.IssueDate), MONTH(i.IssueDate)";
+                break;
+            case "yearly":
+                c.groupBy = "YEAR(i.IssueDate)";
+                c.selectLabel = "CAST(YEAR(i.IssueDate) AS NVARCHAR(4))";
+                c.orderBy = "MIN(i.IssueDate)";
+                break;
+            default: // daily
+                c.groupBy = "CAST(i.IssueDate AS DATE)";
+                c.selectLabel = "FORMAT(i.IssueDate,'yyyy-MM-dd')";
+                c.orderBy = "MIN(i.IssueDate)";
+        }
+        return c;
+    }
+
+    public ArrayList<RevenueRow> getRevenueStats(String range) throws ClassNotFoundException {
+        ArrayList<RevenueRow> list = new ArrayList<>();
+        GroupConf c = conf(range);
+
+        String sql
+                = "SELECT " + c.selectLabel + " AS period, "
+                + "       SUM(i.TotalAmount) AS revenue, "
+                + "       COUNT(b.BookingID) AS roomsSold, "
+                + "       " + c.orderBy + " AS ord "
+                + "FROM dbo.INVOICE i "
+                + "JOIN dbo.BOOKING b ON b.BookingID = i.BookingID "
+                + "WHERE i.Status = 'Paid' "
+                + "GROUP BY " + c.groupBy + " "
+                + "ORDER BY " + c.orderBy;
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = DBConnection.getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            BigDecimal prev = null;
+            while (rs.next()) {
+                String period = rs.getString("period");
+                BigDecimal revenue = rs.getBigDecimal("revenue");
+                int roomsSold = rs.getInt("roomsSold");
+
+                double change = 0.0;
+                if (prev != null && prev.doubleValue() != 0.0) {
+                    change = (revenue.doubleValue() - prev.doubleValue()) / prev.doubleValue() * 100.0;
+                }
+
+                list.add(new RevenueRow(period, revenue, roomsSold, change));
+                prev = revenue;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+
+        return list;
+    }
+
+    // =============== 2) Average ===============
+    public BigDecimal getAverage(String range) throws ClassNotFoundException {
+        GroupConf c = conf(range);
+        String sql
+                = "SELECT AVG(x.rev) "
+                + "FROM (SELECT SUM(i.TotalAmount) AS rev "
+                + "      FROM dbo.INVOICE i "
+                + "      WHERE i.Status='Paid' "
+                + "      GROUP BY " + c.groupBy + ") x";
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        BigDecimal avg = BigDecimal.ZERO;
+
+        try {
+            conn = DBConnection.getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next() && rs.getBigDecimal(1) != null) {
+                avg = rs.getBigDecimal(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+
+        return avg;
+    }
+
+    // =============== 3) Best period (label + $) ===============
+    public String getBestPeriod(String range) throws ClassNotFoundException {
+        GroupConf c = conf(range);
+        String sql
+                = "SELECT TOP 1 " + c.selectLabel + " AS label, SUM(i.TotalAmount) AS total "
+                + "FROM dbo.INVOICE i "
+                + "WHERE i.Status='Paid' "
+                + "GROUP BY " + c.groupBy + " "
+                + "ORDER BY total DESC";
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String best = "N/A";
+
+        try {
+            conn = DBConnection.getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                best = rs.getString("label") + " ($" + rs.getBigDecimal("total") + ")";
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+
+        return best;
+    }
+
+    // =============== 4) Total ===============
+    public BigDecimal getTotal(String range) throws ClassNotFoundException {
+        String sql = "SELECT SUM(i.TotalAmount) FROM dbo.INVOICE i WHERE i.Status='Paid'";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        BigDecimal total = BigDecimal.ZERO;
+
+        try {
+            conn = DBConnection.getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next() && rs.getBigDecimal(1) != null) {
+                total = rs.getBigDecimal(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (Exception e) {
+            }
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (Exception e) {
+            }
+        }
+
+        return total;
     }
 }

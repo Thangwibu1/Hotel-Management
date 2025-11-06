@@ -4,13 +4,17 @@
  */
 package controller.manager;
 
+import dao.ManageReportDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.RevenueRow;
 
 /**
  *
@@ -28,20 +32,52 @@ public class RevenueReportController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    private String normalizeRange(String range) {
+        if (range == null) {
+            return "daily";
+        }
+        String r = range.toLowerCase();
+        switch (r) {
+            case "monthly":
+            case "yearly":
+                return r;
+            default:
+                return "daily";
+        }
+    }
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet RevenueReportController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet RevenueReportController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String range = normalizeRange(request.getParameter("range"));
+
+        try {
+            ManageReportDAO reportDao = new ManageReportDAO();
+
+            ArrayList<RevenueRow> result = reportDao.getRevenueStats(range);
+            BigDecimal avgRevenue = reportDao.getAverage(range);
+            String bestPeriod = reportDao.getBestPeriod(range);
+            BigDecimal totalRevenue = reportDao.getTotal(range);
+
+            // G?n attribute cho JSP
+            request.setAttribute("RANGE", range);
+            request.setAttribute("result", result);
+            request.setAttribute("avgRevenue", avgRevenue);
+            request.setAttribute("bestPeriod", bestPeriod);
+            request.setAttribute("totalRevenue", totalRevenue);
+
+            request.getRequestDispatcher("/manager/dashboard.jsp").forward(request, response);
+
+        } catch (Exception ex) {
+            // Log và show trang l?i ??n gi?n
+            ex.printStackTrace();
+            request.setAttribute("RANGE", range);
+            request.setAttribute("result", new ArrayList<RevenueRow>());
+            request.setAttribute("avgRevenue", BigDecimal.ZERO);
+            request.setAttribute("bestPeriod", "N/A");
+            request.setAttribute("totalRevenue", BigDecimal.ZERO);
+            request.setAttribute("error", "Không t?i ???c d? li?u báo cáo. Vui lòng th? l?i.");
+            request.getRequestDispatcher("/manager/dashboard.jsp").forward(request, response);
         }
     }
 
