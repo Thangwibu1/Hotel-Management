@@ -6,7 +6,37 @@
 
 <%@page contentType="text/html" pageEncoding="windows-1252"%>
 <!-- Bill Popup Fragment -->
-<div id="billPopup" class="bill-overlay" style="display: none;">
+<style>
+    .bill-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+    
+    .bill-modal {
+        background: white;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+    
+    .payment-btn.active {
+        background-color: #007bff;
+        color: white;
+        border-color: #007bff;
+    }
+</style>
+<div id="billPopup" class="bill-overlay">
     <div class="bill-modal">
         <div class="bill-header">
             <div class="bill-icon">

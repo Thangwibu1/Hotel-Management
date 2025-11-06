@@ -8,8 +8,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.BookingDAO;
 import dao.BookingServiceDAO;
+import dao.RoomTaskDAO;
+import model.Booking;
 import model.BookingService;
 import model.ChoosenService;
+import model.RoomTask;
 import utils.IConstant;
 
 import java.io.IOException;
@@ -59,17 +62,30 @@ public class BookingChangeController extends HttpServlet {
                 if (serviceId[i] != null && !serviceId[i].isEmpty() && quantity[i] != null && !quantity[i].isEmpty() && date[i] != null && !date[i].isEmpty()) {
                     ChoosenService newService = new ChoosenService(Integer.parseInt(serviceId[i]), Integer.parseInt(quantity[i]), LocalDate.parse(date[i]));
                     newServices.add(newService);
+                    
                 }
             }
         }
         // Store the new services in the database
         for (ChoosenService newService : newServices) {
             addBooking(newService, Integer.parseInt(bookingId));
+            if (newService.getServiceId() == 3) {
+                RoomTask roomTask = new RoomTask(Integer.parseInt(bookingId), null, newService.getServiceDate().atStartOfDay(),newService.getServiceDate().atTime(23, 59, 59), "Pending", null, 0);
+                RoomTaskDAO roomTaskDAO = new RoomTaskDAO();
+                boolean roomTaskAdded = roomTaskDAO.insertRoomTaskForService(roomTask);
+                if (!roomTaskAdded) {
+                    System.out.println("Sai me roi");
+                }
+            }
         }
+        // Booking booking = bookingDAO.getBookingById(Integer.parseInt(bookingId));
         if (cancelService != null) {
             for (String id : cancelService) {
                 updateBookingServiceStatus(Integer.parseInt(id), -1);
-            }   
+                // if (Integer.parseInt(id) == 3) {
+                    
+                // }
+            }
         }
         resp.sendRedirect(IConstant.homeServlet);
     }

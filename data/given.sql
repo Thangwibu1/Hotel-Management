@@ -103,7 +103,7 @@ CREATE TABLE ROOM_TASK
     StaffID     INT           NULL,
     StartTime   DATETIME      NULL,
     EndTime     DATETIME      NULL,
-    StatusClean NVARCHAR(50) CHECK (StatusClean IN ('Cleaned', 'In Progress', 'Pending', 'Maintance')),
+    StatusClean NVARCHAR(50) CHECK (StatusClean IN ('Cleaned', 'In Progress', 'Pending', 'Maintenance')),
     Notes       NVARCHAR(500) NULL,
     FOREIGN KEY (RoomID) REFERENCES ROOM (RoomID)
 );
@@ -136,6 +136,7 @@ CREATE TABLE SERVICE
 );
 GO
 
+
 -- 6. Bảng Chi tiết Dịch vụ của Đặt phòng (BOOKING_SERVICE)
 CREATE TABLE BOOKING_SERVICE
 (
@@ -148,6 +149,10 @@ CREATE TABLE BOOKING_SERVICE
     FOREIGN KEY (BookingID) REFERENCES BOOKING (BookingID),
     FOREIGN KEY (ServiceID) REFERENCES SERVICE (ServiceID)
 );
+GO
+
+ALTER TABLE BOOKING_SERVICE
+ADD Note nvarchar(MAX) NULL;
 GO
 
 -- 7. Bảng Hóa đơn (INVOICE)
@@ -199,14 +204,24 @@ CREATE TABLE SYSTEM_CONFIG
     ConfigValue NVARCHAR(50) NOT NULL
 );
 GO
+CREATE TABLE ASSIGN_TASK (
+    ID VARCHAR(10) PRIMARY KEY, 
+    LastTimeAssign DATETIME NOT NULL
+);
 
+ALTER TABLE ROOM_TASK
+ADD isSystemTask INT NOT NULL;
+
+
+ALTER TABLE BOOKING_SERVICE
+ADD StaffID INT NULL;
 -- ===================================================================
 -- PHẦN 2: CHÈN DỮ LIỆU MẪU
 -- ===================================================================
 
 -- 1. Dữ liệu bảng GUEST
 INSERT INTO GUEST (FullName, Phone, Email, PasswordHash, Address, IDNumber, DateOfBirth)
-VALUES ('Nguyễn Văn An', '0901234567', 'nguyenvanan@email.com', 'hashed_password_1', '123 Lê Lợi, Q1, TPHCM',
+VALUES ('Nguyễn Văn An', '0901234567', 'nguyenvanan@email.com', '123', '123 Lê Lợi, Q1, TPHCM',
         '012345678', '1990-05-15'),
        ('Trần Thị Bình', '0912345678', 'tranthibinh@email.com', 'hashed_password_2', '456 Hai Bà Trưng, Đà Nẵng',
         '087654321', '1988-11-22'),
@@ -258,10 +273,8 @@ GO
 -- 4. Dữ liệu bảng SERVICE
 INSERT INTO SERVICE (ServiceName, ServiceType, Price)
 VALUES ('Breakfast Buffet', 'Food', 15.00),
-       ('Set Menu Lunch', 'Food', 25.00),
        ('Laundry Service (per kg)', 'Laundry', 5.00),
-       ('Spa Massage (60 mins)', 'Spa', 40.00),
-       ('Room Keeping', 'HouseKeeping', 30.00)
+       ('Room Keeping', 'HouseKeeping', 5.00)
 GO
 
 -- 5. Dữ liệu bảng STAFF
@@ -272,7 +285,14 @@ VALUES ('Phạm Minh Quân', 'Manager', 'manager01', 'hash_placeholder_staff_1',
        ('Trần Văn Bình', 'Receptionist', 'receptionist02', 'hash_placeholder_staff_3', '0333334445',
         'binh.tv@hotel.com');
 GO
+INSERT INTO ASSIGN_TASK (ID, LastTimeAssign)
+VALUES ('ASS01', GETDATE());
 
+INSERT INTO [STAFF]
+    (FullName, Role, Username, PasswordHash, Phone, Email)
+VALUES 
+    (N'Mai Thanh', 'ServiceStaff', 'mai', '1', '0901234567', 'maithanh@hotel.com');
+select [TypeName], [Capacity], [PricePerNight] from ROOM_TYPE;
 -- Dọn dẹp bảng trước khi chèn (tùy chọn)
 -- DELETE FROM dbo.ROOM_TASK;
 
@@ -306,8 +326,8 @@ GO
 
 -- Thêm nhân viên Housekeeping mới vào bảng STAFF
 INSERT INTO STAFF (FullName, Role, Username, PasswordHash, Phone, Email)
-VALUES (N'Nguyễn Thị Lan', 'Housekeeping', 'lan.nt', 'hashed_password_1', '0901234567', 'lan.nt@hotel.com'),
-       (N'Trần Văn An', 'Housekeeping', 'an.tv', 'hashed_password_2', '0907654321', 'an.tv@hotel.com');
+VALUES (N'Nguyễn Thị Lan', 'Housekeeping', 'lan.nt', '1', '0901234567', 'lan.nt@hotel.com'),
+       (N'Trần Văn An', 'Housekeeping', 'an.tv', '1', '0907654321', 'an.tv@hotel.com');
 GO
 
 ALTER TABLE BOOKING_SERVICE
@@ -337,3 +357,61 @@ FROM ROOM_TASK;
 
 select [TypeName], [Capacity], [PricePerNight]
 from ROOM_TYPE;
+
+-- ===================================================================
+-- PHẦN 3: DỮ LIỆU VÀ TRIGGER CHO DEVICE VÀ ROOM_DEVICE
+-- ===================================================================
+
+-- Thêm dữ liệu cho bảng DEVICE
+INSERT INTO DEVICE (DeviceName, Description)
+VALUES 
+    (N'TV', N'Tivi màn hình phẳng'),
+    (N'Điều hòa', N'Máy điều hòa nhiệt độ'),
+    (N'Tủ lạnh', N'Tủ lạnh mini'),
+    (N'Ga giường', N'Bộ ga trải giường');
+GO
+
+-- Tạo trigger để tự động thêm 4 thiết bị cơ bản vào mỗi phòng mới
+CREATE TRIGGER trg_AddDevicesToNewRoom
+ON ROOM
+AFTER INSERT
+AS
+BEGIN
+    -- Thêm 4 thiết bị cơ bản cho mỗi phòng mới được tạo
+    INSERT INTO ROOM_DEVICE (RoomID, DeviceID, Quantity)
+    SELECT 
+        i.RoomID,
+        d.DeviceID,
+        1 as Quantity  -- Mỗi thiết bị có số lượng là 1
+    FROM INSERTED i
+    CROSS JOIN DEVICE d
+    WHERE d.DeviceName IN (N'TV', N'Điều hòa', N'Tủ lạnh', N'Ga giường');
+END;
+GO
+
+-- Thêm thiết bị cho các phòng đã tồn tại
+-- Lặp qua tất cả các phòng hiện có và thêm 4 thiết bị cơ bản
+INSERT INTO ROOM_DEVICE (RoomID, DeviceID, Quantity)
+SELECT 
+    r.RoomID,
+    d.DeviceID,
+    1 as Quantity
+FROM ROOM r
+CROSS JOIN DEVICE d
+WHERE d.DeviceName IN (N'TV', N'Điều hòa', N'Tủ lạnh', N'Ga giường');
+GO
+
+-- Kiểm tra dữ liệu đã được thêm
+SELECT * FROM DEVICE;
+GO
+
+SELECT 
+    rd.RoomDeviceID,
+    r.RoomNumber,
+    d.DeviceName,
+    rd.Quantity
+FROM ROOM_DEVICE rd
+JOIN ROOM r ON rd.RoomID = r.RoomID
+JOIN DEVICE d ON rd.DeviceID = d.DeviceID
+ORDER BY r.RoomNumber, d.DeviceName;
+GO

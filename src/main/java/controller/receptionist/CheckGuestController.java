@@ -35,27 +35,18 @@ public class CheckGuestController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
+           
             String guestId = request.getParameter("guestId");
             GuestDAO guestDao = new GuestDAO();
             boolean checkExist = guestDao.checkDuplicateIdNumber(guestId);
-            HttpSession ss = request.getSession();
-            // XÓA H?T flash data c? tr??c
-            ss.removeAttribute("GUEST");
-            ss.removeAttribute("FLASH_NEXT_WAY");
-            ss.removeAttribute("FLASH_ID_NUM");
 
-            // Set l?i data m?i
-            ss.setAttribute("FLASH_NEXT_WAY", checkExist ? "booking" : "createAcc");
-            ss.setAttribute("FLASH_ID_NUM", guestId);
-
+            request.setAttribute("FLASH_ID_NUM", guestId);
+            request.setAttribute("CURRENT_TAB", "bookings");
+            request.setAttribute("CURRENT_STEP", "checkGuest");
             if (checkExist) {
-                ss.setAttribute("GUEST", guestDao.getGuestByIdNumber(guestId));
-            } else {
-                ss.removeAttribute("GUEST");
+                request.setAttribute("GUEST", guestDao.getGuestByIdNumber(guestId));
             }
-            ss.setAttribute("FLASH_ID_NUM", guestId);
-            response.sendRedirect(request.getContextPath() + "/receptionist/receptionist?tab=bookings");
-
+            request.getRequestDispatcher("/receptionist/bookingPage.jsp?tab=bookings").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -74,7 +65,7 @@ public class CheckGuestController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 //        HttpSession ss = request.getSession(false);
-        
+
         processRequest(request, response);
     }
 

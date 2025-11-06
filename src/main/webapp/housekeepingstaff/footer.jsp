@@ -3,56 +3,52 @@
     Created on : Oct 5, 2025, 11:32:30 AM
     Author     : TranHongGam
 --%>
-
 <%@page import="model.Staff"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%-- ĐÃ SỬA THÀNH UTF-8 --%>
-
-
-
 <%
     Staff staff = (Staff) session.getAttribute("userStaff");
 %>
-<div class="footer-info bg-light border-top" style="padding:2rem ">
-    <div class="row justify-content-center">
-
-        <div class="info-section col-12 col-md-4 text-center">
-            <h3 class="fs-5 fw-bold mb-3 "> Thống kê ca làm việc</h3>
-            <div class="info-item d-flex justify-content-around mb-1">
-                <span class="info-label text-muted me-3">Tổng phòng:</span>
-                <span class="info-value fw-bold text-dark">8</span>
+<div class="footer-info bg-light border-top mt-auto py-3 container-fluid">
+    <%-- container-fluid để nền kéo dài hết chiều rộng --%>
+    <div class="footer-content-wrapper mx-auto" style="max-width: 1200px;"> 
+        <%-- ĐÃ THAY BẰNG DIV MỚI ĐỂ CĂN GIỮA NỘI DUNG --%>
+        <div class="row g-4">
+            <div class="col-12 col-md-4">
+                <h6 class="fw-bold text-dark mb-3">Luxury Hotel</h6>
+                <p class="mb-2 text-muted">
+                    <strong class="text-dark">Address:</strong> 123 Nguyen Hue Street, District 1, Ho Chi Minh City
+                </p>
+                <p class="mb-2 text-muted">
+                    <strong class="text-dark">Email:</strong> info@luxuryhotel.com
+                </p>
+                <p class="mb-2 text-muted">
+                    <strong class="text-dark">Phone:</strong> (84) 28 1234 5678
+                </p>
+                <p class="text-muted small mb-0 mt-3">
+                    © 2025 Luxury Hotel. All rights reserved.
+                </p>
             </div>
-            <div class="info-item d-flex justify-content-around mb-1">
-                <span class="info-label text-muted me-3">Đã hoàn thành:</span>
-                <span class="info-value fw-bold text-success">2</span>
+            <div class="col-12 col-md-4">
+                <h6 class="fw-bold text-dark mb-3">Quick Links</h6>
+                <ul class="list-unstyled text-muted">
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">About Us</a></li>
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Rooms & Services</a></li>
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Special Offers</a></li>
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Careers</a></li>
+                </ul>
             </div>
-            <div class="info-item d-flex justify-content-around mb-1">
-                <span class="info-label text-muted me-3">Còn lại:</span>
-                <span class="info-value fw-bold text-warning">5</span>
+            <div class="col-12 col-md-4">
+                <h6 class="fw-bold text-dark mb-3"> Support & Contact</h6>
+                <p class="mb-2 text-muted">
+                    Hotline: <strong class="text-dark">1800-1234</strong>
+                </p>
+                <p class="mb-2 text-muted">
+                    support@hotel.com
+                </p>
+                <p class="mb-0 text-muted">
+                    IT Department: <strong class="text-dark">Ext. 2345</strong>
+                </p>
             </div>
         </div>
-
-        <div class="info-section col-12 col-md-4 text-center">
-            <h3 class="fs-5 fw-bold mb-3 "> Thông tin hệ thống</h3>
-            <div class="info-item mb-1">
-                <span class="info-label text-muted">Hệ thống quản lý phòng <strong class="text-dark">v2.1</strong></span>
-            </div>
-            <div class="info-item mb-1">
-                <span class="info-label text-muted">Nhân viên hiện tại: <strong class="text-success"><%= staff.getFullName()%></strong></span>
-            </div>
-        </div>
-
-        <div class="info-section col-12 col-md-4 text-center">
-            <h3 class="fs-5 fw-bold mb-3 ">📞 Hỗ trợ & Liên hệ</h3>
-            <div class="info-item mb-1">
-                <span class="info-label text-muted">📞 Hotline: <strong class="text-dark">1800-1234</strong></span>
-            </div>
-            <div class="info-item mb-1">
-                <span class="info-label text-muted">✉️ support@hotel.com</span>
-            </div>
-            <div class="info-item mb-1">
-                <span class="info-label text-muted">Bộ phận IT: <strong class="text-dark">Ext. 2345</strong></span>
-            </div>
-        </div>
-    </div>
+    </div> <%-- Đóng thẻ footer-content-wrapper --%>
 </div>
