@@ -4,23 +4,20 @@
  */
 package controller.receptionist;
 
-import dao.BookingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.BookingActionRow;
 
 /**
  *
  * @author trinhdtu
  */
-@WebServlet(name = "BookingsController", urlPatterns = {"/receptionist/BookingsController"})
-public class BookingsController extends HttpServlet {
+@WebServlet(name = "NewBookingController", urlPatterns = {"/receptionist/NewBookingController"})
+public class NewBookingController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,14 +32,11 @@ public class BookingsController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
-            
-            BookingDAO bookingDao = new BookingDAO();
-            ArrayList<BookingActionRow> result = bookingDao.getInforBooking();
-            
-            request.setAttribute("RESULT", result);
+            request.setAttribute("CURRENT_STEP", "checkGuest");
             request.setAttribute("CURRENT_TAB", "bookings"); 
-            request.getRequestDispatcher("/receptionist/bookingPage.jsp").forward(request, response);
-        }catch(Exception e){
+            request.getRequestDispatcher("/receptionist/bookingPage.jsp?tab=bookings").forward(request, response);
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

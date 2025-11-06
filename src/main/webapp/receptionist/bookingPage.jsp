@@ -27,5 +27,13 @@
             <!-- ====== JavaScript (inline) ====== -->
         </div>
         <script src="${pageContext.request.contextPath}/receptionist/style.js"></script>
+        <%
+            String error = (String) request.getAttribute("ERROR");
+            if (error != null) {
+        %>
+        <jsp:include page="../receptionist/components/errorPopup.jsp"/>
+        <%
+            }
+        %>
     </body>
 </html>

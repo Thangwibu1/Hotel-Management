@@ -5,6 +5,7 @@
 package controller.receptionist;
 
 import dao.BookingDAO;
+import dao.BookingServiceDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -13,14 +14,24 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.BookingActionRow;
+import model.Booking;
+import model.BookingService;
 
 /**
  *
  * @author trinhdtu
  */
-@WebServlet(name = "BookingsController", urlPatterns = {"/receptionist/BookingsController"})
-public class BookingsController extends HttpServlet {
+@WebServlet(name = "DeleteBookingController", urlPatterns = {"/receptionist/DeleteBookingController"})
+public class DeleteBookingController extends HttpServlet {
+
+    private BookingDAO bookingDAO;
+    private BookingServiceDAO bookingServiceDAO;
+
+    @Override
+    public void init() throws ServletException {
+        bookingDAO = new BookingDAO();
+        bookingServiceDAO = new BookingServiceDAO();
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,15 +45,47 @@ public class BookingsController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String bookingIdStr = request.getParameter("bookingId");
+
         try {
-            
-            BookingDAO bookingDao = new BookingDAO();
-            ArrayList<BookingActionRow> result = bookingDao.getInforBooking();
-            
-            request.setAttribute("RESULT", result);
-            request.setAttribute("CURRENT_TAB", "bookings"); 
-            request.getRequestDispatcher("/receptionist/bookingPage.jsp").forward(request, response);
-        }catch(Exception e){
+            if (bookingIdStr != null && !bookingIdStr.isEmpty()) {
+                int bookingId = Integer.parseInt(bookingIdStr);
+                Booking booking = bookingDAO.getBookingById(bookingId);
+
+                if (booking == null) {
+                    response.sendError(404, "Booking not found");
+                    return;
+                }
+
+                String currentStatus = booking.getStatus();
+
+                if (currentStatus.equalsIgnoreCase("Checked-in")
+                        || currentStatus.equalsIgnoreCase("Checked-out")
+                        || currentStatus.equalsIgnoreCase("Canceled")) {
+
+                    request.setAttribute("ERROR",
+                            "Cannot cancel booking in status: " + currentStatus);
+                    request.getRequestDispatcher("/receptionist/BookingsController").forward(request, response);
+                    return;
+                }
+                ArrayList<BookingService> list = bookingServiceDAO.getBookingServiceByBookingId(bookingId);
+                for (BookingService bs : list) {
+                    bookingServiceDAO.updateBookingServiceStatus(bs.getBookingServiceId(), -1);
+                }
+
+                boolean updated = bookingDAO.updateBookingStatus(bookingId, "Canceled");
+
+                if (updated) {
+                    request.setAttribute("MESSAGE", "Booking #" + bookingId + " has been canceled successfully.");
+                } else {
+                    request.setAttribute("MESSAGE", "Failed to cancel booking #" + bookingId);
+                }
+
+                request.setAttribute("CURRENT_TAB", "bookings");
+                request.setAttribute("CURRENT_STEP", "manage");
+                request.getRequestDispatcher("/receptionist/BookingsController").forward(request, response);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

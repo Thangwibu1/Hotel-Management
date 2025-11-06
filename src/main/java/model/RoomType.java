@@ -18,6 +18,11 @@ public class RoomType {
         this.typeName = typeName;
     }
 
+    public RoomType(String typeName, BigDecimal pricePerNight) {
+        this.typeName = typeName;
+        this.pricePerNight = pricePerNight;
+    }
+    
     public RoomType(String typeName, int capacity, BigDecimal pricePerNight) {
         this.typeName = typeName;
         this.capacity = capacity;

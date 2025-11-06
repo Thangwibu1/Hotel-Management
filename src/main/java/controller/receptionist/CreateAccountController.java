@@ -4,23 +4,23 @@
  */
 package controller.receptionist;
 
-import dao.BookingDAO;
+import dao.GuestDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.BookingActionRow;
+import javax.servlet.http.HttpSession;
+import model.Guest;
 
 /**
  *
  * @author trinhdtu
  */
-@WebServlet(name = "BookingsController", urlPatterns = {"/receptionist/BookingsController"})
-public class BookingsController extends HttpServlet {
+@WebServlet(name = "CreateAccountController", urlPatterns = {"/receptionist/CreateAccountController"})
+public class CreateAccountController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,23 +31,53 @@ public class BookingsController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    private GuestDAO guestDAO;
+
+    @Override
+    public void init() throws ServletException {
+        guestDAO = new GuestDAO();
+    }
+
+    public boolean validate(String email, String idNumber) {
+        return guestDAO.checkDuplicateEmail(email) || guestDAO.checkDuplicateIdNumber(idNumber);
+    }
+
+    public boolean addGuest(String fullName, String phone, String email, String password, String idNumber) {
+        return guestDAO.addGuestForRecep(new Guest(fullName, phone, email, idNumber, password));
+    }
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession ss = request.getSession();
+
         try {
-            
-            BookingDAO bookingDao = new BookingDAO();
-            ArrayList<BookingActionRow> result = bookingDao.getInforBooking();
-            
-            request.setAttribute("RESULT", result);
-            request.setAttribute("CURRENT_TAB", "bookings"); 
-            request.getRequestDispatcher("/receptionist/bookingPage.jsp").forward(request, response);
-        }catch(Exception e){
+            String idNumber = request.getParameter("idNumber");
+            String password = request.getParameter("password");
+            String fullName = request.getParameter("fullName");
+            String email = request.getParameter("email");
+            String phone = request.getParameter("phone");
+
+            if (!validate(email, idNumber)) {
+                addGuest(fullName, phone, email, password, idNumber);
+                Guest newGuest = new GuestDAO().getGuestByIdNumber(idNumber);
+                request.setAttribute("FLASH_ID_NUM", idNumber);
+                request.setAttribute("GUEST", newGuest);
+                request.setAttribute("CURRENT_STEP", "checkGuest");
+                request.setAttribute("CURRENT_TAB", "bookings");
+                request.getRequestDispatcher("/receptionist/bookingPage.jsp?tab=bookings").forward(request, response);
+            } else {
+                request.setAttribute("STATUS", "true");
+                request.setAttribute("CURRENT_TAB", "bookings");
+                request.setAttribute("FLASH_ID_NUM", idNumber);
+                request.getRequestDispatcher("/receptionist/bookingPage.jsp?tab=bookings").forward(request, response);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

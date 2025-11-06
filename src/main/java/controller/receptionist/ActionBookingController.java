@@ -4,23 +4,21 @@
  */
 package controller.receptionist;
 
-import dao.BookingDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.BookingActionRow;
+import utils.IConstant;
 
 /**
  *
  * @author trinhdtu
  */
-@WebServlet(name = "BookingsController", urlPatterns = {"/receptionist/BookingsController"})
-public class BookingsController extends HttpServlet {
+@WebServlet(name = "ActionBookingController", urlPatterns = {"/receptionist/ActionBookingController"})
+public class ActionBookingController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,14 +33,32 @@ public class BookingsController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
-            
-            BookingDAO bookingDao = new BookingDAO();
-            ArrayList<BookingActionRow> result = bookingDao.getInforBooking();
-            
-            request.setAttribute("RESULT", result);
-            request.setAttribute("CURRENT_TAB", "bookings"); 
-            request.getRequestDispatcher("/receptionist/bookingPage.jsp").forward(request, response);
-        }catch(Exception e){
+            String action = request.getParameter("action");
+            String bookingId = request.getParameter("BookingId");
+
+            request.setAttribute("bookingId", bookingId);
+            request.setAttribute("CURRENT_TAB", "bookings");
+            if (action != null || bookingId != null) {
+                try {
+                    switch (action) {
+                        case "view":
+                            request.getRequestDispatcher(IConstant.bookingViewController).forward(request, response);
+                            break;
+                        case "edit":
+                            request.getRequestDispatcher(IConstant.bookingEditController).forward(request, response);
+                            break;
+                        case "delete":
+                            request.getRequestDispatcher(IConstant.bookingDeleteController).forward(request, response);
+                            break;
+                        default:
+                            response.sendError(400, "Unknown action");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    response.sendError(500, "Action failed");
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

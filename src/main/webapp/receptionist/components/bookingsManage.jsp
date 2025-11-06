@@ -17,11 +17,20 @@
     </head>
     <body>
         <!-- BOOKINGS -->
+        <%
+            String step = (String) request.getAttribute("CURRENT_STEP");
+            if (step == null) {
+                step = "manage";
+            }
+            if ("manage".equalsIgnoreCase(step)) {
+        %>
         <section id="bookings" class="screen">
             <div class="card" style="padding:16px">
                 <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
                     <h2 class="panel-title">Booking Management</h2>
-                    <button class="btn primary btnNewBooking">New Booking</button>
+                    <form action="NewBookingController">
+                        <button class="btn primary btnNewBooking" type="submit">New Booking</button>
+                    </form>
                 </div>
                 <div class="spacer"></div>
                 <table>
@@ -36,8 +45,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <%
-                            ArrayList<BookingActionRow> listRow = (ArrayList<BookingActionRow>) request.getAttribute("RESULT");
+                        <%                            ArrayList<BookingActionRow> listRow = (ArrayList<BookingActionRow>) request.getAttribute("RESULT");
                             if (listRow != null && !listRow.isEmpty()) {
                                 for (BookingActionRow row : listRow) {
                         %>
@@ -54,11 +62,17 @@
                             <td><%= row.getBooking().getCheckOutDate().format(IConstant.dateFormat)%></td>
                             <td class="booking-status"><span class="badge"><%= row.getBooking().getStatus()%></span></td>
                             <td>
-                                <div class="actions">
-                                    <button class="btn icon" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg></button>
-                                    <button class="btn icon" title="View"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-icon lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg></button>
-                                    <button class="btn icon" title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
-                                </div>
+                                <form action="ActionBookingController">
+                                    <div class="actions">
+
+                                        <input type="hidden" name="bookingId" value="<%= row.getBooking().getBookingId()%>">
+                                        <button class="btn icon" type="submit" name="action" value="edit" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg></button>
+                                        <button class="btn icon" type="submit" name="action" value="view" title="View"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-icon lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg></button>
+                                        <button class="btn icon" type="submit" name="action" value="delete"
+                                                title="Delete" onclick="return confirm('Delete this booking?');"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+
+                                    </div>
+                                </form>
                             </td>
                         </tr>
                         <%
@@ -70,6 +84,28 @@
             </div>
 
         </section>
+        <%
+        } else if ("checkGuest".equalsIgnoreCase(step)) {
+        %>
         <jsp:include page="../components/checkExistGuest.jsp"/>
+        <%
+        } else if ("selectRoom".equalsIgnoreCase(step)) {
+        %>
+        <jsp:include page="../components/showRooms.jsp"/>
+        <%
+        } else if ("addServices".equalsIgnoreCase(step)) {
+        %>
+        <jsp:include page="../components/addServicePage.jsp"/>
+        <%
+        } else if ("detail".equalsIgnoreCase(step)) {
+        %>
+        <jsp:include page="../components/detailBookingPage.jsp"/>
+        <%
+            }else if ("edit".equalsIgnoreCase(step)) {
+        %>
+        <jsp:include page="../components/editBookingPage.jsp"/>
+        <%
+            }
+        %>
     </body>
 </html>
