@@ -120,12 +120,12 @@
         <div class="container main-content">
             <main class="container-fluid py-4">
                 <div class="card shadow-sm mb-4">
-                    <div class="card-body" style="display: flex; justify-content: space-between;">
-                        <div class="row align-items-center ps-5">
+                    <div class="card-body" >
+                        <div class="row align-items-center p-3" >
                             <div class="col-2 col-md-auto text-center text-md-start mb-3 mb-md-0 ">
                                 <div class="rounded-circle overflow-hidden d-inline-block" style="width: 60px; height: 60px;">
                                     <img src="https://png.pngtree.com/background/20210714/original/pngtree-luxury-background-with-sparkling-elements-vector-image-picture-image_1238565.jpg" 
-                                         alt="Hình n?n l?p lánh" 
+                                         alt="img lap lanh" 
                                          class="img-fluid" 
                                          style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
@@ -135,13 +135,17 @@
                                 <p class="text-muted mb-0">Housekeeping Staff - Morning Shift</p>
                             </div>
                         </div>
+                        <div style="padding-left: 85px;">
+                            <p>Phone: <%= staff.getPhone() %></p>    
+                            <p>Role: <%= staff.getRole() %></p>    
+                            <p>Email: <%= staff.getEmail() %></p>    
+                        </div>
                     </div>
                 </div>
-
                 <div class="card shadow-sm mb-4">
-                    <div class="card-body">
+                    <div class="card-body p-5">
                         <h5 class="card-title mb-3">
-                            <i class="fas fa-calendar-alt text-primary me-2"></i>
+                            <i class="fas fa-calendar-alt text-dark me-2"></i>
                             Select Report Time Period
                         </h5>
                         <form action="<%= IConstant.reportByTimeHKController%>" method="POST">

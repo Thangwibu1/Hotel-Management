@@ -11,6 +11,7 @@ import dao.RoomTaskDAO;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -36,12 +37,14 @@ public class TakeRoomForCleanController extends HttpServlet {
         try {
             System.out.println("DAY LA TAKEROOMCLEAN");  
             RoomTaskDAO d = new RoomTaskDAO();
-            ArrayList<RoomTask> listTask = d.getAllRoomTaskBaseDate(LocalDateTime.now(), 1);
+            ArrayList<RoomTask> listTask = d.getAllRoomTaskBaseDate(LocalDateTime.now(),1);
             
             if (listTask == null || listTask.isEmpty()) {
 //                System.out.println("check xem co lay dc roomTask cua hom nay ko ne . VO DAY LA KO LAY DC");
                 request.getRequestDispatcher(IConstant.makeNewRoomTaskController).forward(request, response);
             } else {
+                //sort  
+
                 ArrayList<RoomTask> listPending = d.getRoomBaseStatus("Pending", LocalDateTime.now());
                 ArrayList<RoomTask> listMaintenance = d.getRoomBaseStatus("Maintenance", LocalDateTime.now());
                 ArrayList<RoomTask> listCleaned = d.getRoomBaseStatus("Cleaned", LocalDateTime.now());
@@ -86,6 +89,7 @@ public class TakeRoomForCleanController extends HttpServlet {
         } 
 
     } 
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
