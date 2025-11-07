@@ -191,7 +191,7 @@
                         </div>
                         <div class="checkbox-list d-flex justify-content-center  ">
                             
-                            <form action="<%= IConstant.takeDeviceForNoteMaintenanceController %>" method="post" style="width: 55% ; padding-bottom: 4rem; " >
+                            <form action="<%= IConstant.takeDeviceForNoteMaintenanceController %>" method="get" style="width: 55% ; padding-bottom: 4rem; " >
                                 <input type="hidden" name="room_Task_ID" value="<%= roomTaskID%>">
                                 <input type="hidden" name="room" value="<%= room%>">
                                 <input type="hidden" name="status_want_update" value="<%= status_want_update%>">

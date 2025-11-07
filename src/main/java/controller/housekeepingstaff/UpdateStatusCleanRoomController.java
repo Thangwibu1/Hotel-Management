@@ -5,6 +5,7 @@
 
 package controller.housekeepingstaff;
 
+import dao.RoomDAO;
 import dao.RoomTaskDAO;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -75,11 +76,25 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                 int staffID = staff.getStaffId();
                 if (d.getRoomTaskById(roomTaskID).getStaffID() == staffID) {
                     rowAffected = d.updateStatusRoomTaskToCleand(staffID, statusWantUpdate, roomTaskID);
+                    request.setAttribute("THONGBAO", "Update Successfully!!");
+                    request.getRequestDispatcher("./homeHouseKeeping.jsp").forward(request, response);
+                } else {
+                    request.setAttribute("THONGBAO", "Update Fail!!");
+                    request.getRequestDispatcher("./homeHouseKeeping.jsp").forward(request, response);
+                }
+                
+                System.out.println("DA XU LY" + rowAffected);
+            }else if ((new RoomTaskDAO()).getRoomTaskById(Integer.parseInt(request.getParameter("room_Task_ID"))).getStatusClean().equalsIgnoreCase("Maintenance")) {
+                roomTaskID = Integer.parseInt(request.getParameter("room_Task_ID").trim());
+                statusWantUpdate = request.getParameter("status_want_update");
+                int staffID = staff.getStaffId();
+                if (d.getRoomTaskById(roomTaskID).getStaffID() == staffID) {
+                    rowAffected = d.updateStatusRoomTaskToCleand(staffID, statusWantUpdate, roomTaskID);
+                    (new RoomDAO()).updateRoomStatus(d.getRoomTaskById(roomTaskID).getRoomID(), "Available");
                 } else {
                     request.setAttribute("THONGBAO", "Update Fail!!");
                     request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
                 }
-                System.out.println("DA XU LY" + rowAffected);
             }else{
                 roomTaskID = Integer.parseInt(request.getParameter("room_Task_ID").trim());
                 statusWantUpdate = request.getParameter("status_want_update");

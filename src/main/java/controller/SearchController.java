@@ -74,11 +74,11 @@ public class SearchController extends HttpServlet {
             boolean checkRoomType = Integer.parseInt(roomType) == 0;
 
             if (checkRoomType) {
-                if (isBooked == false) {
+                if (isBooked == false && room.getStatus().equalsIgnoreCase("Available")) {
                     availableRooms.add(room);
                 }
             } else {
-                if (isBooked == false && room.getRoomTypeId() == Integer.parseInt(roomType)) {
+                if (isBooked == false && room.getRoomTypeId() == Integer.parseInt(roomType) && room.getStatus().equalsIgnoreCase("Available")) {
                     availableRooms.add(room);
                 }
             }
