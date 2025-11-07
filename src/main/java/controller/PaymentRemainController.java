@@ -16,12 +16,14 @@ import dao.PaymentDAO;
 import dao.RoomDAO;
 import dao.RoomTypeDAO;
 import dao.ServiceDAO;
+import dao.SystemConfigDAO;
 import model.Booking;
 import model.BookingService;
 import model.Payment;
 import model.Room;
 import model.RoomType;
 import model.Service;
+import model.SystemConfig;
 
 @WebServlet("/paymentRemain")
 public class PaymentRemainController extends HttpServlet {
@@ -32,6 +34,7 @@ public class PaymentRemainController extends HttpServlet {
     private RoomTypeDAO roomTypeDAO;
     private BookingServiceDAO bookingServiceDAO;
     private ServiceDAO serviceDAO;
+    private SystemConfigDAO systemConfigDAO;
 
     @Override
     public void init() throws ServletException {
@@ -41,6 +44,7 @@ public class PaymentRemainController extends HttpServlet {
         roomTypeDAO = new RoomTypeDAO();
         bookingServiceDAO = new BookingServiceDAO();
         serviceDAO = new ServiceDAO();
+        systemConfigDAO = new SystemConfigDAO();
     }
 
 
@@ -88,8 +92,19 @@ public class PaymentRemainController extends HttpServlet {
                 }
             }
             
-            // 7. Tổng tiền = tiền phòng + tiền dịch vụ
-            double totalAmount = roomTotal + servicesTotal;
+            // 7. Lấy thuế suất từ system config
+            double taxRate = 0;
+            SystemConfig taxConfig = systemConfigDAO.getSystemConfigByName("TAX_RATE");
+            if (taxConfig != null) {
+                taxRate = taxConfig.getConfigValue() / 100.0; // Convert % to decimal
+            }
+            
+            // 8. Tính tiền thuế
+            double subtotal = roomTotal + servicesTotal;
+            double taxAmount = subtotal * taxRate;
+            
+            // 9. Tổng tiền = tiền phòng + tiền dịch vụ + thuế
+            double totalAmount = subtotal + taxAmount;
             
             return totalAmount;
             
@@ -158,8 +173,19 @@ public class PaymentRemainController extends HttpServlet {
                 }
             }
             
-            // Tổng tiền phải trả
-            double totalAmount = roomTotal + servicesTotal;
+            // Lấy thuế suất từ system config
+            double taxRate = 0;
+            SystemConfig taxConfig = systemConfigDAO.getSystemConfigByName("tax");
+            if (taxConfig != null) {
+                taxRate = taxConfig.getConfigValue() / 100.0; // Convert % to decimal
+            }
+            
+            // Tính tiền thuế
+            double subtotal = roomTotal + servicesTotal;
+            double taxAmount = subtotal * taxRate;
+            
+            // Tổng tiền phải trả (bao gồm thuế)
+            double totalAmount = subtotal + taxAmount;
             
             // Lấy tổng số tiền đã thanh toán
             ArrayList<Payment> payments = paymentDAO.getPaymentByBookingId(bookingId);
@@ -180,6 +206,9 @@ public class PaymentRemainController extends HttpServlet {
             request.setAttribute("bookingServices", bookingServices);
             request.setAttribute("serviceDetails", serviceDetails);
             request.setAttribute("servicesTotal", servicesTotal);
+            request.setAttribute("subtotal", subtotal);
+            request.setAttribute("taxRate", taxRate * 100); // Convert back to percentage for display
+            request.setAttribute("taxAmount", taxAmount);
             request.setAttribute("totalAmount", totalAmount);
             request.setAttribute("paidAmount", paidAmount);
             request.setAttribute("remainingAmount", remainingAmount);

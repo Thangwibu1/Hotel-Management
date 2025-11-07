@@ -108,4 +108,26 @@ public class SystemConfigDAO {
         }
         return result;
     }
+
+    public SystemConfig getSystemConfigByName(String configName) {
+        SystemConfig result = null;
+        String sql = "SELECT [ConfigID], [ConfigName], [ConfigValue] FROM [HotelManagement].[dbo].[SYSTEM_CONFIG] WHERE [ConfigName] = ?";
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, configName);
+            ResultSet rs = ps.executeQuery();
+            if (rs != null && rs.next()) {
+                int configId = rs.getInt("ConfigID");
+                int configValue = rs.getInt("ConfigValue");
+                result = new SystemConfig(configId, configName, configValue);
+            }
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

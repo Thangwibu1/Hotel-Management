@@ -6,14 +6,19 @@
 package controller.housekeepingstaff;
 
 import java.io.IOException;
+import java.sql.Date;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.RepairDAO;
 import dao.RoomDAO;
 import dao.RoomDeviceDAO;
+import dao.RoomTaskDAO;
+import model.Repair;
 import model.RoomDevice;
 import model.Staff;
 import utils.IConstant;
@@ -54,6 +59,7 @@ public class TakeDeviceForNoteMaintenanceController extends HttpServlet {
                     int roomDeviceId = roomDevice.getRoomDeviceId();
                     (new RoomDAO()).updateRoomStatus(roomDevice.getRoomId(), "Maintenance");
                     roomDevice.setStatus(0);
+                    
                     roomDeviceDAO.updateRoomDeviceById(roomDevice);
                 }
                 request.setAttribute("LIST_DEVICE_BROKEN", damagedItemsArray);

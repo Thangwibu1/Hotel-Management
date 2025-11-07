@@ -19,6 +19,9 @@
     List<Service> serviceDetails = (List<Service>) request.getAttribute("serviceDetails");
     Double servicesTotal = (Double) request.getAttribute("servicesTotal");
     
+    Double subtotal = (Double) request.getAttribute("subtotal");
+    Double taxRate = (Double) request.getAttribute("taxRate");
+    Double taxAmount = (Double) request.getAttribute("taxAmount");
     Double totalAmount = (Double) request.getAttribute("totalAmount");
     Double paidAmount = (Double) request.getAttribute("paidAmount");
     Double remainingAmount = (Double) request.getAttribute("remainingAmount");
@@ -851,8 +854,22 @@
             Tổng Kết Thanh Toán
         </h2>
         <div class="payment-summary">
+            <% if (subtotal != null) { %>
             <div class="summary-item">
-                <span>Tổng Chi Phí:</span>
+                <span>Tổng Phụ (Phòng + Dịch vụ):</span>
+                <span><strong><%= currencyFormatter.format(subtotal) %></strong></span>
+            </div>
+            <% } %>
+            
+            <% if (taxAmount != null && taxAmount > 0) { %>
+            <div class="summary-item">
+                <span>Thuế (<%= String.format("%.0f", taxRate) %>%):</span>
+                <span><strong><%= currencyFormatter.format(taxAmount) %></strong></span>
+            </div>
+            <% } %>
+            
+            <div class="summary-item total">
+                <span>Tổng Chi Phí (Bao gồm thuế):</span>
                 <span><strong><%= currencyFormatter.format(totalAmount) %></strong></span>
             </div>
             <div class="summary-item paid">

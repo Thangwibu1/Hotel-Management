@@ -90,7 +90,7 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                 int staffID = staff.getStaffId();
                 if (d.getRoomTaskById(roomTaskID).getStaffID() == staffID) {
                     rowAffected = d.updateStatusRoomTaskToCleand(staffID, statusWantUpdate, roomTaskID);
-                    (new RoomDAO()).updateRoomStatus(d.getRoomTaskById(roomTaskID).getRoomID(), "Available");
+                    (new RoomDAO()).updateRoomStatus(d.getRoomTaskById(roomTaskID).getRoomID(), "Waiting");
                 } else {
                     request.setAttribute("THONGBAO", "Update Fail!!");
                     request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
