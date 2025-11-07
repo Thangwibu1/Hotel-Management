@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="model.Staff" %>
+<%@ page import="model.Service" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="utils.IConstant" %>
 <!DOCTYPE html>
@@ -8,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Luxury Hotel</title>
+    <title>Service Management - Luxury Hotel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -171,6 +172,24 @@
             text-decoration: none;
         }
         
+        .back-button {
+            background: var(--gray);
+            color: var(--white);
+            border-color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .back-button:hover {
+            background: var(--black);
+            border-color: var(--black);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-button i {
+            margin-right: 0.5rem;
+        }
+
         .add-button { 
             background: var(--gold);
             color: var(--black);
@@ -260,6 +279,18 @@
         .delete-link:hover {
             background: transparent;
             color: #C62828;
+        }
+
+        .disabled-link {
+            background: #9E9E9E;
+            border: 2px solid #9E9E9E;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .disabled-link:hover {
+            background: #9E9E9E;
+            color: var(--white);
         }
 
         /* === MODAL === */
@@ -474,6 +505,12 @@
 
 <%
     Staff admin = (Staff) request.getAttribute("admin");
+    String error = (String) session.getAttribute("error");
+    String success = (String) session.getAttribute("success");
+    
+    // Clear messages after displaying
+    if (error != null) session.removeAttribute("error");
+    if (success != null) session.removeAttribute("success");
 %>
 
 <div class="header">
@@ -486,24 +523,15 @@
             <% } %>
         </div>
         <div class="header-actions">
+            <a href="./admin"><i class="fas fa-home"></i> Admin Home</a>
             <a href="./getRoomWaiting"><i class="fas fa-clock"></i> Waiting Rooms</a>
-            <a href="./GetServiceAdminController"><i class="fas fa-concierge-bell"></i> Service Manager</a>
             <a href="./system"><i class="fas fa-cog"></i> System Config</a>
-            <a href="./housekeeping-statistic"><i class="fas fa-chart-bar"></i> Housekeeping</a>
             <a href="<%= request.getContextPath() %>/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
     </div>
 </div>
 
 <div class="container">
-    <%
-        String error = "";
-        try {
-            error = (String) request.getAttribute("error");
-        } catch (Exception e) {
-            error = "";
-        }
-    %>
     <% if (error != null && !error.isEmpty()) { %>
         <div class="alert alert-error">
             <i class="fas fa-exclamation-circle"></i>
@@ -511,49 +539,62 @@
         </div>
     <% } %>
     
+    <% if (success != null && !success.isEmpty()) { %>
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <span><strong>Success:</strong> <%= success %></span>
+        </div>
+    <% } %>
+    
     <div class="card">
-        <h2><i class="fas fa-users"></i> Staff Management</h2>
-        <a class="add-button btn" id="addStaffBtn">
-            <i class="fas fa-user-plus"></i> Add New Staff
+        <h2><i class="fas fa-concierge-bell"></i> Service Management</h2>
+        <a href="./admin" class="back-button btn">
+            <i class="fas fa-arrow-left"></i> Back to Admin Dashboard
+        </a>
+        <a class="add-button btn" id="addServiceBtn">
+            <i class="fas fa-plus"></i> Add New Service
         </a>
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Full Name</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Role</th>
+                    <th>Service ID</th>
+                    <th>Service Name</th>
+                    <th>Service Type</th>
+                    <th>Price ($)</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <%
-                    ArrayList<Staff> staffs = (ArrayList<Staff>) request.getAttribute("staffs");
-                    if (staffs != null && !staffs.isEmpty()) {
-                        for (Staff staff : staffs) {
+                    ArrayList<Service> services = (ArrayList<Service>) request.getAttribute("services");
+                    if (services != null && !services.isEmpty()) {
+                        for (Service service : services) {
+                            boolean isProtected = (service.getServiceId() == 3);
                 %>
                     <tr>
-                        <td><%= staff.getStaffId() %></td>
-                        <td><%= staff.getFullName() %></td>
-                        <td><%= staff.getUsername() %></td>
-                        <td><%= staff.getEmail() %></td>
-                        <td><%= staff.getPhone() %></td>
-                        <td><%= staff.getRole() %></td>
+                        <td><%= service.getServiceId() %></td>
+                        <td><%= service.getServiceName() %></td>
+                        <td><%= service.getServiceType() != null ? service.getServiceType() : "N/A" %></td>
+                        <td>$<%= service.getPrice() %></td>
                         <td class="action-links">
-                            <a class="edit-link" 
-                               data-id="<%= staff.getStaffId() %>"
-                               data-fullname="<%= staff.getFullName() %>"
-                               data-username="<%= staff.getUsername() %>"
-                               data-email="<%= staff.getEmail() %>"
-                               data-phone="<%= staff.getPhone() %>"
-                               data-role="<%= staff.getRole() %>">
-                                <i class="fas fa-edit"></i> Edit
-                            </a>
-                            <a class="delete-link" data-id="<%= staff.getStaffId() %>" data-name="<%= staff.getFullName() %>">
-                                <i class="fas fa-trash"></i> Delete
-                            </a>
+                            <% if (isProtected) { %>
+                                <a class="disabled-link" title="This service cannot be modified">
+                                    <i class="fas fa-lock"></i> Protected
+                                </a>
+                            <% } else { %>
+                                <a class="edit-link" 
+                                   data-id="<%= service.getServiceId() %>"
+                                   data-name="<%= service.getServiceName() %>"
+                                   data-type="<%= service.getServiceType() != null ? service.getServiceType() : "" %>"
+                                   data-price="<%= service.getPrice() %>">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a class="delete-link" 
+                                   data-id="<%= service.getServiceId() %>" 
+                                   data-name="<%= service.getServiceName() %>">
+                                    <i class="fas fa-trash"></i> Delete
+                                </a>
+                            <% } %>
                         </td>
                     </tr>
                 <%
@@ -561,7 +602,7 @@
                     } else {
                 %>
                     <tr>
-                        <td colspan="7" style="text-align: center; color: var(--gray); font-style: italic;">No staff members found.</td>
+                        <td colspan="5" style="text-align: center; color: var(--gray); font-style: italic;">No services found.</td>
                     </tr>
                 <%
                     }
@@ -571,39 +612,58 @@
     </div>
 </div>
 
-<!-- Add/Update Staff Modal -->
-<div id="staffModal" class="modal">
+<!-- Add Service Modal -->
+<div id="addModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h2 id="modalTitle"><i class="fas fa-user-plus"></i> Add Staff</h2>
+            <h2><i class="fas fa-plus"></i> Add New Service</h2>
             <span class="close">&times;</span>
         </div>
-        <form id="staffForm" method="POST">
+        <form id="addForm" method="POST" action="./AddServiceController">
             <div class="modal-body">
-                <input type="hidden" id="staffId" name="staffId">
                 <div class="form-group">
-                    <label for="fullName"><i class="fas fa-user"></i> Full Name</label>
-                    <input type="text" id="fullName" name="fullName" required>
+                    <label for="addServiceName"><i class="fas fa-concierge-bell"></i> Service Name</label>
+                    <input type="text" id="addServiceName" name="serviceName" required>
                 </div>
                 <div class="form-group">
-                    <label for="username"><i class="fas fa-at"></i> Username</label>
-                    <input type="text" id="username" name="username" required>
+                    <label for="addServiceType"><i class="fas fa-tag"></i> Service Type</label>
+                    <input type="text" id="addServiceType" name="serviceType" required>
                 </div>
                 <div class="form-group">
-                    <label for="password"><i class="fas fa-lock"></i> Password</label>
-                    <input type="password" id="password" name="password">
+                    <label for="addPrice"><i class="fas fa-dollar-sign"></i> Price</label>
+                    <input type="number" id="addPrice" name="price" step="0.01" min="0" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Add Service
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Update Service Modal -->
+<div id="updateModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-edit"></i> Update Service</h2>
+            <span class="close">&times;</span>
+        </div>
+        <form id="updateForm" method="POST" action="./UpdateServiceController">
+            <div class="modal-body">
+                <input type="hidden" id="updateServiceId" name="serviceId">
+                <div class="form-group">
+                    <label for="updateServiceName"><i class="fas fa-concierge-bell"></i> Service Name</label>
+                    <input type="text" id="updateServiceName" name="serviceName" required>
                 </div>
                 <div class="form-group">
-                    <label for="email"><i class="fas fa-envelope"></i> Email</label>
-                    <input type="email" id="email" name="email" required>
+                    <label for="updateServiceType"><i class="fas fa-tag"></i> Service Type</label>
+                    <input type="text" id="updateServiceType" name="serviceType" required>
                 </div>
                 <div class="form-group">
-                    <label for="phone"><i class="fas fa-phone"></i> Phone</label>
-                    <input type="text" id="phone" name="phone" required>
-                </div>
-                <div class="form-group">
-                    <label for="role"><i class="fas fa-user-tag"></i> Role</label>
-                    <input type="text" id="role" name="role" required>
+                    <label for="updatePrice"><i class="fas fa-dollar-sign"></i> Price</label>
+                    <input type="number" id="updatePrice" name="price" step="0.01" min="0" required>
                 </div>
             </div>
             <div class="modal-footer">
@@ -624,7 +684,7 @@
         </div>
         <div class="modal-body">
             <p style="font-size: 1.1rem; text-align: center; color: var(--gray);">
-                Are you sure you want to delete staff member <strong id="staffNameToDelete" style="color: var(--gold);"></strong>?
+                Are you sure you want to delete service <strong id="serviceNameToDelete" style="color: var(--gold);"></strong>?
             </p>
             <p style="text-align: center; color: #C62828; margin-top: 1rem;">
                 <i class="fas fa-exclamation-circle"></i> This action cannot be undone.
@@ -643,65 +703,37 @@
 
 <script>
     // Get modals
-    var staffModal = document.getElementById("staffModal");
+    var addModal = document.getElementById("addModal");
+    var updateModal = document.getElementById("updateModal");
     var deleteModal = document.getElementById("deleteModal");
 
     // Get close buttons
     var closeButtons = document.getElementsByClassName("close");
 
-    // Get form and elements
-    var staffForm = document.getElementById("staffForm");
-    var modalTitle = document.getElementById("modalTitle");
-    var staffIdInput = document.getElementById("staffId");
-    var fullNameInput = document.getElementById("fullName");
-    var usernameInput = document.getElementById("username");
-    var passwordInput = document.getElementById("password");
-    var emailInput = document.getElementById("email");
-    var phoneInput = document.getElementById("phone");
-    var roleInput = document.getElementById("role");
-
-    // --- Event Listeners ---
-
     // Open Add modal
-    document.getElementById("addStaffBtn").onclick = function() {
-        staffForm.reset();
-        staffForm.action = './add-staff';
-        modalTitle.innerHTML = '<i class="fas fa-user-plus"></i> Add New Staff';
-        passwordInput.required = true;
-        staffIdInput.value = "";
-        staffModal.style.display = "flex";
+    document.getElementById("addServiceBtn").onclick = function() {
+        document.getElementById("addForm").reset();
+        addModal.style.display = "flex";
     }
 
-    // Open Edit modal
+    // Open Update modal
     document.querySelectorAll('.edit-link').forEach(function(button) {
         button.onclick = function() {
-            staffForm.reset();
-            staffForm.action = './update-staff';
-            modalTitle.innerHTML = '<i class="fas fa-user-edit"></i> Update Staff';
-            
-            // Populate form
-            staffIdInput.value = this.dataset.id;
-            fullNameInput.value = this.dataset.fullname;
-            usernameInput.value = this.dataset.username;
-            emailInput.value = this.dataset.email;
-            phoneInput.value = this.dataset.phone;
-            roleInput.value = this.dataset.role;
-            
-            // Password is not pre-filled for security, but can be updated.
-            passwordInput.placeholder = "Leave blank to keep current password";
-            passwordInput.required = false;
-
-            staffModal.style.display = "flex";
+            document.getElementById('updateServiceId').value = this.dataset.id;
+            document.getElementById('updateServiceName').value = this.dataset.name;
+            document.getElementById('updateServiceType').value = this.dataset.type;
+            document.getElementById('updatePrice').value = this.dataset.price;
+            updateModal.style.display = "flex";
         }
     });
 
     // Open Delete modal
     document.querySelectorAll('.delete-link').forEach(function(button) {
         button.onclick = function() {
-            var staffId = this.dataset.id;
-            var staffName = this.dataset.name;
-            document.getElementById('staffNameToDelete').textContent = staffName;
-            document.getElementById('confirmDeleteLink').href = '<%= request.getContextPath() %>/admin/remove-staff?staffId=' + staffId;
+            var serviceId = this.dataset.id;
+            var serviceName = this.dataset.name;
+            document.getElementById('serviceNameToDelete').textContent = serviceName;
+            document.getElementById('confirmDeleteLink').href = './DeleteServiceController?serviceId=' + serviceId;
             deleteModal.style.display = "flex";
         }
     });
@@ -720,8 +752,11 @@
 
     // Close modals when clicking outside
     window.onclick = function(event) {
-        if (event.target == staffModal) {
-            staffModal.style.display = "none";
+        if (event.target == addModal) {
+            addModal.style.display = "none";
+        }
+        if (event.target == updateModal) {
+            updateModal.style.display = "none";
         }
         if (event.target == deleteModal) {
             deleteModal.style.display = "none";
@@ -731,3 +766,4 @@
 
 </body>
 </html>
+

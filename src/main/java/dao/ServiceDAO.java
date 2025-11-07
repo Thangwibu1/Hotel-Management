@@ -58,4 +58,84 @@ public class ServiceDAO {
 
         return service;
     }
+
+    public boolean updateService(int serviceId, String serviceName, String serviceType, java.math.BigDecimal price) {
+        boolean result = false;
+        String sql = "UPDATE [HotelManagement].[dbo].[SERVICE] SET [ServiceName] = ?, [ServiceType] = ?, [Price] = ? WHERE [ServiceID] = ?";
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        try {
+            conn = DBConnection.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, serviceName);
+            ps.setString(2, serviceType);
+            ps.setBigDecimal(3, price);
+            ps.setInt(4, serviceId);
+            result = ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+
+        return result;
+    }
+
+    public boolean deleteService(int serviceId) {
+        boolean result = false;
+        String sql = "DELETE FROM [HotelManagement].[dbo].[SERVICE] WHERE [ServiceID] = ?";
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        try {
+            conn = DBConnection.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, serviceId);
+            result = ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+
+        return result;
+    }
+
+    public boolean addService(String serviceName, String serviceType, java.math.BigDecimal price) {
+        boolean result = false;
+        String sql = "INSERT INTO [HotelManagement].[dbo].[SERVICE] ([ServiceName], [ServiceType], [Price]) VALUES (?, ?, ?)";
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        try {
+            conn = DBConnection.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, serviceName);
+            ps.setString(2, serviceType);
+            ps.setBigDecimal(3, price);
+            result = ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+
+        return result;
+    }
 }
