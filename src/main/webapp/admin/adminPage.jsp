@@ -486,6 +486,7 @@
             <% } %>
         </div>
         <div class="header-actions">
+            <a href="./getRoomWaiting"><i class="fas fa-clock"></i> Waiting Rooms</a>
             <a href="./system"><i class="fas fa-cog"></i> System Config</a>
             <a href="./housekeeping-statistic"><i class="fas fa-chart-bar"></i> Housekeeping</a>
             <a href="<%= request.getContextPath() %>/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>

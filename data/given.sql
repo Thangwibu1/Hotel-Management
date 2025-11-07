@@ -48,7 +48,7 @@ CREATE TABLE ROOM
     RoomNumber  NVARCHAR(10) UNIQUE NOT NULL,
     RoomTypeID  INT                 NOT NULL,
     Description NVARCHAR(500)       NULL, -- Thêm cột mô tả
-    Status      NVARCHAR(20) CHECK (Status IN ('Available', 'Occupied', 'Dirty', 'Maintenance')),
+    Status      NVARCHAR(20) CHECK (Status IN ('Available', 'Waiting', 'Dirty', 'Maintenance')),
     FOREIGN KEY (RoomTypeID) REFERENCES ROOM_TYPE (RoomTypeID)
 );
 GO
@@ -152,7 +152,7 @@ CREATE TABLE BOOKING_SERVICE
 GO
 
 ALTER TABLE BOOKING_SERVICE
-ADD Note nvarchar(MAX) NULL;
+    ADD Note nvarchar(MAX) NULL;
 GO
 
 -- 7. Bảng Hóa đơn (INVOICE)
@@ -205,16 +205,19 @@ CREATE TABLE SYSTEM_CONFIG
 );
 GO
 CREATE TABLE ASSIGN_TASK (
-    ID VARCHAR(10) PRIMARY KEY, 
-    LastTimeAssign DATETIME NOT NULL
+                             ID VARCHAR(10) PRIMARY KEY,
+                             LastTimeAssign DATETIME NOT NULL
 );
 
 ALTER TABLE ROOM_TASK
-ADD isSystemTask INT NOT NULL;
+    ADD isSystemTask INT NOT NULL;
 
 
 ALTER TABLE BOOKING_SERVICE
-ADD StaffID INT NULL;
+    ADD StaffID INT NULL;
+
+alter table [dbo].[ROOM_DEVICE]
+    add status int default 1
 -- ===================================================================
 -- PHẦN 2: CHÈN DỮ LIỆU MẪU
 -- ===================================================================
@@ -253,18 +256,18 @@ INSERT INTO ROOM (RoomNumber, RoomTypeID, Description, Status)
 VALUES
 -- Tầng 1 (Standard)
 ('101', 1, N'Phòng đơn tiêu chuẩn, hướng vườn.', 'Available'),
-('102', 2, N'Phòng đôi tiêu chuẩn, gần sảnh chính.', 'Dirty'),
+('102', 2, N'Phòng đôi tiêu chuẩn, gần sảnh chính.', 'Available'),
 ('103', 2, N'Phòng đôi tiêu chuẩn, yên tĩnh.', 'Available'),
 -- Tầng 2 (Standard & Deluxe)
 ('201', 2, N'Phòng đôi tiêu chuẩn, tầng 2.', 'Available'),
-('202', 3, N'Phòng Deluxe đôi, có ban công hướng thành phố.', 'Occupied'),
-('203', 3, N'Phòng Deluxe đôi, gần cầu thang máy.', 'Maintenance'),
+('202', 3, N'Phòng Deluxe đôi, có ban công hướng thành phố.', 'Available'),
+('203', 3, N'Phòng Deluxe đôi, gần cầu thang máy.', 'Available'),
 -- Tầng 3 (Deluxe)
 ('301', 3, N'Phòng Deluxe đôi, tầng cao yên tĩnh.', 'Available'),
 ('302', 3, N'Phòng Deluxe đôi, có tầm nhìn đẹp.', 'Available'),
-('303', 3, N'Phòng Deluxe đôi, cuối hành lang.', 'Dirty'),
+('303', 3, N'Phòng Deluxe đôi, cuối hành lang.', 'Available'),
 -- Tầng 4 (Family Suite)
-('401', 4, N'Suite gia đình, 2 phòng ngủ, có bếp nhỏ.', 'Occupied'),
+('401', 4, N'Suite gia đình, 2 phòng ngủ, có bếp nhỏ.', 'Available'),
 ('402', 4, N'Suite gia đình, hướng hồ bơi.', 'Available'),
 -- Tầng 5 (Presidential)
 ('501', 5, N'Suite Tổng thống, cao cấp nhất, có phòng khách riêng.', 'Available');
@@ -280,17 +283,17 @@ GO
 -- 5. Dữ liệu bảng STAFF
 INSERT INTO STAFF (FullName, Role, Username, PasswordHash, Phone, Email)
 VALUES ('Phạm Minh Quân', 'Manager', 'manager01', 'hash_placeholder_staff_1', '0331112222', 'quan.pm@hotel.com'),
-       ('Hoàng Thị Lan', 'Receptionist', 'receptionist01', 'hash_placeholder_staff_2', '0333334444',
+       ('Hoàng Thị Lan', 'Receptionist', 're', '123', '0333334444',
         'lan.ht@hotel.com'),
-       ('Trần Văn Bình', 'Receptionist', 'receptionist02', 'hash_placeholder_staff_3', '0333334445',
+       (N'Ngọc Thắng', 'Admin', 'admin', '1', '0333334445',
         'binh.tv@hotel.com');
 GO
 INSERT INTO ASSIGN_TASK (ID, LastTimeAssign)
 VALUES ('ASS01', GETDATE());
 
 INSERT INTO [STAFF]
-    (FullName, Role, Username, PasswordHash, Phone, Email)
-VALUES 
+(FullName, Role, Username, PasswordHash, Phone, Email)
+VALUES
     (N'Mai Thanh', 'ServiceStaff', 'mai', '1', '0901234567', 'maithanh@hotel.com');
 select [TypeName], [Capacity], [PricePerNight] from ROOM_TYPE;
 -- Dọn dẹp bảng trước khi chèn (tùy chọn)
@@ -330,8 +333,6 @@ VALUES (N'Nguyễn Thị Lan', 'Housekeeping', 'lan.nt', '1', '0901234567', 'lan
        (N'Trần Văn An', 'Housekeeping', 'an.tv', '1', '0907654321', 'an.tv@hotel.com');
 GO
 
-ALTER TABLE BOOKING_SERVICE
-    ADD StaffID int;
 
 
 
@@ -364,7 +365,7 @@ from ROOM_TYPE;
 
 -- Thêm dữ liệu cho bảng DEVICE
 INSERT INTO DEVICE (DeviceName, Description)
-VALUES 
+VALUES
     (N'TV', N'Tivi màn hình phẳng'),
     (N'Điều hòa', N'Máy điều hòa nhiệt độ'),
     (N'Tủ lạnh', N'Tủ lạnh mini'),
@@ -373,34 +374,34 @@ GO
 
 -- Tạo trigger để tự động thêm 4 thiết bị cơ bản vào mỗi phòng mới
 CREATE TRIGGER trg_AddDevicesToNewRoom
-ON ROOM
-AFTER INSERT
-AS
+    ON ROOM
+    AFTER INSERT
+    AS
 BEGIN
     -- Thêm 4 thiết bị cơ bản cho mỗi phòng mới được tạo
     INSERT INTO ROOM_DEVICE (RoomID, DeviceID, Quantity)
-    SELECT 
+    SELECT
         i.RoomID,
         d.DeviceID,
         1 as Quantity  -- Mỗi thiết bị có số lượng là 1
     FROM INSERTED i
-    CROSS JOIN DEVICE d
+             CROSS JOIN DEVICE d
     WHERE d.DeviceName IN (N'TV', N'Điều hòa', N'Tủ lạnh', N'Ga giường');
 END;
 GO
 INSERT INTO dbo.STAFF ( FullName, Role, Username, [PasswordHash], Phone, Email)
-VALUES 
-( N'Himawari Mai Anh', N'Housekeeping', 'maianh', '1', '0912345678', 'huong.lt@example.com'),
-( N'Tuyen Quang Loi', N'Housekeeping', 'loi', '1', '0987654321', 'loi.pv@example.com');
+VALUES
+    ( N'Himawari Mai Anh', N'Housekeeping', 'maianh', '1', '0912345678', 'huong.lt@example.com'),
+    ( N'Tuyen Quang Loi', N'Housekeeping', 'loi', '1', '0987654321', 'loi.pv@example.com');
 -- Thêm thiết bị cho các phòng đã tồn tại
 -- Lặp qua tất cả các phòng hiện có và thêm 4 thiết bị cơ bản
 INSERT INTO ROOM_DEVICE (RoomID, DeviceID, Quantity)
-SELECT 
+SELECT
     r.RoomID,
     d.DeviceID,
     1 as Quantity
 FROM ROOM r
-CROSS JOIN DEVICE d
+         CROSS JOIN DEVICE d
 WHERE d.DeviceName IN (N'TV', N'Điều hòa', N'Tủ lạnh', N'Ga giường');
 GO
 
@@ -408,13 +409,19 @@ GO
 SELECT * FROM DEVICE;
 GO
 
-SELECT 
+SELECT
     rd.RoomDeviceID,
     r.RoomNumber,
     d.DeviceName,
     rd.Quantity
 FROM ROOM_DEVICE rd
-JOIN ROOM r ON rd.RoomID = r.RoomID
-JOIN DEVICE d ON rd.DeviceID = d.DeviceID
+         JOIN ROOM r ON rd.RoomID = r.RoomID
+         JOIN DEVICE d ON rd.DeviceID = d.DeviceID
 ORDER BY r.RoomNumber, d.DeviceName;
+GO
+
+
+-- Chèn dữ liệu vào bảng SYSTEM_CONFIG
+INSERT INTO SYSTEM_CONFIG (ConfigName, ConfigValue)
+VALUES ('tax', '5');
 GO

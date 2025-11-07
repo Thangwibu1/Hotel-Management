@@ -13,6 +13,7 @@ import dao.PaymentDAO;
 import dao.RoomDAO;
 import dao.RoomTypeDAO;
 import dao.ServiceDAO;
+import dao.SystemConfigDAO;
 import model.Booking;
 import model.BookingService;
 import model.Invoice;
@@ -20,6 +21,7 @@ import model.Payment;
 import model.Room;
 import model.RoomType;
 import model.Service;
+import model.SystemConfig;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -36,6 +38,7 @@ public class checkOutController extends HttpServlet {
     private RoomDAO roomDAO;
     private RoomTypeDAO roomTypeDAO;
     private InvoiceDAO invoiceDAO;
+    private SystemConfigDAO systemConfigDAO;
 
     @Override
     public void init() throws ServletException {
@@ -46,6 +49,7 @@ public class checkOutController extends HttpServlet {
         roomDAO = new RoomDAO();
         roomTypeDAO = new RoomTypeDAO();
         invoiceDAO = new InvoiceDAO();
+        systemConfigDAO = new SystemConfigDAO();
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -90,8 +94,19 @@ public class checkOutController extends HttpServlet {
                 }
             }
             
-            // Tổng tiền phải trả
-            double totalAmount = roomTotal + servicesTotal;
+            // Lấy thuế suất từ system config
+            double taxRate = 0;
+            SystemConfig taxConfig = systemConfigDAO.getSystemConfigByName("tax");
+            if (taxConfig != null) {
+                taxRate = taxConfig.getConfigValue() / 100.0; // Convert % to decimal
+            }
+            
+            // Tính tiền thuế
+            double subtotal = roomTotal + servicesTotal;
+            double taxAmount = subtotal * taxRate;
+            
+            // Tổng tiền phải trả (bao gồm thuế)
+            double totalAmount = subtotal + taxAmount;
             
             // Lấy tổng số tiền đã thanh toán
             ArrayList<Payment> payments = paymentDAO.getPaymentByBookingId(bookingId);
@@ -131,9 +146,9 @@ public class checkOutController extends HttpServlet {
             Invoice invoice = new Invoice();
             invoice.setBookingId(bookingId);
             invoice.setIssueDate(new Date(System.currentTimeMillis()));
-            invoice.setPrice(totalAmount);
+            invoice.setPrice(subtotal);
             invoice.setDiscount(0); // Không có giảm giá
-            invoice.setTax(0); // Không có thuế
+            invoice.setTax(taxAmount); // Thuế
             invoice.setTotalAmount(totalAmount);
             invoice.setStatus("Paid");
             
@@ -152,6 +167,9 @@ public class checkOutController extends HttpServlet {
             request.setAttribute("numberOfNights", numberOfNights);
             request.setAttribute("roomTotal", roomTotal);
             request.setAttribute("servicesTotal", servicesTotal);
+            request.setAttribute("subtotal", subtotal);
+            request.setAttribute("taxRate", taxRate * 100); // Convert back to percentage for display
+            request.setAttribute("taxAmount", taxAmount);
             request.setAttribute("totalAmount", totalAmount);
             request.setAttribute("paidAmount", paidAmount);
             request.setAttribute("invoice", invoice);

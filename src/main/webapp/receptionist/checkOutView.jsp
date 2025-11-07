@@ -14,6 +14,9 @@
     Long numberOfNights = (Long) request.getAttribute("numberOfNights");
     Double roomTotal = (Double) request.getAttribute("roomTotal");
     Double servicesTotal = (Double) request.getAttribute("servicesTotal");
+    Double subtotal = (Double) request.getAttribute("subtotal");
+    Double taxRate = (Double) request.getAttribute("taxRate");
+    Double taxAmount = (Double) request.getAttribute("taxAmount");
     Invoice invoice = (Invoice) request.getAttribute("invoice");
     
     String successMessage = (String) request.getAttribute("successMessage");
@@ -366,8 +369,22 @@
                     </div>
                     <% } %>
                     
+                    <% if (subtotal != null) { %>
+                    <div class="summary-item">
+                        <span>Tổng phụ:</span>
+                        <span><%= currencyFormatter.format(subtotal) %></span>
+                    </div>
+                    <% } %>
+                    
+                    <% if (taxAmount != null && taxAmount > 0) { %>
+                    <div class="summary-item">
+                        <span>Thuế (<%= String.format("%.0f", taxRate) %>%):</span>
+                        <span><%= currencyFormatter.format(taxAmount) %></span>
+                    </div>
+                    <% } %>
+                    
                     <div class="summary-item total">
-                        <span>Tổng chi phí:</span>
+                        <span>Tổng chi phí (Bao gồm thuế):</span>
                         <span><%= currencyFormatter.format(totalAmount) %></span>
                     </div>
                     

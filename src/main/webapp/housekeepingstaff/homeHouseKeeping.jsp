@@ -260,11 +260,20 @@
                 <%
                 } else if (r.getStatusClean().equalsIgnoreCase("Maintenance")) {
                 %>
+                <form action="<%= IConstant.updateStatusCleanRoomController %>" method="POST" onsubmit="return confirm('Do you want to start maintaining this room?');" >
+                    
+                    <input type="hidden" name="room" value="<%= r.getRoomID()%>">
+
+                    <input type="hidden" name="status_want_update" value="Cleaned">
+
+                    <input type="hidden" name="room_Task_ID" value="<%= r.getRoomTaskID() %>">
+
                     <div style="width: 100%">
                         <button style="width: 100%" type="submit" class="btn btn-primary">
                             <%= maintainForPress%>
                         </button>
                     </div>
+                </form>
                 <%
                     }
                 %>

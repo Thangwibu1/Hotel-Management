@@ -17,7 +17,7 @@ public class RoomDeviceDAO {
      */
     public ArrayList<RoomDevice> getAllRoomDevices() {
         ArrayList<RoomDevice> result = new ArrayList<>();
-        String sql = "SELECT [RoomDeviceID], [RoomID], [DeviceID], [Quantity] FROM [HotelManagement].[dbo].[ROOM_DEVICE]";
+        String sql = "SELECT [RoomDeviceID], [RoomID], [DeviceID], [Quantity], [Status] FROM [HotelManagement].[dbo].[ROOM_DEVICE]";
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -32,7 +32,8 @@ public class RoomDeviceDAO {
                 int roomId = rs.getInt("RoomID");
                 int deviceId = rs.getInt("DeviceID");
                 int quantity = rs.getInt("Quantity");
-                RoomDevice roomDevice = new RoomDevice(roomDeviceId, roomId, deviceId, quantity);
+                Integer status = (Integer) rs.getObject("Status");
+                RoomDevice roomDevice = new RoomDevice(roomDeviceId, roomId, deviceId, quantity, status);
                 result.add(roomDevice);
             }
         } catch (SQLException e) {
@@ -61,7 +62,7 @@ public class RoomDeviceDAO {
      */
     public RoomDevice getRoomDeviceById(int roomDeviceId) {
         RoomDevice roomDevice = null;
-        String sql = "SELECT [RoomDeviceID], [RoomID], [DeviceID], [Quantity] FROM [HotelManagement].[dbo].[ROOM_DEVICE] WHERE [RoomDeviceID] = ?";
+        String sql = "SELECT [RoomDeviceID], [RoomID], [DeviceID], [Quantity], [Status] FROM [HotelManagement].[dbo].[ROOM_DEVICE] WHERE [RoomDeviceID] = ?";
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -77,7 +78,8 @@ public class RoomDeviceDAO {
                 int roomId = rs.getInt("RoomID");
                 int deviceId = rs.getInt("DeviceID");
                 int quantity = rs.getInt("Quantity");
-                roomDevice = new RoomDevice(id, roomId, deviceId, quantity);
+                Integer status = (Integer) rs.getObject("Status");
+                roomDevice = new RoomDevice(id, roomId, deviceId, quantity, status);
             }
         } catch (SQLException e) {
             System.err.println("Database error in getRoomDeviceById: " + e.getMessage());
@@ -105,7 +107,7 @@ public class RoomDeviceDAO {
      */
     public ArrayList<RoomDevice> getRoomDevicesByRoomId(int roomId) {
         ArrayList<RoomDevice> result = new ArrayList<>();
-        String sql = "SELECT [RoomDeviceID], [RoomID], [DeviceID], [Quantity] FROM [HotelManagement].[dbo].[ROOM_DEVICE] WHERE [RoomID] = ?";
+        String sql = "SELECT [RoomDeviceID], [RoomID], [DeviceID], [Quantity], [Status] FROM [HotelManagement].[dbo].[ROOM_DEVICE] WHERE [RoomID] = ?";
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -121,7 +123,8 @@ public class RoomDeviceDAO {
                 int rid = rs.getInt("RoomID");
                 int deviceId = rs.getInt("DeviceID");
                 int quantity = rs.getInt("Quantity");
-                RoomDevice roomDevice = new RoomDevice(roomDeviceId, rid, deviceId, quantity);
+                Integer status = (Integer) rs.getObject("Status");
+                RoomDevice roomDevice = new RoomDevice(roomDeviceId, rid, deviceId, quantity, status);
                 result.add(roomDevice);
             }
         } catch (SQLException e) {
@@ -150,7 +153,7 @@ public class RoomDeviceDAO {
      */
     public boolean insertRoomDevice(RoomDevice roomDevice) {
         boolean result = false;
-        String sql = "INSERT INTO [HotelManagement].[dbo].[ROOM_DEVICE] ([RoomID], [DeviceID], [Quantity]) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO [HotelManagement].[dbo].[ROOM_DEVICE] ([RoomID], [DeviceID], [Quantity], [Status]) VALUES (?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement ps = null;
 
@@ -160,6 +163,11 @@ public class RoomDeviceDAO {
             ps.setInt(1, roomDevice.getRoomId());
             ps.setInt(2, roomDevice.getDeviceId());
             ps.setInt(3, roomDevice.getQuantity());
+            if (roomDevice.getStatus() != null) {
+                ps.setInt(4, roomDevice.getStatus());
+            } else {
+                ps.setNull(4, java.sql.Types.INTEGER);
+            }
             
             int rowsAffected = ps.executeUpdate();
             result = rowsAffected > 0;
@@ -188,7 +196,7 @@ public class RoomDeviceDAO {
      */
     public boolean updateRoomDeviceById(RoomDevice roomDevice) {
         boolean result = false;
-        String sql = "UPDATE [HotelManagement].[dbo].[ROOM_DEVICE] SET [RoomID] = ?, [DeviceID] = ?, [Quantity] = ? WHERE [RoomDeviceID] = ?";
+        String sql = "UPDATE [HotelManagement].[dbo].[ROOM_DEVICE] SET [RoomID] = ?, [DeviceID] = ?, [Quantity] = ?, [Status] = ? WHERE [RoomDeviceID] = ?";
         Connection conn = null;
         PreparedStatement ps = null;
 
@@ -198,7 +206,12 @@ public class RoomDeviceDAO {
             ps.setInt(1, roomDevice.getRoomId());
             ps.setInt(2, roomDevice.getDeviceId());
             ps.setInt(3, roomDevice.getQuantity());
-            ps.setInt(4, roomDevice.getRoomDeviceId());
+            if (roomDevice.getStatus() != null) {
+                ps.setInt(4, roomDevice.getStatus());
+            } else {
+                ps.setNull(4, java.sql.Types.INTEGER);
+            }
+            ps.setInt(5, roomDevice.getRoomDeviceId());
             
             int rowsAffected = ps.executeUpdate();
             result = rowsAffected > 0;
