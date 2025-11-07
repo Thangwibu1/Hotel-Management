@@ -119,7 +119,7 @@ public class CreateAccountController extends HttpServlet {
                 Guest newGuest = new GuestDAO().getGuestByIdNumber(idNumber);
                 
                 // Gửi email chào mừng đến guest
-                sendWelcomeEmail(newGuest);
+//                sendWelcomeEmail(newGuest);
                 
                 request.setAttribute("FLASH_ID_NUM", idNumber);
                 request.setAttribute("GUEST", newGuest);

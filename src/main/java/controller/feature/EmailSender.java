@@ -5,7 +5,6 @@ import javax.mail.internet.*;
 import java.io.File;
 import java.util.List;
 import java.util.Properties;
-
 public class EmailSender {
 
     private final String fromEmail;

@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.Booking;
 import model.BookingActionRow;
 import model.BookingService;
+import model.Room;
 import model.Service;
 import model.ServiceDetail;
 
@@ -75,7 +76,7 @@ public class ViewBookingController extends HttpServlet {
                 return;
             }
             System.out.println("[ViewBookingController] Booking ID = " + bookingId);
-
+            Room room = roomDAO.getRoomById(booking.getRoomId());
             ArrayList<BookingActionRow> rows = bookingDAO.getInforBooking();
             BookingActionRow foundRow = null;
             for (BookingActionRow row : rows) {
@@ -123,6 +124,7 @@ public class ViewBookingController extends HttpServlet {
             request.setAttribute("SERVICE_TOTAL", serviceTotal);
             request.setAttribute("GRAND_TOTAL", grandTotal);
             request.setAttribute("nights", nights);
+            request.setAttribute("room", room);
 
             request.setAttribute("CURRENT_TAB", "bookings");
             request.setAttribute("CURRENT_STEP", "detail");
