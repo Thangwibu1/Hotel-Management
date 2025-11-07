@@ -422,10 +422,10 @@ public class RoomTaskDAO {
         return result;
     }
 
-    public ArrayList<RoomTask> getAllRoomTaskByDateRangeAndStatus(LocalDate startDate, LocalDate endDate, String statusClean) {
+    public ArrayList<RoomTask> getAllRoomTaskByDateRangeAndStatus(LocalDate startDate, LocalDate endDate, String statusClean, int staffID) {
         ArrayList<RoomTask> result = new ArrayList<RoomTask>();
         String sql = "SELECT [RoomTaskID],[RoomID],[StatusClean],[StaffID],[StartTime],[EndTime],[Notes],[isSystemTask] FROM [HotelManagement].[dbo].[ROOM_TASK] "
-                + "WHERE CAST([EndTime] AS DATE) BETWEEN ? AND ? AND [StatusClean] = ? AND [EndTime] IS NOT NULL";
+                + "WHERE CAST([StartTime] AS DATE) BETWEEN ? AND ? AND [StatusClean] = ? AND [StaffID] = ?";
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -435,6 +435,7 @@ public class RoomTaskDAO {
             ps.setObject(1, startDate);
             ps.setObject(2, endDate);
             ps.setString(3, statusClean);
+            ps.setInt(4, staffID);
             rs = ps.executeQuery();
             while (rs.next()) {
                 RoomTask room = new RoomTask();
@@ -471,7 +472,6 @@ public class RoomTaskDAO {
         }
         if (result.isEmpty()) {
             System.out.println("Ko lay duoc phong");
-            result = null;
         } else {
             System.out.println("Lay duoc nha");
         }

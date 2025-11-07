@@ -100,7 +100,7 @@
             }
         </style>
     </head>
-    <body style="padding-top: 100px">
+    <body >
         <%
             Staff staff = (Staff) session.getAttribute("userStaff");
             ArrayList<BookingService> listTask = (ArrayList) request.getAttribute("LIST_SERVICE_TASK");
@@ -108,6 +108,7 @@
         %>
 
         <jsp:include page="headerService.jsp"/>
+        
         <div class="container" style="padding-top: 2rem">
 
             <div class="tabs d-flex flex-column flex-md-row gap-2">

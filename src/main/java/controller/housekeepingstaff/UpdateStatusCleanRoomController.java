@@ -122,9 +122,9 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
 
 
 
-            //?a chay xong update
+            //qa chay xong update
             if(rowAffected > 0){
-                request.setAttribute("THONGBAO", "Update successfully!!");
+                request.setAttribute("THONGBAO", "Status updated successfully!");
                 request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
             }else{
                 System.out.println("SAI ROI NHA");

@@ -41,16 +41,16 @@
             }
 
             .avatar {
-                width: 50px;
-                height: 50px;
+                width: 40px;
+                height: 40px;
                 background: var(--primary-gradient);
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 color: white;
-                font-size: 20px;
-                font-weight: bold;
+                font-size: 18px;
+                font-weight: 600;
             }
 
             .btn-logout {
@@ -235,7 +235,7 @@
             }
         </style>
     </head>
-    <body style="padding-top: 100px">
+    <body >
         <%
             String start_date = (String) request.getAttribute("start_date");
             String end_date = (String) request.getAttribute("end_date");

@@ -221,12 +221,11 @@ body {
     display: inline-block;
     background: #fee2e2;
     color: #dc2626;
-    padding: 0.2rem 0.8rem;
+    padding: 0.2rem 1rem;
     border-radius: 0.4rem;
     font-size: 1.2rem;
     margin-left: 0.8rem;
 }
-
 .room-actions {
     display: flex;
     flex-direction: column;
