@@ -138,6 +138,48 @@ public class RoomDAO {
         return room;
     }
 
+    public ArrayList<Room> getRoomsByStatus(String status) {
+        ArrayList<Room> result = new ArrayList<Room>();
+        String sql = "SELECT [RoomID] ,[RoomNumber] ,[RoomTypeID] ,[Description] ,[Status] FROM [HotelManagement].[dbo].[ROOM] WHERE [Status] = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, status);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Room room = new Room();
+                room.setRoomId(rs.getInt("RoomID"));
+                room.setRoomNumber(rs.getString("RoomNumber"));
+                room.setRoomTypeId(rs.getInt("RoomTypeID"));
+                room.setDescription(rs.getString("Description"));
+                room.setStatus(rs.getString("Status"));
+
+                result.add(room);
+            }
+        } catch (SQLException e) {
+            System.err.println("Database error in getRoomsByStatus: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("General error in getRoomsByStatus: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+
+        return result;
+    }
+
     public boolean updateRoomStatus(int roomId, String status) {
         boolean result = false;
 
@@ -150,10 +192,17 @@ public class RoomDAO {
             ps = con.prepareStatement(sql);
             ps.setString(1, status);
             ps.setInt(2, roomId);
-            boolean rowsAffected = ps.executeUpdate() > 0;
+            result = ps.executeUpdate() > 0;
 
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
         }
 
         return result;

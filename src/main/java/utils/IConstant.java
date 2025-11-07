@@ -77,6 +77,7 @@ public interface IConstant {
     //----------------------------------------------------------------------
     public static final String systemConfigPage = "/" + adminFilter + "/systemConfig.jsp";
     public static final String adminPage = "/" + adminFilter + "/adminPage.jsp";
+    public static final String viewWaitingRoomPage = "/" + adminFilter + "/viewWaitingRoom.jsp";
     public static final String editServicePage = "editService.jsp";
     public static final String detailBookingPage = "detailBooking.jsp";
     public static final String bookingDashboard = "bookingDashboard.jsp";

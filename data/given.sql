@@ -283,9 +283,9 @@ GO
 -- 5. Dữ liệu bảng STAFF
 INSERT INTO STAFF (FullName, Role, Username, PasswordHash, Phone, Email)
 VALUES ('Phạm Minh Quân', 'Manager', 'manager01', 'hash_placeholder_staff_1', '0331112222', 'quan.pm@hotel.com'),
-       ('Hoàng Thị Lan', 'Receptionist', 're', 'hash_placeholder_staff_2', '0333334444',
+       ('Hoàng Thị Lan', 'Receptionist', 're', '123', '0333334444',
         'lan.ht@hotel.com'),
-       ('Trần Văn Bình', 'Receptionist', 'receptionist02', 'hash_placeholder_staff_3', '0333334445',
+       (N'Ngọc Thắng', 'Admin', 'admin', '1', '0333334445',
         'binh.tv@hotel.com');
 GO
 INSERT INTO ASSIGN_TASK (ID, LastTimeAssign)
