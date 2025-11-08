@@ -32,7 +32,7 @@
     </div>
     <div class="header-right">
         
-        <form action="<%= request.getContextPath()%>/logout" method="get" style="margin-right: 2rem;">
+        <form action="<%= request.getContextPath()%>/logout" method="get" style="margin-right: 2rem; " onsubmit="return confirm('Are you sure you want to log out of your account?');>
             <button class="btn-publish">Logout</button>
         </form>
     </div>

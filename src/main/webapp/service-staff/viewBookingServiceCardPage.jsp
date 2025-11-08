@@ -331,31 +331,59 @@
                                         <%
                                         if(!bookingService.getServiceDate().isAfter(LocalDate.now())){
                                             if( bookingService.getStatus() == 1 || bookingService.getStatus() == 0 ){
+                                                if(bookingService.getServiceId() != 3){
                                             %>
-                                        <div>
-                                            <div>
-                                                <select name="status_Update" class="form-select form-select-sm" style="width: 180px; margin-right: 6px; margin: 10px 0;" required>
-                                                    <option value="" selected disabled>Choose Status </option>
-                                                    <% if(bookingService.getStatus() == 0 ){
-                                                        %>
-                                                     <option value="1" >In Progress </option>
-                                                     <option value="-1" >Canceled </option>
-                                                        <%
-                                                    }else{
-                                                        %>
-                                                        <option value="2" >Completed </option>
-                                                        <%
-                                                    }%>
-  
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <button type="submit" class="btn-submit status-badge">
-                                                    <- Edit Status 
-                                                </button>
-                                            </div>
-                                        </div>
+                                                    <div>
+                                                        <div>
+                                                            <select name="status_Update" class="form-select form-select-sm" style="width: 180px; margin-right: 6px; margin: 10px 0;" required>
+                                                                <option value="" selected disabled>Choose Status </option>
+                                                                <% if(bookingService.getStatus() == 0 ){
+                                                                    %>
+                                                                 <option value="1" >In Progress </option>
+                                                                 <option value="-1" >Canceled </option>
+                                                                    <%
+                                                                }else{
+                                                                    %>
+                                                                    <option value="2" >Completed </option>
+                                                                    <%
+                                                                }%>
+
+                                                            </select>
+                                                        </div>
+                                                        <div>
+                                                            <button type="submit" class="btn-submit status-badge">
+                                                                <- Edit Status 
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                         <%
+                                                }else{
+                                                %>
+                                                <div>
+                                                    <div>
+                                                        <select name="status_Update" class="form-select form-select-sm" style="width: 180px; margin-right: 6px; margin: 10px 0;" required>
+                                                            <option value="" selected disabled>Choose Status </option>
+                                                            <% if (bookingService.getStatus() == 0) {
+                                                            %>
+                                                            
+                                                            <option value="-1" >Canceled </option>
+                                                            <%
+                                                            } else {
+                                                            %>
+                                                            <option value="2" >Completed </option>
+                                                            <%
+                                                                        }%>
+
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <button type="submit" class="btn-submit status-badge">
+                                                            <- Edit Status 
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <%
+                                                }
                                             }
                                         }else{
                                             if(bookingService.getStatus() ==  0){
