@@ -148,7 +148,7 @@
 
             Staff staff = (Staff) session.getAttribute("userStaff");
             
-            // Lấy HashMap chứa roomDeviceId -> deviceName từ attribute
+            
             Map<Integer, String> deviceMap = (Map<Integer, String>) request.getAttribute("deviceMap");
             
             if (staff == null || roomTaskID == 0 || status_want_update == null || room == null) {

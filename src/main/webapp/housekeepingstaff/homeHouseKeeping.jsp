@@ -226,7 +226,9 @@
                     String roomNumber = rl.getRoomNumber();
                     int roomTaskID = r.getRoomTaskID();
                     String targetStatus = "Cleaned";
+                    if(r.getStaffID() == staff.getStaffId()){
 
+                    
                 %>
                 <form action="<%= IConstant.completeIngroressTask %>" method="POST">
                     <input type="hidden" name="room" value="<%= roomNumber%>">
@@ -241,6 +243,15 @@
                 </form>
 
                 <%
+                    }else{
+                        %>
+                        <div style="width: 100%">
+                            <button style="width: 100%" type="submit" class="btn btn-primary">
+                                <%= inProgressForPress%>
+                            </button>
+                        </div>
+                        <%
+                    }
                 } else if (r.getStatusClean().equalsIgnoreCase("Pending")) {
                 %>
                 <form action="<%= IConstant.updateStatusCleanRoomController %>" method="POST" onsubmit="return confirm('Do you want to start cleaning this room?');" >
