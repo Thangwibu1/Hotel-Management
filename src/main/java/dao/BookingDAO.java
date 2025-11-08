@@ -107,20 +107,22 @@ public class BookingDAO {
         return generatedBookingId;
     }
 
-
     /**
-     * Thêm booking mới với transaction (nhận Connection từ bên ngoài)
-     * Hàm này không tự tạo Connection, phải nhận từ ngoài để đảm bảo transaction
-     * @param booking Đối tượng booking cần thêm
+     * Thêm booking mới với transaction (nhận Connection từ bên
+     * ngoài) Hàm này không tự tạo Connection, phải nhận từ ngoài
+     * để đảm bảo transaction
+     *
+     * @param booking �?ối tượng booking cần thêm
      * @param conn Connection được quản lý từ bên ngoài
-     * @return ID của booking vừa được tạo, hoặc -1 nếu thất bại
+     * @return ID của booking vừa được tạo, hoặc -1 nếu thất
+     * bại
      * @throws SQLException Nếu có lỗi database
      */
     public int addBookingWithTransaction(Booking booking, Connection conn) throws SQLException {
         int generatedBookingId = -1;
         String sql = "INSERT INTO [dbo].[BOOKING] (GuestID, RoomID, CheckInDate, CheckOutDate, BookingDate, Status) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try ( PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, booking.getGuestId());
             ps.setInt(2, booking.getRoomId());
             ps.setObject(3, booking.getCheckInDate());
@@ -131,7 +133,7 @@ public class BookingDAO {
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                try (ResultSet rs = ps.getGeneratedKeys()) {
+                try ( ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
                         generatedBookingId = rs.getInt(1);
                     }
@@ -174,7 +176,8 @@ public class BookingDAO {
 
         return result;
     }
-    public Booking getBookingByRoomID(int roomID,LocalDate dateNow) {
+
+    public Booking getBookingByRoomID(int roomID, LocalDate dateNow) {
         Booking result = null;
         String sql = "SELECT [BookingID], [GuestID], [RoomID], [CheckInDate], [CheckOutDate], [BookingDate], [Status] FROM [HotelManagement].[dbo].[BOOKING] where [RoomID] = ? and CheckInDate <= ?  AND Status Like N'Checked-in'; ";
 
@@ -187,7 +190,7 @@ public class BookingDAO {
 
             if (rs != null) {
                 while (rs.next()) {
-                    
+
                     int bookingId = rs.getInt("BookingID");
                     int guestId = rs.getInt("GuestID");
                     int roomId = rs.getInt("RoomID");
@@ -307,15 +310,15 @@ public class BookingDAO {
             LocalDate bookingCheckOutDate = booking.getCheckOutDate().toLocalDate();
 
             if (!booking.getStatus().equals("Canceled")) {
-            for (LocalDate date : datesInRange) {
-                if ((date.isEqual(bookingCheckInDate) || date.isAfter(bookingCheckInDate))
-                        && (date.isEqual(bookingCheckOutDate) || date.isBefore(bookingCheckOutDate))) {
-                    result2.add(booking);
-                    break; // Không cần kiểm tra các ngày còn lại, đã tìm thấy ngày phù hợp
+                for (LocalDate date : datesInRange) {
+                    if ((date.isEqual(bookingCheckInDate) || date.isAfter(bookingCheckInDate))
+                            && (date.isEqual(bookingCheckOutDate) || date.isBefore(bookingCheckOutDate))) {
+                        result2.add(booking);
+                        break; // Không cần kiểm tra các ngày còn lại, đã tìm thấy ngày phù hợp
+                    }
                 }
-            }
-        } else {
-            continue;
+            } else {
+                continue;
             }
         }
         return result2;
@@ -523,4 +526,73 @@ public class BookingDAO {
         return result;
     }
 
+    public boolean updateBookingAll(Connection conn, Booking b) throws SQLException {
+        String sql = "UPDATE BOOKING SET GuestID=?, RoomID=?, CheckInDate=?, CheckOutDate=? WHERE BookingID=?";
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, b.getGuestId());
+            ps.setInt(2, b.getRoomId());
+            ps.setObject(3, b.getCheckInDate());   // LocalDateTime -> setObject OK v?i SQL Server
+            ps.setObject(4, b.getCheckOutDate());
+            ps.setInt(5, b.getBookingId());
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    public boolean updateGuestAndRoomOnly(Connection conn, Booking b) throws SQLException {
+        String sql = "UPDATE BOOKING SET GuestID=?, RoomID=? WHERE BookingID=?";
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, b.getGuestId());
+            ps.setInt(2, b.getRoomId());
+            ps.setInt(3, b.getBookingId());
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    /*
+    update + replace services (transaction ??y ?? trong DAO)
+     */
+    public boolean updateBookingAndServices(Booking b,
+            String[] serviceIds,
+            String[] quantities,
+            String[] serviceDates)
+            throws SQLException, ClassNotFoundException {
+        try ( Connection conn = DBConnection.getConnection()) {
+            conn.setAutoCommit(false);
+
+            updateBookingAll(conn, b);
+
+            BookingServiceDAO bsDao = new BookingServiceDAO();
+            bsDao.replaceBookingServices(conn, b.getBookingId(), serviceIds, quantities, serviceDates);
+
+            conn.commit();
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw ex;
+        }
+    }
+
+    /*
+     update guest+room + replace services (cho Checked-in)
+     */
+    public boolean updateServicesOnly(Booking b,
+            String[] serviceIds,
+            String[] quantities,
+            String[] serviceDates)
+            throws SQLException, ClassNotFoundException {
+        try ( Connection conn = DBConnection.getConnection()) {
+            conn.setAutoCommit(false);
+
+            updateGuestAndRoomOnly(conn, b);
+
+            BookingServiceDAO bsDao = new BookingServiceDAO();
+            bsDao.replaceBookingServices(conn, b.getBookingId(), serviceIds, quantities, serviceDates);
+
+            conn.commit();
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw ex;
+        }
+    }
 }

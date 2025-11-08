@@ -1,5 +1,6 @@
 package dao;
 
+import java.math.BigDecimal;
 import model.Room;
 import utils.DBConnection;
 
@@ -7,7 +8,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import model.RoomInformation;
+import model.RoomType;
 
 public class RoomDAO {
 
@@ -46,9 +51,15 @@ public class RoomDAO {
         } finally {
             // Close resources in reverse order
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (con != null) con.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 System.err.println("Error closing resources: " + e.getMessage());
             }
@@ -87,9 +98,15 @@ public class RoomDAO {
             e.printStackTrace();
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (con != null) con.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 System.err.println("Error closing resources: " + e.getMessage());
             }
@@ -97,6 +114,7 @@ public class RoomDAO {
 
         return room;
     }
+
     public Room getRoomByRoomNumber(String roomNumber) {
         Room room = null;
         String sql = "SELECT [RoomID] ,[RoomNumber] ,[RoomTypeID] ,[Description] ,[Status] FROM [HotelManagement].[dbo].[ROOM] WHERE [RoomNumber] = ?";
@@ -127,9 +145,15 @@ public class RoomDAO {
             e.printStackTrace();
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (con != null) con.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (SQLException e) {
                 System.err.println("Error closing resources: " + e.getMessage());
             }
@@ -227,6 +251,7 @@ public class RoomDAO {
         }
         return result;
     }
+
     public int countAvailableRoom(String status) {
         int result = 0;
         String sql = "SELECT COUNT([RoomID]) as total\n"
@@ -258,4 +283,61 @@ public class RoomDAO {
         }
         return result;
     }
+
+    public ArrayList<RoomInformation> getAvailableRoomsForBookingEdit(int bookingId,
+            int roomTypeId, int currentRoomId, LocalDateTime targetCheckIn, LocalDateTime targetCheckOut) throws ClassNotFoundException {
+
+        ArrayList<RoomInformation> result = new ArrayList<>();
+
+        String sql = "SELECT r.RoomID,\n"
+                + "               r.RoomNumber,\n"
+                + "               rt.TypeName,\n"
+                + "               rt.PricePerNight\n"
+                + "        FROM ROOM r\n"
+                + "        JOIN ROOM_TYPE rt ON r.RoomTypeID = rt.RoomTypeID\n"
+                + "        WHERE r.RoomTypeID = ?\n"
+                + "          AND (r.Status = 'Available' OR r.RoomID = ?)\n"
+                + "          AND NOT EXISTS (\n"
+                + "              SELECT 1\n"
+                + "              FROM BOOKING b\n"
+                + "              WHERE b.RoomID = r.RoomID\n"
+                + "                AND b.BookingID <> ? \n"
+                + "                AND b.Status IN ('Reserved','Checked-in')\n"
+                + "                AND b.CheckInDate  < ?\n"
+                + "                AND b.CheckOutDate > ?\n"
+                + "          )\n"
+                + "        ORDER BY rt.TypeName, r.RoomNumber";
+
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+
+            ps.setInt(1, roomTypeId);
+            ps.setInt(2, currentRoomId);
+            ps.setInt(3, bookingId);
+            ps.setTimestamp(4, Timestamp.valueOf(targetCheckOut));
+            ps.setTimestamp(5, Timestamp.valueOf(targetCheckIn));
+
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int roomId = rs.getInt("RoomID");
+                String roomNum = rs.getString("RoomNumber");
+                String typeName = rs.getString("TypeName");
+                BigDecimal price = rs.getBigDecimal("PricePerNight");
+                RoomInformation room = new RoomInformation(
+                        new Room(roomNum, roomId),
+                        new RoomType(typeName, price)
+                );
+                result.add(room);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
+    }
+
 }

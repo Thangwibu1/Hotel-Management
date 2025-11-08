@@ -98,4 +98,8 @@ bookingForm.addEventListener('submit', function (event) {
     const month = String(todaySubmit.getMonth() + 1).padStart(2, '0');
     const day = String(todaySubmit.getDate()).padStart(2, '0');
     bookingDateInput.value = `${year}-${month}-${day}`;
+    
+});
+bookingForm.addEventListener('submit', function (event) {
+    alert("Submitting form now...");
 });

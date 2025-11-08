@@ -12,6 +12,7 @@ import dao.RoomTypeDAO;
 import dao.ServiceDAO;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,8 +23,10 @@ import model.Booking;
 import model.BookingActionRow;
 import model.BookingService;
 import model.Room;
+import model.RoomInformation;
 import model.Service;
 import model.ServiceDetail;
+import utils.IConstant;
 
 /**
  *
@@ -116,16 +119,25 @@ public class ViewBookingController extends HttpServlet {
 
             ArrayList<ServiceDetail> serviceDetails = bookingServiceDAO.getServiceDetailsByBookingId(bookingId);
 
+            ArrayList<RoomInformation> availRooms = roomDAO.getAvailableRoomsForBookingEdit(bookingId, room.getRoomTypeId(), room.getRoomId(), booking.getCheckInDate(), booking.getCheckOutDate());
+            System.out.println("size list hshahah: " + availRooms.size());
+            DateTimeFormatter htmlDateFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            
+            
+            ArrayList<Service> serviceOfHotel = serviceDAO.getAllService();
+            request.setAttribute("checkIn", booking.getCheckInDate().toLocalDate().format(htmlDateFmt));
+            request.setAttribute("checkOut", booking.getCheckOutDate().toLocalDate().format(htmlDateFmt));
             request.setAttribute("SERVICE_DETAILS", serviceDetails);
             request.setAttribute("DETAIL_ROW", foundRow);
             request.setAttribute("BOOKING", booking);
             request.setAttribute("SERVICES", serviceList);
+             request.setAttribute("SERVICESofHOTEL", serviceOfHotel);
             request.setAttribute("ROOM_TOTAL", roomTotal);
             request.setAttribute("SERVICE_TOTAL", serviceTotal);
             request.setAttribute("GRAND_TOTAL", grandTotal);
             request.setAttribute("nights", nights);
             request.setAttribute("room", room);
-
+            request.setAttribute("AVAILABLE_ROOMS", availRooms);
             request.setAttribute("CURRENT_TAB", "bookings");
             request.setAttribute("CURRENT_STEP", "detail");
             request.getRequestDispatcher("/receptionist/bookingPage.jsp").forward(request, response);

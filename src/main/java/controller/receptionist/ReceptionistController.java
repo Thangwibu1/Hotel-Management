@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Staff;
 import utils.IConstant;
 
 /**
@@ -34,6 +35,8 @@ public class ReceptionistController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
+//            Staff staff = (Staff) request.getAttribute("userStaff");
+//            request.setAttribute("userStaff", staff);
             String tab = request.getParameter("tab");
             if (tab == null) {
                 tab = "dashboard";

@@ -215,7 +215,7 @@ public class GuestDAO {
             if (rs != null) {
                 while (rs.next()) {
                     int guestId = rs.getInt("GuestID");
-                     String fullName = rs.getString("FullName");
+                    String fullName = rs.getString("FullName");
                     String phone = rs.getString("Phone");
                     String email = rs.getString("Email");
                     String address = rs.getString("Address");
@@ -233,8 +233,10 @@ public class GuestDAO {
 
     /**
      * Lấy thông tin Guest theo email
+     *
      * @param email Email của Guest cần tìm
-     * @return Đối tượng Guest nếu tìm thấy, null nếu không tìm thấy
+     * @return �?ối tượng Guest nếu tìm thấy, null nếu không tìm
+     * thấy
      */
     public Guest getGuestByEmail(String email) {
         Guest guest = null;
@@ -303,6 +305,43 @@ public class GuestDAO {
                 LocalDateTime dobDT = dob.atStartOfDay(); // 00:00:00
                 ps.setTimestamp(7, Timestamp.valueOf(dobDT));
             }
+            int rowsAffected = ps.executeUpdate();
+            result = rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public boolean updateGuest(Guest guest) {
+        boolean result = false;
+        String sql = "UPDATE [dbo].[GUEST]\n"
+                + "   SET [FullName] = ?\n"
+                + "      ,[Phone] = ?\n"
+                + "      ,[Email] = ?\n"
+                + " WHERE [GuestID] = ?";
+
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, guest.getFullName());
+            ps.setString(2, guest.getPhone());
+            ps.setString(3, guest.getEmail());
+            ps.setInt(4, guest.getGuestId());
+
             int rowsAffected = ps.executeUpdate();
             result = rowsAffected > 0;
         } catch (Exception e) {
