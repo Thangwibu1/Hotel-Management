@@ -24,16 +24,18 @@
    
 <div class="header mb-2">
     <div class="header-left">
-        <div class="avatar">A</div>
+        <div style="width: 40px;height: 40px; border-radius: 50%; overflow: hidden; " >
+            <img style="display: block; width: 100%;" src="https://play-lh.googleusercontent.com/BCKxiWeeTOOnqvAwHnyFdJfd0Ed49SYorBghckiIqWftIWqkwxBvoWcMJbcNXW_5RU0=w240-h480-rw" alt="Avatar" class="avatar-image">
+        </div>
         <div class="user-info">
-            <h3 >Hello <%= staff.getFullName()%> </h3>
+            <h3 >Hello <%= staff.getFullName()%> !</h3>
             <p>Morning Shift ID : <%= staff.getStaffId()%></p>
         </div>
     </div>
     <div class="header-right">
         
         <form action="<%= request.getContextPath()%>/logout" method="get" style="margin-right: 2rem; " onsubmit="return confirm('Are you sure you want to log out of your account?')">
-            <button class="btn-publish">Logout</button>
+            <button class="btn-publish" style="font-weight: bold;">&#x21AA; Logout </button>
         </form>
     </div>
     

@@ -67,8 +67,9 @@ body {
 }
 
 .btn-publish {
-    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-    color: white;
+    /*background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);*/
+    background: linear-gradient(135deg, #f5f5dc 0%, #e0d7c5 100%);
+    color: #37474F;
     border: none;
     padding: 8px 20px;
     border-radius: 6px;
@@ -80,7 +81,7 @@ body {
 
 .btn-publish:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+    box-shadow: 0 4px 12px rgba(235, 222, 192, 0.5);
 }
 
 /* Container Styles */
