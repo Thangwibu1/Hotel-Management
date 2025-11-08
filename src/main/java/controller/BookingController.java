@@ -376,7 +376,7 @@ public class BookingController extends HttpServlet {
                     }
 
                     if (service.getServiceId() == 3) {
-                        RoomTask roomTask = new RoomTask(newBookingId, null, newBookingService.getServiceDate().atStartOfDay(), newBookingService.getServiceDate().atTime(23, 59, 59), "Pending", null, 0);
+                        RoomTask roomTask = new RoomTask(newBookingId, Integer.parseInt(roomId), 0, newBookingService.getServiceDate().atStartOfDay(), newBookingService.getServiceDate().atTime(23, 59, 59), "Pending", null, 0);
                         RoomTaskDAO roomTaskDAO = new RoomTaskDAO();
                         boolean roomTaskAdded = roomTaskDAO.insertRoomTaskForServiceForTransaction(roomTask, conn);
                         if (!roomTaskAdded) {
