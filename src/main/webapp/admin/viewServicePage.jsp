@@ -270,16 +270,6 @@
             background: transparent;
             color: #1565C0;
         }
-        
-        .delete-link { 
-            background: #C62828;
-            border: 2px solid #C62828;
-        }
-        
-        .delete-link:hover {
-            background: transparent;
-            color: #C62828;
-        }
 
         .disabled-link {
             background: #9E9E9E;
@@ -589,11 +579,6 @@
                                    data-price="<%= service.getPrice() %>">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
-                                <a class="delete-link" 
-                                   data-id="<%= service.getServiceId() %>" 
-                                   data-name="<%= service.getServiceName() %>">
-                                    <i class="fas fa-trash"></i> Delete
-                                </a>
                             <% } %>
                         </td>
                     </tr>
@@ -675,37 +660,10 @@
     </div>
 </div>
 
-<!-- Delete Confirmation Modal -->
-<div id="deleteModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h2>
-            <span class="close">&times;</span>
-        </div>
-        <div class="modal-body">
-            <p style="font-size: 1.1rem; text-align: center; color: var(--gray);">
-                Are you sure you want to delete service <strong id="serviceNameToDelete" style="color: var(--gold);"></strong>?
-            </p>
-            <p style="text-align: center; color: #C62828; margin-top: 1rem;">
-                <i class="fas fa-exclamation-circle"></i> This action cannot be undone.
-            </p>
-        </div>
-        <div class="modal-footer">
-            <a class="btn btn-secondary" id="cancelDelete">
-                <i class="fas fa-times"></i> Cancel
-            </a>
-            <a id="confirmDeleteLink" href="#" class="btn btn-danger">
-                <i class="fas fa-trash"></i> Delete
-            </a>
-        </div>
-    </div>
-</div>
-
 <script>
     // Get modals
     var addModal = document.getElementById("addModal");
     var updateModal = document.getElementById("updateModal");
-    var deleteModal = document.getElementById("deleteModal");
 
     // Get close buttons
     var closeButtons = document.getElementsByClassName("close");
@@ -727,22 +685,6 @@
         }
     });
 
-    // Open Delete modal
-    document.querySelectorAll('.delete-link').forEach(function(button) {
-        button.onclick = function() {
-            var serviceId = this.dataset.id;
-            var serviceName = this.dataset.name;
-            document.getElementById('serviceNameToDelete').textContent = serviceName;
-            document.getElementById('confirmDeleteLink').href = './DeleteServiceController?serviceId=' + serviceId;
-            deleteModal.style.display = "flex";
-        }
-    });
-    
-    // Cancel delete
-    document.getElementById('cancelDelete').onclick = function() {
-        deleteModal.style.display = "none";
-    }
-
     // Close modals with close button
     for (var i = 0; i < closeButtons.length; i++) {
         closeButtons[i].onclick = function() {
@@ -757,9 +699,6 @@
         }
         if (event.target == updateModal) {
             updateModal.style.display = "none";
-        }
-        if (event.target == deleteModal) {
-            deleteModal.style.display = "none";
         }
     }
 </script>
