@@ -102,7 +102,6 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                     }
                 } else {
                     request.setAttribute("THONGBAO", "Update Fail!!");
-                    request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
                 }
             }else{
                 roomTaskID = Integer.parseInt(request.getParameter("room_Task_ID").trim());
