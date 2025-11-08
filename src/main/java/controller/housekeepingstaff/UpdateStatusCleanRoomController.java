@@ -77,10 +77,16 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                 int staffID = staff.getStaffId();
                 if (d.getRoomTaskById(roomTaskID).getStaffID() == staffID) {
                     rowAffected = d.updateStatusRoomTaskToCleand(staffID, statusWantUpdate, roomTaskID);
-                    int bookingServiceId = d.getBookingServiceIdByRoomTaskId(roomTaskID);
-                    if (bookingServiceId > 0) {
-                        (new BookingServiceDAO()).updateBookingServiceStatus(bookingServiceId, 2, staffID);
+                    ArrayList<Integer> bookingServiceIds = d.getBookingServiceIdByRoomTaskId(roomTaskID);
+                    if (bookingServiceIds != null) {
+                        for (Integer bookingServiceId : bookingServiceIds) {
+                            if ((new BookingServiceDAO()).getById(bookingServiceId).getStatus() == 1) {
+                                (new BookingServiceDAO()).updateBookingServiceStatus(bookingServiceId, 2, staffID);
+                                break;
+                            }
+                        }
                     }
+                    
                     request.setAttribute("THONGBAO", "Update Successfully!!");
                     request.getRequestDispatcher("./homeHouseKeeping.jsp").forward(request, response);
                 } else {
@@ -96,9 +102,14 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                 if (d.getRoomTaskById(roomTaskID).getStaffID() == staffID) {
                     rowAffected = d.updateStatusRoomTaskToCleand(staffID, statusWantUpdate, roomTaskID);
                     (new RoomDAO()).updateRoomStatus(d.getRoomTaskById(roomTaskID).getRoomID(), "Waiting");
-                    int bookingServiceId = d.getBookingServiceIdByRoomTaskId(roomTaskID);
-                    if (bookingServiceId > 0) {
-                        (new BookingServiceDAO()).updateBookingServiceStatus(bookingServiceId, 2, staffID);
+                    ArrayList<Integer> bookingServiceIds = d.getBookingServiceIdByRoomTaskId(roomTaskID);
+                    if (bookingServiceIds != null) {
+                        for (Integer bookingServiceId : bookingServiceIds) {
+                            if ((new BookingServiceDAO()).getById(bookingServiceId).getStatus() == 1) {
+                                (new BookingServiceDAO()).updateBookingServiceStatus(bookingServiceId, 2, staffID);
+                                break;
+                            }
+                        }
                     }
                 } else {
                     request.setAttribute("THONGBAO", "Update Fail!!");
@@ -107,7 +118,7 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                 roomTaskID = Integer.parseInt(request.getParameter("room_Task_ID").trim());
                 statusWantUpdate = request.getParameter("status_want_update");
                 int staffID = staff.getStaffId();
-                int bookingServiceId = d.getBookingServiceIdByRoomTaskId(roomTaskID);
+                ArrayList<Integer> bookingServiceIds = d.getBookingServiceIdByRoomTaskId(roomTaskID);
                 ArrayList<RoomTask> listTask = d.getAllRoomTaskBaseDate(LocalDateTime.now());
                 boolean flag = false;
                 for (RoomTask roomTask : listTask) {
@@ -118,11 +129,15 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                 }
                 if (flag) {
                     request.setAttribute("THONGBAO", "Update Fail!!");
-                    request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
+//                    request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
                 } else {
                     rowAffected = d.updateStatusRoomTask(staff.getStaffId(), roomTaskID, statusWantUpdate);
-                    if (bookingServiceId > 0) {
-                        (new BookingServiceDAO()).updateBookingServiceStatus(bookingServiceId, 1, staffID);
+                    if (bookingServiceIds != null) {
+                        for (Integer bookingServiceId : bookingServiceIds) {
+                            if ((new BookingServiceDAO()).getById(bookingServiceId).getStatus() == 0)
+                            (new BookingServiceDAO()).updateBookingServiceStatus(bookingServiceId, 1, staffID);
+                            break;
+                        }
                     }
                 }
                 

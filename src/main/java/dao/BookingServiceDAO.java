@@ -69,6 +69,31 @@ public class BookingServiceDAO {
         }
         return result;
     }
+    public BookingService getById(int bookingServiceId) {
+        BookingService result = null;
+        String sql = "SELECT [Booking_Service_ID],[BookingID],[ServiceID],[Quantity],[ServiceDate],[Status],[StaffID],[Note] " +
+                     "FROM [HotelManagement].[dbo].[BOOKING_SERVICE] WHERE [Booking_Service_ID] = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, bookingServiceId);
+            ResultSet rs = ps.executeQuery();
+            if (rs != null && rs.next()) {
+                int bookingServiceID = rs.getInt("Booking_Service_ID");
+                int bookingID = rs.getInt("BookingID");
+                int serviceId = rs.getInt("ServiceID");
+                int quantity = rs.getInt("Quantity");
+                LocalDate serviceDate = rs.getObject("ServiceDate", LocalDate.class);
+                int status = rs.getInt("Status");
+                String note = rs.getString("Note");
+                result = new BookingService(bookingServiceID, bookingID, serviceId, quantity, serviceDate, status, note);
+                result.setStaffID(rs.getInt("StaffID"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public BookingService getBookingServiceByBookingServiceId(int bookingServiceId) {
 
         BookingService result = null;
@@ -364,6 +389,40 @@ public boolean addBookingServiceWithTransaction(BookingService bookingService, C
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return result;
+    }
+
+    public ArrayList<Integer> getRoomTaskIdByBookingServiceId(int bookingServiceId) {
+        ArrayList<Integer> result = new ArrayList<>();
+
+        String sql = "SELECT DISTINCT rt.RoomTaskID FROM BOOKING_SERVICE bs JOIN BOOKING b ON bs.BookingID = b.BookingID JOIN ROOM r ON b.RoomID = r.RoomID JOIN ROOM_TASK rt ON r.RoomID = rt.RoomID WHERE bs.Booking_Service_ID = ? and rt.isSystemTask = 0";
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, bookingServiceId);
+            ResultSet rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+                    result.add(rs.getInt("RoomTaskID"));
+                }
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+
         return result;
     }
 }

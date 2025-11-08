@@ -78,6 +78,36 @@ public class RoomTaskDAO {
     //     }
     //     return rowsAffected > 0;
     // }
+
+    public boolean deleteRoomTask(int roomTaskId) {
+        String sql = "DELETE FROM [HotelManagement].[dbo].[ROOM_TASK] WHERE [RoomTaskID] = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        int rowsAffected = 0;
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, roomTaskId);
+            rowsAffected = ps.executeUpdate();
+        } catch (Exception e) {
+            System.err.println("General error in deleteRoomTask: " + e.getMessage());
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+        return rowsAffected > 0;
+    }
+
     public boolean insertRoomTaskForServiceForTransaction(RoomTask roomTask, Connection conn) {
         String sql = "INSERT INTO [HotelManagement].[dbo].[ROOM_TASK] ([RoomID], [StartTime], [EndTime], [StatusClean], [Notes], [isSystemTask]) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -737,10 +767,10 @@ public class RoomTaskDAO {
     }
 
 
-    public int getBookingServiceIdByRoomTaskId(int roomTaskId) {
-        int result = 0;
+    public ArrayList<Integer> getBookingServiceIdByRoomTaskId(int roomTaskId) {
+        ArrayList<Integer> result = new ArrayList<>();
 
-        String sql = "SELECT bs.Booking_Service_ID FROM ROOM_TASK rt JOIN BOOKING b ON rt.RoomID = b.RoomID AND b.Status IN ('Reserved', 'Checked-in') JOIN BOOKING_SERVICE bs ON b.BookingID = bs.BookingID WHERE rt.RoomTaskID = ?  AND rt.isSystemTask = 0";
+        String sql = "SELECT bs.Booking_Service_ID FROM ROOM_TASK rt JOIN BOOKING b ON rt.RoomID = b.RoomID AND b.Status IN ('Reserved', 'Checked-in') JOIN BOOKING_SERVICE bs ON b.BookingID = bs.BookingID WHERE rt.RoomTaskID = ?  AND rt.isSystemTask = 0 and bs.ServiceID = 3";
         Connection con = null;
         PreparedStatement ps = null;
         try {
@@ -748,8 +778,10 @@ public class RoomTaskDAO {
             ps = con.prepareStatement(sql);
             ps.setInt(1, roomTaskId);
             ResultSet rs = ps.executeQuery();
-            if (rs != null && rs.next()) {
-                result = rs.getInt("Booking_Service_ID");
+            if (rs != null) {
+                while (rs.next()) {
+                    result.add(rs.getInt("Booking_Service_ID"));
+                }
             }
         } catch (Exception e) {
 
@@ -769,4 +801,6 @@ public class RoomTaskDAO {
 
         return result;
     }
+
+    
 }

@@ -82,6 +82,18 @@ public class BookingChangeController extends HttpServlet {
         if (cancelService != null) {
             for (String id : cancelService) {
                 updateBookingServiceStatus(Integer.parseInt(id), -1);
+                if (bookingServiceDAO.getById(Integer.parseInt(id)).getServiceId() == 3) {
+                    ArrayList<Integer> roomTaskIds = bookingServiceDAO.getRoomTaskIdByBookingServiceId(Integer.parseInt(id));
+                    for (Integer roomTaskId : roomTaskIds) {
+                        
+                        RoomTaskDAO roomTaskDAO = new RoomTaskDAO();
+                        RoomTask roomTask = roomTaskDAO.getRoomTaskById(roomTaskId);
+                        if (roomTask != null && roomTask.getStatusClean().equals("Pending")) {
+                            roomTaskDAO.deleteRoomTask(roomTaskId);
+                            break;
+                        }
+                    }
+                }
                 // if (Integer.parseInt(id) == 3) {
                     
                 // }

@@ -732,7 +732,7 @@
                     </button>
                 </form>
 
-                <% if ("Reserved".equalsIgnoreCase(booking.getStatus())) { %>
+                <% if (!"Canceled".equalsIgnoreCase(booking.getStatus()) && !"Checked-out".equalsIgnoreCase(booking.getStatus())) { %>
                 <form action="<%=IConstant.getBookingInfoServlet%>" method="post">
                     <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>">
                     <input type="hidden" name="guestId" value="<%= guest.getGuestId() %>">
@@ -740,7 +740,9 @@
                         <i class="fas fa-edit"></i> Chỉnh sửa
                     </button>
                 </form>
+                <% } %>
                 
+                <% if (!"Canceled".equalsIgnoreCase(booking.getStatus()) && !"Checked-out".equalsIgnoreCase(booking.getStatus()) && !"Checked-in".equalsIgnoreCase(booking.getStatus())) { %>
                 <form action="./cancelBooking" method="post" class="cancel-booking-form">
                     <input type="hidden" name="bookingId" value="<%= booking.getBookingId() %>">
                     <input type="hidden" name="guestId" value="<%= guest.getGuestId() %>">
