@@ -736,4 +736,37 @@ public class RoomTaskDAO {
         return rowsAffected;
     }
 
+
+    public int getBookingServiceIdByRoomTaskId(int roomTaskId) {
+        int result = 0;
+
+        String sql = "SELECT bs.Booking_Service_ID FROM ROOM_TASK rt JOIN BOOKING b ON rt.RoomID = b.RoomID AND b.Status IN ('Reserved', 'Checked-in') JOIN BOOKING_SERVICE bs ON b.BookingID = bs.BookingID WHERE rt.RoomTaskID = ?  AND rt.isSystemTask = 0";
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, roomTaskId);
+            ResultSet rs = ps.executeQuery();
+            if (rs != null && rs.next()) {
+                result = rs.getInt("Booking_Service_ID");
+            }
+        } catch (Exception e) {
+
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+                
+            }
+        }
+
+
+        return result;
+    }
 }

@@ -5,6 +5,7 @@
 
 package controller.housekeepingstaff;
 
+import dao.BookingServiceDAO;
 import dao.RoomDAO;
 import dao.RoomTaskDAO;
 import java.io.IOException;
@@ -76,6 +77,10 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                 int staffID = staff.getStaffId();
                 if (d.getRoomTaskById(roomTaskID).getStaffID() == staffID) {
                     rowAffected = d.updateStatusRoomTaskToCleand(staffID, statusWantUpdate, roomTaskID);
+                    int bookingServiceId = d.getBookingServiceIdByRoomTaskId(roomTaskID);
+                    if (bookingServiceId > 0) {
+                        (new BookingServiceDAO()).updateBookingServiceStatus(bookingServiceId, 2, staffID);
+                    }
                     request.setAttribute("THONGBAO", "Update Successfully!!");
                     request.getRequestDispatcher("./homeHouseKeeping.jsp").forward(request, response);
                 } else {
@@ -91,6 +96,10 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                 if (d.getRoomTaskById(roomTaskID).getStaffID() == staffID) {
                     rowAffected = d.updateStatusRoomTaskToCleand(staffID, statusWantUpdate, roomTaskID);
                     (new RoomDAO()).updateRoomStatus(d.getRoomTaskById(roomTaskID).getRoomID(), "Waiting");
+                    int bookingServiceId = d.getBookingServiceIdByRoomTaskId(roomTaskID);
+                    if (bookingServiceId > 0) {
+                        (new BookingServiceDAO()).updateBookingServiceStatus(bookingServiceId, 2, staffID);
+                    }
                 } else {
                     request.setAttribute("THONGBAO", "Update Fail!!");
                     request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
@@ -99,6 +108,7 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                 roomTaskID = Integer.parseInt(request.getParameter("room_Task_ID").trim());
                 statusWantUpdate = request.getParameter("status_want_update");
                 int staffID = staff.getStaffId();
+                int bookingServiceId = d.getBookingServiceIdByRoomTaskId(roomTaskID);
                 ArrayList<RoomTask> listTask = d.getAllRoomTaskBaseDate(LocalDateTime.now());
                 boolean flag = false;
                 for (RoomTask roomTask : listTask) {
@@ -112,6 +122,9 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                     request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
                 } else {
                     rowAffected = d.updateStatusRoomTask(staff.getStaffId(), roomTaskID, statusWantUpdate);
+                    if (bookingServiceId > 0) {
+                        (new BookingServiceDAO()).updateBookingServiceStatus(bookingServiceId, 1, staffID);
+                    }
                 }
                 
                 // HashMap<Integer, Integer> roomIdAndGuestId = d.getRoomIdAndGuestIdByRoomTaskId(roomTaskID);
