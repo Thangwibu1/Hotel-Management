@@ -21,6 +21,7 @@
         <title>Show Booking Service - Hotel Service Management </title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="./style.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <style>
             body {
                 background-color: #f5f5f5;
@@ -211,9 +212,9 @@
                                 style="cursor: pointer; background-color: white;"> 
 
                             <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#007bff" class="bi bi-list-ul mb-3" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 0 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm0-4a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm0-4a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-                                </svg>
+                                <i class="bi bi-list-ul mb-3" 
+                                   style="width: 40px; height: 40px; font-size: 40px; color: #37474F;">
+                                </i>
                                 <h4 class="card-title fw-bold text-dark">Today's Services</h4>
                                 <p class="card-text text-muted mb-4">List of all services provided today</p>
 
@@ -236,9 +237,10 @@
 
                             <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
 
-                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#8a2be2" class="bi bi-people-fill mb-3" viewBox="0 0 16 16">
-                                <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-9.975.324A.286.286 0 0 0 5 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5c0-.12-.016-.238-.046-.352zM.024 12.289V12.5l.004.148v.005c.036.702.392 1.28.883 1.636A2.887 2.887 0 0 0 2 13.064V12.5a.286.286 0 0 0-.25-.375H1.455a.299.299 0 0 0-.083.018zM3.454 13a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zM3 12.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zM3 12a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
-                                </svg>
+                                  <i class="bi bi-people-fill mb-3" 
+                                       style="width: 40px; height: 40px; font-size: 40px; color: #37474F;">
+                                    </i>
+
 
                                 <h4 class="card-title fw-bold text-dark">Employee Performance</h4>
                                 <p class="card-text text-muted mb-4">Statistics of work performance by shift/day</p>
@@ -288,7 +290,7 @@
             } else {
             %>
             
-            <div class="row mb-4 mt-4 g-3 align-items-stretch">
+            <div class="row mb-4 mt-2 g-3 align-items-stretch">
                 <div class="col-12 col-md-4">
                     <div class="card stat-card text-center border-0 shadow-sm h-100">
                         <div class="card-body">
