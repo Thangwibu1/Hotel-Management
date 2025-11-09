@@ -94,10 +94,7 @@
                 font-size: 20px;
             }
 
-            /* ?� XO�: .btn-complete, .btn-complete:hover v� ?� thay b?ng .btn-maintenance */
-            /* ?� XO�: .btn-close-left v� .modal-title-group (c�c class n�y kh�ng c�n trong HTML) */
-
-            /* CSS ?ANG D�NG: N�t Completed Maintenance */
+            
             .btn-maintenance {
                 background-color: #495057; /* M�u x�m ?en */
                 color: white;
