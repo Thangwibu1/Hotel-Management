@@ -404,7 +404,19 @@
                                                      <div class="service-card p-4">
                                                          <div class="d-flex justify-content-between align-items-start mb-3">
                                                              <span class="service-id-badge">Booking Service Task</span>
-                                                             <span class="badge badge-completed px-3 py-2"><%= b.getStatus() == 1 ? "Complete" : "Canceled" %></span>
+                                                                                <%
+                                                                                String statusDisplay = "";
+                                                                                if(b.getStatus() == -1){
+                                                                                   statusDisplay = "Canceled";
+                                                                                }else if(b.getStatus() == 0){
+                                                                                   statusDisplay = "Pending";
+                                                                                }else if(b.getStatus() == 1){
+                                                                                   statusDisplay = "InProgress";
+                                                                                }else{
+                                                                                   statusDisplay = "Completed";
+                                                                                }
+                                                                                %>
+                                                             <span class="badge badge-completed px-3 py-2"><%= statusDisplay %></span>
                                                          </div>
                                                          <div class="row g-3 mb-3">
                                                              <div class="col-md-2">
