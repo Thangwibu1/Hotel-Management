@@ -42,8 +42,10 @@ public class CheckInController extends HttpServlet {
             BookingDAO bookingDao = new BookingDAO();
             boolean checkedIn = false;
             ArrayList<Payment> checkPayment = (new PaymentDAO()).getPaymentByBookingId(bookingId);
-            if (checkPayment != null && checkPayment.get(0).getStatus().equals("Completed")) {
-                checkedIn = bookingDao.updateBookingStatus(bookingId, "Checked-in");
+            if (checkPayment != null && !checkPayment.isEmpty()) {
+                if (checkPayment.get(0).getStatus().equals("Completed")) {
+                    checkedIn = bookingDao.updateBookingStatus(bookingId, "Checked-in");
+                }
             }
             if (checkedIn) {
                 // bookingDao.updateBookingStatus(bookingId, "Checked-in");

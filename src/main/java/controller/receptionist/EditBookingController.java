@@ -60,7 +60,7 @@ public class EditBookingController extends HttpServlet {
         try {
             int bookingId = Integer.parseInt(request.getParameter("bookingId"));
             int guestId = Integer.parseInt(request.getParameter("guestId"));
-
+            System.out.println("hehehe"  + guestId);
             // FIX: ??i t? selectedRoomId sang roomId
             String roomIdParam = request.getParameter("roomId");
             if (roomIdParam == null || roomIdParam.isEmpty()) {
