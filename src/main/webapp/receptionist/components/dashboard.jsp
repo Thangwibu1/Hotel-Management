@@ -44,34 +44,7 @@
 
             <div class="spacer"></div>
 
-            <div class="grid grid-2">
-                <div class="card stat">
-                    <h4>Revenue This Month <span>?</span></h4>
-                    <div class="value">$267</div>
-                    <div class="muted">From completed stays</div>
-                    <div class="chartish"></div>
-                </div>
-                <div class="card stat">
-                    <h4>Pending Revenue <span>?</span></h4>
-                    <div class="value">$378</div>
-                    <div class="muted">From current guests</div>
-                    <div class="chartish"></div>
-                </div>
-            </div>
-
-            <div class="spacer"></div>
-
-            <div class="card" style="padding:16px">
-                <h3 style="margin:8px 0 16px">Recent Activity</h3>
-                <table>
-                    <thead><tr><th>Activity</th><th style="width:120px;text-align:right">Amount</th></tr></thead>
-                    <tbody>
-                        <tr><td>Booking #1 – Status: confirmed</td><td style="text-align:right">$387</td></tr>
-                        <tr><td>Sarah Johnson – Checked in</td><td style="text-align:right">$378</td></tr>
-                        <tr><td>Michael Brown – Checked out</td><td style="text-align:right">$267</td></tr>
-                    </tbody>
-                </table>
-            </div>
+            
         </section>
     </body>
 </html>

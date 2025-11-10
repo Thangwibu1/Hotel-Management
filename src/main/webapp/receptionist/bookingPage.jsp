@@ -5,11 +5,11 @@
 --%>
 
 <%@page import="model.Guest"%>
-<%@page contentType="text/html" pageEncoding="windows-1252"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <!-- ====== CSS (inline) ====== -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/receptionist/style.css"/>
@@ -35,13 +35,6 @@
             <!-- ====== JavaScript (inline) ====== -->
         </div>
         <script src="${pageContext.request.contextPath}/receptionist/style.js"></script>
-        <%
-            String error = (String) request.getAttribute("ERROR");
-            if (error != null) {
-        %>
-        <jsp:include page="../receptionist/components/errorPopup.jsp"/>
-        <%
-            }
-        %>
+        
     </body>
 </html>

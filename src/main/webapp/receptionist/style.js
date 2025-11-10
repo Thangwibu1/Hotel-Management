@@ -100,6 +100,3 @@ bookingForm.addEventListener('submit', function (event) {
     bookingDateInput.value = `${year}-${month}-${day}`;
     
 });
-bookingForm.addEventListener('submit', function (event) {
-    alert("Submitting form now...");
-});

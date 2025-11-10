@@ -103,13 +103,13 @@
                     </div>
                     <!-- Buttons -->
                     <div class="button-group">
-                        <button type="button" class="btn-back">
+                        <a href="${pageContext.request.contextPath}/receptionist/BookingsController" class="btn-back">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <line x1="19" y1="12" x2="5" y2="12"></line>
                             <polyline points="12 19 5 12 12 5"></polyline>
                             </svg>
                             Back
-                        </button>
+                        </a>
                         <button type="submit" class="btn-create">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
