@@ -12,7 +12,6 @@ import dao.RoomTaskDAO;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -98,10 +97,8 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                     }
 
                     request.setAttribute("THONGBAO", "Update Successfully!!");
-//                    request.getRequestDispatcher("./homeHouseKeeping.jsp").forward(request, response);
                 } else {
                     request.setAttribute("THONGBAO", "Update Fail!!");
-//                    request.getRequestDispatcher("./homeHouseKeeping.jsp").forward(request, response);
                 }
 
                 System.out.println("DA XU LY" + rowAffected);
@@ -139,7 +136,6 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                 }
                 if (flag) {
                     request.setAttribute("THONGBAO", "Update Fail!!");
-//                    request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
                 } else {
                     rowAffected = d.updateStatusRoomTask(staff.getStaffId(), roomTaskID, statusWantUpdate);
                     if (bookingServiceIds != null) {
@@ -151,20 +147,14 @@ public class UpdateStatusCleanRoomController extends HttpServlet {
                     }
                 }
 
-                // HashMap<Integer, Integer> roomIdAndGuestId = d.getRoomIdAndGuestIdByRoomTaskId(roomTaskID);
-//                int roomId = roomIdAndGuestId.keySet().iterator().next();
-//                int guestId = roomIdAndGuestId.values().iterator().next();
-//                System.out.println(roomId + guestId + "DUng roi djt me may");
             }
 
-
-            //qa chay xong update
             if (rowAffected > 0) {
                 request.setAttribute("THONGBAO", "Status updated successfully!");
                 request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
             } else {
                 System.out.println("SAI ROI NHA");
-                request.setAttribute("THONGBAO", "Status updated successfully!");
+                request.setAttribute("THONGBAO", "Status fail to update!");
                 request.getRequestDispatcher(IConstant.housekeeping).forward(request, response);
             }
 

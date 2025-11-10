@@ -41,7 +41,14 @@ public class UpdateStaffController extends HttpServlet {
 
         Staff staff = new Staff(Integer.parseInt(id), fullName, role, username, password, phone, email);
 
-        updateStaff(staff);
+        boolean success = updateStaff(staff);
+        
+        if (success) {
+            req.setAttribute("success", "Staff updated successfully!");
+        } else {
+            req.setAttribute("error", "Failed to update staff. Please try again.");
+        }
+        
         req.getRequestDispatcher("admin").forward(req, resp);
     }
 

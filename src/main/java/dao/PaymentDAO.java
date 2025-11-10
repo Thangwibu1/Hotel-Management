@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import model.Payment;
+import model.PaymentWithRoomDTO;
 import utils.DBConnection;
 
 public class PaymentDAO {
@@ -139,6 +140,84 @@ public class PaymentDAO {
             ps.setString(5, payment.getStatus());
             return ps.executeUpdate() > 0;
         }
+    }
+
+    /**
+     * Lấy tất cả payments kèm theo room number và guest name
+     * @return ArrayList chứa PaymentWithRoomDTO
+     */
+    public ArrayList<PaymentWithRoomDTO> getAllPaymentsWithRoomInfo() {
+        ArrayList<PaymentWithRoomDTO> result = new ArrayList<>();
+        String sql = "SELECT P.PaymentID, P.BookingID, P.PaymentDate, P.Amount, P.PaymentMethod, P.Status, " +
+                     "R.RoomNumber, G.FullName " +
+                     "FROM PAYMENT P " +
+                     "INNER JOIN BOOKING B ON P.BookingID = B.BookingID " +
+                     "INNER JOIN ROOM R ON B.RoomID = R.RoomID " +
+                     "INNER JOIN GUEST G ON B.GuestID = G.GuestID " +
+                     "ORDER BY P.PaymentDate DESC";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            
+            while (rs.next()) {
+                PaymentWithRoomDTO dto = new PaymentWithRoomDTO();
+                dto.setPaymentId(rs.getInt("PaymentID"));
+                dto.setBookingId(rs.getInt("BookingID"));
+                dto.setRoomNumber(rs.getString("RoomNumber"));
+                dto.setPaymentDate(rs.getObject("PaymentDate", LocalDate.class));
+                dto.setAmount(rs.getDouble("Amount"));
+                dto.setPaymentMethod(rs.getString("PaymentMethod"));
+                dto.setStatus(rs.getString("Status"));
+                dto.setGuestName(rs.getString("FullName"));
+                result.add(dto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return result;
+    }
+
+    /**
+     * Tìm kiếm payments theo room number
+     * @param roomNumber Số phòng cần tìm
+     * @return ArrayList chứa PaymentWithRoomDTO
+     */
+    public ArrayList<PaymentWithRoomDTO> searchPaymentsByRoomNumber(String roomNumber) {
+        ArrayList<PaymentWithRoomDTO> result = new ArrayList<>();
+        String sql = "SELECT P.PaymentID, P.BookingID, P.PaymentDate, P.Amount, P.PaymentMethod, P.Status, " +
+                     "R.RoomNumber, G.FullName " +
+                     "FROM PAYMENT P " +
+                     "INNER JOIN BOOKING B ON P.BookingID = B.BookingID " +
+                     "INNER JOIN ROOM R ON B.RoomID = R.RoomID " +
+                     "INNER JOIN GUEST G ON B.GuestID = G.GuestID " +
+                     "WHERE R.RoomNumber LIKE ? " +
+                     "ORDER BY P.PaymentDate DESC";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, "%" + roomNumber + "%");
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                PaymentWithRoomDTO dto = new PaymentWithRoomDTO();
+                dto.setPaymentId(rs.getInt("PaymentID"));
+                dto.setBookingId(rs.getInt("BookingID"));
+                dto.setRoomNumber(rs.getString("RoomNumber"));
+                dto.setPaymentDate(rs.getObject("PaymentDate", LocalDate.class));
+                dto.setAmount(rs.getDouble("Amount"));
+                dto.setPaymentMethod(rs.getString("PaymentMethod"));
+                dto.setStatus(rs.getString("Status"));
+                dto.setGuestName(rs.getString("FullName"));
+                result.add(dto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return result;
     }
 
 }

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.StaffDAO;
 import model.Staff;
-import utils.IConstant;
 
 @WebServlet("/admin/add-staff")
 public class AddStaffController extends HttpServlet {
@@ -42,12 +41,16 @@ public class AddStaffController extends HttpServlet {
         Staff newStaff = new Staff(fullName, role, username, password, phone, email);
 
         if (!isUsernameExist(username)) {
-            addStaff(newStaff);
+            boolean success = addStaff(newStaff);
+            if (success) {
+                req.setAttribute("success", "Staff added successfully!");
+            } else {
+                req.setAttribute("error", "Failed to add staff. Please try again.");
+            }
             req.getRequestDispatcher("admin").forward(req, resp);
         } else {
             req.setAttribute("error", "Username already exists!");
             req.getRequestDispatcher("admin").forward(req, resp);
-            
         }
     }
 

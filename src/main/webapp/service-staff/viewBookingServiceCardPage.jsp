@@ -331,7 +331,7 @@
                                         <%
                                         if(!bookingService.getServiceDate().isAfter(LocalDate.now())){
                                             if( bookingService.getStatus() == 1 || bookingService.getStatus() == 0 ){
-                                                if(bookingService.getServiceId() != 3){
+                                                if(bookingService.getServiceId() != 3 ){
                                             %>
                                                     <div>
                                                         <div>

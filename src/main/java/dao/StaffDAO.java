@@ -270,4 +270,57 @@ public class StaffDAO {
 
         return result;
     }
+
+    public ArrayList<Staff> searchStaff(String keyword) {
+        ArrayList<Staff> result = new ArrayList<>();
+        
+        String sql = "SELECT [StaffID] ,[FullName] ,[Role] ,[Username] ,[PasswordHash] ,[Phone] ,[Email] " +
+                     "FROM [HotelManagement].[dbo].[STAFF] " +
+                     "WHERE [FullName] LIKE ? OR [Username] LIKE ? OR [Email] LIKE ? OR [Phone] LIKE ? OR [Role] LIKE ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            String searchPattern = "%" + keyword + "%";
+            ps.setString(1, searchPattern);
+            ps.setString(2, searchPattern);
+            ps.setString(3, searchPattern);
+            ps.setString(4, searchPattern);
+            ps.setString(5, searchPattern);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("StaffID");
+                String fullName = rs.getString("FullName");
+                String role = rs.getString("Role");
+                String username = rs.getString("Username");
+                String passwordHash = rs.getString("PasswordHash");
+                String phone = rs.getString("Phone");
+                String email = rs.getString("Email");
+                Staff staff = new Staff(id, fullName, role, username, passwordHash, phone, email);
+                result.add(staff);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+
+        return result;
+    }
 }

@@ -50,6 +50,8 @@ public interface IConstant {
     public static final String bookingController = "./BookingsController";
     public static final String getPendingCheckinController = "./GetPendingCheckinController";
     public static final String roomsStatusReceptionistController = "./RoomsStatusBoard";
+    public static final String viewPaymentController = "./ViewPayment";
+    public static final String updatePaymentStatusController = "./UpdatePaymentStatus";
 //    --------------------manager servlet------------------------
     public static final String guestReportController = "GuestReportController";
     public static final String revenueReportController = "RevenueReportController";
@@ -100,6 +102,7 @@ public interface IConstant {
     public static final String canceledText = "Canceled";
     
     //---service page-----------------------------------------------------------
+
     public static final String registerServicePage = "./registerServicePage.jsp";
     public static final String updateStatusServicePage = "./updateStatusServicePage.jsp";
     public static final String reportServicePage = "./reportServicePage.jsp";

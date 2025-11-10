@@ -9,7 +9,13 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="utils.IConstant"%>
 <%@page import="model.Staff"%>
-<%@page contentType="text/html" pageEncoding="windows-1252"%>
+<%@page import="model.Booking"%>
+<%@page import="model.Guest"%>
+<%@page import="model.Room"%>
+<%@page import="dao.BookingDAO"%>
+<%@page import="dao.GuestDAO"%>
+<%@page import="dao.RoomDAO"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -138,6 +144,10 @@
             <div class="card">
                 <div class="container main-content-area">
                     <%
+                        BookingDAO bookingDAO = new BookingDAO();
+                        GuestDAO guestDAO = new GuestDAO();
+                        RoomDAO roomDAO = new RoomDAO();
+                        
                         if (listTask != null && !listTask.isEmpty()) {
                     %>
 <!--=======================================================================================================-->    
@@ -154,14 +164,25 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% for (BookingService serviceTask : listTask) {
+                                    <% 
+                                    for (BookingService serviceTask : listTask) {
                                         for (Service s : listService) {
                                             if(serviceTask.getServiceId() == s.getServiceId()){
+                                                // Lấy thông tin booking từ bookingId
+                                                Booking booking = bookingDAO.getBookingById(serviceTask.getBookingId());
+                                                Guest guest = null;
+                                                Room room = null;
+                                                
+                                                if (booking != null) {
+                                                    // Lấy thông tin guest và room
+                                                    guest = guestDAO.getGuestById(booking.getGuestId());
+                                                    room = roomDAO.getRoomById(booking.getRoomId());
+                                                }
                                            %>
                                         <tr>
                                             <td> <%= IConstant.formatDate(serviceTask.getServiceDate()) %> </td>
-                                            <td>Nguyen Van A</td>
-                                            <td>101</td>
+                                            <td><%= (guest != null) ? guest.getFullName() : "N/A" %></td>
+                                            <td><%= (room != null) ? room.getRoomNumber() : "N/A" %></td>
                                             <td><%= s.getServiceName() %></td>
                                             <td>
                                                <%

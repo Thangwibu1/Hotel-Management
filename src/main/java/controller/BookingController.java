@@ -323,8 +323,8 @@ public class BookingController extends HttpServlet {
         LocalDate outDate = LocalDate.parse(checkOutDate);
         LocalDate bookDate = LocalDate.parse(bookingDate);
         //Change to 00:00:00 and 23:59:59
-        LocalDateTime inDateTime = inDate.atStartOfDay();
-        LocalDateTime outDateTime = outDate.atTime(23, 59, 59);
+        LocalDateTime inDateTime = inDate.atTime(12,0,0);
+        LocalDateTime outDateTime = outDate.atTime(14, 0, 0);
 
         ArrayList<ChoosenService> services = new ArrayList<>();
         String[] serviceId = (String[]) req.getParameterValues("serviceId");
@@ -376,7 +376,7 @@ public class BookingController extends HttpServlet {
                     }
 
                     if (service.getServiceId() == 3) {
-                        RoomTask roomTask = new RoomTask(newBookingId, null, newBookingService.getServiceDate().atStartOfDay(), newBookingService.getServiceDate().atTime(23, 59, 59), "Pending", null, 0);
+                        RoomTask roomTask = new RoomTask(newBookingId, Integer.parseInt(roomId), 0, newBookingService.getServiceDate().atStartOfDay(), newBookingService.getServiceDate().atTime(23, 59, 59), "Pending", null, 0);
                         RoomTaskDAO roomTaskDAO = new RoomTaskDAO();
                         boolean roomTaskAdded = roomTaskDAO.insertRoomTaskForServiceForTransaction(roomTask, conn);
                         if (!roomTaskAdded) {
@@ -393,7 +393,7 @@ public class BookingController extends HttpServlet {
                 bookDate, 
                 (double) (Integer.parseInt(totalAmount)) / 2.0, 
                 "Credit Card",
-                "Completed"
+                "Pending"
             );
             PaymentDAO paymentDAO = new PaymentDAO();
             boolean paymentAdded = paymentDAO.addPaymentWithTransaction(newPayment, conn);

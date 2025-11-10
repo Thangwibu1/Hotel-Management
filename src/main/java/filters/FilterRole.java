@@ -25,6 +25,7 @@ public class FilterRole implements Filter {
         HttpSession session = request.getSession();
         String url = request.getRequestURI();
         Staff staff = (Staff) session.getAttribute("userStaff");
+        System.out.println("DEBUG: " + url + "");
         if (staff != null && !url.contains("logout")) {
             String role = staff.getRole().toLowerCase();
             if (role.equalsIgnoreCase("servicestaff")) {
@@ -44,7 +45,7 @@ public class FilterRole implements Filter {
                     case "housekeeping":
                         response.sendRedirect(request.getContextPath() + IConstant.housekeeping);
                         return;
-                    case "servicestaff":
+                    case "service-staff":
                         response.sendRedirect(IConstant.serviceRole);
                         return;
                 }

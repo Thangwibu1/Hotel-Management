@@ -1,7 +1,6 @@
 package controller.admin;
 
 import dao.SystemConfigDAO;
-import model.SystemConfig;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,7 +22,21 @@ public class RemoveSystemConfig extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String configId = req.getParameter("configId");
-        systemConfigDAO.deleteSystemConfig(Integer.parseInt(configId));
+        int id = Integer.parseInt(configId);
+        
+        // Prevent deleting config ID = 1 (protected system config)
+        if (id == 1) {
+            req.setAttribute("error", "Cannot delete system config ID 1. This is a protected configuration.");
+            req.getRequestDispatcher("./system").forward(req, resp);
+            return;
+        }
+        
+        boolean success = systemConfigDAO.deleteSystemConfig(id);
+        if (success) {
+            req.setAttribute("success", "System config deleted successfully!");
+        } else {
+            req.setAttribute("error", "Failed to delete system config. Please try again.");
+        }
         req.getRequestDispatcher("./system").forward(req, resp);
     }
 

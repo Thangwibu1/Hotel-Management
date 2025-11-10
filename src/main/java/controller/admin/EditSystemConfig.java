@@ -24,7 +24,22 @@ public class EditSystemConfig extends HttpServlet {
         String configId = req.getParameter("configId");
         String configName = req.getParameter("configName");
         String configValue = req.getParameter("configValue");
-        systemConfigDAO.updateVale(new SystemConfig(Integer.parseInt(configId), configName, Integer.parseInt(configValue)));
+        int id = Integer.parseInt(configId);
+        
+        // For config ID = 1, preserve the original config name from database
+        if (id == 1) {
+            SystemConfig existingConfig = systemConfigDAO.getSystemConfigById(id);
+            if (existingConfig != null) {
+                configName = existingConfig.getConfigName();
+            }
+        }
+        
+        boolean success = systemConfigDAO.updateVale(new SystemConfig(id, configName, Integer.parseInt(configValue)));
+        if (success) {
+            req.setAttribute("success", "System config updated successfully!");
+        } else {
+            req.setAttribute("error", "Failed to update system config. Please try again.");
+        }
         req.getRequestDispatcher("./system").forward(req, resp);
     }
 

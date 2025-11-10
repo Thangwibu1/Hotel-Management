@@ -38,14 +38,12 @@ public class TakeRoomForCleanController extends HttpServlet {
             System.out.println("DAY LA TAKEROOMCLEAN");  
             RoomTaskDAO d = new RoomTaskDAO();
             ArrayList<RoomTask> listTask = d.getAllRoomTaskBaseDate(LocalDateTime.now(),1);
-//            ArrayList<RoomTask> listTask = d.getAllRoomTaskBaseDate(LocalDateTime.now(), 1);
+
             ArrayList<RoomTask> listTask2 = d.getAllRoomTaskBaseDate(LocalDateTime.now(), 0);
             
             if (listTask == null || listTask.isEmpty()) {
-//                System.out.println("check xem co lay dc roomTask cua hom nay ko ne . VO DAY LA KO LAY DC");
                 request.getRequestDispatcher(IConstant.makeNewRoomTaskController).forward(request, response);
             } else {
-                //sort  
 
                 if (listTask2 != null && !listTask2.isEmpty()) {
                     for (RoomTask roomTask : listTask2) {
@@ -57,7 +55,7 @@ public class TakeRoomForCleanController extends HttpServlet {
                 Comparator<RoomTask> statusComparator = new Comparator<RoomTask>() {
                     @Override
                     public int compare(RoomTask task1, RoomTask task2) {
-                        // Hàm ph? tr?: gán s? ?u tiên. S? nh? h?n -> ?u tiên cao h?n
+                      
                         int priority1 = getStatusPriority(task1.getStatusClean());
                         int priority2 = getStatusPriority(task2.getStatusClean());
                         return Integer.compare(priority1, priority2);
@@ -65,13 +63,13 @@ public class TakeRoomForCleanController extends HttpServlet {
                             
                     private int getStatusPriority(String status) {
                         if (status == null) return 5; 
-                            String lowerStatus = status.toLowerCase();
-                                if (lowerStatus.equals("pending")) return 1;
-                                if (lowerStatus.equals("in progress")) return 2;
-                                if (lowerStatus.equals("cleaned")) return 3;
-                                if (lowerStatus.equals("maintenance")) return 4;
-                                return 5;
-                            }
+                        String lowerStatus = status.toLowerCase();
+                        if (lowerStatus.equals("pending")) return 1;
+                        if (lowerStatus.equals("in progress")) return 2;
+                        if (lowerStatus.equals("cleaned")) return 3;
+                        if (lowerStatus.equals("maintenance")) return 4;
+                        return 5;
+                    }
                 };
                 listTask.sort(statusComparator);
                 ArrayList<RoomTask> listPending = d.getRoomBaseStatus("Pending", LocalDateTime.now());
@@ -98,7 +96,6 @@ public class TakeRoomForCleanController extends HttpServlet {
                     request.setAttribute("ACTIVE", active);
 
                     if (active.equalsIgnoreCase("pending")) {
-                        System.out.println(request.getContextPath());
                         request.setAttribute("LIST_DISPLAY_HOME", listPending);
                     } else if (active.equalsIgnoreCase("cleaned")) {
                         request.setAttribute("LIST_DISPLAY_HOME", listCleaned);

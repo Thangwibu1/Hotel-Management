@@ -7,8 +7,8 @@ public class RoomTask {
     private int roomTaskID;
     private int roomID;
     private Integer staffID;
-    private LocalDateTime startTime; 
-    private LocalDateTime endTime;   
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private String statusClean;
     private String notes;
     private int isSystemTask;
@@ -17,13 +17,13 @@ public class RoomTask {
     }
 
     public RoomTask(
-        int roomID,            
-        Integer staffID,       
-        LocalDateTime startTime,
-        LocalDateTime endTime,  
-        String statusClean,     
-        String notes,
-        int isSystemTask
+            int roomID,
+            Integer staffID,
+            LocalDateTime startTime,
+            LocalDateTime endTime,
+            String statusClean,
+            String notes,
+            int isSystemTask
     ) {
         this.roomID = roomID;
         this.staffID = staffID;
@@ -32,7 +32,7 @@ public class RoomTask {
         this.statusClean = statusClean;
         this.notes = notes;
         this.isSystemTask = isSystemTask;
-       
+
     }
 
     public RoomTask(int roomTaskID, int roomID, int staffID, LocalDateTime startTime, LocalDateTime endTime, String statusClean, String notes, int isSystemTask) {
@@ -45,8 +45,9 @@ public class RoomTask {
         this.notes = notes;
         this.isSystemTask = isSystemTask;
     }
-//[RoomID], [StaffID], [StartTime], [EndTime], [StatusClean], [Notes])
-    public RoomTask(int roomID, String statusClean , LocalDateTime startTime) {
+
+    //[RoomID], [StaffID], [StartTime], [EndTime], [StatusClean], [Notes])
+    public RoomTask(int roomID, String statusClean, LocalDateTime startTime) {
         this.roomTaskID = 0;
         this.roomID = roomID;
         this.staffID = null;
@@ -55,7 +56,7 @@ public class RoomTask {
         this.statusClean = statusClean;
         this.notes = "";
         this.isSystemTask = 0;
-        
+
     }
 
     public RoomTask(int roomId, Object object, LocalDateTime now, Object object0, String pending, Object object1) {
@@ -119,7 +120,7 @@ public class RoomTask {
     public void setNotes(String notes) {
         this.notes = notes;
     }
-    
+
     public int getIsSystemTask() {
         return isSystemTask;
     }
@@ -132,6 +133,6 @@ public class RoomTask {
     public String toString() {
         return "RoomTask{" + "roomTaskID=" + roomTaskID + ", roomID=" + roomID + ", staffID=" + staffID + ", startTime=" + startTime + ", endTime=" + endTime + ", statusClean=" + statusClean + ", notes=" + notes + ", isSystemTask=" + isSystemTask + '}';
     }
-    
+
 
 }

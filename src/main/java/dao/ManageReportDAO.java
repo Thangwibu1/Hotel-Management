@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import model.CancellationStat;
 import model.FrequentGuest;
 import model.OccupancyRoom;
@@ -99,7 +100,7 @@ public class ManageReportDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            // ?�ng resources
+            // Đóng resources
             try {
                 if (rs != null) {
                     rs.close();

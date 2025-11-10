@@ -19,23 +19,24 @@
         <title>Booking Service - Hotel Service Management</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="./style.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <style>
-           
+
             .report-card {
                 transition: transform 0.3s ease, box-shadow 0.3s ease;
-                border: 1px solid #e9ecef; 
+                border: 1px solid #e9ecef;
                 border-radius: 0.75rem !important;
             }
 
             .report-card:hover {
                 transform: translateY(-5px);
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important; 
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
                 cursor: pointer;
             }
 
-           
+
             .bi-people-fill {
-                color: #8a2be2; 
+                color: #8a2be2;
             }
 
             .bi-currency-dollar {
@@ -49,6 +50,24 @@
             .badge.bg-success {
                 background-color: #198754 !important;
             }
+            .profile-item {
+                background: linear-gradient(135deg, #fdfdfd 0%, #ebebeb 100%);
+                transition: all 0.3s;
+            }
+
+            .profile-item:hover {
+                transform: translateX(5px);
+                box-shadow: 0 4px 12px rgba(224, 203, 178, 0.5);
+            }
+
+            .profile-icon {
+                background: linear-gradient(135deg, #596570 0%, #404951 100%);
+            }
+
+            .profile-header svg {
+                fill: #667eea;
+            }
+
         </style>
     </head>
     <body class="d-flex flex-column min-vh-100" >
@@ -81,23 +100,69 @@
                     </button>
                 </form>
             </div>
+            <!--detail-->       
+            <div class="card shadow-sm border-0 rounded-3 mb-4 mt-4">
+                <div class="card-body p-4">
+                    <div class="profile-header d-flex align-items-center gap-3 pb-3 mb-4 border-bottom">
+                        <i class="bi bi-person-circle ms-3" style="font-size: 32px; color: #37474F;"></i>
+                        <h2 class="h4 mb-0" style="color: #37474F;">Account Profile</h2>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-6 col-xl-3">
+                            <div class="profile-item d-flex align-items-start gap-3 p-3 rounded-3">
+                                <div class="profile-icon rounded-3 d-flex align-items-center justify-content-center text-white" style="min-width: 50px; height: 50px; font-size: 22px;">
+                                    <i class="bi bi-person-fill"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="text-uppercase text-muted small fw-semibold mb-1" style="font-size: 12px; letter-spacing: 0.5px;">Full Name</div>
+                                    <div class="fw-semibold"><%= staff.getFullName()%></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <div class="profile-item d-flex align-items-start gap-3 p-3 rounded-3">
+                                <div class="profile-icon rounded-3 d-flex align-items-center justify-content-center text-white" style="min-width: 50px; height: 50px; font-size: 22px;">
+                                    <i class="bi bi-envelope-fill"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="text-uppercase text-muted small fw-semibold mb-1" style="font-size: 12px; letter-spacing: 0.5px;">Email Address</div>
+                                    <div class="fw-semibold text-break " style="font-size: 11px;"><%= staff.getEmail()%></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <div class="profile-item d-flex align-items-start gap-3 p-3 rounded-3">
+                                <div class="profile-icon rounded-3 d-flex align-items-center justify-content-center text-white" style="min-width: 50px; height: 50px; font-size: 22px;">
+                                    <i class="bi bi-telephone-fill"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="text-uppercase text-muted small fw-semibold mb-1" style="font-size: 12px; letter-spacing: 0.5px;">Phone Number</div>
+                                    <div class="fw-semibold"><%= staff.getPhone()%></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <div class="profile-item d-flex align-items-start gap-3 p-3 rounded-3">
+                                <div class="profile-icon rounded-3 d-flex align-items-center justify-content-center text-white" style="min-width: 50px; height: 50px; font-size: 22px;">
+                                    <i class="bi bi-person-badge-fill"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="text-uppercase text-muted small fw-semibold mb-1" style="font-size: 12px; letter-spacing: 0.5px;">Employee ID</div>
+                                    <div class="fw-semibold"><%= staff.getStaffId()%></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>               
+            <!--done-->
+
 
             <div class="container-fluid mt-4">
 
-                <div class="card shadow-sm mb-4 border-1">
-                    <div class="card-body py-3">
-                        <h5 class="card-title text-muted mb-0 d-flex align-items-center ">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bar-chart-fill me-2" viewBox="0 0 16 16">
-                            <path d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V2z"/>
-                            </svg>
-                            Select Report Type
-                        </h5>
-                    </div>
-                </div>
-
                 <div class="row g-4 justify-content-center">
 
-                   
+
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         <form action="<%= IConstant.listServiceTodayController%>" method="POST" class="h-100"> 
 
@@ -107,12 +172,12 @@
                                     style="cursor: pointer; background-color: white;"> 
 
                                 <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#007bff" class="bi bi-list-ul mb-3" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 0 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm0-4a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm0-4a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-                                    </svg>
+                                    <i class="bi bi-list-ul mb-3" 
+                                       style="width: 40px; height: 40px; font-size: 40px; color: #37474F;">
+                                    </i>
                                     <h4 class="card-title fw-bold text-dark">Today's Services</h4>
                                     <p class="card-text text-muted mb-4">List of all services provided today</p>
-                                    
+
                                 </div>
 
                             </button>
@@ -132,13 +197,13 @@
 
                                 <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
 
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#8a2be2" class="bi bi-people-fill mb-3" viewBox="0 0 16 16">
-                                    <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-9.975.324A.286.286 0 0 0 5 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5c0-.12-.016-.238-.046-.352zM.024 12.289V12.5l.004.148v.005c.036.702.392 1.28.883 1.636A2.887 2.887 0 0 0 2 13.064V12.5a.286.286 0 0 0-.25-.375H1.455a.299.299 0 0 0-.083.018zM3.454 13a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zM3 12.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zM3 12a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
-                                    </svg>
+                                    <i class="bi bi-people-fill mb-3" 
+                                       style="width: 40px; height: 40px; font-size: 40px; color: #37474F;">
+                                    </i>
 
-                                    <h4 class="card-title fw-bold text-dark">Employee Performance</h4>
-                                    <p class="card-text text-muted mb-4">Statistics of work performance by shift/day</p>
-                                    
+                                    <h4 class="card-title fw-bold text-dark" style="color: #37474F;">Employee Performance</h4>
+                                    <p class="card-text text-muted mb-4" style="color: #37474F;">Statistics of work performance by shift/day</p>
+
                                 </div>
 
                             </button>
@@ -146,31 +211,30 @@
                         </form>
                     </div>
 
-                        <div class="col-lg-4 col-md-6 col-sm-12">
-                            <form action="<%= IConstant.serviceRevenueController %>" method="POST" class="h-100">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <form action="<%= IConstant.serviceRevenueController%>" method="POST" class="h-100">
 
-                                <input type="hidden" name="report_type" value="service_revenue">
+                            <input type="hidden" name="report_type" value="service_revenue">
 
-                                <button type="submit"
-                                        class="card report-card shadow-sm w-100 border-0 h-100"
-                                        style="cursor: pointer; background-color: white;">
+                            <button type="submit"
+                                    class="card report-card shadow-sm w-100 border-0 h-100"
+                                    style="cursor: pointer; background-color: white;">
 
-                                    <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#fbc531" class="bi bi-currency-dollar mb-3" viewBox="0 0 16 16">
-                                        <path d="M4 10.78a.5.5 0 0 0 .5.5h2a.5.5 0 0 1 0 1h-2.5a.5.5 0 0 0 0 1h2.5a1.5 1.5 0 0 0 0-3H5.5a.5.5 0 0 1 0-1h2.5a.5.5 0 0 0 0-1h-2.5a1.5 1.5 0 0 1 0-3H12a.5.5 0 0 0 0-1h-2.5a.5.5 0 0 1 0-1H12a1.5 1.5 0 0 0 0-3H4.5a.5.5 0 0 0 0 1h2a.5.5 0 0 1 0 1H4.5a.5.5 0 0 0 0 1h2.5a1.5 1.5 0 0 1 0 3H4z"/>
-                                        </svg>
-                                        <h4 class="card-title fw-bold text-dark">Service Revenue</h4>
-                                        <p class="card-text text-muted mb-4">Total revenue value by time period</p>
-                                        
-                                    </div>
+                                <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#fbc531" class="bi bi-currency-dollar mb-3" viewBox="0 0 16 16">
+                                    <path d="M4 10.78a.5.5 0 0 0 .5.5h2a.5.5 0 0 1 0 1h-2.5a.5.5 0 0 0 0 1h2.5a1.5 1.5 0 0 0 0-3H5.5a.5.5 0 0 1 0-1h2.5a.5.5 0 0 0 0-1h-2.5a1.5 1.5 0 0 1 0-3H12a.5.5 0 0 0 0-1h-2.5a.5.5 0 0 1 0-1H12a1.5 1.5 0 0 0 0-3H4.5a.5.5 0 0 0 0 1h2a.5.5 0 0 1 0 1H4.5a.5.5 0 0 0 0 1h2.5a1.5 1.5 0 0 1 0 3H4z"/>
+                                    </svg>
+                                    <h4 class="card-title fw-bold text-dark" style="color: #37474F;">Service Revenue</h4>
+                                    <p class="card-text text-muted mb-4" style="color: #37474F;">Total revenue value by time period</p>
 
-                                </button>
+                                </div>
 
-                            </form>
-                        </div>
+                            </button>
+
+                        </form>
+                    </div>
                 </div>
             </div>
-
 
 
         </div>

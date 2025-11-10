@@ -372,21 +372,49 @@ VALUES
     (N'Ga giường', N'Bộ ga trải giường');
 GO
 
--- Tạo trigger để tự động thêm 4 thiết bị cơ bản vào mỗi phòng mới
+-- Xóa trigger cũ nếu đã tồn tại
+IF OBJECT_ID('trg_AddDevicesToNewRoom', 'TR') IS NOT NULL
+    DROP TRIGGER trg_AddDevicesToNewRoom;
+GO
+
+-- Tạo trigger để tự động thêm TẤT CẢ thiết bị vào mỗi phòng mới
 CREATE TRIGGER trg_AddDevicesToNewRoom
     ON ROOM
     AFTER INSERT
     AS
 BEGIN
-    -- Thêm 4 thiết bị cơ bản cho mỗi phòng mới được tạo
-    INSERT INTO ROOM_DEVICE (RoomID, DeviceID, Quantity)
+    -- Thêm TẤT CẢ thiết bị hiện có cho mỗi phòng mới được tạo
+    INSERT INTO ROOM_DEVICE (RoomID, DeviceID, Quantity, Status)
     SELECT
         i.RoomID,
         d.DeviceID,
-        1 as Quantity  -- Mỗi thiết bị có số lượng là 1
+        1 as Quantity,  -- Mỗi thiết bị có số lượng là 1
+        1 as Status     -- Status = 1 (Working)
     FROM INSERTED i
-             CROSS JOIN DEVICE d
-    WHERE d.DeviceName IN (N'TV', N'Điều hòa', N'Tủ lạnh', N'Ga giường');
+             CROSS JOIN DEVICE d;
+END;
+GO
+
+-- Xóa trigger cũ nếu đã tồn tại
+IF OBJECT_ID('trg_AddNewDeviceToAllRooms', 'TR') IS NOT NULL
+    DROP TRIGGER trg_AddNewDeviceToAllRooms;
+GO
+
+-- Tạo trigger để tự động thêm device mới vào TẤT CẢ các phòng hiện có
+CREATE TRIGGER trg_AddNewDeviceToAllRooms
+    ON DEVICE
+    AFTER INSERT
+    AS
+BEGIN
+    -- Thêm device mới vào tất cả các phòng hiện có
+    INSERT INTO ROOM_DEVICE (RoomID, DeviceID, Quantity, Status)
+    SELECT
+        r.RoomID,
+        i.DeviceID,
+        1 as Quantity,  -- Mỗi thiết bị có số lượng là 1
+        1 as Status     -- Status = 1 (Working)
+    FROM INSERTED i
+             CROSS JOIN ROOM r;
 END;
 GO
 INSERT INTO dbo.STAFF ( FullName, Role, Username, [PasswordHash], Phone, Email)
@@ -394,15 +422,15 @@ VALUES
     ( N'Himawari Mai Anh', N'Housekeeping', 'maianh', '1', '0912345678', 'huong.lt@example.com'),
     ( N'Tuyen Quang Loi', N'Housekeeping', 'loi', '1', '0987654321', 'loi.pv@example.com');
 -- Thêm thiết bị cho các phòng đã tồn tại
--- Lặp qua tất cả các phòng hiện có và thêm 4 thiết bị cơ bản
-INSERT INTO ROOM_DEVICE (RoomID, DeviceID, Quantity)
+-- Lặp qua tất cả các phòng hiện có và thêm TẤT CẢ thiết bị có sẵn
+INSERT INTO ROOM_DEVICE (RoomID, DeviceID, Quantity, Status)
 SELECT
     r.RoomID,
     d.DeviceID,
-    1 as Quantity
+    1 as Quantity,
+    1 as Status  -- Status = 1 (Working)
 FROM ROOM r
-         CROSS JOIN DEVICE d
-WHERE d.DeviceName IN (N'TV', N'Điều hòa', N'Tủ lạnh', N'Ga giường');
+         CROSS JOIN DEVICE d;
 GO
 
 -- Kiểm tra dữ liệu đã được thêm

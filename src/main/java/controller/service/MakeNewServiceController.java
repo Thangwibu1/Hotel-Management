@@ -165,23 +165,23 @@ public class MakeNewServiceController extends HttpServlet {
                             
                             request.setAttribute("MSG", "Booking Service Succesfullly");
                             request.setAttribute("color", "green");
-                            request.getRequestDispatcher(IConstant.registerServicePage).forward(request, response);
+                            request.getRequestDispatcher(IConstant.registerServiceController).forward(request, response);
                              return; 
                         }else{
                             request.setAttribute("MSG", "Can not make booking service.Booking again.!!");
                             request.setAttribute("color", "red");
-                            request.getRequestDispatcher(IConstant.registerServicePage).forward(request, response);
+                            request.getRequestDispatcher(IConstant.registerServiceController).forward(request, response);
                         }
                     }
                 }else{
                     request.setAttribute("MSG", "The service date does not fall within the guest's stay .");
                     request.setAttribute("color", "red");
-                    request.getRequestDispatcher(IConstant.registerServicePage).forward(request, response);
+                    request.getRequestDispatcher(IConstant.registerServiceController).forward(request, response);
                 }
             }else{
                 request.setAttribute("MSG", "This room does not currently have a valid checked-in guest to register services!!");
                 request.setAttribute("color", "red");
-                request.getRequestDispatcher(IConstant.registerServicePage).forward(request, response);
+                request.getRequestDispatcher(IConstant.registerServiceController).forward(request, response);
             }
             System.out.println("Room Number: " + roomNumber);
             System.out.println("Service Type: " + serviceId);

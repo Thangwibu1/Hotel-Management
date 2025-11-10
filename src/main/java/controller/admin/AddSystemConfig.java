@@ -24,7 +24,13 @@ public class AddSystemConfig extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String configName = req.getParameter("configName");
         String configValue = req.getParameter("configValue");
-        systemConfigDAO.addSystemConfig(new SystemConfig(configName, Integer.parseInt(configValue)));
+        
+        boolean success = systemConfigDAO.addSystemConfig(new SystemConfig(configName, Integer.parseInt(configValue)));
+        if (success) {
+            req.setAttribute("success", "System config added successfully!");
+        } else {
+            req.setAttribute("error", "Failed to add system config. Please try again.");
+        }
         req.getRequestDispatcher("./system").forward(req, resp);
     }
 

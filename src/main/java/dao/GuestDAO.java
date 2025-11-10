@@ -235,7 +235,7 @@ public class GuestDAO {
      * Lấy thông tin Guest theo email
      *
      * @param email Email của Guest cần tìm
-     * @return �?ối tượng Guest nếu tìm thấy, null nếu không tìm
+     * @return �?ối tượng Guest nếu tìm thấy, null nếu không tìm
      * thấy
      */
     public Guest getGuestByEmail(String email) {
