@@ -304,5 +304,43 @@ public class RoomDeviceDAO {
 
         return result;
     }
+
+    /**
+     * Cập nhật status của tất cả thiết bị trong một phòng cụ thể
+     * @param roomId ID của phòng
+     * @param status Status mới cần cập nhật
+     * @return true nếu cập nhật thành công, false nếu thất bại
+     */
+    public boolean updateAllRoomDevicesStatusByRoomId(int roomId, int status) {
+        boolean result = false;
+        String sql = "UPDATE [HotelManagement].[dbo].[ROOM_DEVICE] SET [Status] = ? WHERE [RoomID] = ?";
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        try {
+            conn = DBConnection.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, status);
+            ps.setInt(2, roomId);
+            
+            int rowsAffected = ps.executeUpdate();
+            result = rowsAffected >= 0; // >= 0 because even if no rows affected, it's still success (no devices in room)
+        } catch (SQLException e) {
+            System.err.println("Database error in updateAllRoomDevicesStatusByRoomId: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("General error in updateAllRoomDevicesStatusByRoomId: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
+        }
+
+        return result;
+    }
 }
 

@@ -1,6 +1,7 @@
 package controller.admin;
 
 import dao.RoomDAO;
+import dao.RoomDeviceDAO;
 import model.Staff;
 import utils.IConstant;
 
@@ -16,10 +17,12 @@ import java.io.IOException;
 public class CompleteRoomController extends HttpServlet {
 
     private RoomDAO roomDAO;
+    private RoomDeviceDAO roomDeviceDAO;
 
     @Override
     public void init() {
         roomDAO = new RoomDAO();
+        roomDeviceDAO = new RoomDeviceDAO();
     }
 
     @Override
@@ -44,10 +47,17 @@ public class CompleteRoomController extends HttpServlet {
                 int roomId = Integer.parseInt(roomIdStr);
                 
                 // Update room status to "Available"
-                boolean updateSuccess = roomDAO.updateRoomStatus(roomId, "Available");
+                boolean updateRoomSuccess = roomDAO.updateRoomStatus(roomId, "Available");
                 
-                if (updateSuccess) {
-                    req.setAttribute("success", "Room has been marked as completed and is now available.");
+                if (updateRoomSuccess) {
+                    // Update all room devices status to 1 (available/working)
+                    boolean updateDevicesSuccess = roomDeviceDAO.updateAllRoomDevicesStatusByRoomId(roomId, 1);
+                    
+                    if (updateDevicesSuccess) {
+                        req.setAttribute("success", "Room and all devices have been marked as completed and are now available.");
+                    } else {
+                        req.setAttribute("success", "Room has been marked as completed, but some devices may not have been updated.");
+                    }
                 } else {
                     req.setAttribute("error", "Failed to update room status.");
                 }

@@ -546,9 +546,11 @@
                                data-value="<%= configg.getConfigValue() %>">
                                 <i class="fas fa-edit"></i> Edit
                             </a>
-                            <a class="delete-link" data-id="<%= configg.getConfigId() %>" data-name="<%= configg.getConfigName() %>">
-                                <i class="fas fa-trash"></i> Delete
-                            </a>
+                            <% if (configg.getConfigId() != 1) { %>
+                                <a class="delete-link" data-id="<%= configg.getConfigId() %>" data-name="<%= configg.getConfigName() %>">
+                                    <i class="fas fa-trash"></i> Delete
+                                </a>
+                            <% } %>
                         </td>
                     </tr>
                 <%
@@ -658,12 +660,17 @@
             modalTitle.innerHTML = '<i class="fas fa-edit"></i> Edit Config';
 
             // Populate form
-            configIdInput.value = this.dataset.id;
+            var configId = this.dataset.id;
+            configIdInput.value = configId;
             configNameInput.value = this.dataset.name;
             configValueInput.value = this.dataset.value;
 
-            // Config name should not be editable
-            configNameInput.readOnly = true;
+            // Config ID = 1 cannot edit name, only value
+            if (configId == "1") {
+                configNameInput.readOnly = true;
+            } else {
+                configNameInput.readOnly = false;
+            }
 
             configModal.style.display = "flex";
         }

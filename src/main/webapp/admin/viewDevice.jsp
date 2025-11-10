@@ -1,14 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
+<%@ page import="model.Device" %>
 <%@ page import="model.Staff" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="utils.IConstant" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Luxury Hotel</title>
+    <title>Device Management - Luxury Hotel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -189,77 +189,6 @@
             margin-right: 0.5rem;
         }
         
-        /* === SEARCH BAR === */
-        .search-container {
-            margin-bottom: 2rem;
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-        
-        .search-form {
-            display: flex;
-            gap: 1rem;
-            flex: 1;
-            max-width: 600px;
-        }
-        
-        .search-input {
-            flex: 1;
-            padding: 0.75rem 1rem;
-            border: 2px solid var(--border);
-            border-radius: 6px;
-            font-size: 1rem;
-            font-family: var(--font-sans);
-            transition: all 0.3s ease;
-        }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(201, 171, 129, 0.1);
-        }
-        
-        .search-button {
-            background: var(--gold);
-            color: var(--black);
-            border: 2px solid var(--gold);
-            padding: 0.75rem 2rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            font-family: var(--font-sans);
-            white-space: nowrap;
-        }
-        
-        .search-button:hover {
-            background: var(--gold-dark);
-            border-color: var(--gold-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(201, 171, 129, 0.3);
-        }
-        
-        .search-button i {
-            margin-right: 0.5rem;
-        }
-        
-        .clear-search {
-            background: transparent;
-            color: var(--gray);
-            border: 2px solid var(--gray);
-        }
-        
-        .clear-search:hover {
-            background: var(--gray);
-            color: var(--white);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 102, 102, 0.3);
-        }
-        
         /* === TABLE === */
         table { 
             width: 100%;
@@ -290,47 +219,6 @@
         
         tr:hover { 
             background: var(--off-white);
-        }
-        
-        .action-links {
-            display: flex;
-            gap: 0.5rem;
-        }
-        
-        .action-links a { 
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            color: var(--white);
-            cursor: pointer;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-        
-        .edit-link { 
-            background: #1565C0;
-            border: 2px solid #1565C0;
-        }
-        
-        .edit-link:hover {
-            background: transparent;
-            color: #1565C0;
-        }
-        
-        .delete-link { 
-            background: #C62828;
-            border: 2px solid #C62828;
-        }
-        
-        .delete-link:hover {
-            background: transparent;
-            color: #C62828;
         }
 
         /* === MODAL === */
@@ -422,7 +310,7 @@
         }
         
         .form-group input,
-        .form-group select { 
+        .form-group textarea { 
             width: 100%;
             padding: 0.8rem;
             border: 2px solid var(--border);
@@ -432,8 +320,13 @@
             transition: all 0.3s ease;
         }
         
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
         .form-group input:focus,
-        .form-group select:focus {
+        .form-group textarea:focus {
             outline: none;
             border-color: var(--gold);
             box-shadow: 0 0 0 3px rgba(201, 171, 129, 0.1);
@@ -458,28 +351,6 @@
         .btn-primary:hover {
             background: var(--gold-dark);
             border-color: var(--gold-dark);
-        }
-        
-        .btn-danger { 
-            background: #C62828;
-            color: var(--white);
-            border-color: #C62828;
-        }
-        
-        .btn-danger:hover {
-            background: #B71C1C;
-            border-color: #B71C1C;
-        }
-        
-        .btn-secondary { 
-            background: transparent;
-            color: var(--gray);
-            border-color: var(--gray);
-        }
-        
-        .btn-secondary:hover {
-            background: var(--gray);
-            color: var(--white);
         }
         
         /* === ANIMATIONS === */
@@ -527,30 +398,12 @@
                 text-align: center;
             }
             
-            .search-container {
-                flex-direction: column;
-            }
-            
-            .search-form {
-                max-width: 100%;
-                flex-direction: column;
-            }
-            
-            .search-button,
-            .clear-search {
-                width: 100%;
-            }
-            
             table {
                 font-size: 0.85rem;
             }
             
             th, td {
                 padding: 0.7rem;
-            }
-            
-            .action-links {
-                flex-direction: column;
             }
         }
     </style>
@@ -571,8 +424,7 @@
             <% } %>
         </div>
         <div class="header-actions">
-            <a href="./view-device"><i class="fas fa-tools"></i> Devices</a>
-            <a href="./view-room-device"><i class="fas fa-cogs"></i> Room Devices</a>
+            <a href="./admin"><i class="fas fa-users"></i> Staff Management</a>
             <a href="./getRoomWaiting"><i class="fas fa-clock"></i> Waiting Rooms</a>
             <a href="./GetServiceAdminController"><i class="fas fa-concierge-bell"></i> Service Manager</a>
             <a href="./system"><i class="fas fa-cog"></i> System Config</a>
@@ -609,81 +461,35 @@
     <% } %>
     
     <div class="card">
-        <h2><i class="fas fa-users"></i> Staff Management</h2>
-        
-        <!-- Search Bar -->
-        <div class="search-container">
-            <form class="search-form" action="./search-staff" method="GET">
-                <%
-                    String searchKeyword = (String) request.getAttribute("searchKeyword");
-                    if (searchKeyword == null) searchKeyword = "";
-                %>
-                <input type="text" 
-                       name="keyword" 
-                       class="search-input" 
-                       placeholder="Search by name, username, email, phone or role..." 
-                       value="<%= searchKeyword %>"
-                       autocomplete="off">
-                <button type="submit" class="search-button">
-                    <i class="fas fa-search"></i> Search
-                </button>
-                <% if (!searchKeyword.isEmpty()) { %>
-                    <a href="./admin" class="search-button clear-search">
-                        <i class="fas fa-times"></i> Clear
-                    </a>
-                <% } %>
-            </form>
-        </div>
-        
-        <a class="add-button btn" id="addStaffBtn">
-            <i class="fas fa-user-plus"></i> Add New Staff
+        <h2><i class="fas fa-tools"></i> Device Management</h2>
+        <a class="add-button btn" id="addDeviceBtn">
+            <i class="fas fa-plus-circle"></i> Add New Device
         </a>
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Full Name</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Role</th>
-                    <th>Actions</th>
+                    <th>Device Name</th>
+                    <th>Description</th>
                 </tr>
             </thead>
             <tbody>
                 <%
-                    ArrayList<Staff> staffs = (ArrayList<Staff>) request.getAttribute("staffs");
-                    if (staffs != null && !staffs.isEmpty()) {
-                        for (Staff staff : staffs) {
+                    ArrayList<Device> devices = (ArrayList<Device>) request.getAttribute("devices");
+                    if (devices != null && !devices.isEmpty()) {
+                        for (Device device : devices) {
                 %>
                     <tr>
-                        <td><%= staff.getStaffId() %></td>
-                        <td><%= staff.getFullName() %></td>
-                        <td><%= staff.getUsername() %></td>
-                        <td><%= staff.getEmail() %></td>
-                        <td><%= staff.getPhone() %></td>
-                        <td><%= staff.getRole() %></td>
-                        <td class="action-links">
-                            <a class="edit-link" 
-                               data-id="<%= staff.getStaffId() %>"
-                               data-fullname="<%= staff.getFullName() %>"
-                               data-username="<%= staff.getUsername() %>"
-                               data-email="<%= staff.getEmail() %>"
-                               data-phone="<%= staff.getPhone() %>"
-                               data-role="<%= staff.getRole() %>">
-                                <i class="fas fa-edit"></i> Edit
-                            </a>
-                            <a class="delete-link" data-id="<%= staff.getStaffId() %>" data-name="<%= staff.getFullName() %>">
-                                <i class="fas fa-trash"></i> Delete
-                            </a>
-                        </td>
+                        <td><%= device.getDeviceId() %></td>
+                        <td><%= device.getDeviceName() %></td>
+                        <td><%= device.getDescription() != null && !device.getDescription().isEmpty() ? device.getDescription() : "<em style='color: #999;'>No description</em>" %></td>
                     </tr>
                 <%
                         }
                     } else {
                 %>
                     <tr>
-                        <td colspan="7" style="text-align: center; color: var(--gray); font-style: italic;">No staff members found.</td>
+                        <td colspan="3" style="text-align: center; color: var(--gray); font-style: italic;">No devices found.</td>
                     </tr>
                 <%
                     }
@@ -693,163 +499,62 @@
     </div>
 </div>
 
-<!-- Add/Update Staff Modal -->
-<div id="staffModal" class="modal">
+<!-- Add Device Modal -->
+<div id="deviceModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h2 id="modalTitle"><i class="fas fa-user-plus"></i> Add Staff</h2>
+            <h2 id="modalTitle"><i class="fas fa-plus-circle"></i> Add Device</h2>
             <span class="close">&times;</span>
         </div>
-        <form id="staffForm" method="POST">
+        <form id="deviceForm" method="POST" action="./add-device">
             <div class="modal-body">
-                <input type="hidden" id="staffId" name="staffId">
                 <div class="form-group">
-                    <label for="fullName"><i class="fas fa-user"></i> Full Name</label>
-                    <input type="text" id="fullName" name="fullName" required>
+                    <label for="deviceName"><i class="fas fa-tag"></i> Device Name *</label>
+                    <input type="text" id="deviceName" name="deviceName" required placeholder="Enter device name">
                 </div>
                 <div class="form-group">
-                    <label for="username"><i class="fas fa-at"></i> Username</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password"><i class="fas fa-lock"></i> Password</label>
-                    <input type="password" id="password" name="password">
-                </div>
-                <div class="form-group">
-                    <label for="email"><i class="fas fa-envelope"></i> Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone"><i class="fas fa-phone"></i> Phone</label>
-                    <input type="text" id="phone" name="phone" required>
-                </div>
-                <div class="form-group">
-                    <label for="role"><i class="fas fa-user-tag"></i> Role</label>
-                    <input type="text" id="role" name="role" required>
+                    <label for="description"><i class="fas fa-align-left"></i> Description</label>
+                    <textarea id="description" name="description" placeholder="Enter device description (optional)"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Save Changes
+                    <i class="fas fa-save"></i> Save Device
                 </button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- Delete Confirmation Modal -->
-<div id="deleteModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h2>
-            <span class="close">&times;</span>
-        </div>
-        <div class="modal-body">
-            <p style="font-size: 1.1rem; text-align: center; color: var(--gray);">
-                Are you sure you want to delete staff member <strong id="staffNameToDelete" style="color: var(--gold);"></strong>?
-            </p>
-            <p style="text-align: center; color: #C62828; margin-top: 1rem;">
-                <i class="fas fa-exclamation-circle"></i> This action cannot be undone.
-            </p>
-        </div>
-        <div class="modal-footer">
-            <a class="btn btn-secondary" id="cancelDelete">
-                <i class="fas fa-times"></i> Cancel
-            </a>
-            <a id="confirmDeleteLink" href="#" class="btn btn-danger">
-                <i class="fas fa-trash"></i> Delete
-            </a>
-        </div>
-    </div>
-</div>
-
 <script>
-    // Get modals
-    var staffModal = document.getElementById("staffModal");
-    var deleteModal = document.getElementById("deleteModal");
+    // Get modal
+    var deviceModal = document.getElementById("deviceModal");
 
-    // Get close buttons
-    var closeButtons = document.getElementsByClassName("close");
+    // Get close button
+    var closeButton = document.getElementsByClassName("close")[0];
 
-    // Get form and elements
-    var staffForm = document.getElementById("staffForm");
-    var modalTitle = document.getElementById("modalTitle");
-    var staffIdInput = document.getElementById("staffId");
-    var fullNameInput = document.getElementById("fullName");
-    var usernameInput = document.getElementById("username");
-    var passwordInput = document.getElementById("password");
-    var emailInput = document.getElementById("email");
-    var phoneInput = document.getElementById("phone");
-    var roleInput = document.getElementById("role");
-
-    // --- Event Listeners ---
+    // Get form
+    var deviceForm = document.getElementById("deviceForm");
 
     // Open Add modal
-    document.getElementById("addStaffBtn").onclick = function() {
-        staffForm.reset();
-        staffForm.action = './add-staff';
-        modalTitle.innerHTML = '<i class="fas fa-user-plus"></i> Add New Staff';
-        passwordInput.required = true;
-        staffIdInput.value = "";
-        staffModal.style.display = "flex";
+    document.getElementById("addDeviceBtn").onclick = function() {
+        deviceForm.reset();
+        deviceModal.style.display = "flex";
     }
 
-    // Open Edit modal
-    document.querySelectorAll('.edit-link').forEach(function(button) {
-        button.onclick = function() {
-            staffForm.reset();
-            staffForm.action = './update-staff';
-            modalTitle.innerHTML = '<i class="fas fa-user-edit"></i> Update Staff';
-            
-            // Populate form
-            staffIdInput.value = this.dataset.id;
-            fullNameInput.value = this.dataset.fullname;
-            usernameInput.value = this.dataset.username;
-            emailInput.value = this.dataset.email;
-            phoneInput.value = this.dataset.phone;
-            roleInput.value = this.dataset.role;
-            
-            // Password is not pre-filled for security, but can be updated.
-            passwordInput.placeholder = "Leave blank to keep current password";
-            passwordInput.required = false;
-
-            staffModal.style.display = "flex";
-        }
-    });
-
-    // Open Delete modal
-    document.querySelectorAll('.delete-link').forEach(function(button) {
-        button.onclick = function() {
-            var staffId = this.dataset.id;
-            var staffName = this.dataset.name;
-            document.getElementById('staffNameToDelete').textContent = staffName;
-            document.getElementById('confirmDeleteLink').href = '<%= request.getContextPath() %>/admin/remove-staff?staffId=' + staffId;
-            deleteModal.style.display = "flex";
-        }
-    });
-    
-    // Cancel delete
-    document.getElementById('cancelDelete').onclick = function() {
-        deleteModal.style.display = "none";
+    // Close modal with close button
+    closeButton.onclick = function() {
+        deviceModal.style.display = "none";
     }
 
-    // Close modals with close button
-    for (var i = 0; i < closeButtons.length; i++) {
-        closeButtons[i].onclick = function() {
-            this.closest('.modal').style.display = "none";
-        }
-    }
-
-    // Close modals when clicking outside
+    // Close modal when clicking outside
     window.onclick = function(event) {
-        if (event.target == staffModal) {
-            staffModal.style.display = "none";
-        }
-        if (event.target == deleteModal) {
-            deleteModal.style.display = "none";
+        if (event.target == deviceModal) {
+            deviceModal.style.display = "none";
         }
     }
 </script>
 
 </body>
 </html>
+
