@@ -102,6 +102,7 @@ public interface IConstant {
     public static final String canceledText = "Canceled";
     
     //---service page-----------------------------------------------------------
+
     public static final String registerServicePage = "./registerServicePage.jsp";
     public static final String updateStatusServicePage = "./updateStatusServicePage.jsp";
     public static final String reportServicePage = "./reportServicePage.jsp";

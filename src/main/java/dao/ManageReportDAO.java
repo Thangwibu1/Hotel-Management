@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import model.CancellationStat;
 import model.FrequentGuest;
 import model.OccupancyRoom;
@@ -65,38 +66,55 @@ public class ManageReportDAO {
 
     public ArrayList<ServiceUsage> getMostUsedServices(int limit) throws ClassNotFoundException {
         ArrayList<ServiceUsage> result = new ArrayList<>();
-
-        String sql
-                = "SELECT TOP (?) "
+        String sql = "SELECT TOP (?) "
                 + "    s.ServiceID AS ServiceID, "
                 + "    s.ServiceName AS ServiceName, "
                 + "    COALESCE(SUM(bs.Quantity), 0) AS TotalUsed, "
-                + "    COUNT(DISTINCT bs.BookingID) AS TotalBookings "
+                + "    COALESCE(SUM(bs.Quantity * s.Price), 0) AS TotalRevenue "
                 + "FROM BOOKING_SERVICE bs "
                 + "JOIN SERVICE s ON bs.ServiceID = s.ServiceID "
                 + "JOIN BOOKING b ON bs.BookingID = b.BookingID "
                 + "WHERE b.Status IN ('Checked-in','Checked-out','Reserved') "
+                + "  AND bs.Status >= 0 "
                 + "GROUP BY s.ServiceID, s.ServiceName "
                 + "ORDER BY TotalUsed DESC;";
+
         Connection con = null;
         PreparedStatement ps = null;
-
+        ResultSet rs = null;
         try {
             con = DBConnection.getConnection();
             ps = con.prepareStatement(sql);
             ps.setInt(1, limit);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
+
             while (rs.next()) {
                 int serviceId = rs.getInt("ServiceID");
                 String serviceName = rs.getString("ServiceName");
                 int totalUsed = rs.getInt("TotalUsed");
-                int totalBookings = rs.getInt("TotalBookings");
+                double totalRevenue = rs.getDouble("TotalRevenue");
 
-                result.add(new ServiceUsage(serviceId, serviceName, totalUsed, totalBookings));
+                result.add(new ServiceUsage(serviceId, serviceName, totalUsed, totalRevenue));
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            // Đóng resources
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+
         return result;
     }
 

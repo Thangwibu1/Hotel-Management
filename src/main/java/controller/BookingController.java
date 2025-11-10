@@ -323,8 +323,8 @@ public class BookingController extends HttpServlet {
         LocalDate outDate = LocalDate.parse(checkOutDate);
         LocalDate bookDate = LocalDate.parse(bookingDate);
         //Change to 00:00:00 and 23:59:59
-        LocalDateTime inDateTime = inDate.atStartOfDay();
-        LocalDateTime outDateTime = outDate.atTime(23, 59, 59);
+        LocalDateTime inDateTime = inDate.atTime(12,0,0);
+        LocalDateTime outDateTime = outDate.atTime(14, 0, 0);
 
         ArrayList<ChoosenService> services = new ArrayList<>();
         String[] serviceId = (String[]) req.getParameterValues("serviceId");
