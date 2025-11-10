@@ -17,8 +17,6 @@
         <%
             ArrayList<ServiceUsage> result = (ArrayList<ServiceUsage>) request.getAttribute("mostUsedServices");
             if (result != null && !result.isEmpty()) {
-
-
         %>
         <div class="card" style="padding: 32px;">
             <div class="services-header">
