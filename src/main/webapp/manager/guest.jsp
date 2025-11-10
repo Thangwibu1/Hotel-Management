@@ -13,6 +13,8 @@
         <link rel="stylesheet" href="../manager/style.css">
     </head>
     <body>
+        
+        <!--hahah-->
         <div class="dashboard-container">
             <jsp:include page="components/header.jsp" />
 

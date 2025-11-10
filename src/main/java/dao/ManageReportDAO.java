@@ -75,13 +75,14 @@ public class ManageReportDAO {
                 + "JOIN SERVICE s ON bs.ServiceID = s.ServiceID "
                 + "JOIN BOOKING b ON bs.BookingID = b.BookingID "
                 + "WHERE b.Status IN ('Checked-in','Checked-out','Reserved') "
-                + "  AND bs.Status >= 0 "
+                + "  AND bs.Status >= 0 " 
                 + "GROUP BY s.ServiceID, s.ServiceName "
                 + "ORDER BY TotalUsed DESC;";
 
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
+
         try {
             con = DBConnection.getConnection();
             ps = con.prepareStatement(sql);

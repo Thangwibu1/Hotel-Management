@@ -61,7 +61,11 @@ public class CheckAvailabilityRoomController extends HttpServlet {
             // Validate
             if (!checkOutDateTime.isAfter(checkInDateTime)) {
                 request.setAttribute("ERROR", "Check-out must be after check-in.");
-                request.getRequestDispatcher("/receptionist/NewBookingController").forward(request, response);
+//                request.getRequestDispatcher("/receptionist/NewBookingController").forward(request, response);
+                request.setAttribute("CURRENT_STEP", "checkGuest");
+                request.setAttribute("CURRENT_TAB", "bookings");
+                request.setAttribute("GUEST", guest);
+                request.getRequestDispatcher("/receptionist/bookingPage.jsp?tab=bookings").forward(request, response);
                 return;
             }
 

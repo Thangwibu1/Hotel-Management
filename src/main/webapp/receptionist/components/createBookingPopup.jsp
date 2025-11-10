@@ -38,7 +38,6 @@
                 <!-- Form -->
                 <form id="datesForm" action="CheckAvailabilityRoomController" method="POST">
                     <input type="hidden" name="guestId" value="<%= guest.getGuestId()%>">
-                    <h1><%= guest.getGuestId()%></h1>
                     <!-- Guest Info Row -->
                     <div class="form-row">
                         <div class="form-group">
