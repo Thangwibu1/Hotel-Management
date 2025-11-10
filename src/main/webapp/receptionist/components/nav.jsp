@@ -35,6 +35,10 @@
                         class="tab <%= "rooms".equals(currentTab) ? "active" : ""%>">
                     <span class="icon"></span>Room Status
                 </button>
+                <button type="submit" name="tab" value="payment"
+                        class="tab <%= "payment".equals(currentTab) ? "active" : ""%>">
+                    <span class="icon"></span>Payment
+                </button>
             </form>
         </nav>
     </body>

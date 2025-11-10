@@ -94,7 +94,7 @@ public class PaymentRemainController extends HttpServlet {
             
             // 7. Lấy thuế suất từ system config
             double taxRate = 0;
-            SystemConfig taxConfig = systemConfigDAO.getSystemConfigByName("TAX_RATE");
+            SystemConfig taxConfig = systemConfigDAO.getSystemConfigByName("tax");
             if (taxConfig != null) {
                 taxRate = taxConfig.getConfigValue() / 100.0; // Convert % to decimal
             }
@@ -191,7 +191,9 @@ public class PaymentRemainController extends HttpServlet {
             ArrayList<Payment> payments = paymentDAO.getPaymentByBookingId(bookingId);
             double paidAmount = 0;
             for (Payment payment : payments) {
-                paidAmount += payment.getAmount();
+                if (!payment.getStatus().equals("Failed")) {
+                    paidAmount += payment.getAmount();
+                }
             }
             
             // Tính số tiền còn lại phải trả

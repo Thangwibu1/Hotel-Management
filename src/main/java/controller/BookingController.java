@@ -393,7 +393,7 @@ public class BookingController extends HttpServlet {
                 bookDate, 
                 (double) (Integer.parseInt(totalAmount)) / 2.0, 
                 "Credit Card",
-                "Completed"
+                "Pending"
             );
             PaymentDAO paymentDAO = new PaymentDAO();
             boolean paymentAdded = paymentDAO.addPaymentWithTransaction(newPayment, conn);

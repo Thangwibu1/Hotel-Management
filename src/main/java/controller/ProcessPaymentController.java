@@ -44,7 +44,7 @@ public class ProcessPaymentController extends HttpServlet {
             payment.setPaymentDate(LocalDate.now());
             payment.setAmount(amount);
             payment.setPaymentMethod(paymentMethod);
-            payment.setStatus("Completed");
+            payment.setStatus("Pending");
             
             // Thêm payment vào database
             boolean success = paymentDAO.addPayment(payment);

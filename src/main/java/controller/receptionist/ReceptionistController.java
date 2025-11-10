@@ -56,6 +56,10 @@ public class ReceptionistController extends HttpServlet {
                     request.setAttribute("CURRENT_TAB", "rooms");
                     request.getRequestDispatcher(IConstant.roomsStatusReceptionistController).forward(request, response);
                     break;
+                case "payment":
+                    request.setAttribute("CURRENT_TAB", "payment");
+                    request.getRequestDispatcher(IConstant.viewPaymentController).forward(request, response);
+                    break;
                 default:
                     request.setAttribute("CURRENT_TAB", "dashboard");
                     request.getRequestDispatcher(IConstant.dashboardReceptionistController).forward(request, response);

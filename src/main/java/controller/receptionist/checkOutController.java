@@ -112,7 +112,9 @@ public class checkOutController extends HttpServlet {
             ArrayList<Payment> payments = paymentDAO.getPaymentByBookingId(bookingId);
             double paidAmount = 0;
             for (Payment payment : payments) {
-                paidAmount += payment.getAmount();
+                if (payment.getStatus().equals("Completed")) {
+                    paidAmount += payment.getAmount();
+                }
             }
             
             // Tính số tiền còn lại phải trả
