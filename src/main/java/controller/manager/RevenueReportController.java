@@ -76,7 +76,7 @@ public class RevenueReportController extends HttpServlet {
             request.setAttribute("avgRevenue", BigDecimal.ZERO);
             request.setAttribute("bestPeriod", "N/A");
             request.setAttribute("totalRevenue", BigDecimal.ZERO);
-            request.setAttribute("error", "Không t?i ???c d? li?u báo cáo. Vui lòng th? l?i.");
+            request.setAttribute("error", "Không tai duoc du lieu báo cáo. Vui lòng thu lai.");
             request.getRequestDispatcher("/manager/dashboard.jsp").forward(request, response);
         }
     }

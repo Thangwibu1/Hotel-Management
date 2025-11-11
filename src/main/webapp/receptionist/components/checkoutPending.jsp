@@ -52,7 +52,7 @@
 
             </tbody>
         </table>
-//        <jsp:include page="../components/guestBill.jsp" />
+        <jsp:include page="../components/guestBill.jsp" />
 
         <script>
             let currentBookingId = null;

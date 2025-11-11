@@ -66,7 +66,6 @@
                                 <% } %>
                             <th>Revenue</th>
                             <th>Rooms Sold</th>
-                            <th>Change</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,7 +77,6 @@
                             <td><%= s.getPeriod()%></td>
                             <td>$<%= s.getRevenue()%></td>
                             <td><%= s.getRoomsSold()%></td>
-                            <td>hahah</td>
                         </tr>
                         <%
                             }
