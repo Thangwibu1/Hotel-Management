@@ -165,7 +165,7 @@
                             name="checkinDate" 
                             class="form-input"
                             value="<%= row.getBooking().getCheckInDate().toLocalDate().toString()%>"
-                            <%= allowStayDates ? "" : "redonly disabled"%>
+                            redonly disabled
                             >
 
 
@@ -179,7 +179,7 @@
                             name="checkoutDate" 
                             class="form-input"
                             value="<%= row.getBooking().getCheckOutDate().toLocalDate().toString()%>"
-                            <%= allowStayDates ? "" : "redonly disabled"%>
+                            redonly disabled
                             >
                     </div>
                 </div>
