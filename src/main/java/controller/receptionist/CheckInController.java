@@ -49,9 +49,11 @@ public class CheckInController extends HttpServlet {
             }
             if (checkedIn) {
                 // bookingDao.updateBookingStatus(bookingId, "Checked-in");
-                response.sendRedirect("GetPendingCheckinController");
+                request.getRequestDispatcher("GetPendingCheckinController").forward(request, response);
             } else {
-                response.sendRedirect("GetPendingCheckinController");
+                request.setAttribute("ERROR", "You haven’t paid the deposit yet, so check-in is not available.\n"
+                        + "Please complete your deposit payment to proceed with check-in.");
+                request.getRequestDispatcher("GetPendingCheckinController").forward(request, response);
             }
         } catch (Exception e) {
             e.printStackTrace();

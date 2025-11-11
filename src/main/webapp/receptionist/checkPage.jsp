@@ -22,9 +22,16 @@
             <jsp:include page="../receptionist/components/nav.jsp"/>
 
             <jsp:include page="../receptionist/components/checkManage.jsp"/>
-
+            <%
+                String error = (String) request.getAttribute("ERROR");
+                if (error != null) {
+            %>
+            <jsp:include page="../receptionist/components/errorPopup.jsp"/>
+            <%
+                }
+            %>
             <!-- ====== JavaScript (inline) ====== -->
         </div>
-            <script src="../receptionist/style.js"></script>
+        <script src="../receptionist/style.js"></script>
     </body>
 </html>

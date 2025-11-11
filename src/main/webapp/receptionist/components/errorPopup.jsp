@@ -158,9 +158,6 @@
             </div>
             
             <div class="error-body">
-                <p class="error-message">
-                    <%= errorMessage != null ? errorMessage : "An unexpected error occurred." %>
-                </p>
                 
                 <% if (hasError) { %>
                     <div class="error-details">

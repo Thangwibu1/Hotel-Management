@@ -57,7 +57,6 @@ public class checkOutController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try {
             int bookingId = Integer.parseInt(request.getParameter("bookingId"));
-            
             // Lấy thông tin booking
             Booking booking = bookingDAO.getBookingById(bookingId);
             if (booking == null) {
@@ -76,14 +75,14 @@ public class checkOutController extends HttpServlet {
                 booking.getCheckOutDate().toLocalDate()
             );
             
-            // Tính tiền phòng
+            // Tính ti�?n phòng
             double pricePerNight = roomType.getPricePerNight().doubleValue(); //convert BigDecimal to double
             double roomTotal = pricePerNight * numberOfNights; //calculate room total
             
             // Lấy danh sách dịch vụ đã sử dụng
             ArrayList<BookingService> bookingServices = bookingServiceDAO.getBookingServiceByBookingId(bookingId);
             
-            // Tính tổng tiền dịch vụ
+            // Tính tổng ti�?n dịch vụ
             double servicesTotal = 0;
             for (BookingService bs : bookingServices) {
                 Service service = serviceDAO.getServiceById(bs.getServiceId());
@@ -101,14 +100,14 @@ public class checkOutController extends HttpServlet {
                 taxRate = taxConfig.getConfigValue() / 100.0; // Convert % to decimal
             }
             
-            // Tính tiền thuế
+            // Tính ti�?n thuế
             double subtotal = roomTotal + servicesTotal;
             double taxAmount = subtotal * taxRate;
             
-            // Tổng tiền phải trả (bao gồm thuế)
+            // Tổng ti�?n phải trả (bao gồm thuế)
             double totalAmount = subtotal + taxAmount;
             
-            // Lấy tổng số tiền đã thanh toán
+            // Lấy tổng số ti�?n đã thanh toán
             ArrayList<Payment> payments = paymentDAO.getPaymentByBookingId(bookingId);
             double paidAmount = 0;
             for (Payment payment : payments) {
@@ -117,7 +116,7 @@ public class checkOutController extends HttpServlet {
                 }
             }
             
-            // Tính số tiền còn lại phải trả
+            // Tính số ti�?n còn lại phải trả
             double remainingAmount = totalAmount - paidAmount;
             
             // Kiểm tra xem đã thanh toán đủ chưa
@@ -129,12 +128,12 @@ public class checkOutController extends HttpServlet {
                 request.setAttribute("totalAmount", totalAmount);
                 request.setAttribute("paidAmount", paidAmount);
                 request.setAttribute("remainingAmount", remainingAmount);
-                request.setAttribute("errorMessage", "Khách hàng chưa thanh toán đủ tiền! Còn thiếu: " + String.format("%,.0f VNĐ", remainingAmount));
+                request.setAttribute("errorMessage", "Khách hàng chưa thanh toán đủ ti�?n! Còn thiếu: " + String.format("%,.0f VN�?", remainingAmount));
                 request.getRequestDispatcher("/receptionist/checkOutView.jsp").forward(request, response);
                 return;
             }
             
-            // Đã thanh toán đủ - tiến hành checkout
+            // �?ã thanh toán đủ - tiến hành checkout
             // 1. Cập nhật trạng thái booking thành "Checked-out"
             boolean updateSuccess = bookingDAO.updateBookingStatus(bookingId, "Checked-out");
             
@@ -161,7 +160,6 @@ public class checkOutController extends HttpServlet {
                 request.getRequestDispatcher("/error.jsp").forward(request, response);
                 return;
             }
-            
             // 3. Hiển thị trang thành công
             request.setAttribute("booking", booking);
             request.setAttribute("room", room);
