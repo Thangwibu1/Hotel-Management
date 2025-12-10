@@ -13,6 +13,15 @@ public class Room {
     // Constructors
     public Room() {}
 
+    public Room(String roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
+    public Room(String roomNumber, int roomId) {
+        this.roomNumber = roomNumber;
+        this.roomId = roomId;
+    }
+    
     public Room(int roomId, String roomNumber, int roomTypeId, String status, String description) {
         this.roomId = roomId;
         this.roomNumber = roomNumber;

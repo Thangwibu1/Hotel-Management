@@ -1,6 +1,7 @@
 package dao;
 
 import model.Room;
+import model.RoomTask;
 import model.RoomType;
 import utils.DBConnection;
 
@@ -56,7 +57,7 @@ public class RoomTypeDAO {
 
     public RoomType getRoomTypeById(int roomTypeId) {
         RoomType roomType = null;
-        String sql = "SELECT [TypeID], [TypeName], [Capacity], [PricePerNight] FROM ROOM_TYPE WHERE [TypeID] = ?";
+        String sql = "SELECT [RoomTypeID], [TypeName], [Capacity], [PricePerNight] FROM ROOM_TYPE WHERE [RoomTypeID] = ?";
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -68,7 +69,7 @@ public class RoomTypeDAO {
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                int id = rs.getInt("TypeID");
+                int id = rs.getInt("RoomTypeID");
                 String typeName = rs.getString("TypeName");
                 int capacity = rs.getInt("Capacity");
                 BigDecimal pricePerNight = rs.getBigDecimal("PricePerNight");
@@ -92,5 +93,36 @@ public class RoomTypeDAO {
         }
 
         return roomType;
+    }
+
+    public ArrayList<RoomTask> getRoomTaskByStaffId(int staffId) {
+        ArrayList<RoomTask> result = new ArrayList<RoomTask>();
+
+        String sql = "SELECT [RoomTaskID] ,[RoomID],[StaffID],[StartTime],[EndTime],[StatusClean],[Notes] FROM [HotelManagement].[dbo].[ROOM_TASK] where [StaffID] = ?";
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, staffId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("RoomTaskID");
+                int roomId = rs.getInt("RoomID");
+                String startTime = rs.getString("StartTime");
+                String endTime = rs.getString("EndTime");
+                String statusClean = rs.getString("StatusClean");
+                String notes = rs.getString("Notes");
+                RoomTask roomTask = new RoomTask(id, roomId, staffId, java.time.LocalDateTime.parse(startTime), endTime != null ? java.time.LocalDateTime.parse(endTime) : null, statusClean, notes, 0);
+                result.add(roomTask);
+            }
+        } catch (Exception e) {
+            
+        }
+
+        return result;
     }
 }

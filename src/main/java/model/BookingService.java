@@ -1,44 +1,128 @@
 package model;
 
-/**
- * Model cho bảng BOOKING_SERVICE
- */
-public class BookingService {
+import java.io.Serializable;
+import java.time.LocalDate; 
+
+
+public class BookingService implements Serializable{
     private int bookingServiceId;
-    private Booking booking; // Quan hệ khóa ngoại đến BOOKING
-    private Service service; // Quan hệ khóa ngoại đến SERVICE
+    private int bookingId;
+    private int serviceId;
     private int quantity;
-    private String serviceDate;
+    private LocalDate serviceDate; 
+    private int status;
+    private String note;
+    private int staffID;
 
-    // Constructors
-    public BookingService() {}
+ 
 
-    public BookingService(int bookingServiceId, Booking booking, Service service, int quantity, String serviceDate) {
-        this.bookingServiceId = bookingServiceId;
-        this.booking = booking;
-        this.service = service;
-        this.quantity = quantity;
-        this.serviceDate = serviceDate;
+    public int getStaffID() {
+        return staffID;
     }
 
-    // Getters and Setters
+    public BookingService(int bookingServiceId, int bookingId, int serviceId, int quantity, LocalDate serviceDate, int status, String note, int staffID) {
+        this.bookingServiceId = bookingServiceId;
+        this.bookingId = bookingId;
+        this.serviceId = serviceId;
+        this.quantity = quantity;
+        this.serviceDate = serviceDate;
+        this.status = status;
+        this.note = note;
+        this.staffID = staffID;
+    }
+
+    public BookingService(int bookingServiceId, int bookingId, int serviceId, int quantity, LocalDate serviceDate, int status, int staffID) {
+        this.bookingServiceId = bookingServiceId;
+        this.bookingId = bookingId;
+        this.serviceId = serviceId;
+        this.quantity = quantity;
+        this.serviceDate = serviceDate;
+        this.status = status;
+        this.staffID = staffID;
+    }
+
+    public void setStaffID(int staffID) {
+        this.staffID = staffID;
+    }
+    // --- Constructors được cập nhật ---
+    public BookingService() {}
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public BookingService(int bookingServiceId, int bookingId, int serviceId, int quantity, LocalDate serviceDate, int status, String note) {
+        this.bookingServiceId = bookingServiceId;
+        this.bookingId = bookingId;
+        this.serviceId = serviceId;
+        this.quantity = quantity;
+        this.serviceDate = serviceDate;
+        this.status = status;
+        this.note = note;
+        this.staffID = 0;
+    }
+    
+    
+
+    public BookingService(int bookingId, int serviceId, int quantity, LocalDate serviceDate, int status) {
+        this.bookingId = bookingId;
+        this.serviceId = serviceId;
+        this.quantity = quantity;
+        this.serviceDate = serviceDate;
+        this.status = status;
+    }
+
+    public BookingService(int bookingServiceId, int bookingId, int serviceId, int quantity, LocalDate serviceDate, int status) { 
+        this.bookingServiceId = bookingServiceId;
+        this.bookingId = bookingId;
+        this.serviceId = serviceId;
+        this.quantity = quantity;
+        this.serviceDate = serviceDate;
+        this.status = status;
+    }
+
     public int getBookingServiceId() { return bookingServiceId; }
     public void setBookingServiceId(int bookingServiceId) { this.bookingServiceId = bookingServiceId; }
 
-    public Booking getBooking() { return booking; }
-    public void setBooking(Booking booking) { this.booking = booking; }
+    public int getBookingId() { return bookingId; }
+    public void setBookingId(int bookingId) { this.bookingId = bookingId; }
 
-    public Service getService() { return service; }
-    public void setService(Service service) { this.service = service; }
+    public int getServiceId() { return serviceId; }
+    public void setServiceId(int serviceId) { this.serviceId = serviceId; }
+
+    public BookingService(int bookingId, int serviceId, int quantity, LocalDate serviceDate, int status, String note) {
+        this.bookingId = bookingId;
+        this.serviceId = serviceId;
+        this.quantity = quantity;
+        this.serviceDate = serviceDate;
+        this.status = status;
+        this.note = note;
+    }
 
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
 
-    public String getServiceDate() { return serviceDate; }
-    public void setServiceDate(String serviceDate) { this.serviceDate = serviceDate; }
+    public LocalDate getServiceDate() { return serviceDate; } 
+    public void setServiceDate(LocalDate serviceDate) { this.serviceDate = serviceDate; } 
+    
+    public int getStatus() { return status; }
+    public void setStatus(int status) { this.status = status; }
 
+    // --- THAY �?ỔI: toString() được cập nhật ---
     @Override
     public String toString() {
-        return "BookingService{" + "bookingServiceId=" + bookingServiceId + ", service=" + service.getServiceName() + ", quantity=" + quantity + '}';
+        return "BookingService{" +
+                "bookingServiceId=" + bookingServiceId +
+                ", bookingId=" + bookingId +
+                ", serviceId=" + serviceId +
+                ", quantity=" + quantity +
+                ", serviceDate=" + serviceDate + 
+                ", status=" + status +
+                ", staffID=" + staffID +
+                '}';
     }
 }

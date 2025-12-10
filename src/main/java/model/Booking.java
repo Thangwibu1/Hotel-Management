@@ -1,54 +1,131 @@
 package model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 /**
- * Model cho bảng BOOKING
+ * Model cho bảng BOOKING (�?ã được cập nhật để sử dụng
+ * LocalDate và LocalDateTime)
  */
 public class Booking {
+
     private int bookingId;
-    private Guest guest; // Quan hệ khóa ngoại đến GUEST
-    private Room room;   // Quan hệ khóa ngoại đến ROOM
-    private String checkInDate;
-    private String checkOutDate;
-    private String bookingDate;
+    private int guestId;
+    private int roomId;
+    private LocalDateTime checkInDate;  // THAY �?ỔI: Kiểu LocalDateTime
+    private LocalDateTime checkOutDate; // THAY �?ỔI: Kiểu LocalDateTime
+    private LocalDate bookingDate;    // THAY �?ỔI: Kiểu LocalDate
     private String status;
 
     // Constructors
-    public Booking() {}
+    public Booking() {
+    }
 
-    public Booking(int bookingId, Guest guest, Room room, String checkInDate, String checkOutDate, String bookingDate, String status) {
+    public Booking(int bookingId) {
         this.bookingId = bookingId;
-        this.guest = guest;
-        this.room = room;
+    }
+
+    public Booking(int bookingId, LocalDateTime checkInDate, LocalDateTime checkOutDate, String status) {
+        this.bookingId = bookingId;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+        this.status = status;
+    }
+
+    public Booking(int bookingId, int roomId, LocalDateTime checkInDate, LocalDateTime checkOutDate) {
+        this.bookingId = bookingId;
+        this.roomId = roomId;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+    }
+
+    public Booking(int guestId, int roomId, LocalDateTime checkInDate, LocalDateTime checkOutDate, LocalDate bookingDate, String status) {
+        this.guestId = guestId;
+        this.roomId = roomId;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.bookingDate = bookingDate;
         this.status = status;
     }
 
-    // Getters and Setters
-    public int getBookingId() { return bookingId; }
-    public void setBookingId(int bookingId) { this.bookingId = bookingId; }
+    public Booking(int bookingId, int guestId, int roomId, LocalDateTime checkInDate, LocalDateTime checkOutDate, LocalDate bookingDate, String status) {
+        this.bookingId = bookingId;
+        this.guestId = guestId;
+        this.roomId = roomId;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+        this.bookingDate = bookingDate;
+        this.status = status;
+    }
 
-    public Guest getGuest() { return guest; }
-    public void setGuest(Guest guest) { this.guest = guest; }
+    // Getters and Setters được cập nhật
+    public int getBookingId() {
+        return bookingId;
+    }
 
-    public Room getRoom() { return room; }
-    public void setRoom(Room room) { this.room = room; }
+    public void setBookingId(int bookingId) {
+        this.bookingId = bookingId;
+    }
 
-    public String getCheckInDate() { return checkInDate; }
-    public void setCheckInDate(String checkInDate) { this.checkInDate = checkInDate; }
+    public int getGuestId() {
+        return guestId;
+    }
 
-    public String getCheckOutDate() { return checkOutDate; }
-    public void setCheckOutDate(String checkOutDate) { this.checkOutDate = checkOutDate; }
+    public void setGuestId(int guestId) {
+        this.guestId = guestId;
+    }
 
-    public String getBookingDate() { return bookingDate; }
-    public void setBookingDate(String bookingDate) { this.bookingDate = bookingDate; }
+    public int getRoomId() {
+        return roomId;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
+    }
+
+    public LocalDateTime getCheckInDate() {
+        return checkInDate;
+    } // THAY �?ỔI
+
+    public void setCheckInDate(LocalDateTime checkInDate) {
+        this.checkInDate = checkInDate;
+    } // THAY �?ỔI
+
+    public LocalDateTime getCheckOutDate() {
+        return checkOutDate;
+    } // THAY �?ỔI
+
+    public void setCheckOutDate(LocalDateTime checkOutDate) {
+        this.checkOutDate = checkOutDate;
+    } // THAY �?ỔI
+
+    public LocalDate getBookingDate() {
+        return bookingDate;
+    } // THAY �?ỔI
+
+    public void setBookingDate(LocalDate bookingDate) {
+        this.bookingDate = bookingDate;
+    } // THAY �?ỔI
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     @Override
     public String toString() {
-        return "Booking{" + "bookingId=" + bookingId + ", guest=" + guest.getFullName() + ", room=" + room.getRoomNumber() + ", status='" + status + '\'' + '}';
+        return "Booking{"
+                + "bookingId=" + bookingId
+                + ", guestId=" + guestId
+                + ", roomId=" + roomId
+                + ", checkInDate=" + checkInDate
+                + // Sẽ tự động g�?i .toString() của LocalDateTime
+                ", checkOutDate=" + checkOutDate
+                + ", bookingDate=" + bookingDate
+                + ", status='" + status + '\''
+                + '}';
     }
 }

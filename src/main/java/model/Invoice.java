@@ -1,46 +1,106 @@
 package model;
 
-import java.math.BigDecimal;
+import java.sql.Date;
 
-/**
- * Model cho bảng INVOICE
- */
 public class Invoice {
     private int invoiceId;
-    private Booking booking; // Quan hệ khóa ngoại đến BOOKING
-    private String issueDate;
-    private BigDecimal totalAmount;
+    private int bookingId;
+    private Date issueDate;
+    private double price;
+    private double discount;
+    private double tax;
+    private double totalAmount;
     private String status;
 
-    // Constructors
-    public Invoice() {}
+    public Invoice() {
+    }
 
-    public Invoice(int invoiceId, Booking booking, String issueDate, BigDecimal totalAmount, String status) {
+    public Invoice(int invoiceId, int bookingId, Date issueDate, double price, double discount, double tax, double totalAmount, String status) {
         this.invoiceId = invoiceId;
-        this.booking = booking;
+        this.bookingId = bookingId;
         this.issueDate = issueDate;
+        this.price = price;
+        this.discount = discount;
+        this.tax = tax;
         this.totalAmount = totalAmount;
         this.status = status;
     }
 
-    // Getters and Setters
-    public int getInvoiceId() { return invoiceId; }
-    public void setInvoiceId(int invoiceId) { this.invoiceId = invoiceId; }
-
-    public Booking getBooking() { return booking; }
-    public void setBooking(Booking booking) { this.booking = booking; }
-
-    public String getIssueDate() { return issueDate; }
-    public void setIssueDate(String issueDate) { this.issueDate = issueDate; }
-
-    public BigDecimal getTotalAmount() { return totalAmount; }
-    public void setTotalAmount(BigDecimal totalAmount) { this.totalAmount = totalAmount; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-
-    @Override
-    public String toString() {
-        return "Invoice{" + "invoiceId=" + invoiceId + ", bookingId=" + booking.getBookingId() + ", totalAmount=" + totalAmount + ", status='" + status + '\'' + '}';
+    public int getInvoiceId() {
+        return invoiceId;
     }
+
+    public void setInvoiceId(int invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+
+    public int getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(int bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public Date getIssueDate() {
+        return issueDate;
+    }
+
+    public void setIssueDate(Date issueDate) {
+        this.issueDate = issueDate;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public double getTax() {
+        return tax;
+    }
+
+    public void setTax(double tax) {
+        this.tax = tax;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+//    @Override
+//    public String toString() {
+//        return "Invoice{" +
+//                "invoiceId=" + invoiceId +
+//                ", bookingId=" + bookingId +
+//                ", issueDate=" + issueDate +
+//                ", price=" + price +
+//                ", discount=" + discount +
+//                ", tax=" + tax +
+//                ", totalAmount=" + totalAmount +
+//                ", status='" + status + ' +
+//                '}';
+//    }
 }

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
     private StaffDAO staffDAO;
@@ -31,13 +32,28 @@ public class LoginController extends HttpServlet {
         Staff staff = staffDAO.getStaffByUsernameAndPassword(username, password);
         Guest guest = guestDAO.getGuestByUsernameAndPassword(username, password);
         request.getSession().setAttribute("isLogin", false);
-
         if (staff != null) {
             request.getSession().setAttribute("isLogin", true);
             request.getSession().setAttribute("userStaff", staff);
-            System.out.println("abc");
-            response.sendRedirect(IConstant.homeServlet);
-            return; // Dừng thực thi
+            String role = staff.getRole().toLowerCase();
+            switch (role) {
+                case "admin":
+                    response.sendRedirect(IConstant.adminRole); //la mot controller
+                    return;
+                case "receptionist":
+                    response.sendRedirect(IConstant.receptionistRole);
+                    return;
+                case "manager":
+                    response.sendRedirect(IConstant.managerRole);
+                    return;
+                case "housekeeping":
+                    response.sendRedirect(request.getContextPath() + IConstant.housekeeping);
+                    return;
+                case "servicestaff":
+                    response.sendRedirect(IConstant.serviceRole);
+                    return;
+            }
+
         }
         if (guest != null) {
             request.getSession().setAttribute("isLogin", true);
@@ -46,7 +62,6 @@ public class LoginController extends HttpServlet {
             return; // Dừng thực thi
         }
 
-// Nếu cả hai đều null
         request.setAttribute("error", "Invalid username or password");
         request.getRequestDispatcher(IConstant.loginPage).forward(request, response);
     }
